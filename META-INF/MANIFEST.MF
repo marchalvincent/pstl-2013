@@ -3,7 +3,7 @@ Bundle-ManifestVersion: 2
 Bundle-Name: Pstl-2013
 Bundle-SymbolicName: pstl-2013; singleton:=true
 Bundle-Version: 1.0.0.qualifier
-Bundle-Activator: pstl_2013.Activator
+Bundle-Activator: com.upmc.pstl2013.views.Activator
 Require-Bundle: org.eclipse.ui,
  org.eclipse.core.runtime
 Bundle-ActivationPolicy: lazy
