@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.upmc.pstl2013.UMLtoAlloy;
+package com.upmc.pstl2013.alloyGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,23 +16,21 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Activity;
 
 import com.upmc.pstl2013.interfaces.IUMLFileChooser;
-import com.upmc.pstl2013.interfaces.IUMLParser;
 
 /**
  * Cette classe se charge de parser un fichier UML.
  */
 public class UMLParser implements IUMLParser {
 
-	private IUMLFileChooser fileChooser;
 	private List<Activity> activities;
 
-	public UMLParser(IUMLFileChooser fc) {
-		fileChooser = fc;
+	public UMLParser() {
+		super();
 		activities = new ArrayList<Activity>();
 	}
 
 	@Override
-	public List<Activity> getActivities() {
+	public List<Activity> getActivities(IUMLFileChooser fileChooser) {
 
 		List<IFile> files = fileChooser.getselectedUMLFiles();
 
@@ -49,15 +47,8 @@ public class UMLParser implements IUMLParser {
 					if (eo instanceof Activity) {
 						Activity umlActivity = (Activity) eo;
 						activities.add(umlActivity);
-
-						System.out.println(umlActivity.getName());
-
-						//umlActivity.getNodes()
-						//umlActivity.getEdges()
 					}
 				}
-				//TODO enlever??
-				//EcoreUtil.getObjectsByType(pm.getProcessElements(), UMLPackage.eINSTANCE.getActivityFinalNode());
 			}
 		}
 		return activities;

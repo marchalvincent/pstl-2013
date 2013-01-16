@@ -1,4 +1,4 @@
-package com.upmc.pstl2013.UMLtoAlloy.test;
+package com.upmc.pstl2013.alloyGenerator.test;
 
 import static org.junit.Assert.*;
 
