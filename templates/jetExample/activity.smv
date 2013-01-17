@@ -1,0 +1,99 @@
+
+<%=NSHelper.lineSeparator(sa.getName())%>
+MODULE <%=NSHelper.moduleName(sa)%>(container, p_inc-cond<%=NSHelper.getActivityInParam(sa)%>)
+
+DEFINE
+
+	f-cond := running <%=NSHelper.getFinalCond(sa)%>;
+
+VAR
+	terminated : boolean;
+	running : boolean;
+	
+	-- ActivityNode
+	<% for (ActivityNode node : sa.getNodes()) { 
+		NSHelper.ActivityNodeString ans = NSHelper.getCond(node);
+	    %>
+	<% if (node instanceof org.eclipse.uml2.uml.DecisionNode) {%>
+	<%=node.getName()%> : DecisionNode(self,
+			<%=ans.get("incCond")%>,
+			<%=ans.get("outCond")%>,
+			<%=ans.get("initialTokens")%>,
+			<%=node.getOutgoings().size()-1%>);
+	<%} else if (node instanceof org.eclipse.uml2.uml.MergeNode) {%>
+	<%=node.getName()%> : MergeNode(self,
+			<%=ans.get("incCond")%>,
+			<%=ans.get("outCond")%>,
+			<%=ans.get("initialTokens")%>,
+			<%=node.getIncomings().size()-1%>,
+			<%=NSHelper.getPullCond(node)%>);
+	<%} else if (node instanceof org.eclipse.uml2.uml.ActivityParameterNode) {
+		NSHelper.ActivityNodeString ansParam = NSHelper.getParamCond((org.eclipse.uml2.uml.ActivityParameterNode)node);
+	%>
+	<%=node.getName()%> : ObjectNode(
+			self,
+			<%=ansParam.get("incCond")%>,
+			<%=ansParam.get("outCond")%>,
+			<%=ansParam.get("initialTokens")%>,
+			<%=ansParam.get("min")%>,
+			<%=ansParam.get("max")%>,
+			<%=ansParam.get("type")%>,
+			<%=ansParam.get("flowCond")%>);
+	<%} else {%>
+	<%=node.getName()%> : ActivityNode(self,
+			<%=ans.get("incCond")%>,
+			<%=ans.get("outCond")%>,
+			<%=ans.get("initialTokens")%>);
+	<%}%>
+	<% if (node instanceof org.eclipse.uml2.uml.CallBehaviorAction) {
+		 org.eclipse.uml2.uml.CallBehaviorAction cba = (org.eclipse.uml2.uml.CallBehaviorAction) node; %>
+	<%=NSHelper.getCalledBehaviorName(cba)%> : <%=cba.getBehavior().eClass().getName()%>-<%=cba.getBehavior().getName()%>(self, <%=node.getName()%>.firing<%=NSHelper.getCallInParam(cba)%>);
+	<%}%>
+	<% if (node instanceof org.eclipse.uml2.uml.Action) { 
+			org.eclipse.uml2.uml.Action action = (org.eclipse.uml2.uml.Action)node;
+			
+			for (org.eclipse.uml2.uml.Pin pin : NSHelper.getAllPin(node)) {
+				NSHelper.ActivityNodeString ansPin = NSHelper.getPinCond(pin);
+					%>
+		<%=pin.getName()%> : ObjectNode(
+				self,
+				<%=ansPin.get("incCond")%>,
+				<%=ansPin.get("outCond")%>,
+				<%=ansPin.get("initialTokens")%>,
+				<%=ansPin.get("min")%>,
+				<%=ansPin.get("max")%>,
+				<%=ansPin.get("type")%>,
+				<%=ansPin.get("flowCond")%>);
+					<%
+			}
+	}
+	}
+	%>
+	-- ActivityEdge
+	<% for (ActivityEdge edge : sa.getEdges()) { 
+		NSHelper.ActivityNodeString ansEdge = NSHelper.getEdgeCond(edge);
+	 %><%=edge.getName()%> : ActivityEdge(self,<%=edge.getSource().getName()%>, <%=edge.getTarget().getName()%>, <%=ansEdge.get("push")%>, <%=ansEdge.get("pull")%>);
+	<%}%>
+INIT
+	terminated = FALSE &
+	running = FALSE;
+TRANS
+	case
+		!running & !terminated 	: next(running) = p_inc-cond & next(terminated) = terminated; -- isInitial?
+		f-cond 				    : next(running) = FALSE & next(terminated) = TRUE;
+		TRUE					: next(running) = running & next(terminated) = terminated;
+	esac;
+<%
+String invar = NSHelper.getActivityInvar(sa).toString();
+if (invar.length() > 0) {%>
+INVAR
+	-- only one node are computing at the same time
+	<%=invar.toString()%>
+<%}%>
+
+<% for (ActivityNode node : sa.getNodes()) { %>
+CTLSPEC EF <%=node.getName()%>.firing;
+<%} %>
+
+--TODO JUSTICE terminated=TRUE;
+
