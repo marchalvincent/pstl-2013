@@ -14,9 +14,13 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.FileDialog;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
+
+import com.upmc.pstl2013.alloyGenerator.AlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.test.UMLFileChooserBouchon;
+import com.upmc.pstl2013.interfaces.IUMLFileChooser;
 
 public class SwtView extends Composite {
 	private Text text;
@@ -26,6 +30,7 @@ public class SwtView extends Composite {
 	//private JFileChooser dialog;
 	private FileDialog dialog;
 	private IFile currentFile;
+	private Button btnTestvincent;
 
 	/**
 	 * Create the composite.
@@ -109,8 +114,17 @@ public class SwtView extends Composite {
 			}
 		});
 		btnChooserFile.setText("Chooser File");
-		new Label(this, SWT.NONE);
-
+		
+		btnTestvincent = new Button(this, SWT.NONE);
+		btnTestvincent.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				IUMLFileChooser fcb = new UMLFileChooserBouchon();
+				IAlloyGenerator alloyGenerator = new AlloyGenerator();
+				alloyGenerator.generateFile(fcb);
+			}
+		});
+		btnTestvincent.setLayoutData(new GridData(SWT.RIGHT, SWT.CENTER, false, false, 1, 1));
+		btnTestvincent.setText("TestVincent");
 	}
-
 }
