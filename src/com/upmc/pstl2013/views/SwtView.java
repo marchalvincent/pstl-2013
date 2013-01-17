@@ -1,5 +1,11 @@
 package com.upmc.pstl2013.views;
 
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IWorkspace;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.IPath;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -7,13 +13,19 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 public class SwtView extends Composite {
 	private Text text;
 	private Button btnReset;
 	private Button btnStart;
+	private Button btnChooserFile;
+	//private JFileChooser dialog;
+	private FileDialog dialog;
+	private IFile currentFile;
 
 	/**
 	 * Create the composite.
@@ -23,6 +35,17 @@ public class SwtView extends Composite {
 	public SwtView(Composite parent, int style) {
 		super(parent, style);
 		setLayout(new GridLayout(2, false));
+		
+		
+		//dialog = new JFileChooser(); //Fonctionne 1
+		dialog = new FileDialog(new Shell());
+		
+		
+		//SimpleFileChooser dialog = new SimpleFileChooser();
+		//dialog.setVisible(true);
+		
+		//WorkspaceResourceDialog dialog = new WorkspaceResourceDialog(new Shell(),new WorkbenchLabelProvider(), new WorkbenchContentProvider());
+		//dialog.open();
 		
 		btnReset = new Button(this, SWT.NONE);
 		btnReset.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -49,7 +72,43 @@ public class SwtView extends Composite {
 		});
 		btnStart.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnStart.setText("Start");
-		new Label(this, SWT.NONE);
+		
+		btnChooserFile = new Button(this, SWT.NONE);
+		btnChooserFile.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				String path = dialog.open();
+				text.setText(path);
+				if (path != null)
+				{
+					Platform.getLocation();
+					//File f = new File(new File(Dialog_.getDirectory()), Dialog_.getFile());
+					IWorkspace workspace= ResourcesPlugin.getWorkspace(); 
+					IPath location = Path.fromOSString(path); 
+					currentFile = workspace.getRoot().getFileForLocation(location);
+					/*
+					IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+					IProject project = root.getProject("MyProject");
+					IFile file = project.getFile("src/my/package/MyClass.java");
+					text.setText(currentFile.toString());*/
+					//dialog.
+				}
+				
+				
+				/*
+				int retVal = dialog.showOpenDialog(null);
+				if (retVal == JFileChooser.APPROVE_OPTION) {
+					File file = dialog.getSelectedFile();
+					IWorkspace workspace= ResourcesPlugin.getWorkspace(); 
+					IPath location= Path.fromOSString(file.getAbsolutePath()); 
+					currentFile = workspace.getRoot().getFileForLocation(location);
+			    }*/
+				
+				
+				
+			}
+		});
+		btnChooserFile.setText("Chooser File");
 		new Label(this, SWT.NONE);
 
 	}
