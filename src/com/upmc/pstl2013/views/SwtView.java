@@ -16,6 +16,7 @@ import com.upmc.pstl2013.alloyGenerator.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
 import com.upmc.pstl2013.fileContainer.UMLFileContainer;
 import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
+import org.eclipse.swt.widgets.Label;
 
 public class SwtView extends Composite {
 	
@@ -51,7 +52,7 @@ public class SwtView extends Composite {
 		btnReset.setText("Reset");
 		
 		text = new Text(this, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		GridData gd_text = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 2);
+		GridData gd_text = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 4);
 		gd_text.heightHint = 1000;
 		text.setLayoutData(gd_text);
 		text.setText("Appuyez sur démarrer pour lancer la vérification Alloy.");
@@ -67,6 +68,9 @@ public class SwtView extends Composite {
 		btnStart.setText("Start");
 		
 		btnChooserFile = new Button(this, SWT.NONE);
+		GridData gd_btnChooserFile = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
+		gd_btnChooserFile.widthHint = 87;
+		btnChooserFile.setLayoutData(gd_btnChooserFile);
 		btnChooserFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -79,6 +83,9 @@ public class SwtView extends Composite {
 		btnChooserFile.setText("Chooser File");
 		
 		btnGnrerAlloy = new Button(this, SWT.NONE);
+		GridData gd_btnGnrerAlloy = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
+		gd_btnGnrerAlloy.widthHint = 87;
+		btnGnrerAlloy.setLayoutData(gd_btnGnrerAlloy);
 		btnGnrerAlloy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -86,6 +93,10 @@ public class SwtView extends Composite {
 			}
 		});
 		btnGnrerAlloy.setText("Générer Alloy");
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
 
 	}
 }
