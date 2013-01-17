@@ -4,7 +4,7 @@ import com.upmc.pstl2013.alloyGenerator.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.IUMLParser;
 import com.upmc.pstl2013.alloyGenerator.UMLParser;
 import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
-import com.upmc.pstl2013.interfaces.IUMLFileChooser;
+import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
 
 /**
  * La factory. Implémente le Design Pattern Singleton.
@@ -24,7 +24,7 @@ public class Factory implements IFactory {
 	}
 	
 	@Override
-	public IUMLFileChooser newFileChooser() {
+	public IUMLFileContainer newFileChooser() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -2,7 +2,7 @@ package com.upmc.pstl2013.factory;
 
 import com.upmc.pstl2013.alloyGenerator.IUMLParser;
 import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
-import com.upmc.pstl2013.interfaces.IUMLFileChooser;
+import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
 
 /**
  * Représente les objets que la factory doit savoir créer.
@@ -13,7 +13,7 @@ public interface IFactory {
 	 * Créé un sélecteur de fichier UML.
 	 * @return
 	 */
-	IUMLFileChooser newFileChooser();
+	IUMLFileContainer newFileChooser();
 	
 	/**
 	 * Créé un parser de fichier UML.

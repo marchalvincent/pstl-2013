@@ -1,6 +1,6 @@
 package com.upmc.pstl2013.alloyGenerator.interfaces;
 
-import com.upmc.pstl2013.interfaces.IUMLFileChooser;
+import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
 
 /**
  * L'interface d'un générateur de fichier Alloy.
@@ -10,7 +10,7 @@ public interface IAlloyGenerator {
 
 	/**
 	 * Génère le fichier Alloy.
-	 * @param fileChooser le {@link IUMLFileChooser} qui a servit à sélectionner les fichiers UML.
+	 * @param fileChooser le {@link IUMLFileContainer} qui a servit à sélectionner les fichiers UML.
 	 */
-	void generateFile(IUMLFileChooser fileChooser);
+	void generateFile(IUMLFileContainer fileChooser);
 }

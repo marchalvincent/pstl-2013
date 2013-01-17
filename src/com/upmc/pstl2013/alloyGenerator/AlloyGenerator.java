@@ -10,7 +10,7 @@ import org.eclipse.uml2.uml.Activity;
 
 import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
 import com.upmc.pstl2013.factory.Factory;
-import com.upmc.pstl2013.interfaces.IUMLFileChooser;
+import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
 import com.upmc.pstl2013.util.Console;
 
 /**
@@ -27,7 +27,9 @@ public class AlloyGenerator implements IAlloyGenerator {
 	}
 
 	@Override
-	public void generateFile(IUMLFileChooser fileChooser) {
+	public void generateFile(IUMLFileContainer fileChooser) {
+		
+		Console.debug("Début des générations.", this.getClass());
 		// on créé le parser et on récupère les activités
 		IUMLParser parser = Factory.getInstance().newParser();
 		List<Activity> activities = parser.getActivities(fileChooser);
@@ -44,7 +46,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 			String alloyTxt = jetTemplate.generate(jetHelper);
 
 			try {
-				File fichier = new File("alloy/generated" + i + ".als");
+				File fichier = new File("generated" + i + ".als");
 				fichier.createNewFile();
 				
 				FileOutputStream out = new FileOutputStream(fichier);
@@ -55,11 +57,14 @@ public class AlloyGenerator implements IAlloyGenerator {
 			}
 			catch (FileNotFoundException e) {
 				Console.warning("Impossible de trouver le fichier.", this.getClass());
+				e.printStackTrace();
 			}
 			catch (IOException e) {
 				Console.warning("Impossible de créer le fichier.", this.getClass());
+				e.printStackTrace();
 			}
 			i++;
 		}
+		Console.debug("Générations finies.", this.getClass());
 	}
 }

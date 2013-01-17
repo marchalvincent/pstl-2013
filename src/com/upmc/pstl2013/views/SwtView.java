@@ -1,8 +1,5 @@
 package com.upmc.pstl2013.views;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.swt.SWT;
@@ -12,16 +9,25 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.upmc.pstl2013.alloyGenerator.AlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
+import com.upmc.pstl2013.fileContainer.UMLFileContainer;
+import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
+
 public class SwtView extends Composite {
+	
 	private Text text;
 	private Button btnReset;
 	private Button btnStart;
 	private Button btnChooserFile;
-	private List<IFile> listIFile;
+	private Button btnGnrerAlloy;
+
+	private IUMLFileContainer fileContainer;
+	private IAlloyGenerator alloyGenerator;
+	
 	/**
 	 * Create the composite.
 	 * @param parent
@@ -29,9 +35,10 @@ public class SwtView extends Composite {
 	 */
 	public SwtView(Composite parent, int style) {
 		super(parent, style);
-		setLayout(new GridLayout(2, false));
+		fileContainer = new UMLFileContainer();
+		alloyGenerator = new AlloyGenerator();
 		
-		listIFile = new ArrayList<IFile>();
+		setLayout(new GridLayout(2, false));
 		
 		btnReset = new Button(this, SWT.NONE);
 		btnReset.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
@@ -63,15 +70,22 @@ public class SwtView extends Composite {
 		btnChooserFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				IFile file[] = WorkspaceResourceDialog.openFileSelection(new Shell(), "Select the file",null, false, null, null);
+				IFile file[] = WorkspaceResourceDialog.openFileSelection(new Shell(), "Select the file", null, false, null, null);
 				for (IFile iFile : file) {
-					listIFile.add(iFile);
+					fileContainer.addFile(iFile);
 				}
 			}
 		});
 		btnChooserFile.setText("Chooser File");
-		new Label(this, SWT.NONE);
+		
+		btnGnrerAlloy = new Button(this, SWT.NONE);
+		btnGnrerAlloy.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				alloyGenerator.generateFile(fileContainer);
+			}
+		});
+		btnGnrerAlloy.setText("Générer Alloy");
 
 	}
-
 }

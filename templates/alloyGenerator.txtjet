@@ -34,22 +34,21 @@ one sig P extends Performer {} {
 	performer = ActivityNode -> Yoann
 }
 
-// TODO faire le traitement
 <%
 	EList<ActivityNode> nodes = jetHelper.getNodes();
 	EList<ActivityEdge> edges = jetHelper.getEdges();
 	
-	stringBuffer.append("------Generated Nodes------" + nl);
+	stringBuffer.append("------Generated Nodes------" + NL);
 	for (ActivityNode node : nodes) {
-		stringBuffer.append("one sig " + node.getName() + " extends " + node.eClass().getName() + " {}{}" + nl);
+		stringBuffer.append("one sig " + node.getName() + " extends " + node.eClass().getName() + " {}{}" + NL);
 	}
 	
-	stringBuffer.append(nl + nl + "------Generated Edges------" + nl);
+	stringBuffer.append(NL + NL + "------Generated Edges------" + NL);
 	for (ActivityEdge edge : edges) {
-		stringBuffer.append("one sig " + edge.getName() + " extends " + edge.eClass().getName() + " {}{" + nl);
-		stringBuffer.append("    source = " + edge.getSource().getName() + nl);
-		stringBuffer.append("    target = " + edge.getTarget().getName() + nl);
-		stringBuffer.append("}" + nl);
+		stringBuffer.append("one sig " + edge.getName() + " extends " + edge.eClass().getName() + " {}{" + NL);
+		stringBuffer.append("    source = " + edge.getSource().getName() + NL);
+		stringBuffer.append("    target = " + edge.getTarget().getName() + NL);
+		stringBuffer.append("}" + NL);
 	}
 %>
 
