@@ -12,11 +12,14 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
+import com.upmc.pstl2013.AlloyExecutor.AlloyExecutor;
+import com.upmc.pstl2013.AlloyExecutor.interfaces.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
 import com.upmc.pstl2013.fileContainer.UMLFileContainer;
 import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
-import org.eclipse.swt.widgets.Label;
+
+import edu.mit.csail.sdg.alloy4.Err;
 
 public class SwtView extends Composite {
 	
@@ -25,9 +28,12 @@ public class SwtView extends Composite {
 	private Button btnStart;
 	private Button btnChooserFile;
 	private Button btnGnrerAlloy;
-
+	private Button btnExcuterAlloy;
+	
 	private IUMLFileContainer fileContainer;
 	private IAlloyGenerator alloyGenerator;
+	private IAlloyExecutor alloyExecutor;
+	
 	
 	/**
 	 * Create the composite.
@@ -38,6 +44,7 @@ public class SwtView extends Composite {
 		super(parent, style);
 		fileContainer = new UMLFileContainer();
 		alloyGenerator = new AlloyGenerator();
+		
 		
 		setLayout(new GridLayout(2, false));
 		
@@ -52,7 +59,7 @@ public class SwtView extends Composite {
 		btnReset.setText("Reset");
 		
 		text = new Text(this, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		GridData gd_text = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 4);
+		GridData gd_text = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 5);
 		gd_text.heightHint = 1000;
 		text.setLayoutData(gd_text);
 		text.setText("Appuyez sur démarrer pour lancer la vérification Alloy.");
@@ -93,10 +100,24 @@ public class SwtView extends Composite {
 			}
 		});
 		btnGnrerAlloy.setText("Générer Alloy");
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
+		
+		btnExcuterAlloy = new Button(this, SWT.NONE);
+		btnExcuterAlloy.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
+		btnExcuterAlloy.setText("Exécuter Alloy");
+		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) 
+			{
+				alloyExecutor = new AlloyExecutor(fileContainer.getselectedUMLFiles());
+				try {
+					alloyExecutor.executeFiles();
+				} catch (Err e1) {
+					e1.printStackTrace();
+				}
+				
+			}
+		});
+
 
 	}
 }
