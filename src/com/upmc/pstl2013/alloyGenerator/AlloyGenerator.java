@@ -44,7 +44,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 			String alloyTxt = jetTemplate.generate(jetHelper);
 
 			try {
-				File fichier = new File("generated" + i + ".als");
+				File fichier = new File("alloy/generated" + i + ".als");
 				fichier.createNewFile();
 				
 				FileOutputStream out = new FileOutputStream(fichier);
