@@ -28,8 +28,4 @@ public class UMLFileChooserBouchon implements IUMLFileChooser {
 	public List<IFile> getselectedUMLFiles() {
 		return files;
 	}
-	
-	public static void main(String[] args) {
-		new UMLFileChooserBouchon();
-	}
 }
