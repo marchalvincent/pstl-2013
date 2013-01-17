@@ -33,7 +33,6 @@ public class UMLParser implements IUMLParser {
 	public List<Activity> getActivities(IUMLFileChooser fileChooser) {
 
 		List<IFile> files = fileChooser.getselectedUMLFiles();
-
 		for (IFile file : files) {
 			if (file != null) {
 				final URI uri = URI.createFileURI(file.getRawLocationURI().getPath());
