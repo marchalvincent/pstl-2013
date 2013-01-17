@@ -15,8 +15,7 @@ public class View extends ViewPart {
 	/**
 	 * The constructor.
 	 */
-	public View() {
-	}
+	public View() {}
 
 	/**
 	 * This is a callback that will allow us
