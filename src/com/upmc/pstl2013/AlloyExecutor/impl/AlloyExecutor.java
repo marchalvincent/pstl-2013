@@ -1,9 +1,9 @@
 package com.upmc.pstl2013.AlloyExecutor.impl;
 
 import java.io.File;
-import java.util.List;
 
 import com.upmc.pstl2013.AlloyExecutor.IAlloyExecutor;
+import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.util.Console;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
@@ -21,21 +21,24 @@ import edu.mit.csail.sdg.alloy4viz.VizGUI;
  * Cette classe se charge d'éxécuter les fichiers Alloy généré précédement 
  *
  */
-public class AlloyExecutor implements IAlloyExecutor{
+public class AlloyExecutor implements IAlloyExecutor {
 
-	/***
+	private IAlloyGenerator generator;
+	
+	/**
 	 * Constructeur
 	 */
-	public AlloyExecutor()
+	public AlloyExecutor(IAlloyGenerator generator)
 	{
 		super();
+		this.generator = generator;
 	}
 
-	/***
+	/**
 	 * Exécute chacun des fichiers gérés par le plugin.
 	 */
 	@Override
-	public void executeFiles(List<File> listFiles) throws Err
+	public void executeFiles() throws Err
 	{
 		// The visualizer (We will initialize it to nonnull when we visualize an Alloy solution)
 		VizGUI viz = null;
@@ -52,12 +55,12 @@ public class AlloyExecutor implements IAlloyExecutor{
 			}
 		};
 
-		for (File file : listFiles) 
+		for (File file : generator.getGeneratedFiles()) 
 		{
 			filename = file.getName();
 
 			//Vérifie que le fichier soit de type ALLOY
-			if (filename.substring(filename.length()-3, filename.length()) == "als")
+			if (filename.substring(filename.length()-3, filename.length()).equals("als"))
 			{
 				// Parse+typecheck the model
 				Console.debug("=========== Parsing+Typechecking "+filename+" =============", this.getClass());
@@ -90,5 +93,4 @@ public class AlloyExecutor implements IAlloyExecutor{
 			}
 		}
 	}
-
 }

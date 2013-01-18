@@ -23,28 +23,27 @@ import com.upmc.pstl2013.util.Console;
  */
 public class UMLParser implements IUMLParser {
 
+	private IUMLFileContainer fileContainer;
 	private List<Activity> activities;
 
-	public UMLParser() {
+	public UMLParser(IUMLFileContainer fc) {
 		super();
+		fileContainer = fc;
 		activities = new ArrayList<Activity>();
 	}
 
 	@Override
-	public List<Activity> getActivities(IUMLFileContainer fileChooser) {
+	public List<Activity> getActivities() {
 
 		Console.debug("Debut du parsing.", this.getClass());
-		List<IFile> files = fileChooser.getselectedUMLFiles();
+		List<IFile> files = fileContainer.getselectedUMLFiles();
 		int i = 1, nbFic = 0, nbActivity = 0;
 		for (IFile file : files) {
 			nbFic++;
 			Console.debug("Fichier n°" + i + ".", this.getClass());
 			if (file != null) {
-				System.out.println(file);
-				System.out.println(file.getLocation());
-				System.out.println(file.getRawLocationURI());
-				final URI uri = URI.createFileURI(file.getRawLocationURI().getPath());
 
+				URI uri = URI.createFileURI(file.getRawLocationURI().getPath());
 				ResourceSet resourceSet = new ResourceSetImpl();
 				Resource resource = (Resource) resourceSet.getResource(uri, true);
 
@@ -59,7 +58,7 @@ public class UMLParser implements IUMLParser {
 					}
 				}
 			}
-			i ++;
+			i++;
 		}
 		Console.debug("Bilan du parsing : " + nbFic + " fichiers, " + nbActivity + " activités.", this.getClass());
 		return activities;
