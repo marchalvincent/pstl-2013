@@ -1,4 +1,4 @@
-package com.upmc.pstl2013.AlloyExecutor.interfaces;
+package com.upmc.pstl2013.AlloyExecutor;
 
 import java.io.File;
 import java.util.List;

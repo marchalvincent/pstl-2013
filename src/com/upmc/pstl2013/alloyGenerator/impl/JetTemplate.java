@@ -1,4 +1,4 @@
-package com.upmc.pstl2013.alloyGenerator;
+package com.upmc.pstl2013.alloyGenerator.impl;
 
 import com.upmc.pstl2013.util.Console;
 import org.eclipse.emf.common.util.EList;
