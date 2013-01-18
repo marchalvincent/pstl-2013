@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.alloyGenerator;
 
-import com.upmc.pstl2013.fileContainer.IUMLFileContainer;
+import java.io.File;
+import java.util.List;
 
 /**
  * L'interface d'un générateur de fichier Alloy.
@@ -9,8 +10,13 @@ import com.upmc.pstl2013.fileContainer.IUMLFileContainer;
 public interface IAlloyGenerator {
 
 	/**
-	 * Génère le fichier Alloy.
-	 * @param fileChooser le {@link IUMLFileContainer} qui a servit à sélectionner les fichiers UML.
+	 * Génère le(s) fichier(s) Alloy.
 	 */
-	void generateFile(IUMLFileContainer fileChooser);
+	void generateFile();
+	
+	/**
+	 * Renvoie la liste des fichiers Alloy générés.
+	 * @return {@link List} de {@link File}.
+	 */
+	List<File> getGeneratedFiles();
 }
