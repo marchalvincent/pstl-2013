@@ -1,10 +1,10 @@
 package com.upmc.pstl2013.AlloyExecutor;
 
+import java.io.File;
 import java.util.List;
 
-import org.eclipse.core.resources.IFile;
-
 import com.upmc.pstl2013.AlloyExecutor.interfaces.IAlloyExecutor;
+import com.upmc.pstl2013.util.Console;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
@@ -17,20 +17,30 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 import edu.mit.csail.sdg.alloy4viz.VizGUI;
 
+/**
+ * Cette classe se charge d'éxécuter les fichiers Alloy généré précédement 
+ *
+ */
 public class AlloyExecutor implements IAlloyExecutor{
 
-	private List<IFile> listFile;
-
-	public AlloyExecutor(List<IFile> listFile)
+	/***
+	 * Constructeur
+	 */
+	public AlloyExecutor()
 	{
-		this.listFile = listFile;
+		super();
 	}
-	
+
+	/***
+	 * Exécute chacun des fichiers gérés par le plugin.
+	 */
 	@Override
-	public void executeFiles() throws Err
+	public void executeFiles(List<File> listFiles) throws Err
 	{
 		// The visualizer (We will initialize it to nonnull when we visualize an Alloy solution)
 		VizGUI viz = null;
+
+		String filename;
 
 		// Alloy4 sends diagnostic messages and progress reports to the A4Reporter.
 		// By default, the A4Reporter ignores all these events (but you can extend the A4Reporter to display the event for the user)
@@ -41,42 +51,43 @@ public class AlloyExecutor implements IAlloyExecutor{
 				System.out.flush();
 			}
 		};
-		
-		for (IFile file : listFile) 
+
+		for (File file : listFiles) 
 		{
-			String filename = file.getName();
-			
-			// Parse+typecheck the model
-			System.out.println("=========== Parsing+Typechecking "+filename+" =============");
-			Module world = CompUtil.parseEverything_fromFile(rep, null, filename);
+			filename = file.getName();
 
-			// Choose some default options for how you want to execute the commands
-			A4Options options = new A4Options();
-			options.solver = A4Options.SatSolver.SAT4J;
+			//Vérifie que le fichier soit de type ALLOY
+			if (filename.substring(filename.length()-3, filename.length()) == "als")
+			{
+				// Parse+typecheck the model
+				Console.debug("=========== Parsing+Typechecking "+filename+" =============", this.getClass());
+				Module world = CompUtil.parseEverything_fromFile(rep, null, filename);
 
-			for (Command command: world.getAllCommands()) {
-				// Execute the command
-				System.out.println("============ Command "+command+": ============");
-				A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
-				// Print the outcome
-				System.out.println(ans);
-				// If satisfiable...
-				if (ans.satisfiable()) {
-					// You can query "ans" to find out the values of each set or type.
-					// This can be useful for debugging.
-					//
-					// You can also write the outcome to an XML file
-					ans.writeXML("alloy_example_output.xml");
-					//
-					// You can then visualize the XML file by calling this:
-					if (viz==null) {
-						viz = new VizGUI(false, "alloy_example_output.xml", null);
-					} else {
-						viz.loadXML("alloy_example_output.xml", true);
+				// Choose some default options for how you want to execute the commands
+				A4Options options = new A4Options();
+				options.solver = A4Options.SatSolver.SAT4J;
+
+				for (Command command: world.getAllCommands()) {
+					// Execute the command
+					Console.debug("============ Command "+command+": ============",this.getClass());
+					A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
+					// Print the outcome
+					Console.debug(ans.toString(),this.getClass());
+					// If satisfiable...
+					if (ans.satisfiable()) {
+						// You can query "ans" to find out the values of each set or type.
+						// This can be useful for debugging.
+						// You can also write the outcome to an XML file
+						ans.writeXML("alloy_example_output.xml");
+						// You can then visualize the XML file by calling this:
+						if (viz==null) {
+							viz = new VizGUI(false, "alloy_example_output.xml", null);
+						} else {
+							viz.loadXML("alloy_example_output.xml", true);
+						}
 					}
 				}
 			}
-
 		}
 	}
 
