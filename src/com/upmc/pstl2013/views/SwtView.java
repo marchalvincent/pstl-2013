@@ -16,12 +16,12 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.upmc.pstl2013.AlloyExecutor.AlloyExecutor;
-import com.upmc.pstl2013.AlloyExecutor.interfaces.IAlloyExecutor;
-import com.upmc.pstl2013.alloyGenerator.AlloyGenerator;
-import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
-import com.upmc.pstl2013.fileContainer.UMLFileContainer;
-import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
+import com.upmc.pstl2013.AlloyExecutor.IAlloyExecutor;
+import com.upmc.pstl2013.AlloyExecutor.impl.AlloyExecutor;
+import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
+import com.upmc.pstl2013.fileContainer.IUMLFileContainer;
+import com.upmc.pstl2013.fileContainer.impl.UMLFileContainer;
 import com.upmc.pstl2013.util.Console;
 
 import edu.mit.csail.sdg.alloy4.Err;

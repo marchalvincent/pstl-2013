@@ -1,6 +1,6 @@
-package com.upmc.pstl2013.alloyGenerator.interfaces;
+package com.upmc.pstl2013.alloyGenerator;
 
-import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
+import com.upmc.pstl2013.fileContainer.IUMLFileContainer;
 
 /**
  * L'interface d'un générateur de fichier Alloy.

@@ -1,9 +1,9 @@
-package com.upmc.pstl2013.AlloyExecutor;
+package com.upmc.pstl2013.AlloyExecutor.impl;
 
 import java.io.File;
 import java.util.List;
 
-import com.upmc.pstl2013.AlloyExecutor.interfaces.IAlloyExecutor;
+import com.upmc.pstl2013.AlloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.util.Console;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;

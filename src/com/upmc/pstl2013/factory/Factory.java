@@ -1,10 +1,10 @@
 package com.upmc.pstl2013.factory;
 
-import com.upmc.pstl2013.alloyGenerator.AlloyGenerator;
-import com.upmc.pstl2013.alloyGenerator.IUMLParser;
-import com.upmc.pstl2013.alloyGenerator.UMLParser;
-import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
-import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
+import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.impl.IUMLParser;
+import com.upmc.pstl2013.alloyGenerator.impl.UMLParser;
+import com.upmc.pstl2013.fileContainer.IUMLFileContainer;
 
 /**
  * La factory. Implémente le Design Pattern Singleton.

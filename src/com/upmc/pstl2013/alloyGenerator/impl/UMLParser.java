@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.upmc.pstl2013.alloyGenerator;
+package com.upmc.pstl2013.alloyGenerator.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Activity;
 
-import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
+import com.upmc.pstl2013.fileContainer.IUMLFileContainer;
 import com.upmc.pstl2013.util.Console;
 
 /**
