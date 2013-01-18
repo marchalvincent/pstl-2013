@@ -25,5 +25,10 @@ public class UMLFileContainer implements IUMLFileContainer {
 	public void addFile(IFile file) {
 		files.add(file);
 	}
+	
+	@Override
+	public int getLength() {
+		return files.size();
+	}
 
 }

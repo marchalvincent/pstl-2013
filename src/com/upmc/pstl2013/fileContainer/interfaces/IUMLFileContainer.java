@@ -19,4 +19,10 @@ public interface IUMLFileContainer {
 	 * @param file {@link IFile}.
 	 */
 	void addFile(IFile file);
+
+	/***
+	 * Permet de retourner le nombre d'éléments présent dans la liste
+	 * @return le nombre de IFile present dans la liste
+	 */
+	int getLength();
 }

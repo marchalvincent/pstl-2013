@@ -1,5 +1,9 @@
 package com.upmc.pstl2013.views;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.swt.SWT;
@@ -18,6 +22,7 @@ import com.upmc.pstl2013.alloyGenerator.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.interfaces.IAlloyGenerator;
 import com.upmc.pstl2013.fileContainer.UMLFileContainer;
 import com.upmc.pstl2013.fileContainer.interfaces.IUMLFileContainer;
+import com.upmc.pstl2013.util.Console;
 
 import edu.mit.csail.sdg.alloy4.Err;
 
@@ -33,6 +38,8 @@ public class SwtView extends Composite {
 	private IUMLFileContainer fileContainer;
 	private IAlloyGenerator alloyGenerator;
 	private IAlloyExecutor alloyExecutor;
+	private List <File> listeFiles;
+	
 	
 	
 	/**
@@ -44,7 +51,8 @@ public class SwtView extends Composite {
 		super(parent, style);
 		fileContainer = new UMLFileContainer();
 		alloyGenerator = new AlloyGenerator();
-		
+		alloyExecutor = new AlloyExecutor();
+		listeFiles = new ArrayList<File>();
 		
 		setLayout(new GridLayout(2, false));
 		
@@ -97,24 +105,30 @@ public class SwtView extends Composite {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				alloyGenerator.generateFile(fileContainer);
+				//Rend possible l'exécution des fichiers générés.
+				if (fileContainer.getLength() >0)
+					btnExcuterAlloy.setEnabled(true);
 			}
 		});
 		btnGnrerAlloy.setText("Générer Alloy");
 		
 		btnExcuterAlloy = new Button(this, SWT.NONE);
+		btnExcuterAlloy.setEnabled(false);
 		btnExcuterAlloy.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1));
 		btnExcuterAlloy.setText("Exécuter Alloy");
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) 
 			{
-				alloyExecutor = new AlloyExecutor(fileContainer.getselectedUMLFiles());
-				try {
-					alloyExecutor.executeFiles();
-				} catch (Err e1) {
-					e1.printStackTrace();
+				try 
+				{
+					alloyExecutor.executeFiles(listeFiles);
+					Console.debug("Fin d'exécution des fichiers Alloy", this.getClass());
+				} 
+				catch (Err e1) 
+				{
+					Console.warning(e1.toString(), alloyExecutor.getClass());
 				}
-				
 			}
 		});
 

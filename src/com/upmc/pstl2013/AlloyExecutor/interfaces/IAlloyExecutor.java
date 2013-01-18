@@ -1,15 +1,18 @@
 package com.upmc.pstl2013.AlloyExecutor.interfaces;
 
+import java.io.File;
+import java.util.List;
+
 import edu.mit.csail.sdg.alloy4.Err;
 /***
- * Interface d'un executeur de fichier Alloy.
+ * Interface d'un exécuteur de fichier Alloy.
  *
  */
 public interface IAlloyExecutor {
 
 	/***
-	 * 
-	 * @throws Err
+	 * Méthode permettant d'Exécuter la liste des fichiers als présent dans la liste.
+	 * @throws Err Dans le cas d'une exécution impossible.
 	 */
-	public void executeFiles() throws Err;
+	public void executeFiles(List<File> listFiles) throws Err;
 }
