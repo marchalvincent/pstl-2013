@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.AlloyExecutor.impl;
 
 import java.io.File;
+import java.io.IOException;
 
 import com.upmc.pstl2013.AlloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
@@ -57,40 +58,45 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 		for (File file : generator.getGeneratedFiles()) 
 		{
-			filename = file.getName();
+			try {
+				filename = file.getCanonicalPath();
+				System.out.println("--------------------" + filename);
+				//Vérifie que le fichier soit de type ALLOY
+				if (filename.substring(filename.length()-3, filename.length()).equals("als"))
+				{
+					// Parse+typecheck the model
+					Console.debug("=========== Parsing+Typechecking "+filename+" =============", this.getClass());
+					Module world = CompUtil.parseEverything_fromFile(rep, null, filename);
 
-			//Vérifie que le fichier soit de type ALLOY
-			if (filename.substring(filename.length()-3, filename.length()).equals("als"))
-			{
-				// Parse+typecheck the model
-				Console.debug("=========== Parsing+Typechecking "+filename+" =============", this.getClass());
-				Module world = CompUtil.parseEverything_fromFile(rep, null, filename);
+					// Choose some default options for how you want to execute the commands
+					A4Options options = new A4Options();
+					options.solver = A4Options.SatSolver.SAT4J;
 
-				// Choose some default options for how you want to execute the commands
-				A4Options options = new A4Options();
-				options.solver = A4Options.SatSolver.SAT4J;
-
-				for (Command command: world.getAllCommands()) {
-					// Execute the command
-					Console.debug("============ Command "+command+": ============",this.getClass());
-					A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
-					// Print the outcome
-					Console.debug(ans.toString(),this.getClass());
-					// If satisfiable...
-					if (ans.satisfiable()) {
-						// You can query "ans" to find out the values of each set or type.
-						// This can be useful for debugging.
-						// You can also write the outcome to an XML file
-						ans.writeXML("alloy_example_output.xml");
-						// You can then visualize the XML file by calling this:
-						if (viz==null) {
-							viz = new VizGUI(false, "alloy_example_output.xml", null);
-						} else {
-							viz.loadXML("alloy_example_output.xml", true);
+					for (Command command: world.getAllCommands()) {
+						// Execute the command
+						Console.debug("============ Command "+command+": ============",this.getClass());
+						A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
+						// Print the outcome
+						Console.debug(ans.toString(),this.getClass());
+						// If satisfiable...
+						if (ans.satisfiable()) {
+							// You can query "ans" to find out the values of each set or type.
+							// This can be useful for debugging.
+							// You can also write the outcome to an XML file
+							ans.writeXML("alloy_example_output.xml");
+							// You can then visualize the XML file by calling this:
+							if (viz==null) {
+								viz = new VizGUI(false, "alloy_example_output.xml", null);
+							} else {
+								viz.loadXML("alloy_example_output.xml", true);
+							}
 						}
 					}
 				}
+			} catch (IOException e) {
+				Console.warning("Impossible de récupérer le chemin du fichier : " + e.toString(), this.getClass());
 			}
+			
 		}
 	}
 }

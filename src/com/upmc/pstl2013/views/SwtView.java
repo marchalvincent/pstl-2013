@@ -1,5 +1,7 @@
 package com.upmc.pstl2013.views;
 
+import java.io.FileNotFoundException;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.swt.SWT;
@@ -41,7 +43,7 @@ public class SwtView extends Composite {
 	 */
 	public SwtView(Composite parent, int style) {
 		super(parent, style);
-		
+
 		fileContainer = Factory.getInstance().newFileContainer();
 		IUMLParser parser = Factory.getInstance().newParser(fileContainer);
 		alloyGenerator = Factory.getInstance().newAlloyGenerator(parser);
@@ -68,7 +70,14 @@ public class SwtView extends Composite {
 		GridData gd_text = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 5);
 		gd_text.heightHint = 1000;
 		text.setLayoutData(gd_text);
-		text.setText("Appuyez sur démarrer pour lancer la vérification Alloy.");
+
+		// on vérifie que le dossier de génération alloy est correct
+		try {
+			alloyGenerator.fichiersPresents();
+			text.setText("Prêt pour la vérification de process.");
+		} catch (FileNotFoundException e2) {
+			text.setText(e2.getMessage());
+		}
 
 		btnGnrerAlloy = new Button(this, SWT.NONE);
 		GridData gd_btnGnrerAlloy = new GridData(SWT.LEFT, SWT.TOP, false, false, 1, 1);
@@ -94,9 +103,9 @@ public class SwtView extends Composite {
 				alloyGenerator.generateFile();
 				try {
 					alloyExecutor.executeFiles();
-					Console.debug("Fin d'exécution des fichiers Alloy", this.getClass());
+					Console.debug("Fin d'exécution des fichiers Alloy.", this.getClass());
 				} catch (Err e1) {
-					Console.warning(e1.toString(), alloyExecutor.getClass());
+					Console.warning(e1.toString(), this.getClass());
 				}
 			}
 		});

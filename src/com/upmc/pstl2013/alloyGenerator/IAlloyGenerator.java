@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.alloyGenerator;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 /**
@@ -19,4 +20,11 @@ public interface IAlloyGenerator {
 	 * @return {@link List} de {@link File}.
 	 */
 	List<File> getGeneratedFiles();
+	
+	/**
+	 * Vérifie que les fichiers syntax et semantic sont présents dans le dossier de destination.
+	 * @return boolean true si les fichiers sont présents.
+	 * @throws FileNotFoundException exception lancée s'il manque 1 ou 2 des fichiers.
+	 */
+	boolean fichiersPresents() throws FileNotFoundException;
 }
