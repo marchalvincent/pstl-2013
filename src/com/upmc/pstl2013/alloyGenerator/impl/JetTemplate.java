@@ -38,12 +38,12 @@ public class JetTemplate
 	
 	stringBuffer.append("------Generated Nodes------" + NL);
 	for (ActivityNode node : nodes) {
-		stringBuffer.append("one sig " + node.getName() + " extends " + node.eClass().getName() + " {}{}" + NL);
+		stringBuffer.append("one sig " + node.getName().replace("-", "") + " extends " + node.eClass().getName() + " {}{}" + NL);
 	}
 	
 	stringBuffer.append(NL + NL + "------Generated Edges------" + NL);
 	for (ActivityEdge edge : edges) {
-		stringBuffer.append("one sig " + edge.getName() + " extends " + edge.eClass().getName() + " {}{" + NL);
+		stringBuffer.append("one sig " + edge.getName().replace("-", "") + " extends " + edge.eClass().getName() + " {}{" + NL);
 		stringBuffer.append("    source = " + edge.getSource().getName() + NL);
 		stringBuffer.append("    target = " + edge.getTarget().getName() + NL);
 		stringBuffer.append("}" + NL);
