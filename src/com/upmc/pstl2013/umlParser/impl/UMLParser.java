@@ -64,4 +64,10 @@ public class UMLParser implements IUMLParser {
 		Console.debug("Bilan du parsing : " + nbFic + " fichiers, " + nbActivity + " activités.", this.getClass());
 		return activities;
 	}
+
+	@Override
+	public void reset() {
+		activities = new ArrayList<Activity>();
+		fileContainer.reset();
+	}
 }

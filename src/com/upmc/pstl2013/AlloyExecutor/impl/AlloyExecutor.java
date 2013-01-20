@@ -102,4 +102,9 @@ public class AlloyExecutor implements IAlloyExecutor {
 			
 		}
 	}
+
+	@Override
+	public void reset() {
+		generator.reset();
+	}
 }

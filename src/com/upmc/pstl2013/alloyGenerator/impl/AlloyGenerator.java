@@ -22,8 +22,8 @@ public class AlloyGenerator implements IAlloyGenerator {
 	
 	private IUMLParser parser;
 	private List<File> filesGenerated;
-	private String separator = File.separator;
-	private String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+	private final String separator = File.separator;
+	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 
 	/**
 	 * Constructeur
@@ -101,5 +101,11 @@ public class AlloyGenerator implements IAlloyGenerator {
 	@Override
 	public List<File> getGeneratedFiles() {
 		return filesGenerated;
+	}
+
+	@Override
+	public void reset() {
+		filesGenerated = new ArrayList<File>();
+		parser.reset();
 	}
 }

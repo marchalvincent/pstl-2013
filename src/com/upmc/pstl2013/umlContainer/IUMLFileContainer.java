@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 
-public interface IUMLFileContainer {
+import com.upmc.pstl2013.IProcess;
+
+public interface IUMLFileContainer extends IProcess {
 
 	/**
 	 * Ajoute un fichier à la liste.
