@@ -41,6 +41,9 @@ public class AlloyExecutor implements IAlloyExecutor {
 	@Override
 	public void executeFiles() throws Err
 	{
+		// on lance la génération des fichiers Alloy
+		generator.generateFile();
+		
 		// The visualizer (We will initialize it to nonnull when we visualize an Alloy solution)
 		VizGUI viz = null;
 
