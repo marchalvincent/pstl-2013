@@ -9,12 +9,12 @@ import com.upmc.pstl2013.AlloyExecutor.impl.AlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.IJetHelper;
-import com.upmc.pstl2013.alloyGenerator.impl.IUMLParser;
 import com.upmc.pstl2013.alloyGenerator.impl.JetHelper;
 import com.upmc.pstl2013.alloyGenerator.impl.JetTemplate;
-import com.upmc.pstl2013.alloyGenerator.impl.UMLParser;
-import com.upmc.pstl2013.fileContainer.IUMLFileContainer;
-import com.upmc.pstl2013.fileContainer.impl.UMLFileContainer;
+import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
+import com.upmc.pstl2013.umlContainer.impl.UMLFileContainer;
+import com.upmc.pstl2013.umlParser.IUMLParser;
+import com.upmc.pstl2013.umlParser.impl.UMLParser;
 
 /**
  * La factory. Implémente le Design Pattern Singleton.

@@ -1,4 +1,4 @@
-package com.upmc.pstl2013.alloyGenerator.impl;
+package com.upmc.pstl2013.umlParser;
 
 import java.util.List;
 

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.upmc.pstl2013.alloyGenerator.impl;
+package com.upmc.pstl2013.umlParser.impl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,7 +15,8 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Activity;
 
-import com.upmc.pstl2013.fileContainer.IUMLFileContainer;
+import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
+import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.util.Console;
 
 /**

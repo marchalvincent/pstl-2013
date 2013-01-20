@@ -1,11 +1,11 @@
-package com.upmc.pstl2013.fileContainer.impl;
+package com.upmc.pstl2013.umlContainer.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 
-import com.upmc.pstl2013.fileContainer.IUMLFileContainer;
+import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
 
 public class UMLFileContainer implements IUMLFileContainer {
 

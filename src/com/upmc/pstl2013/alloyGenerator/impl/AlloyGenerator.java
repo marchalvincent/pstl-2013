@@ -11,6 +11,7 @@ import org.eclipse.uml2.uml.Activity;
 
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.util.Console;
 
 /**
