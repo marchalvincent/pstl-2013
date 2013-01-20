@@ -4,11 +4,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.List;
 
+import com.upmc.pstl2013.IProcess;
+
 /**
  * L'interface d'un générateur de fichier Alloy.
  *
  */
-public interface IAlloyGenerator {
+public interface IAlloyGenerator extends IProcess {
 
 	/**
 	 * Génère le(s) fichier(s) Alloy.

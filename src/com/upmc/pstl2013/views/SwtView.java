@@ -99,6 +99,7 @@ public class SwtView extends Composite {
 				} catch (Err e1) {
 					Console.warning(e1.toString(), this.getClass());
 				}
+				alloyExecutor.reset();
 			}
 		});
 		new Label(this, SWT.NONE);
