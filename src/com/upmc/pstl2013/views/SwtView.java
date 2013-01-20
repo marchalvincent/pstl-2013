@@ -1,9 +1,14 @@
 package com.upmc.pstl2013.views;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
+import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.jface.viewers.Viewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
@@ -56,7 +61,18 @@ public class SwtView extends Composite {
 		btnChooserFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				IFile file[] = WorkspaceResourceDialog.openFileSelection(new Shell(), "Select the file", null, false, null, null);
+				// on créé un filtre pour les fichiers .uml
+				List<ViewerFilter> filters = new ArrayList<ViewerFilter>();
+				filters.add(new ViewerFilter() {
+					@Override
+					public boolean select(Viewer viewer, Object parentElement, Object element) {
+						if (element instanceof IFile)
+							return ((IFile)element).getFileExtension().equals("uml");
+						else return true;
+					}
+				});
+				IFile file[] = WorkspaceResourceDialog.openFileSelection(new Shell(), "Selectionnez les fichiers UML", 
+						null, true, null, filters);
 				for (IFile iFile : file) {
 					fileContainer.addFile(iFile);
 				}
@@ -69,32 +85,47 @@ public class SwtView extends Composite {
 		gd_text.heightHint = 1000;
 		text.setLayoutData(gd_text);
 
+		btnExcuterAlloy = new Button(this, SWT.NONE);
+		btnExcuterAlloy.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false,
+				false, 1, 1));
+		btnExcuterAlloy.setText("Exécuter Alloy");
+		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				text.setText("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
+				try {
+					alloyExecutor.executeFiles();
+					Console.debug("Fin d'exécution des fichiers Alloy.", this.getClass());
+				} catch (Err e1) {
+					Console.warning(e1.toString(), this.getClass());
+				}
+			}
+		});
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+
+		// on finit par une petite vérification...
+		this.checkDirectory(alloyGenerator);
+	}
+
+	/**
+	 * Vérifie que le dossiers de destinations des générations est correcte.
+	 * @param alloyGenerator {@link IAlloyGenerator}.
+	 */
+	private void checkDirectory(IAlloyGenerator alloyGenerator) {
+
 		// on vérifie que le dossier de génération alloy est correct
 		try {
 			alloyGenerator.fichiersPresents();
 			text.setText("Prêt pour la vérification de process.");
 		} catch (FileNotFoundException e2) {
+			MessageDialog dialog = new MessageDialog(new Shell(), 
+					"Des fichiers sont manquants", null, 
+					e2.toString(), 
+					MessageDialog.WARNING, new String[]{"Ok"}, 1);
+			dialog.open();
 			text.setText(e2.getMessage());
 		}
-		
-				btnExcuterAlloy = new Button(this, SWT.NONE);
-				btnExcuterAlloy.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false,
-						false, 1, 1));
-				btnExcuterAlloy.setText("Exécuter Alloy");
-				btnExcuterAlloy.addMouseListener(new MouseAdapter() {
-					@Override
-					public void mouseDown(MouseEvent e) {
-						text.setText("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
-						try {
-							alloyExecutor.executeFiles();
-							Console.debug("Fin d'exécution des fichiers Alloy.", this.getClass());
-						} catch (Err e1) {
-							Console.warning(e1.toString(), this.getClass());
-						}
-					}
-				});
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
 	}
 }

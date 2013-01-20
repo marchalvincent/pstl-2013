@@ -63,7 +63,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 		{
 			try {
 				filename = file.getCanonicalPath();
-				System.out.println("--------------------" + filename);
+
 				//Vérifie que le fichier soit de type ALLOY
 				if (filename.substring(filename.length()-3, filename.length()).equals("als"))
 				{

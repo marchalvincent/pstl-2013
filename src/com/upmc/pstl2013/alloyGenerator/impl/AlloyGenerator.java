@@ -39,6 +39,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 	@Override
 	public void generateFile() {
 		
+		filesGenerated = new ArrayList<File>();
 		Console.debug("Début des générations.", this.getClass());
 		// on récupère les activités
 		List<Activity> activities = parser.getActivities();
@@ -86,15 +87,14 @@ public class AlloyGenerator implements IAlloyGenerator {
 	}
 	
 	@Override
-	public boolean fichiersPresents() throws FileNotFoundException {
+	public void fichiersPresents() throws FileNotFoundException {
 		StringBuilder fichiersManquants = new StringBuilder();
 		if (!new File(userDir + "semantic.als").exists())
 			fichiersManquants.append(" semantic.als");
 		if (!new File(userDir + "syntax.als").exists())
 			fichiersManquants.append(" syntax.als");
-		if (fichiersManquants.toString().equals(""))
-			return true;
-		throw new FileNotFoundException("Le(s) fichier(s) suivant(s) manque(nt) :" + fichiersManquants.toString() +
+		if (!fichiersManquants.toString().equals(""))
+			throw new FileNotFoundException("Le(s) fichier(s) suivant(s) manque(nt) :" + fichiersManquants.toString() +
 				". Veuillez les ajouter dans votre répertoire : " + userDir);
 	}
 

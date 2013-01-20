@@ -23,8 +23,7 @@ public interface IAlloyGenerator {
 	
 	/**
 	 * Vérifie que les fichiers syntax et semantic sont présents dans le dossier de destination.
-	 * @return boolean true si les fichiers sont présents.
 	 * @throws FileNotFoundException exception lancée s'il manque 1 ou 2 des fichiers.
 	 */
-	boolean fichiersPresents() throws FileNotFoundException;
+	void fichiersPresents() throws FileNotFoundException;
 }
