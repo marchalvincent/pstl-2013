@@ -18,7 +18,13 @@ public class UMLFileContainer implements IUMLFileContainer {
 	
 	@Override
 	public List<IFile> getselectedUMLFiles() {
-		return files;
+		// une fois qu'on a renvoyé les fichiers sélectionnés, il faut les "déselectionner".
+		// c'est pourquoi on passe par une list temporaire
+		List<IFile> filesTemp = new ArrayList<IFile>();
+		for (int i = 0; i < files.size(); i++) {
+			filesTemp.add(files.remove(i));
+		}
+		return filesTemp;
 	}
 
 	@Override
