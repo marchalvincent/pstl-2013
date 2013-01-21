@@ -20,7 +20,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
-import com.upmc.pstl2013.AlloyExecutor.IAlloyExecutor;
+import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.umlContainer.IUMLFileContainer;

@@ -1,9 +1,9 @@
-package com.upmc.pstl2013.AlloyExecutor.impl;
+package com.upmc.pstl2013.alloyExecutor.impl;
 
 import java.io.File;
 import java.io.IOException;
 
-import com.upmc.pstl2013.AlloyExecutor.IAlloyExecutor;
+import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.util.Console;
 
@@ -63,6 +63,8 @@ public class AlloyExecutor implements IAlloyExecutor {
 		{
 			try {
 				filename = file.getCanonicalPath();
+				//TODO enlever
+				filename = "C:\\Users\\Vincent\\.pstl2013\\syntax.als";
 
 				//Vérifie que le fichier soit de type ALLOY
 				if (filename.substring(filename.length()-3, filename.length()).equals("als"))
