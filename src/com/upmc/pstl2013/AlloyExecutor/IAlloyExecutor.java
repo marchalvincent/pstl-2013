@@ -1,4 +1,4 @@
-package com.upmc.pstl2013.AlloyExecutor;
+package com.upmc.pstl2013.alloyExecutor;
 
 import com.upmc.pstl2013.IProcess;
 

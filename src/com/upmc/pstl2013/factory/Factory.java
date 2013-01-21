@@ -4,8 +4,8 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 
-import com.upmc.pstl2013.AlloyExecutor.IAlloyExecutor;
-import com.upmc.pstl2013.AlloyExecutor.impl.AlloyExecutor;
+import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
+import com.upmc.pstl2013.alloyExecutor.impl.AlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.IJetHelper;
