@@ -16,6 +16,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -26,8 +27,6 @@ import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.util.Console;
 
-import edu.mit.csail.sdg.alloy4.Err;
-
 public class SwtView extends Composite {
 
 	private Text text;
@@ -36,6 +35,7 @@ public class SwtView extends Composite {
 
 	private IUMLFileContainer fileContainer;
 	private IAlloyExecutor alloyExecutor;
+	private Button btnGetContentView;
 
 	/**
 	 * Create the composite.
@@ -51,7 +51,8 @@ public class SwtView extends Composite {
 		IAlloyGenerator alloyGenerator = Factory.getInstance().newAlloyGenerator(parser);
 		alloyExecutor = Factory.getInstance().newAlloyExecutor(alloyGenerator);
 
-		setLayout(new GridLayout(2, false));
+		GridLayout gridLayout = new GridLayout(2, false);
+		setLayout(gridLayout);
 
 		btnChooserFile = new Button(this, SWT.NONE);
 		GridData gd_btnChooserFile = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -85,25 +86,38 @@ public class SwtView extends Composite {
 		text.setLayoutData(gd_text);
 
 		btnExcuterAlloy = new Button(this, SWT.NONE);
-		btnExcuterAlloy.setLayoutData(new GridData(SWT.LEFT, SWT.TOP, false,
-				false, 1, 1));
+		GridData gd_btnExcuterAlloy = new GridData(SWT.LEFT, SWT.TOP, false,
+				false, 1, 1);
+		gd_btnExcuterAlloy.widthHint = 87;
+		btnExcuterAlloy.setLayoutData(gd_btnExcuterAlloy);
 		btnExcuterAlloy.setText("Exécuter Alloy");
+
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				showInView("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
 				StringBuilder result = new StringBuilder();
-				try {
-					result.append(alloyExecutor.executeFiles());
-					result.append("Fin d'exécution des fichiers Alloy.");
-					showInView(result.toString());
-				} catch (Err e1) {
-					Console.warning(e1.toString(), this.getClass());
-					text.setText(e1.toString());
-				}
+//				try {
+//					result.append(alloyExecutor.executeFiles());
+//					result.append("Fin d'exécution des fichiers Alloy.");
+//					showInView(result.toString());
+//				} catch (Err e1) {
+//					Console.warning(e1.toString(), this.getClass());
+//					text.setText(e1.toString());
+//				}
 				alloyExecutor.reset();
 			}
 		});
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+
+
+		btnGetContentView = new Button(this, SWT.NONE);
+		GridData gd_btnGetContentView = new GridData(SWT.LEFT, SWT.BOTTOM, false, false, 1, 1);
+		gd_btnGetContentView.widthHint = 87;
+		btnGetContentView.setLayoutData(gd_btnGetContentView);
+		btnGetContentView.setText("DL View");
+		//btnGetContentView.addMouseListener(new ContentViewMouseListener(text.getText()));
 
 		// on finit par une petite vérification...
 		this.checkDirectory(alloyGenerator);
@@ -128,10 +142,11 @@ public class SwtView extends Composite {
 			text.setText(e2.getMessage());
 		}
 	}
-	
+
 	private void showInView(String message)
 	{
 		Console.debug(message,this.getClass());
 		text.setText(message);
 	}
+
 }

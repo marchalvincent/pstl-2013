@@ -3,6 +3,7 @@ package com.upmc.pstl2013.views;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
+
 public class View extends ViewPart {
 	
 	private Composite composite;
