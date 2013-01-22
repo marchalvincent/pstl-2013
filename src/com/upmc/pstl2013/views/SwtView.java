@@ -1,6 +1,9 @@
 package com.upmc.pstl2013.views;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,6 +29,8 @@ import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.util.Console;
+
+import edu.mit.csail.sdg.alloy4.Err;
 
 public class SwtView extends Composite {
 
@@ -97,14 +102,14 @@ public class SwtView extends Composite {
 			public void mouseDown(MouseEvent e) {
 				showInView("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
 				StringBuilder result = new StringBuilder();
-//				try {
-//					result.append(alloyExecutor.executeFiles());
-//					result.append("Fin d'exécution des fichiers Alloy.");
-//					showInView(result.toString());
-//				} catch (Err e1) {
-//					Console.warning(e1.toString(), this.getClass());
-//					text.setText(e1.toString());
-//				}
+				try {
+					result.append(alloyExecutor.executeFiles());
+					result.append("Fin d'exécution des fichiers Alloy.");
+					showInView(result.toString());
+				} catch (Err e1) {
+					Console.warning(e1.toString(), this.getClass());
+					text.setText(e1.toString());
+				}
 				alloyExecutor.reset();
 			}
 		});
@@ -117,7 +122,33 @@ public class SwtView extends Composite {
 		gd_btnGetContentView.widthHint = 87;
 		btnGetContentView.setLayoutData(gd_btnGetContentView);
 		btnGetContentView.setText("DL View");
-		//btnGetContentView.addMouseListener(new ContentViewMouseListener(text.getText()));
+		btnGetContentView.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				Console.debug("Génération du fichier logs.", this.getClass());
+				String separator = File.separator;
+				String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+				try {
+					// on créé le fichier a générer
+					File fichier = new File(userDir + "logs" + ".txt");
+
+					// puis on écrit le contenu dedans
+					FileOutputStream out = new FileOutputStream(fichier);
+					out.write(text.getText().getBytes());
+					out.close();
+
+					Console.debug("Génération terminée.", this.getClass());
+				}
+				catch (FileNotFoundException ex) {
+					Console.warning("Impossible de trouver le fichier : " + ex.toString(), this.getClass());
+				}
+				catch (IOException ex2) {
+					Console.warning("Impossible de créer le fichier : " + ex2.toString(), this.getClass());
+				}
+				Console.debug("Générations finies.", this.getClass());
+			}
+
+		});
 
 		// on finit par une petite vérification...
 		this.checkDirectory(alloyGenerator);
