@@ -16,7 +16,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -92,19 +91,19 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				text.setText("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
+				showInView("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
+				StringBuilder result = new StringBuilder();
 				try {
-					alloyExecutor.executeFiles();
-					Console.debug("Fin d'exécution des fichiers Alloy.", this.getClass());
+					result.append(alloyExecutor.executeFiles());
+					result.append("Fin d'exécution des fichiers Alloy.");
+					showInView(result.toString());
 				} catch (Err e1) {
 					Console.warning(e1.toString(), this.getClass());
+					text.setText(e1.toString());
 				}
 				alloyExecutor.reset();
 			}
 		});
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
 
 		// on finit par une petite vérification...
 		this.checkDirectory(alloyGenerator);
@@ -128,5 +127,11 @@ public class SwtView extends Composite {
 			dialog.open();
 			text.setText(e2.getMessage());
 		}
+	}
+	
+	private void showInView(String message)
+	{
+		Console.debug(message,this.getClass());
+		text.setText(message);
 	}
 }

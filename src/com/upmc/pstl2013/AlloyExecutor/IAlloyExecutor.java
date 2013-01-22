@@ -13,5 +13,5 @@ public interface IAlloyExecutor extends IProcess {
 	 * Méthode permettant d'Exécuter la liste des fichiers "als" présents dans la liste.
 	 * @throws Err Dans le cas d'une exécution impossible.
 	 */
-	public void executeFiles() throws Err;
+	public String executeFiles() throws Err;
 }
