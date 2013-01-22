@@ -41,6 +41,9 @@ public class SwtView extends Composite {
 	private IUMLFileContainer fileContainer;
 	private IAlloyExecutor alloyExecutor;
 	private Button btnGetContentView;
+	
+	private String separator = File.separator;
+	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 
 	/**
 	 * Create the composite.
@@ -121,13 +124,12 @@ public class SwtView extends Composite {
 		GridData gd_btnGetContentView = new GridData(SWT.LEFT, SWT.BOTTOM, false, false, 1, 1);
 		gd_btnGetContentView.widthHint = 87;
 		btnGetContentView.setLayoutData(gd_btnGetContentView);
-		btnGetContentView.setText("DL View");
+		btnGetContentView.setText("DL Logs");
 		btnGetContentView.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				Console.debug("Génération du fichier logs.", this.getClass());
-				String separator = File.separator;
-				String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+				showInView("Génération du fichier logs.");
+				
 				try {
 					// on créé le fichier a générer
 					File fichier = new File(userDir + "logs" + ".txt");
@@ -137,7 +139,7 @@ public class SwtView extends Composite {
 					out.write(text.getText().getBytes());
 					out.close();
 
-					Console.debug("Génération terminée.", this.getClass());
+					showInView("Création du fichier de log terminé : " + fichier.getPath());
 				}
 				catch (FileNotFoundException ex) {
 					Console.warning("Impossible de trouver le fichier : " + ex.toString(), this.getClass());
@@ -174,10 +176,15 @@ public class SwtView extends Composite {
 		}
 	}
 
+	/***
+	 * Affiche le message dans le vue et dans la console de Debug.
+	 * @param message
+	 */
 	private void showInView(String message)
 	{
 		Console.debug(message,this.getClass());
 		text.setText(message);
+		
 	}
 
 }
