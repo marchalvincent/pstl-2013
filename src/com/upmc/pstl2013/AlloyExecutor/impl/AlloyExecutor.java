@@ -39,8 +39,10 @@ public class AlloyExecutor implements IAlloyExecutor {
 	 * Exécute chacun des fichiers gérés par le plugin.
 	 */
 	@Override
-	public void executeFiles() throws Err
+	public String executeFiles() throws Err
 	{
+		//Résultat
+		StringBuilder resultat = new StringBuilder();
 		// on lance la génération des fichiers Alloy
 		generator.generateFile();
 		
@@ -64,13 +66,14 @@ public class AlloyExecutor implements IAlloyExecutor {
 			try {
 				filename = file.getCanonicalPath();
 				//TODO enlever
-				filename = "C:\\Users\\Vincent\\.pstl2013\\syntax.als";
+				filename = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\model\\alloy\\syntax.als";
 
 				//Vérifie que le fichier soit de type ALLOY
 				if (filename.substring(filename.length()-3, filename.length()).equals("als"))
 				{
 					// Parse+typecheck the model
-					Console.debug("=========== Parsing+Typechecking "+filename+" =============", this.getClass());
+					resultat.append("=========== Parsing+Typechecking "+filename+" =============\n");
+					
 					Module world = CompUtil.parseEverything_fromFile(rep, null, filename);
 
 					// Choose some default options for how you want to execute the commands
@@ -79,10 +82,10 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 					for (Command command: world.getAllCommands()) {
 						// Execute the command
-						Console.debug("============ Command "+command+": ============",this.getClass());
+						resultat.append("============ Command "+command+": ============\n");
 						A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
 						// Print the outcome
-						Console.debug(ans.toString(),this.getClass());
+						resultat.append(ans.toString());
 						// If satisfiable...
 						if (ans.satisfiable()) {
 							// You can query "ans" to find out the values of each set or type.
@@ -99,10 +102,11 @@ public class AlloyExecutor implements IAlloyExecutor {
 					}
 				}
 			} catch (IOException e) {
+				resultat.append("Impossible de récupérer le chemin du fichier : " + e.toString() + "\n");
 				Console.warning("Impossible de récupérer le chemin du fichier : " + e.toString(), this.getClass());
 			}
-			
 		}
+		return resultat.toString();
 	}
 
 	@Override
