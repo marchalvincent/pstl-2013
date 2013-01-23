@@ -183,7 +183,7 @@ public class SwtView extends Composite {
 	private void showInView(String message)
 	{
 		Console.debug(message,this.getClass());
-		text.setText(message);
+		text.setText(text.getText() + message);
 		
 	}
 

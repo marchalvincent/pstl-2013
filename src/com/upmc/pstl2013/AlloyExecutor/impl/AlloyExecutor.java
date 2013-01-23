@@ -66,7 +66,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 			try {
 				filename = file.getCanonicalPath();
 				//TODO enlever
-				//filename = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\model\\alloy\\syntax.als";
+				filename = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\model\\alloy\\syntax.als";
 
 				//Vérifie que le fichier soit de type ALLOY
 				if (filename.substring(filename.length()-3, filename.length()).equals("als"))
