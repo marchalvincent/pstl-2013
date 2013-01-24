@@ -11,11 +11,20 @@ public class JetHelper implements IJetHelper {
 	
 	private EList<ActivityNode> nodes;
 	private EList<ActivityEdge> edges;
+	private ActivityNode initialNode;
 	
-	public JetHelper (EList<ActivityNode> n, EList<ActivityEdge> e) {
+	public JetHelper (EList<ActivityNode> n, EList<ActivityEdge> e, ActivityNode init) {
 		super();
 		nodes = n;
 		edges = e;
+		initialNode = init;
+	}
+	
+	@Override
+	public boolean isCorrect() {
+		if (initialNode == null)
+			return false;
+		return true;
 	}
 
 	@Override
@@ -26,5 +35,10 @@ public class JetHelper implements IJetHelper {
 	@Override
 	public EList<ActivityEdge> getEdges() {
 		return edges;
+	}
+
+	@Override
+	public ActivityNode getInitialNode() {
+		return initialNode;
 	}
 }

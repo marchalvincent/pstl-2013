@@ -5,11 +5,17 @@ import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 
 /**
- * Cette interface permet au template Jet de lister les {@link ActivityNode}
- * et les {@link ActivityEdge} à générer.
+ * Cette interface sert de conteneur pour passer plusieurs arguments
+ * au template Jet qui génère le fichier Alloy.
  *
  */
 public interface IJetHelper {
+	
+	/**
+	 * Renvoie vrai si le JetHelper est bien formé.
+	 * @return
+	 */
+	boolean isCorrect();
 
 	/**
 	 * Renvoie la liste des {@link ActivityNode}.
@@ -22,4 +28,10 @@ public interface IJetHelper {
 	 * @return une {@link EList}.
 	 */
 	EList<ActivityEdge> getEdges();
+	
+	/**
+	 * Renvoie le noeud initial.
+	 * @return {@link ActivityNode}.
+	 */
+	ActivityNode getInitialNode();
 }
