@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.util.List;
 
 import com.upmc.pstl2013.IProcess;
+import com.upmc.pstl2013.alloyGenerator.impl.JetException;
 
 /**
  * L'interface d'un générateur de fichier Alloy.
@@ -15,7 +16,7 @@ public interface IAlloyGenerator extends IProcess {
 	/**
 	 * Génère le(s) fichier(s) Alloy.
 	 */
-	void generateFile();
+	void generateFile() throws JetException;
 	
 	/**
 	 * Renvoie la liste des fichiers Alloy générés.

@@ -23,9 +23,9 @@ import edu.mit.csail.sdg.alloy4viz.VizGUI;
  * Cette classe se charge d'éxécuter les fichiers Alloy généré précédement 
  *
  */
-public class AlloyExecutor implements IAlloyExecutor 
-{
+public class AlloyExecutor implements IAlloyExecutor {
 	
+
 	private IAlloyGenerator generator;
 	private static Logger log = Logger.getLogger(AlloyExecutor.class);
 	
@@ -69,7 +69,8 @@ public class AlloyExecutor implements IAlloyExecutor
 			try {
 				filename = file.getCanonicalPath();
 				//TODO enlever
-				filename = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\model\\alloy\\GEN-simple.als";
+				//filename = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\model\\alloy\\GEN-simple.als";
+				//filename = "C:\\Users\\Vincent\\.pstl2013\\GEN-simple.als";
 
 				//Vérifie que le fichier soit de type ALLOY
 				if (filename.substring(filename.length()-3, filename.length()).equals("als"))
