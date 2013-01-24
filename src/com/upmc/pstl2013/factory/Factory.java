@@ -37,8 +37,8 @@ public class Factory implements IFactory {
 
 	@Override
 	public IJetHelper newJetHelper(EList<ActivityNode> nodes,
-			EList<ActivityEdge> edges) {
-		return new JetHelper(nodes, edges);
+			EList<ActivityEdge> edges, ActivityNode init) {
+		return new JetHelper(nodes, edges, init);
 	}
 
 	@Override

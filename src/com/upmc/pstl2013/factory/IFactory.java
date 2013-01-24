@@ -19,15 +19,18 @@ import com.upmc.pstl2013.umlParser.impl.UMLParser;
  * Représente les objets que la factory doit savoir créer.
  */
 public interface IFactory {
-	
+
 	/**
 	 * Créé un {@link JetHelper}.
+	 * 
 	 * @return
 	 */
-	IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges);
-	
+	IJetHelper newJetHelper(EList<ActivityNode> nodes,
+			EList<ActivityEdge> edges, ActivityNode init);
+
 	/**
 	 * Créé un {@link JetTemplate}.
+	 * 
 	 * @return
 	 */
 	JetTemplate newJetTemplate();
@@ -36,22 +39,28 @@ public interface IFactory {
 	 * Créé un {@link IUMLFileContainer}.
 	 */
 	IUMLFileContainer newFileContainer();
-	
+
 	/**
 	 * Créé un {@link UMLParser}.
-	 * @param parser un {@link IUMLFileContainer}.
+	 * 
+	 * @param parser
+	 *            un {@link IUMLFileContainer}.
 	 */
 	IUMLParser newParser(IUMLFileContainer fc);
-	
+
 	/**
 	 * Créé un {@link AlloyGenerator}.
-	 * @param parser un {@link IUMLParser}.
+	 * 
+	 * @param parser
+	 *            un {@link IUMLParser}.
 	 */
 	IAlloyGenerator newAlloyGenerator(IUMLParser parser);
-	
+
 	/**
 	 * Créé un {@link AlloyExecutor}.
-	 * @param generator un {@link IAlloyGenerator}.
+	 * 
+	 * @param generator
+	 *            un {@link IAlloyGenerator}.
 	 */
 	IAlloyExecutor newAlloyExecutor(IAlloyGenerator generator);
 }
