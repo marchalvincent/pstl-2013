@@ -3,9 +3,10 @@ package com.upmc.pstl2013.alloyExecutor.impl;
 import java.io.File;
 import java.io.IOException;
 
+import org.apache.log4j.Logger;
+
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
-import com.upmc.pstl2013.util.Console;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
@@ -23,8 +24,10 @@ import edu.mit.csail.sdg.alloy4viz.VizGUI;
  *
  */
 public class AlloyExecutor implements IAlloyExecutor {
+	
 
 	private IAlloyGenerator generator;
+	private static Logger log = Logger.getLogger(AlloyExecutor.class);
 	
 	/**
 	 * Constructeur
@@ -66,7 +69,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 			try {
 				filename = file.getCanonicalPath();
 				//TODO enlever
-				filename = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\model\\alloy\\syntax.als";
+				filename = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\model\\alloy\\GEN-simple.als";
 
 				//Vérifie que le fichier soit de type ALLOY
 				if (filename.substring(filename.length()-3, filename.length()).equals("als"))
@@ -78,7 +81,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 					// Choose some default options for how you want to execute the commands
 					A4Options options = new A4Options();
-					options.solver = A4Options.SatSolver.SAT4J;
+					options.solver = A4Options.SatSolver.SAT4J; //TODO: minisatx5 JNI
 
 					for (Command command: world.getAllCommands()) {
 						// Execute the command
@@ -103,7 +106,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 				}
 			} catch (IOException e) {
 				resultat.append("Impossible de récupérer le chemin du fichier : " + e.toString() + "\n");
-				Console.warning("Impossible de récupérer le chemin du fichier : " + e.toString(), this.getClass());
+				log.error("Impossible de récupérer le chemin du fichier : " + e.toString(),e);
 			}
 		}
 		return resultat.toString();

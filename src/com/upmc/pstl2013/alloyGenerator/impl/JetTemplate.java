@@ -1,6 +1,6 @@
 package com.upmc.pstl2013.alloyGenerator.impl;
 
-import com.upmc.pstl2013.util.Console;
+import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.*;
 
@@ -25,8 +25,8 @@ public class JetTemplate
     final StringBuffer stringBuffer = new StringBuffer();
      
 	if (!(argument instanceof IJetHelper)) {
-		Console.warning("L'argument passé au template Jet n'est pas un IJetHelper.", this.getClass());
-		//TODO throw exception?? voir les squeleton...
+		Logger log = Logger.getLogger(JetTemplate.class);
+		log.error("L'argument passé au template Jet n'est pas un IJetHelper.");
 		return stringBuffer.toString();
 	}
 	IJetHelper jetHelper = (IJetHelper) argument;

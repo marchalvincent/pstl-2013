@@ -6,6 +6,7 @@ package com.upmc.pstl2013.umlParser.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.TreeIterator;
 import org.eclipse.emf.common.util.URI;
@@ -17,7 +18,6 @@ import org.eclipse.uml2.uml.Activity;
 
 import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
 import com.upmc.pstl2013.umlParser.IUMLParser;
-import com.upmc.pstl2013.util.Console;
 
 /**
  * Cette classe se charge de parser un fichier UML.
@@ -26,6 +26,7 @@ public class UMLParser implements IUMLParser {
 
 	private IUMLFileContainer fileContainer;
 	private List<Activity> activities;
+	private static Logger log = Logger.getLogger(UMLParser.class);
 
 	public UMLParser(IUMLFileContainer fc) {
 		super();
@@ -36,12 +37,12 @@ public class UMLParser implements IUMLParser {
 	@Override
 	public List<Activity> getActivities() {
 
-		Console.debug("Debut du parsing.", this.getClass());
+		log.debug("Debut du parsing.");
 		List<IFile> files = fileContainer.getselectedUMLFiles();
 		int i = 1, nbFic = 0, nbActivity = 0;
 		for (IFile file : files) {
 			nbFic++;
-			Console.debug("Fichier n°" + i + ".", this.getClass());
+			log.debug("Fichier n°" + i + ".");
 			if (file != null) {
 
 				URI uri = URI.createFileURI(file.getRawLocationURI().getPath());
@@ -53,7 +54,7 @@ public class UMLParser implements IUMLParser {
 					EObject eo = tree.next();
 					if (eo instanceof Activity) {
 						nbActivity++;
-						Console.debug("Une activité est trouvée.", this.getClass());
+						log.debug("Une activité est trouvée.");
 						Activity umlActivity = (Activity) eo;
 						activities.add(umlActivity);
 					}
@@ -61,7 +62,7 @@ public class UMLParser implements IUMLParser {
 			}
 			i++;
 		}
-		Console.debug("Bilan du parsing : " + nbFic + " fichiers, " + nbActivity + " activités.", this.getClass());
+		log.debug("Bilan du parsing : " + nbFic + " fichiers, " + nbActivity + " activités.");
 		return activities;
 	}
 

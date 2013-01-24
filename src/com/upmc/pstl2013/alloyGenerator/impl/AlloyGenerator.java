@@ -7,12 +7,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.uml2.uml.Activity;
 
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.umlParser.IUMLParser;
-import com.upmc.pstl2013.util.Console;
 
 /**
  * Cette classe se charge de générer le fichier Alloy à partir 
@@ -24,6 +24,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 	private List<File> filesGenerated;
 	private final String separator = File.separator;
 	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+	private static Logger log = Logger.getLogger(AlloyGenerator.class);
 
 	/**
 	 * Constructeur
@@ -40,13 +41,13 @@ public class AlloyGenerator implements IAlloyGenerator {
 	public void generateFile() {
 		
 		filesGenerated = new ArrayList<File>();
-		Console.debug("Début des générations.", this.getClass());
+		log.debug("Début des générations.");
 		// on récupère les activités
 		List<Activity> activities = parser.getActivities();
 		int i = 1;
 
 		for (Activity activity : activities) {
-			Console.debug("Génération du fichier n°" + i + ".", this.getClass());
+			log.debug("Génération du fichier n°" + i + ".");
 			
 			String alloyTxt = this.getAlloyTxt(activity);
 
@@ -60,17 +61,17 @@ public class AlloyGenerator implements IAlloyGenerator {
 				out.write(alloyTxt.getBytes());
 				out.close();
 				
-				Console.debug("Génération terminée.", this.getClass());
+				log.debug("Génération terminée.");
 			}
 			catch (FileNotFoundException e) {
-				Console.warning("Impossible de trouver le fichier : " + e.toString(), this.getClass());
+				log.error("Impossible de trouver le fichier : " + e.toString(),e);
 			}
 			catch (IOException e) {
-				Console.warning("Impossible de créer le fichier : " + e.toString(), this.getClass());
+				log.error("Impossible de créer le fichier : " + e.toString(),e);
 			}
 			i++;
 		}
-		Console.debug("Générations finies.", this.getClass());
+		log.debug("Générations finies.");
 	}
 	
 	/**

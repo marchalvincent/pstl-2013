@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.ui.dialogs.WorkspaceResourceDialog;
 import org.eclipse.jface.dialogs.MessageDialog;
@@ -28,7 +29,6 @@ import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
 import com.upmc.pstl2013.umlParser.IUMLParser;
-import com.upmc.pstl2013.util.Console;
 
 import edu.mit.csail.sdg.alloy4.Err;
 
@@ -44,6 +44,7 @@ public class SwtView extends Composite {
 	
 	private String separator = File.separator;
 	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+	private static Logger log = Logger.getLogger(SwtView.class);
 
 	/**
 	 * Create the composite.
@@ -103,14 +104,14 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				showInView("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
+				log.debug("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
 				StringBuilder result = new StringBuilder();
 				try {
 					result.append(alloyExecutor.executeFiles());
 					result.append("Fin d'exécution des fichiers Alloy.");
-					showInView(result.toString());
+					log.debug(result.toString());
 				} catch (Err e1) {
-					Console.warning(e1.toString(), this.getClass());
+					log.debug(e1.toString());
 					text.setText(e1.toString());
 				}
 				alloyExecutor.reset();
@@ -128,7 +129,7 @@ public class SwtView extends Composite {
 		btnGetContentView.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				showInView("Génération du fichier logs.");
+				log.debug("Génération du fichier logs.");
 				
 				try {
 					// on créé le fichier a générer
@@ -139,15 +140,15 @@ public class SwtView extends Composite {
 					out.write(text.getText().getBytes());
 					out.close();
 
-					showInView("Création du fichier de log terminé : " + fichier.getPath());
+					log.debug("Création du fichier de log terminé : " + fichier.getPath());
 				}
 				catch (FileNotFoundException ex) {
-					Console.warning("Impossible de trouver le fichier : " + ex.toString(), this.getClass());
+					log.error("Impossible de trouver le fichier : " + ex.toString(), ex);
 				}
 				catch (IOException ex2) {
-					Console.warning("Impossible de créer le fichier : " + ex2.toString(), this.getClass());
+					log.error("Impossible de créer le fichier : " + ex2.toString(), ex2);
 				}
-				Console.debug("Générations finies.", this.getClass());
+				log.debug("Générations finies.");
 			}
 
 		});
@@ -180,11 +181,11 @@ public class SwtView extends Composite {
 	 * Affiche le message dans le vue et dans la console de Debug.
 	 * @param message
 	 */
-	private void showInView(String message)
-	{
-		Console.debug(message,this.getClass());
-		text.setText(text.getText() + message);
-		
-	}
+//	private void showInView(String message)
+//	{
+//		Console.debug(message,this.getClass());
+//		text.setText(text.getText() + message);
+//
+//	}
 
 }
