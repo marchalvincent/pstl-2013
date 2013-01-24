@@ -8,7 +8,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Activity;
+import org.eclipse.uml2.uml.ActivityNode;
 
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.factory.Factory;
@@ -38,7 +40,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 	}
 
 	@Override
-	public void generateFile() {
+	public void generateFile() throws JetException {
 		
 		filesGenerated = new ArrayList<File>();
 		log.debug("Début des générations.");
@@ -78,11 +80,27 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 * Fait appel a Jet et génère le contenu du fichier Alloy.
 	 * @param activity 
 	 * @return le contenu du fichier alloy.
+	 * @throws JetException en cas d'erreur lors de la génération.
 	 */
-	private String getAlloyTxt(Activity activity) {
+	private String getAlloyTxt(Activity activity) throws JetException {
+		
+		ActivityNode initialNode = null;
+		EList<ActivityNode> nodes = activity.getNodes();
+		
+		// on cherche le noeud initial
+		for (ActivityNode activityNode : nodes) {
+			log.debug("Nom de la classe : " + activityNode.eClass().getName());
+			if (activityNode.eClass().getName().equals("InitialNode")) {
+				initialNode = activityNode;
+				// au premier noeud initial rencontré, on quitte le parcours
+				break;
+			}
+		}
 		
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges au template Jet.
-		IJetHelper jetHelper = Factory.getInstance().newJetHelper(activity.getNodes(), activity.getEdges());
+		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, activity.getEdges(),
+				initialNode);
+		log.debug("nom du noeud initial:" + jetHelper.getInitialNode().getName());
 		JetTemplate jetTemplate = Factory.getInstance().newJetTemplate();
 		return jetTemplate.generate(jetHelper);
 	}

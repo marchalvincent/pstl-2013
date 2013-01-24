@@ -1,12 +1,14 @@
 <%@ jet package="com.upmc.pstl2013.alloyGenerator.impl" class="JetTemplate" 
 	imports="org.apache.log4j.Logger 
 			org.eclipse.emf.common.util.EList
-			org.eclipse.uml2.uml.*" %>
+			org.eclipse.uml2.uml.*" 
+	skeleton="alloyGenerator.skeleton" %>
 <% 
+	final Logger log = Logger.getLogger(JetTemplate.class);
 	if (!(argument instanceof IJetHelper)) {
-		Logger log = Logger.getLogger(JetTemplate.class);
-		log.error("L'argument passé au template Jet n'est pas un IJetHelper.");
-		return stringBuffer.toString();
+		final String error = "L'argument passé au template Jet n'est pas un IJetHelper.";
+		log.error(error);
+		throw new JetException(error);
 	}
 	IJetHelper jetHelper = (IJetHelper) argument;
 %>
@@ -18,7 +20,15 @@ open semantic
 
 fact initTokens {
 	Init[  
-		Initial -> 1 , 			// tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + 
+		<% 
+		// on gère les cas sans noeud initial...
+		ActivityNode initialNode = jetHelper.getInitialNode();
+		if (initialNode == null) {
+			final String error = "Le fichier n'a pas trouvé de noeud initial.";
+			log.error(error);
+			throw new JetException(error);
+		} 
+		stringBuffer.append(initialNode.getName().replace("-", "")); %> -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + 
 		ActivityEdge -> 0  // offers	
 	]
 }
