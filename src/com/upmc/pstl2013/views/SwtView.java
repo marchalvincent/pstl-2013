@@ -2,8 +2,6 @@ package com.upmc.pstl2013.views;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +18,12 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.impl.JetException;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
 import com.upmc.pstl2013.umlParser.IUMLParser;
@@ -42,7 +40,7 @@ public class SwtView extends Composite {
 	private IAlloyExecutor alloyExecutor;
 	
 	private String separator = File.separator;
-	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+	private String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 	private static Logger log = Logger.getLogger(SwtView.class);
 
 	/**
@@ -115,10 +113,16 @@ public class SwtView extends Composite {
 				log.debug("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
 				StringBuilder result = new StringBuilder();
 				try {
-					result.append(alloyExecutor.executeFiles());
-					result.append("Fin d'exécution des fichiers Alloy.");
-					log.debug(result.toString());
-					text.setText(result.toString());
+					try {
+						result.append(alloyExecutor.executeFiles());
+						result.append("Fin d'exécution des fichiers Alloy.");
+						log.debug(result.toString());
+						text.setText(result.toString());
+						
+					} catch (JetException e1) {
+						log.error(e1.getMessage());
+						text.setText(e1.getMessage());
+					}
 				} catch (Err e1) {
 					log.debug(e1.toString());
 					text.setText(e1.toString());
