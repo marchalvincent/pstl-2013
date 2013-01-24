@@ -18,6 +18,8 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.FileDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -29,9 +31,13 @@ import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 import edu.mit.csail.sdg.alloy4.Err;
+import org.eclipse.swt.widgets.Label;
 
 public class SwtView extends Composite {
-
+	
+	private Button btnChooseDir;
+	private Text textDirectory;
+	
 	private Text text;
 	private Button btnChooserFile;
 	private Button btnExcuterAlloy;
@@ -42,6 +48,7 @@ public class SwtView extends Composite {
 	private String separator = File.separator;
 	private String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 	private static Logger log = Logger.getLogger(SwtView.class);
+
 
 	/**
 	 * Create the composite.
@@ -68,6 +75,25 @@ public class SwtView extends Composite {
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		setLayout(gridLayout);
+		
+		btnChooseDir = new Button(this, SWT.NONE);
+		btnChooseDir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				
+				DirectoryDialog directoryD = new DirectoryDialog(new Shell());
+				String chemin = directoryD.open();
+				if (chemin != null)
+					textDirectory.setText(chemin);
+				// finir la séléction
+			}
+		});
+		btnChooseDir.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		btnChooseDir.setText("Choose Dir");
+		
+		textDirectory = new Text(this, SWT.BORDER);
+		textDirectory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		textDirectory.setText(userDir);
 
 		btnChooserFile = new Button(this, SWT.NONE);
 		GridData gd_btnChooserFile = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
@@ -106,6 +132,9 @@ public class SwtView extends Composite {
 		gd_btnExcuterAlloy.widthHint = 87;
 		btnExcuterAlloy.setLayoutData(gd_btnExcuterAlloy);
 		btnExcuterAlloy.setText("Exécuter Alloy");
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
 
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
