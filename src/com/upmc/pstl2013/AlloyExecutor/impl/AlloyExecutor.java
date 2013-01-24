@@ -23,9 +23,9 @@ import edu.mit.csail.sdg.alloy4viz.VizGUI;
  * Cette classe se charge d'éxécuter les fichiers Alloy généré précédement 
  *
  */
-public class AlloyExecutor implements IAlloyExecutor {
+public class AlloyExecutor implements IAlloyExecutor 
+{
 	
-
 	private IAlloyGenerator generator;
 	private static Logger log = Logger.getLogger(AlloyExecutor.class);
 	

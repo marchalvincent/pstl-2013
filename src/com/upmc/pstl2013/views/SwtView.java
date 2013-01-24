@@ -40,7 +40,6 @@ public class SwtView extends Composite {
 
 	private IUMLFileContainer fileContainer;
 	private IAlloyExecutor alloyExecutor;
-	private Button btnGetContentView;
 	
 	private String separator = File.separator;
 	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
@@ -55,6 +54,15 @@ public class SwtView extends Composite {
 	public SwtView(Composite parent, int style) {
 		super(parent, style);
 
+		
+		/***
+		 * 
+		 */
+		System.setProperty("log.home", "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\");
+		/***
+		 * 
+		 */
+		
 		fileContainer = Factory.getInstance().newFileContainer();
 		IUMLParser parser = Factory.getInstance().newParser(fileContainer);
 		IAlloyGenerator alloyGenerator = Factory.getInstance().newAlloyGenerator(parser);
@@ -110,47 +118,13 @@ public class SwtView extends Composite {
 					result.append(alloyExecutor.executeFiles());
 					result.append("Fin d'exécution des fichiers Alloy.");
 					log.debug(result.toString());
+					text.setText(result.toString());
 				} catch (Err e1) {
 					log.debug(e1.toString());
 					text.setText(e1.toString());
 				}
 				alloyExecutor.reset();
 			}
-		});
-		new Label(this, SWT.NONE);
-		new Label(this, SWT.NONE);
-
-
-		btnGetContentView = new Button(this, SWT.NONE);
-		GridData gd_btnGetContentView = new GridData(SWT.LEFT, SWT.BOTTOM, false, false, 1, 1);
-		gd_btnGetContentView.widthHint = 87;
-		btnGetContentView.setLayoutData(gd_btnGetContentView);
-		btnGetContentView.setText("DL Logs");
-		btnGetContentView.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseDown(MouseEvent e) {
-				log.debug("Génération du fichier logs.");
-				
-				try {
-					// on créé le fichier a générer
-					File fichier = new File(userDir + "logs" + ".txt");
-
-					// puis on écrit le contenu dedans
-					FileOutputStream out = new FileOutputStream(fichier);
-					out.write(text.getText().getBytes());
-					out.close();
-
-					log.debug("Création du fichier de log terminé : " + fichier.getPath());
-				}
-				catch (FileNotFoundException ex) {
-					log.error("Impossible de trouver le fichier : " + ex.toString(), ex);
-				}
-				catch (IOException ex2) {
-					log.error("Impossible de créer le fichier : " + ex2.toString(), ex2);
-				}
-				log.debug("Générations finies.");
-			}
-
 		});
 
 		// on finit par une petite vérification...
@@ -176,16 +150,5 @@ public class SwtView extends Composite {
 			text.setText(e2.getMessage());
 		}
 	}
-
-	/***
-	 * Affiche le message dans le vue et dans la console de Debug.
-	 * @param message
-	 */
-//	private void showInView(String message)
-//	{
-//		Console.debug(message,this.getClass());
-//		text.setText(text.getText() + message);
-//
-//	}
 
 }
