@@ -36,9 +36,8 @@ public class UMLParser implements IUMLParser {
 
 	@Override
 	public List<Activity> getActivities() {
-
 		log.debug("Debut du parsing.");
-		List<IFile> files = fileContainer.getselectedUMLFiles();
+		List<IFile> files = fileContainer.getSelectedUMLFiles();
 		int i = 1, nbFic = 0, nbActivity = 0;
 		for (IFile file : files) {
 			nbFic++;
@@ -68,7 +67,7 @@ public class UMLParser implements IUMLParser {
 
 	@Override
 	public void reset() {
-		activities = new ArrayList<Activity>();
+		activities.clear();
 		fileContainer.reset();
 	}
 }

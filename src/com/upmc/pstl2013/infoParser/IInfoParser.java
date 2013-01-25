@@ -18,6 +18,6 @@ public interface IInfoParser extends IProcess {
 	 * Renvoie la liste des fichiers sélectionnés.
 	 * @return une {@link List} d'{@link IFile}.
 	 */
-	List<IFile> getselectedUMLFiles();
+	List<IFile> getSelectedUMLFiles();
 	
 }
