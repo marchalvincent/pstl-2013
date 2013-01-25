@@ -16,4 +16,5 @@ public interface IAlloyExecutor extends IProcess {
 	 * @throws En cas d'erreur lors de la génération alloy.
 	 */
 	public String executeFiles() throws Err, JetException;
+	
 }
