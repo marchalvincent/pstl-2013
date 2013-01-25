@@ -1,9 +1,6 @@
 package com.upmc.pstl2013.views;
 
-import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +17,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -41,8 +37,8 @@ public class SwtView extends Composite {
 	private IUMLFileContainer fileContainer;
 	private IAlloyExecutor alloyExecutor;
 	
-	private String separator = File.separator;
-	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+	//private String separator = File.separator;
+	//private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 	private static Logger log = Logger.getLogger(SwtView.class);
 
 	/**
@@ -54,14 +50,11 @@ public class SwtView extends Composite {
 	public SwtView(Composite parent, int style) {
 		super(parent, style);
 
+		//TODO : enlever
+		//log.getAppender("htmlfile").
+		//FileAppender appender = (FileAppender)log.getAppender("htmlfile");
+		//appender.setFile("D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\log.html");
 		
-		/***
-		 * 
-		 */
-		System.setProperty("log.home", "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\");
-		/***
-		 * 
-		 */
 		
 		fileContainer = Factory.getInstance().newFileContainer();
 		IUMLParser parser = Factory.getInstance().newParser(fileContainer);
@@ -78,6 +71,7 @@ public class SwtView extends Composite {
 		btnChooserFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
+
 				// on créé un filtre pour les fichiers .uml
 				List<ViewerFilter> filters = new ArrayList<ViewerFilter>();
 				filters.add(new ViewerFilter() {
@@ -124,6 +118,7 @@ public class SwtView extends Composite {
 					text.setText(e1.toString());
 				}
 				alloyExecutor.reset();
+				System.out.println(log.getAllAppenders().toString());
 			}
 		});
 
