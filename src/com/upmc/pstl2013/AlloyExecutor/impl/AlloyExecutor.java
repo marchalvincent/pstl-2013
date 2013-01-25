@@ -90,13 +90,25 @@ public class AlloyExecutor implements IAlloyExecutor
 
 					for (Command command: world.getAllCommands()) {
 						// Execute the command
-						resultat.append("============ Command "+command+": ============\n");
+						resultat.append("============ Executing "+command+" ============\n");
+						long startTime = System.nanoTime();
 						A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
+						long endTime = System.nanoTime();
+						
 						// Print the outcome
 						//resultat.append(ans.toString());
 						
-						//TODO
-						getResults(ans);
+						//Affichage des info de l'execution
+						resultat.append("Solver : " +  options.solver.toString() + " ");
+						resultat.append("MaxSeq : " +  ans.getMaxSeq() + " ");
+						resultat.append("SkolemsDepth : " +  ans.getAllSkolems() + " ");
+						resultat.append("BitWidth : " +  ans.getBitwidth() + " ");
+						resultat.append("is Incremental : " +  ans.isIncremental() + " ");
+						resultat.append("Is Satisfiable : " +  ans.satisfiable() + "\n");
+						resultat.append("temps : " + (endTime - startTime) + "\n");
+						
+						//TODO : Finir la stratégie de parcours
+						//getResults(ans);
 						
 						// If satisfiable...
 						if (ans.satisfiable()) {
@@ -133,44 +145,13 @@ public class AlloyExecutor implements IAlloyExecutor
 		StringBuilder sb = new StringBuilder();
 		for (Sig sig : ans.getAllReachableSigs())
 		{
-			sb.append(sig.label).append("=").append(ans.eval(sig)).append("\n");
-            for(Field f:sig.getFields()) sb.append(sig.label).append("<:").append(f.label).append("=").append(ans.eval(f)).append("\n");
+			//Pour la stratégie de parcours
+			if (sig.label.equals("semantic/State"))
+			{
+				sb.append(sig.label).append("=").append(ans.eval(sig)).append("\n");
+	            for(Field f:sig.getFields()) sb.append(sig.label).append("<:").append(f.label).append("=").append(ans.eval(f)).append("\n");
+			}
 		}
-		
-		/*
-		for(ExprVar v:ans.getAllSkolems()) {
-            sb.append("skolem ").append(v.label).append("=").append(eval(v)).append("\n");
-        }
-		*/
-		
-		/*if (!solved) return "---OUTCOME---\nUnknown.\n";
-        if (eval == null) return "---OUTCOME---\nUnsatisfiable.\n";
-        String answer = toStringCache;
-		if (answer != null) return answer;
-        Instance sol = eval.instance();
-        
-        sb.append("---INSTANCE---\n" + "integers={");
-        boolean firstTuple = true;
-        for(IndexedEntry<TupleSet> e:sol.intTuples()) {
-            if (firstTuple) firstTuple=false; else sb.append(", ");
-            // No need to print e.index() since we've ensured the Int atom's String representation is always equal to ""+e.index()
-            Object atom = e.value().iterator().next().atom(0);
-            sb.append(atom2name(atom));
-        }
-        sb.append("}\n");
-        try {
-            for(Sig s:sigs) {
-                sb.append(s.label).append("=").append(eval(s)).append("\n");
-                for(Field f:s.getFields()) sb.append(s.label).append("<:").append(f.label).append("=").append(eval(f)).append("\n");
-            }
-            for(ExprVar v:skolems) {
-                sb.append("skolem ").append(v.label).append("=").append(eval(v)).append("\n");
-            }
-            //return toStringCache = sb.toString();
-        } catch(Err er) {
-            //return toStringCache = ("<Evaluator error occurred: "+er+">");
-        }	
-        */	
 	}
 	
 }
