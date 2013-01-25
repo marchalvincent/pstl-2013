@@ -14,6 +14,7 @@ import org.eclipse.uml2.uml.ActivityNode;
 
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 /**
@@ -22,29 +23,32 @@ import com.upmc.pstl2013.umlParser.IUMLParser;
  */
 public class AlloyGenerator implements IAlloyGenerator {
 	
+	private IInfoGenerator infoGenerator;
 	private IUMLParser parser;
 	private List<File> filesGenerated;
-	private final String separator = File.separator;
-	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 	private static Logger log = Logger.getLogger(AlloyGenerator.class);
 
 	/**
 	 * Constructeur
 	 */
-	public AlloyGenerator (IUMLParser parser) {
+	public AlloyGenerator (IInfoGenerator infoGen, IUMLParser pars) {
 		super();
-		this.parser = parser;
+		infoGenerator = infoGen;
+		parser = pars;
 		filesGenerated = new ArrayList<File>();
-		// on créé le répertoire qui contiendra les fichiers Alloy
-		new File(userDir).mkdir();
 	}
 
 	@Override
 	public void generateFile() throws JetException {
-		
-		filesGenerated = new ArrayList<File>();
 		log.debug("Début des générations.");
-		// on récupère les activités
+		
+		// 1. On créé le répertoire qui contiendra les fichiers Alloy s'il n'existe pas.
+		String userDir = infoGenerator.getDestinationDirectory();
+		new File(userDir).mkdir();
+		
+		// TODO utiliser le infoGenerator
+		
+		// 2. On récupère les activités
 		List<Activity> activities = parser.getActivities();
 		int i = 1;
 
@@ -107,6 +111,8 @@ public class AlloyGenerator implements IAlloyGenerator {
 	
 	@Override
 	public void fichiersPresents() throws FileNotFoundException {
+		
+		String userDir = infoGenerator.getDestinationDirectory();
 		StringBuilder fichiersManquants = new StringBuilder();
 		if (!new File(userDir + "semantic.als").exists())
 			fichiersManquants.append(" semantic.als");

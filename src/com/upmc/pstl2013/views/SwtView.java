@@ -19,7 +19,7 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.FileDialog;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
@@ -27,11 +27,11 @@ import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.JetException;
 import com.upmc.pstl2013.factory.Factory;
-import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
+import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
+import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 import edu.mit.csail.sdg.alloy4.Err;
-import org.eclipse.swt.widgets.Label;
 
 public class SwtView extends Composite {
 	
@@ -42,7 +42,8 @@ public class SwtView extends Composite {
 	private Button btnChooserFile;
 	private Button btnExcuterAlloy;
 
-	private IUMLFileContainer fileContainer;
+	private IInfoParser infoParser;
+	private IInfoGenerator infoGenerator;
 	private IAlloyExecutor alloyExecutor;
 	
 	private String separator = File.separator;
@@ -60,18 +61,21 @@ public class SwtView extends Composite {
 		super(parent, style);
 
 		
-		/***
+		/**
 		 * 
 		 */
 		System.setProperty("log.home", "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\");
-		/***
+		/**
 		 * 
 		 */
 		
-		fileContainer = Factory.getInstance().newFileContainer();
-		IUMLParser parser = Factory.getInstance().newParser(fileContainer);
-		IAlloyGenerator alloyGenerator = Factory.getInstance().newAlloyGenerator(parser);
+		infoParser = Factory.getInstance().newInfoParser();
+		infoGenerator = Factory.getInstance().newInfoGenerator();
+		IUMLParser parser = Factory.getInstance().newParser(infoParser);
+		IAlloyGenerator alloyGenerator = Factory.getInstance().newAlloyGenerator(infoGenerator, parser);
 		alloyExecutor = Factory.getInstance().newAlloyExecutor(alloyGenerator);
+		
+		infoGenerator.setDestinationDirectory(userDir);
 
 		GridLayout gridLayout = new GridLayout(2, false);
 		setLayout(gridLayout);
@@ -80,12 +84,13 @@ public class SwtView extends Composite {
 		btnChooseDir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				
 				DirectoryDialog directoryD = new DirectoryDialog(new Shell());
 				String chemin = directoryD.open();
-				if (chemin != null)
+				if (chemin != null) {
+					// on met a jour l'IU et l'info générateur.
 					textDirectory.setText(chemin);
-				// finir la séléction
+					infoGenerator.setDestinationDirectory(chemin);
+				}
 			}
 		});
 		btnChooseDir.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
@@ -115,7 +120,7 @@ public class SwtView extends Composite {
 				IFile file[] = WorkspaceResourceDialog.openFileSelection(new Shell(), "Selectionnez les fichiers UML", 
 						null, true, null, filters);
 				for (IFile iFile : file) {
-					fileContainer.addFile(iFile);
+					infoParser.addFile(iFile);
 				}
 			}
 		});
