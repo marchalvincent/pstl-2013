@@ -1,5 +1,7 @@
 package com.upmc.pstl2013.infoGenerator.impl;
 
+import java.util.Map;
+
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 
 /**
@@ -10,10 +12,12 @@ import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 public class InfoGenerator implements IInfoGenerator {
 
 	private String directoryPath;
+	private Map<String, Map<String, String>> properties;
 	
 	public InfoGenerator() {
 		super();
 		directoryPath = "";
+		properties = null;
 	}
 
 	@Override
@@ -24,6 +28,16 @@ public class InfoGenerator implements IInfoGenerator {
 	@Override
 	public String getDestinationDirectory() {
 		return directoryPath;
+	}
+
+	@Override
+	public void setProperties(Map<String, Map<String, String>> prop) {
+		properties = prop;
+	}
+
+	@Override
+	public Map<String, Map<String, String>> getProperties() {
+		return properties;
 	}
 
 }
