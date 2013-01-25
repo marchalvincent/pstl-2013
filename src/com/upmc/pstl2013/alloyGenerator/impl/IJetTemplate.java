@@ -11,7 +11,7 @@ public interface IJetTemplate {
 	/**
 	 * La méthode est dans la possibilité de renvoyer une exception en cas de problème.
 	 * @param argument
-	 * @return
+	 * @return String
 	 * @throws GenericException
 	 */
 	String generate(Object argument) throws JetException;

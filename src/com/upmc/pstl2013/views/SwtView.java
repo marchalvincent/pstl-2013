@@ -82,6 +82,7 @@ public class SwtView extends Composite {
 				DirectoryDialog directoryD = new DirectoryDialog(new Shell());
 				String chemin = directoryD.open();
 				if (chemin != null) {
+					chemin += separator;
 					// on met a jour l'IU et l'info générateur.
 					textDirectory.setText(chemin);
 					infoGenerator.setDestinationDirectory(chemin);
@@ -139,6 +140,9 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
+				// on définit les propriétés...
+				infoGenerator.setProperties(null);
+				
 				log.debug("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
 				StringBuilder result = new StringBuilder();
 				try {
