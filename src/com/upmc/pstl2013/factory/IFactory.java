@@ -1,5 +1,7 @@
 package com.upmc.pstl2013.factory;
 
+import java.util.Map;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
@@ -12,6 +14,7 @@ import com.upmc.pstl2013.alloyGenerator.impl.IJetHelper;
 import com.upmc.pstl2013.alloyGenerator.impl.JetTemplate;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.infoParser.IInfoParser;
+import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.umlParser.impl.UMLParser;
 
@@ -20,8 +23,8 @@ import com.upmc.pstl2013.umlParser.impl.UMLParser;
  */
 public interface IFactory {
 
-	IJetHelper newJetHelper(EList<ActivityNode> nodes,
-			EList<ActivityEdge> edges, ActivityNode init);
+	IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, 
+			ActivityNode init, ActivityNode fina, IProperties prop);
 
 	/**
 	 * Créé un {@link JetTemplate}.
@@ -56,4 +59,10 @@ public interface IFactory {
 	 * @param generator un {@link IAlloyGenerator}.
 	 */
 	IAlloyExecutor newAlloyExecutor(IAlloyGenerator generator);
+	
+	/**
+	 * Créer une nouvelle propriété.
+	 * @param properties les propriétés sélectionnée par l'utilisateur.
+	 */
+	IProperties newPropertie(Map<String, Map<String, String>> properties);
 }

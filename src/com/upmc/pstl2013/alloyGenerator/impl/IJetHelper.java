@@ -4,18 +4,14 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 
+import com.upmc.pstl2013.properties.IProperties;
+
 /**
  * Cette interface sert de conteneur pour passer plusieurs arguments
  * au template Jet qui génère le fichier Alloy.
  *
  */
 public interface IJetHelper {
-	
-	/**
-	 * Renvoie vrai si le JetHelper est bien formé.
-	 * @return
-	 */
-	boolean isCorrect();
 
 	/**
 	 * Renvoie la liste des {@link ActivityNode}.
@@ -34,4 +30,23 @@ public interface IJetHelper {
 	 * @return {@link ActivityNode}.
 	 */
 	ActivityNode getInitialNode();
+	
+	/**
+	 * Renvoie le noeud final.
+	 * @return {@link ActivityNode}.
+	 */
+	ActivityNode getFinalNode();
+	
+	/**
+	 * Renvoie les propriétés.
+	 * @return {@link IProperties}.
+	 */
+	IProperties getProperties();
+	
+	/**
+	 * Renvoie le nom du predicat final.
+	 * Il faut que ce nom soit différent des autres noms de "node" ou "edge".
+	 * @return {@code String}.
+	 */
+	String getNameFinalPredicat();
 }
