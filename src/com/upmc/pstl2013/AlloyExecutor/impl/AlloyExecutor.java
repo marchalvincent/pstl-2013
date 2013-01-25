@@ -5,21 +5,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import kodkod.instance.Instance;
-import kodkod.instance.TupleSet;
-import kodkod.util.ints.IndexedEntry;
-
 import org.apache.log4j.Logger;
 
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.impl.JetException;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
-import edu.mit.csail.sdg.alloy4.SafeList;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
-import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
@@ -49,12 +44,9 @@ public class AlloyExecutor implements IAlloyExecutor
 		this.generator = generator;
 		this.results = new ArrayList<String>();
 	}
-
-	/**
-	 * Exécute chacun des fichiers gérés par le plugin.
-	 */
+	
 	@Override
-	public String executeFiles() throws Err
+	public String executeFiles() throws Err, JetException
 	{
 		//Résultat
 		StringBuilder resultat = new StringBuilder();

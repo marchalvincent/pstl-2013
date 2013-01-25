@@ -1,17 +1,10 @@
 package com.upmc.pstl2013.alloyExecutor;
 
-import java.util.List;
-
-import kodkod.instance.Instance;
-import kodkod.instance.TupleSet;
-import kodkod.util.ints.IndexedEntry;
-
 import com.upmc.pstl2013.IProcess;
+import com.upmc.pstl2013.alloyGenerator.impl.JetException;
+import com.upmc.pstl2013.alloyGenerator.impl.JetTemplate;
 
 import edu.mit.csail.sdg.alloy4.Err;
-import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
-import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
-import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 /***
  * Interface d'un exécuteur de fichier Alloy.
@@ -22,8 +15,9 @@ public interface IAlloyExecutor extends IProcess {
 	/***
 	 * Méthode permettant d'Exécuter la liste des fichiers "als" présents dans la liste.
 	 * @throws Err Dans le cas d'une exécution impossible.
+	 * @throws JetTemplate dans le cas d'une erreur lors de la génération Jet.
 	 */
-	public String executeFiles() throws Err;
+	public String executeFiles() throws Err, JetException;
 	
 	public void getResults(A4Solution ans);
 }
