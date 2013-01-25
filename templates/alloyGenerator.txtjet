@@ -1,0 +1,121 @@
+<%@ jet package="com.upmc.pstl2013.alloyGenerator.impl" class="JetTemplate" 
+	imports="org.apache.log4j.Logger 
+			org.eclipse.emf.common.util.EList
+			org.eclipse.uml2.uml.*" 
+	skeleton="alloyGenerator.skeleton" %>
+<% 
+	final Logger log = Logger.getLogger(JetTemplate.class);
+	if (!(argument instanceof IJetHelper)) {
+		final String error = "L'argument passé au template Jet n'est pas un IJetHelper.";
+		log.error(error);
+		throw new JetException(error);
+	}
+	IJetHelper jetHelper = (IJetHelper) argument;
+%>
+
+module process
+
+open syntax
+open semantic
+
+fact initTokens {
+	Init[  
+		<% //GENERATION DU NOEUD INITIAL EN DYNAMIQUE
+		// on gère les cas sans noeud initial...
+		ActivityNode initialNode = jetHelper.getInitialNode();
+		if (initialNode == null) {
+			final String error = "Le fichier n'a pas trouvé de noeud initial.";
+			log.error(error);
+			throw new JetException(error);
+		}
+		stringBuffer.append(initialNode.getName().replace("-", "")); %> -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + 
+		ActivityEdge -> 0  // offers	
+	]
+}
+
+// Timing
+one sig T extends Timing {} {
+	timing = (ActivityNode -> 0) 
+}
+
+// Role Performer
+one sig Yoann extends RolePerformer {}
+one sig P extends Performer {} {
+	performer = ActivityNode -> Yoann
+}
+
+<% // GENERATION DES NOEUDS ET EDGES EN DYNAMIQUE
+	EList<ActivityNode> nodes = jetHelper.getNodes();
+	EList<ActivityEdge> edges = jetHelper.getEdges();
+	
+	stringBuffer.append("------Generated Nodes------" + NL);
+	for (ActivityNode node : nodes) {
+		stringBuffer.append("one sig " + node.getName().replace("-", "") + " extends " + node.eClass().getName() + " {}{}" + NL);
+	}
+	
+	stringBuffer.append(NL + NL + "------Generated Edges------" + NL);
+	for (ActivityEdge edge : edges) {
+		stringBuffer.append("one sig " + edge.getName().replace("-", "") + " extends " + edge.eClass().getName() + " {}{" + NL);
+		stringBuffer.append("    source = " + edge.getSource().getName() + NL);
+		stringBuffer.append("    target = " + edge.getTarget().getName() + NL);
+		stringBuffer.append("}" + NL);
+	}
+%>
+
+<% // GENERATION DU NOEUD FINAL EN DYNAMIQUE
+	// on gère les cas sans noeud finaux...
+	ActivityNode finalNode = jetHelper.getfinalNode();
+	if (finalNode == null) {
+		final String error = "Le fichier n'a pas trouvé de noeud final.";
+		log.error(error);
+		throw new JetException(error);
+	}
+	
+	String namePredicat = jetHelper.getNameFinalPredicat();
+	//TODO générer le nom du prédicat
+%>
+pred <% stringBuffer.append(namePredicat); %> {
+	//some s : State | s.getTokens[Final] = 1 // 4 Solution
+	some s:State | s.getTokens[<% stringBuffer.append(finalNode); %>] > 0
+}
+
+
+
+/////////////
+
+
+pred testAll {
+	<% stringBuffer.append(namePredicat); %> 
+}
+
+assert tall {
+	testAll
+}
+
+//TODO le nombre peux State peux augmenter ex: 20 State ou 30 State etc...
+//run testAll for 0 but 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 1
+//check tall for 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 0
+<%
+	IProperties properties = jetHelper.getProperties();
+	if (properties == null) {
+		final String error = "Les propriétés sont incorrectes.";
+		log.error(error);
+		throw new JetException(error);
+	}
+	stringBuffer.append(properties.getAlloyCode() + NL);
+%>
+
+
+
+/** *Visualization Variables */
+// http://alloy.mit.edu/community/node/548
+fun vNodeExecuting : State->ActivityNode {
+   {s:State, a:ActivityNode | s.getTokens[a] > 0}
+}
+fun vEdgeHaveOffers : State->ActivityEdge {
+   {s:State, e:ActivityEdge | s.getOffers[e] > 0}
+}
+
+fun pinInNode : State->Action->Pin->Int {
+	 {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}
+}

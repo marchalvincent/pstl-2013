@@ -1,0 +1,32 @@
+
+<%=NSHelper.lineSeparator("ActivityEdge")%>
+MODULE ActivityEdge(container, source, target, p_push-cond ,p_pull-cond)
+DEFINE
+	haveOffers := container.running & state = PUSH & (offers > 0);
+VAR
+	offers : 0..<%=NSHelper.maxTokens()%>;
+	state : {PUSH, PULL}; 
+INIT
+	state = PULL &
+	offers = 0;
+TRANS
+	case
+		container.running &
+		state = PULL & 
+		source.firing  & 
+		p_push-cond : next(offers) = (offers + source.tokens) & 
+						next(state) = PUSH;
+					
+		container.running &						     
+		state = PUSH & 
+		target.firing &
+		p_pull-cond : next(offers) = (offers - target.tokens) &
+						next(state) = PULL;
+												 
+		TRUE : 			next(offers) = offers & 
+						next(state) = state;
+	esac;
+	
+--INVAR source.firing -> !target.firing;
+--INVAR target.firing -> !source.firing;
+

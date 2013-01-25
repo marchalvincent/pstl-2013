@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_5YIn8F_DEeK1mp8-gHD1eA">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_Ab_sQF_EEeK1mp8-gHD1eA" name="Process" node="_Z_Z1EF_EEeK1mp8-gHD1eA _fR8FsF_EEeK1mp8-gHD1eA _gwBNQF_EEeK1mp8-gHD1eA _lI6gIF_EEeK1mp8-gHD1eA">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_yXgBUF_EEeK1mp8-gHD1eA" name="initial-to-A" source="_Z_Z1EF_EEeK1mp8-gHD1eA" target="_fR8FsF_EEeK1mp8-gHD1eA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_DYv70F_FEeK1mp8-gHD1eA" name="A-to-B" source="_fR8FsF_EEeK1mp8-gHD1eA" target="_gwBNQF_EEeK1mp8-gHD1eA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_EEuRAF_FEeK1mp8-gHD1eA" name="B-vers-final" source="_gwBNQF_EEeK1mp8-gHD1eA" target="_lI6gIF_EEeK1mp8-gHD1eA"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_Z_Z1EF_EEeK1mp8-gHD1eA" name="initial" outgoing="_yXgBUF_EEeK1mp8-gHD1eA"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_fR8FsF_EEeK1mp8-gHD1eA" name="A" outgoing="_DYv70F_FEeK1mp8-gHD1eA" incoming="_yXgBUF_EEeK1mp8-gHD1eA"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_gwBNQF_EEeK1mp8-gHD1eA" name="B" outgoing="_EEuRAF_FEeK1mp8-gHD1eA" incoming="_DYv70F_FEeK1mp8-gHD1eA"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_lI6gIF_EEeK1mp8-gHD1eA" name="final" incoming="_EEuRAF_FEeK1mp8-gHD1eA"/>
+  </packagedElement>
+</uml:Model>
