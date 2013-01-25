@@ -14,7 +14,7 @@
 	</appender>
 	
 	<appender name="htmlfile" class="org.apache.log4j.FileAppender">
-		<param name="File" value="D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\log.html" />
+		<param name="File" value="log.html" />
 		<layout class="org.apache.log4j.HTMLLayout"/>
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMin" value="debug" />

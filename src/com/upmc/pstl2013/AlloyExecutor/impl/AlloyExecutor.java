@@ -165,10 +165,4 @@ public class AlloyExecutor implements IAlloyExecutor
         */	
 	}
 	
-	
-	/** Dumps the Kodkod solution into String. 
-    @Override 
-    public String toString() {
-        
-    }*/
 }
