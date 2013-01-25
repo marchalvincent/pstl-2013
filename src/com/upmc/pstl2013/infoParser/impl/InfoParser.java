@@ -1,17 +1,17 @@
-package com.upmc.pstl2013.umlContainer.impl;
+package com.upmc.pstl2013.infoParser.impl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.resources.IFile;
 
-import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
+import com.upmc.pstl2013.infoParser.IInfoParser;
 
-public class UMLFileContainer implements IUMLFileContainer {
+public class InfoParser implements IInfoParser {
 
 	private List<IFile> files;
 	
-	public UMLFileContainer() {
+	public InfoParser() {
 		super();
 		files = new ArrayList<IFile>();
 	}

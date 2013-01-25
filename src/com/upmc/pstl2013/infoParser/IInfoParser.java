@@ -1,4 +1,4 @@
-package com.upmc.pstl2013.umlContainer;
+package com.upmc.pstl2013.infoParser;
 
 import java.util.List;
 
@@ -6,7 +6,7 @@ import org.eclipse.core.resources.IFile;
 
 import com.upmc.pstl2013.IProcess;
 
-public interface IUMLFileContainer extends IProcess {
+public interface IInfoParser extends IProcess {
 
 	/**
 	 * Ajoute un fichier à la liste.

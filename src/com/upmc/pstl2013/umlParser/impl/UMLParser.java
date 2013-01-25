@@ -16,7 +16,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Activity;
 
-import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
+import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 /**
@@ -24,11 +24,11 @@ import com.upmc.pstl2013.umlParser.IUMLParser;
  */
 public class UMLParser implements IUMLParser {
 
-	private IUMLFileContainer fileContainer;
+	private IInfoParser fileContainer;
 	private List<Activity> activities;
 	private static Logger log = Logger.getLogger(UMLParser.class);
 
-	public UMLParser(IUMLFileContainer fc) {
+	public UMLParser(IInfoParser fc) {
 		super();
 		fileContainer = fc;
 		activities = new ArrayList<Activity>();
