@@ -16,7 +16,11 @@ public class PropertiesFactory {
 	 * @return {@link IProperties}.
 	 */
 	public static IProperties createPropertie(Map<String, Map<String, String>> propertie) {
+		// TODO pour les test, enlever une fois fini
+		if (propertie == null) {
+			return new DeadLock(propertie);
+		}
 		if (propertie.equals("DeadLock")) return new DeadLock(propertie);
-		else return new DeadLock(propertie);
+		else return null;
 	}
 }

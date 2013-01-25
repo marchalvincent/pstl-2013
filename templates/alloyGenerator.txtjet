@@ -1,7 +1,8 @@
 <%@ jet package="com.upmc.pstl2013.alloyGenerator.impl" class="JetTemplate" 
 	imports="org.apache.log4j.Logger 
 			org.eclipse.emf.common.util.EList
-			org.eclipse.uml2.uml.*" 
+			org.eclipse.uml2.uml.*
+			com.upmc.pstl2013.properties.*" 
 	skeleton="alloyGenerator.skeleton" %>
 <% 
 	final Logger log = Logger.getLogger(JetTemplate.class);
@@ -64,19 +65,19 @@ one sig P extends Performer {} {
 
 <% // GENERATION DU NOEUD FINAL EN DYNAMIQUE
 	// on gère les cas sans noeud finaux...
-	ActivityNode finalNode = jetHelper.getfinalNode();
+	ActivityNode finalNode = jetHelper.getFinalNode();
 	if (finalNode == null) {
 		final String error = "Le fichier n'a pas trouvé de noeud final.";
 		log.error(error);
 		throw new JetException(error);
 	}
 	
+	// on génère également le nom du predicat en dynamique
 	String namePredicat = jetHelper.getNameFinalPredicat();
-	//TODO générer le nom du prédicat
 %>
 pred <% stringBuffer.append(namePredicat); %> {
 	//some s : State | s.getTokens[Final] = 1 // 4 Solution
-	some s:State | s.getTokens[<% stringBuffer.append(finalNode); %>] > 0
+	some s:State | s.getTokens[<% stringBuffer.append(finalNode.getName().replace("-", "")); %>] > 0
 }
 
 
@@ -93,8 +94,8 @@ assert tall {
 }
 
 //TODO le nombre peux State peux augmenter ex: 20 State ou 30 State etc...
-//run testAll for 0 but 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 1
-//check tall for 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 0
+run testAll for 0 but 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 1
+check tall for 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 0
 <%
 	IProperties properties = jetHelper.getProperties();
 	if (properties == null) {
