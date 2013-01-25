@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.views;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,28 +18,35 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.impl.JetException;
 import com.upmc.pstl2013.factory.Factory;
-import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
+import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
+import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 import edu.mit.csail.sdg.alloy4.Err;
 
 public class SwtView extends Composite {
 
+	private Button btnChooseDir;
+	private Text textDirectory;
+
 	private Text text;
 	private Button btnChooserFile;
 	private Button btnExcuterAlloy;
 
-	private IUMLFileContainer fileContainer;
+	private IInfoParser infoParser;
+	private IInfoGenerator infoGenerator;
 	private IAlloyExecutor alloyExecutor;
 	
-	//private String separator = File.separator;
-	//private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+	private String separator = File.separator;
+	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 	private static Logger log = Logger.getLogger(SwtView.class);
 
 	/**
@@ -56,14 +64,39 @@ public class SwtView extends Composite {
 		//appender.setFile("D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\log.html");
 		
 		
-		fileContainer = Factory.getInstance().newFileContainer();
-		IUMLParser parser = Factory.getInstance().newParser(fileContainer);
-		IAlloyGenerator alloyGenerator = Factory.getInstance().newAlloyGenerator(parser);
+		infoParser = Factory.getInstance().newInfoParser();
+		infoGenerator = Factory.getInstance().newInfoGenerator();
+		IUMLParser parser = Factory.getInstance().newParser(infoParser);
+		IAlloyGenerator alloyGenerator = Factory.getInstance().newAlloyGenerator(infoGenerator, parser);
 		alloyExecutor = Factory.getInstance().newAlloyExecutor(alloyGenerator);
 
+		infoGenerator.setDestinationDirectory(userDir);
+		
 		GridLayout gridLayout = new GridLayout(2, false);
 		setLayout(gridLayout);
 
+		btnChooseDir = new Button(this, SWT.NONE);
+		btnChooseDir.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				DirectoryDialog directoryD = new DirectoryDialog(new Shell());
+				String chemin = directoryD.open();
+				if (chemin != null) {
+					// on met a jour l'IU et l'info générateur.
+					textDirectory.setText(chemin);
+					infoGenerator.setDestinationDirectory(chemin);
+				}
+			}
+		});
+		btnChooseDir.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+		btnChooseDir.setText("Choose Dir");
+		
+		textDirectory = new Text(this, SWT.BORDER);
+		textDirectory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		textDirectory.setText(userDir);
+
+		
+		
 		btnChooserFile = new Button(this, SWT.NONE);
 		GridData gd_btnChooserFile = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_btnChooserFile.widthHint = 87;
@@ -85,7 +118,7 @@ public class SwtView extends Composite {
 				IFile file[] = WorkspaceResourceDialog.openFileSelection(new Shell(), "Selectionnez les fichiers UML", 
 						null, true, null, filters);
 				for (IFile iFile : file) {
-					fileContainer.addFile(iFile);
+					infoParser.addFile(iFile);
 				}
 			}
 		});
@@ -113,6 +146,9 @@ public class SwtView extends Composite {
 					result.append("Fin d'exécution des fichiers Alloy.");
 					log.debug(result.toString());
 					text.setText(result.toString());
+				} catch (JetException e1) {
+					log.error(e1.getMessage());
+					text.setText(e1.getMessage());
 				} catch (Err e1) {
 					log.debug(e1.toString());
 					text.setText(e1.toString());
