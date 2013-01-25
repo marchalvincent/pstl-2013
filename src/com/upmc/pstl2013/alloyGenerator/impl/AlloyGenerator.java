@@ -46,8 +46,6 @@ public class AlloyGenerator implements IAlloyGenerator {
 		String userDir = infoGenerator.getDestinationDirectory();
 		new File(userDir).mkdir();
 		
-		// TODO utiliser le infoGenerator
-		
 		// 2. On récupère les activités
 		List<Activity> activities = parser.getActivities();
 		int i = 1;
@@ -130,7 +128,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 	@Override
 	public void reset() {
-		filesGenerated = new ArrayList<File>();
+		filesGenerated.clear();
 		parser.reset();
 	}
 }

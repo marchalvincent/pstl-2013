@@ -17,7 +17,7 @@ public class InfoParser implements IInfoParser {
 	}
 	
 	@Override
-	public List<IFile> getselectedUMLFiles() {
+	public List<IFile> getSelectedUMLFiles() {
 		return files;
 	}
 
@@ -28,6 +28,6 @@ public class InfoParser implements IInfoParser {
 
 	@Override
 	public void reset() {
-		files = new ArrayList<IFile>();
+		files.clear();
 	}
 }
