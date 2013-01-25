@@ -9,9 +9,9 @@ import com.upmc.pstl2013.alloyExecutor.impl.AlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.IJetHelper;
-import com.upmc.pstl2013.alloyGenerator.impl.JetHelper;
 import com.upmc.pstl2013.alloyGenerator.impl.JetTemplate;
-import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
+import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
+import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.umlParser.impl.UMLParser;
 
@@ -20,47 +20,40 @@ import com.upmc.pstl2013.umlParser.impl.UMLParser;
  */
 public interface IFactory {
 
-	/**
-	 * Créé un {@link JetHelper}.
-	 * 
-	 * @return
-	 */
 	IJetHelper newJetHelper(EList<ActivityNode> nodes,
 			EList<ActivityEdge> edges, ActivityNode init);
 
 	/**
 	 * Créé un {@link JetTemplate}.
-	 * 
-	 * @return
 	 */
 	JetTemplate newJetTemplate();
 
 	/**
-	 * Créé un {@link IUMLFileContainer}.
+	 * Créé un {@link IInfoParser}.
 	 */
-	IUMLFileContainer newFileContainer();
+	IInfoParser newInfoParser();
+	
+	/**
+	 * Créé un {@link IInfoGenerator}.
+	 */
+	IInfoGenerator newInfoGenerator();
 
 	/**
 	 * Créé un {@link UMLParser}.
-	 * 
-	 * @param parser
-	 *            un {@link IUMLFileContainer}.
+	 * @param parser un {@link IInfoParser}.
 	 */
-	IUMLParser newParser(IUMLFileContainer fc);
+	IUMLParser newParser(IInfoParser fc);
 
 	/**
 	 * Créé un {@link AlloyGenerator}.
-	 * 
-	 * @param parser
-	 *            un {@link IUMLParser}.
+	 * @param infoGenerator un {@link IInfoGenerator}.
+	 * @param parser un {@link IUMLParser}.
 	 */
-	IAlloyGenerator newAlloyGenerator(IUMLParser parser);
+	IAlloyGenerator newAlloyGenerator(IInfoGenerator infoGenerator, IUMLParser parser);
 
 	/**
 	 * Créé un {@link AlloyExecutor}.
-	 * 
-	 * @param generator
-	 *            un {@link IAlloyGenerator}.
+	 * @param generator un {@link IAlloyGenerator}.
 	 */
 	IAlloyExecutor newAlloyExecutor(IAlloyGenerator generator);
 }

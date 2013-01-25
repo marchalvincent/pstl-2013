@@ -11,8 +11,10 @@ import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.IJetHelper;
 import com.upmc.pstl2013.alloyGenerator.impl.JetHelper;
 import com.upmc.pstl2013.alloyGenerator.impl.JetTemplate;
-import com.upmc.pstl2013.umlContainer.IUMLFileContainer;
-import com.upmc.pstl2013.umlContainer.impl.UMLFileContainer;
+import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
+import com.upmc.pstl2013.infoGenerator.impl.InfoGenerator;
+import com.upmc.pstl2013.infoParser.IInfoParser;
+import com.upmc.pstl2013.infoParser.impl.InfoParser;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.umlParser.impl.UMLParser;
 
@@ -47,18 +49,23 @@ public class Factory implements IFactory {
 	}
 	
 	@Override
-	public IUMLFileContainer newFileContainer() {
-		return new UMLFileContainer();
+	public IInfoParser newInfoParser() {
+		return new InfoParser();
 	}
 
 	@Override
-	public IUMLParser newParser(IUMLFileContainer fileContainer) {
+	public IInfoGenerator newInfoGenerator() {
+		return new InfoGenerator();
+	}
+
+	@Override
+	public IUMLParser newParser(IInfoParser fileContainer) {
 		return new UMLParser(fileContainer);
 	}
 
 	@Override
-	public IAlloyGenerator newAlloyGenerator(IUMLParser parser) {
-		return new AlloyGenerator(parser);
+	public IAlloyGenerator newAlloyGenerator(IInfoGenerator infoGenerator, IUMLParser parser) {
+		return new AlloyGenerator(infoGenerator, parser);
 	}
 
 	@Override
