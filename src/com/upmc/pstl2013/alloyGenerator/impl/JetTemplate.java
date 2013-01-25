@@ -22,8 +22,8 @@ public class JetTemplate implements IJetTemplate {
   protected final String TEXT_3 = NL;
   protected final String TEXT_4 = NL + "pred ";
   protected final String TEXT_5 = " {" + NL + "\t//some s : State | s.getTokens[Final] = 1 // 4 Solution" + NL + "\tsome s:State | s.getTokens[";
-  protected final String TEXT_6 = "] > 0" + NL + "}" + NL + "" + NL + "" + NL + "" + NL + "/////////////" + NL + "" + NL + "" + NL + "pred testAll {" + NL + "\t";
-  protected final String TEXT_7 = " " + NL + "}" + NL + "" + NL + "assert tall {" + NL + "\ttestAll" + NL + "}" + NL + "" + NL + "//TODO le nombre peux State peux augmenter ex: 20 State ou 30 State etc..." + NL + "run testAll for 0 but 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 1" + NL + "check tall for 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 0";
+  protected final String TEXT_6 = "] > 0" + NL + "}" + NL + "" + NL + "pred testAll {" + NL + "\t";
+  protected final String TEXT_7 = NL + "}" + NL + "" + NL + "assert tall {" + NL + "\ttestAll" + NL + "}" + NL + "" + NL + "//TODO le nombre peux State peux augmenter ex: 20 State ou 30 State etc..." + NL + "//run testAll for 0 but 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 1" + NL + "//check tall for 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 0";
   protected final String TEXT_8 = NL + NL + NL + NL + "/** *Visualization Variables */" + NL + "// http://alloy.mit.edu/community/node/548" + NL + "fun vNodeExecuting : State->ActivityNode {" + NL + "   {s:State, a:ActivityNode | s.getTokens[a] > 0}" + NL + "}" + NL + "fun vEdgeHaveOffers : State->ActivityEdge {" + NL + "   {s:State, e:ActivityEdge | s.getOffers[e] > 0}" + NL + "}" + NL + "" + NL + "fun pinInNode : State->Action->Pin->Int {" + NL + "\t {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}" + NL + "}";
   protected final String TEXT_9 = NL;
 
@@ -78,7 +78,7 @@ public class JetTemplate implements IJetTemplate {
 		throw new JetException(error);
 	}
 	
-	// on génère également le nom du predicat en dynamique
+	// on génère également le nom du predicat en dynamique pour ne pas avoir de conflits avec les noms de node ou edge
 	String namePredicat = jetHelper.getNameFinalPredicat();
 
     stringBuffer.append(TEXT_4);
@@ -95,7 +95,8 @@ public class JetTemplate implements IJetTemplate {
 		log.error(error);
 		throw new JetException(error);
 	}
-	stringBuffer.append(properties.getAlloyCode() + NL);
+
+	stringBuffer.append(NL + properties.getAlloyCode() + NL);
 
     stringBuffer.append(TEXT_8);
     stringBuffer.append(TEXT_9);

@@ -117,6 +117,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 		ActivityNode initialNode = this.getNodeByType(nodes, "InitialNode");
 		ActivityNode finalNode = this.getNodeByType(nodes, "ActivityFinalNode");
 		IProperties properties = Factory.getInstance().newPropertie(infoGenerator.getProperties());
+		log.warn(properties.getAlloyCode());
 		
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges au template Jet.
 		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, activity.getEdges(),
