@@ -2,6 +2,12 @@ package com.upmc.pstl2013.alloyExecutor.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import kodkod.instance.Instance;
+import kodkod.instance.TupleSet;
+import kodkod.util.ints.IndexedEntry;
 
 import org.apache.log4j.Logger;
 
@@ -11,8 +17,12 @@ import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
+import edu.mit.csail.sdg.alloy4.SafeList;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
+import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
+import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
+import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -28,6 +38,7 @@ public class AlloyExecutor implements IAlloyExecutor
 	
 	private IAlloyGenerator generator;
 	private static Logger log = Logger.getLogger(AlloyExecutor.class);
+	private List<String> results;
 	
 	/**
 	 * Constructeur
@@ -36,6 +47,7 @@ public class AlloyExecutor implements IAlloyExecutor
 	{
 		super();
 		this.generator = generator;
+		this.results = new ArrayList<String>();
 	}
 
 	/**
@@ -88,7 +100,11 @@ public class AlloyExecutor implements IAlloyExecutor
 						resultat.append("============ Command "+command+": ============\n");
 						A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
 						// Print the outcome
-						resultat.append(ans.toString());
+						//resultat.append(ans.toString());
+						
+						//TODO
+						getResults(ans);
+						
 						// If satisfiable...
 						if (ans.satisfiable()) {
 							// You can query "ans" to find out the values of each set or type.
@@ -116,4 +132,51 @@ public class AlloyExecutor implements IAlloyExecutor
 	public void reset() {
 		generator.reset();
 	}
+
+	@Override
+	public void getResults(A4Solution ans) 
+	{
+		
+		StringBuilder sb = new StringBuilder();
+		for (Sig sig : ans.getAllReachableSigs())
+		{
+			sb.append(sig.label).append("=").append(ans.eval(sig)).append("\n");
+            for(Field f:sig.getFields()) sb.append(sig.label).append("<:").append(f.label).append("=").append(ans.eval(f)).append("\n");
+		}
+		/*if (!solved) return "---OUTCOME---\nUnknown.\n";
+        if (eval == null) return "---OUTCOME---\nUnsatisfiable.\n";
+        String answer = toStringCache;
+		if (answer != null) return answer;
+        Instance sol = eval.instance();
+        
+        sb.append("---INSTANCE---\n" + "integers={");
+        boolean firstTuple = true;
+        for(IndexedEntry<TupleSet> e:sol.intTuples()) {
+            if (firstTuple) firstTuple=false; else sb.append(", ");
+            // No need to print e.index() since we've ensured the Int atom's String representation is always equal to ""+e.index()
+            Object atom = e.value().iterator().next().atom(0);
+            sb.append(atom2name(atom));
+        }
+        sb.append("}\n");
+        try {
+            for(Sig s:sigs) {
+                sb.append(s.label).append("=").append(eval(s)).append("\n");
+                for(Field f:s.getFields()) sb.append(s.label).append("<:").append(f.label).append("=").append(eval(f)).append("\n");
+            }
+            for(ExprVar v:skolems) {
+                sb.append("skolem ").append(v.label).append("=").append(eval(v)).append("\n");
+            }
+            //return toStringCache = sb.toString();
+        } catch(Err er) {
+            //return toStringCache = ("<Evaluator error occurred: "+er+">");
+        }	
+        */	
+	}
+	
+	
+	/** Dumps the Kodkod solution into String. 
+    @Override 
+    public String toString() {
+        
+    }*/
 }
