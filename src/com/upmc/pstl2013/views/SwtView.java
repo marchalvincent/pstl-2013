@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.views;
 
+import java.awt.Panel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
@@ -31,6 +33,8 @@ import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 import edu.mit.csail.sdg.alloy4.Err;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.TabFolder;
 
 public class SwtView extends Composite {
 
@@ -48,6 +52,12 @@ public class SwtView extends Composite {
 	private String separator = File.separator;
 	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 	private static Logger log = Logger.getLogger(SwtView.class);
+	
+	private TabFolder tabFolder;
+	private TabItem itemAlloyUse,itemAlloyProperty;
+	private GridLayout gridItemAlloyUse,gridItemAlloyProp ;
+	private Panel panItemAlloyUse,panItemAlloyProp ;
+	
 
 	/**
 	 * Create the composite.
@@ -58,12 +68,6 @@ public class SwtView extends Composite {
 	public SwtView(Composite parent, int style) {
 		super(parent, style);
 
-		//TODO : enlever
-		//log.getAppender("htmlfile").
-		//FileAppender appender = (FileAppender)log.getAppender("htmlfile");
-		//appender.setFile("D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\log.html");
-		
-		
 		infoParser = Factory.getInstance().newInfoParser();
 		infoGenerator = Factory.getInstance().newInfoGenerator();
 		IUMLParser parser = Factory.getInstance().newParser(infoParser);
@@ -126,7 +130,7 @@ public class SwtView extends Composite {
 		btnChooserFile.setText("Chooser File");
 
 		text = new Text(this, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		GridData gd_text = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 5);
+		GridData gd_text = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 6);
 		gd_text.heightHint = 1000;
 		text.setLayoutData(gd_text);
 
@@ -136,6 +140,10 @@ public class SwtView extends Composite {
 		gd_btnExcuterAlloy.widthHint = 87;
 		btnExcuterAlloy.setLayoutData(gd_btnExcuterAlloy);
 		btnExcuterAlloy.setText("Exécuter Alloy");
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
+		new Label(this, SWT.NONE);
 
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
@@ -161,6 +169,23 @@ public class SwtView extends Composite {
 				System.out.println(log.getAllAppenders().toString());
 			}
 		});
+		
+		//TabFolder
+		tabFolder = new TabFolder(this, SWT.NONE);
+		GridData gd_tabFolder = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 10);
+		gd_tabFolder.heightHint = 85;
+		gd_tabFolder.widthHint = 436;
+		
+		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
+		itemAlloyUse.setText("Utilisation");
+
+		//Button button = new Button(tabFolder, SWT.PUSH);
+		//item.setControl(button);
+		
+		itemAlloyProperty = new TabItem(tabFolder, SWT.NONE);
+		itemAlloyProperty.setText("Properties");
+		
+		tabFolder.setLayoutData(gd_tabFolder);
 
 		// on finit par une petite vérification...
 		this.checkDirectory(alloyGenerator);
