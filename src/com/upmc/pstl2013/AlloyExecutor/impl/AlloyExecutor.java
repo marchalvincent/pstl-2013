@@ -15,6 +15,7 @@ import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
+import edu.mit.csail.sdg.alloy4compiler.ast.ExprVar;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
@@ -135,6 +136,13 @@ public class AlloyExecutor implements IAlloyExecutor
 			sb.append(sig.label).append("=").append(ans.eval(sig)).append("\n");
             for(Field f:sig.getFields()) sb.append(sig.label).append("<:").append(f.label).append("=").append(ans.eval(f)).append("\n");
 		}
+		
+		/*
+		for(ExprVar v:ans.getAllSkolems()) {
+            sb.append("skolem ").append(v.label).append("=").append(eval(v)).append("\n");
+        }
+		*/
+		
 		/*if (!solved) return "---OUTCOME---\nUnknown.\n";
         if (eval == null) return "---OUTCOME---\nUnsatisfiable.\n";
         String answer = toStringCache;
