@@ -8,7 +8,7 @@ import com.upmc.pstl2013.properties.IProperties;
 
 public abstract class AbstractProperties implements IProperties {
 
-	private Map<String, Map<String, String>> properties;
+	private Map<String, String> properties;
 	
 	//TODO enlever si besoin, avoir plus tard
 	public static List<String> getProperties() {
@@ -18,7 +18,7 @@ public abstract class AbstractProperties implements IProperties {
 		return liste;
 	}
 	
-	public AbstractProperties(Map<String, Map<String, String>> prop) {
+	public AbstractProperties(Map<String, String> prop) {
 		super();
 		properties = prop;
 	}
