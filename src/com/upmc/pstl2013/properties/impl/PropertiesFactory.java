@@ -29,8 +29,11 @@ public class PropertiesFactory {
 		Set<String> allKeys = prop.keySet();
 		for (String propertieName : allKeys) {
 			Map<String, String> cleVal = prop.get(propertieName);
+			
 			// puis on créer l'objet propertie
-			if (propertieName.equals("DeadLock")) properties.add(new DeadLock(cleVal));
+			if (propertieName.equals("personnalPropertie")) properties.add(new PersonalPropertie(cleVal)); 
+			else if (propertieName.equals("DeadLock")) properties.add(new DeadLock(cleVal));
+			
 			// ici on peut ajouter les nouvelles propriétés
 		}
 		return properties;

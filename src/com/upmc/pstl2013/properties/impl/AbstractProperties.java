@@ -8,7 +8,9 @@ import com.upmc.pstl2013.properties.IProperties;
 
 public abstract class AbstractProperties implements IProperties {
 
+	// TODO a voir comment on gère les properties
 	private Map<String, String> properties;
+	protected String alloyCode;
 	
 	//TODO enlever si besoin, avoir plus tard
 	public static List<String> getProperties() {
@@ -21,5 +23,10 @@ public abstract class AbstractProperties implements IProperties {
 	public AbstractProperties(Map<String, String> prop) {
 		super();
 		properties = prop;
+	}
+
+	@Override
+	public String getAlloyCode() {
+		return alloyCode;
 	}
 }
