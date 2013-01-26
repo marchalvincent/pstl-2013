@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.factory;
 
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.emf.common.util.EList;
@@ -41,8 +42,8 @@ public class Factory implements IFactory {
 
 	@Override
 	public IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, 
-			ActivityNode init, ActivityNode fin, IProperties prop) {
-		return new JetHelper(nodes, edges, init, fin, prop);
+			ActivityNode init, ActivityNode fin, List<IProperties> properties) {
+		return new JetHelper(nodes, edges, init, fin, properties);
 	}
 
 	@Override
@@ -76,7 +77,7 @@ public class Factory implements IFactory {
 	}
 
 	@Override
-	public IProperties newPropertie(Map<String, Map<String, String>> map) {
+	public List<IProperties> newPropertie(Map<String, Map<String, String>> map) {
 		return PropertiesFactory.createPropertie(map);
 	}
 }

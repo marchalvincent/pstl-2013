@@ -2,7 +2,8 @@
 	imports="org.apache.log4j.Logger 
 			org.eclipse.emf.common.util.EList
 			org.eclipse.uml2.uml.*
-			com.upmc.pstl2013.properties.*" 
+			com.upmc.pstl2013.properties.*
+			java.util.List" 
 	skeleton="alloyGenerator.skeleton" %>
 <% 
 	final Logger log = Logger.getLogger(JetTemplate.class);
@@ -92,16 +93,18 @@ assert tall {
 //run testAll for 0 but 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 1
 //check tall for 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 0
 <%
-	IProperties properties = jetHelper.getProperties();
+	List<IProperties> properties = jetHelper.getProperties();
 	if (properties == null) {
 		final String error = "Les propriétés sont incorrectes.";
 		log.error(error);
 		throw new JetException(error);
 	}
-
-	stringBuffer.append(NL + properties.getAlloyCode() + NL);
+	
+	stringBuffer.append(NL);
+	for (IProperties prop : properties) {
+		stringBuffer.append(prop.getAlloyCode() + NL);
+	}
 %>
-
 
 
 /** *Visualization Variables */

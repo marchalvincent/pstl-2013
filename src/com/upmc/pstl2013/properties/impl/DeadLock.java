@@ -6,7 +6,7 @@ import java.util.Map;
 public class DeadLock extends AbstractProperties {
 
 	
-	public DeadLock(Map<String, Map<String, String>> properties) {
+	public DeadLock(Map<String, String> properties) {
 		super(properties);
 	}
 	

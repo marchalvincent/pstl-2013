@@ -1,5 +1,7 @@
 package com.upmc.pstl2013.alloyGenerator.impl;
 
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
@@ -41,7 +43,7 @@ public interface IJetHelper {
 	 * Renvoie les propriétés.
 	 * @return {@link IProperties}.
 	 */
-	IProperties getProperties();
+	List<IProperties> getProperties();
 	
 	/**
 	 * Renvoie le nom du predicat final.
