@@ -134,7 +134,6 @@ public class AlloyGenerator implements IAlloyGenerator {
 	private ActivityNode getNodeByType(EList<ActivityNode> nodes, String type) {
 		// on cherche le noeud initial
 		for (ActivityNode activityNode : nodes) {
-			log.debug("Nom de la classe : " + activityNode.eClass().getName());
 			if (activityNode.eClass().getName().equals(type)) {
 				return activityNode;
 			}
