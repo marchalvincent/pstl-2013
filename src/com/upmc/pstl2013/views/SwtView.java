@@ -245,8 +245,6 @@ public class SwtView extends Composite {
 				}
 			}
 
-			
-
 		});
 
 		// on finit par une petite vérification...
@@ -290,13 +288,11 @@ public class SwtView extends Composite {
 		tabProperties.addListener(SWT.Selection, new Listener() 
 		{
 			@Override
-			public void handleEvent(org.eclipse.swt.widgets.Event  e) {
-				String string = "";
-
+			public void handleEvent(org.eclipse.swt.widgets.Event  e) 
+			{
 				TableItem[] selection = tabProperties.getSelection();
-				for (int i = 0; i < selection.length; i++)
-					string += selection[i] + " ";
-				showValueProperties(string);
+				//Récupère le nom de la property
+				showValueProperties(selection[0].getText());
 			}
 		});
 	}
@@ -339,6 +335,9 @@ public class SwtView extends Composite {
 			}
 		});
 
+		tabValueProperties.getColumn(0).setText("Attributes : " + nameProperty);
+
+		
 		for (int i = 0; i < 10; i++) {
 			TableItem item = new TableItem(tabValueProperties, SWT.NONE);
 			item.setText(0, nameProperty);
