@@ -81,7 +81,6 @@ public class PathStrategy implements IStrategy {
 			}
 		}
 		
-		System.out.println(sb.toString());
 		return sb.toString();
 	}
 

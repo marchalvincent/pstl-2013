@@ -85,7 +85,7 @@ public class AlloyExecutor implements IAlloyExecutor
 
 					for (Command command: world.getAllCommands()) {
 						// Execute the command
-						resultat.append("============ Executing "+command+" ============\n");
+						resultat.append("=========== Executing "+command+" ============\n");
 						long startTime = System.nanoTime();
 						A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
 						long endTime = System.nanoTime();
@@ -100,11 +100,12 @@ public class AlloyExecutor implements IAlloyExecutor
 						resultat.append("BitWidth : " +  ans.getBitwidth() + "   ");
 						resultat.append("is Incremental : " +  ans.isIncremental() + "   ");
 						resultat.append("Is Satisfiable : " +  ans.satisfiable() + "\n");
-						resultat.append("temps : " + (endTime - startTime)/1000000 + " ms \n");
-						
+
 						for (IStrategy iStrategy : strategies) {
-							resultat.append(iStrategy.parcours(ans));
+							resultat.append(iStrategy.parcours(ans) + "\n");
 						}
+						
+						resultat.append("temps : " + (endTime - startTime)/1000000 + " ms \n");
 						
 						// If satisfiable...
 						if (ans.satisfiable()) {
