@@ -204,7 +204,7 @@ public class SwtView extends Composite {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				try {
-					LogCreator.createLog(userDir);
+					LogCreator.createLog(textDirectory.getText());
 				} catch (IOException e1) {
 					log.error(e1.getMessage());
 					text.setText(e1.getMessage());
