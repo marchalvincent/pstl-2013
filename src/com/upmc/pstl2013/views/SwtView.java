@@ -2,6 +2,7 @@ package com.upmc.pstl2013.views;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -70,6 +71,7 @@ public class SwtView extends Composite {
 	private Table tabValueProperties;
 	private final TableEditor editor;
 	private final int EDITABLECOLUMN = 1;
+	private Button btnDlLogs;
 
 
 	/**
@@ -196,7 +198,21 @@ public class SwtView extends Composite {
 		new Label(cpItemAlloyUse, SWT.NONE);
 		new Label(cpItemAlloyUse, SWT.NONE);
 		new Label(cpItemAlloyUse, SWT.NONE);
-		new Label(cpItemAlloyUse, SWT.NONE);
+		
+		btnDlLogs = new Button(cpItemAlloyUse, SWT.NONE);
+		btnDlLogs.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				try {
+					LogCreator.createLog(textDirectory.getText());
+				} catch (IOException e1) {
+					log.error(e1.getMessage());
+					text.setText(e1.getMessage());
+				}
+			}
+		});
+		btnDlLogs.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
+		btnDlLogs.setText("DL logs");
 
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
