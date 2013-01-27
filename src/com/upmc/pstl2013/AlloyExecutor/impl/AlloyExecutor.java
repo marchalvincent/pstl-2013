@@ -85,6 +85,8 @@ public class AlloyExecutor implements IAlloyExecutor
 
 					// Choose some default options for how you want to execute the commands
 					A4Options options = new A4Options();
+					
+					//The required JNI library cannot be found: java.lang.UnsatisfiedLinkError: no minisatx5 in java.library.path
 					options.solver = A4Options.SatSolver.SAT4J; //TODO: minisatx5 JNI
 
 					for (Command command: world.getAllCommands()) {
@@ -98,11 +100,11 @@ public class AlloyExecutor implements IAlloyExecutor
 						//resultat.append(ans.toString());
 						
 						//Affichage des info de l'execution
-						resultat.append("Solver : " +  options.solver.toString() + " ");
-						resultat.append("MaxSeq : " +  ans.getMaxSeq() + " ");
-						resultat.append("SkolemsDepth : " +  ans.getAllSkolems() + " ");
-						resultat.append("BitWidth : " +  ans.getBitwidth() + " ");
-						resultat.append("is Incremental : " +  ans.isIncremental() + " ");
+						resultat.append("Solver : " +  options.solver.toString() + "   ");
+						resultat.append("MaxSeq : " +  ans.getMaxSeq() + "   ");
+						resultat.append("SkolemsDepth : " +  ans.getAllSkolems() + "   ");
+						resultat.append("BitWidth : " +  ans.getBitwidth() + "   ");
+						resultat.append("is Incremental : " +  ans.isIncremental() + "   ");
 						resultat.append("Is Satisfiable : " +  ans.satisfiable() + "\n");
 						resultat.append("temps : " + (endTime - startTime) + "\n");
 						
