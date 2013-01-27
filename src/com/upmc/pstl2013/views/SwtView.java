@@ -294,8 +294,9 @@ public class SwtView extends Composite {
 			public void handleEvent(org.eclipse.swt.widgets.Event  e) 
 			{
 				TableItem[] selection = tabProperties.getSelection();
-				//Récupère le nom de la property
-				showValueProperties(selection[0].getText());
+				
+				if (selection.length > 0)
+					showValueProperties(selection[0].getText());
 			}
 		});
 	}
