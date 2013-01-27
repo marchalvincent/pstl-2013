@@ -1,6 +1,6 @@
 package com.upmc.pstl2013.views;
 
-import java.awt.Panel;
+import java.awt.Event;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -13,6 +13,7 @@ import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.GridData;
@@ -20,8 +21,14 @@ import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.DirectoryDialog;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
+import org.eclipse.swt.widgets.Table;
+import org.eclipse.swt.widgets.TableColumn;
+import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
@@ -33,8 +40,6 @@ import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 import edu.mit.csail.sdg.alloy4.Err;
-import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.TabFolder;
 
 public class SwtView extends Composite {
 
@@ -48,16 +53,17 @@ public class SwtView extends Composite {
 	private IInfoParser infoParser;
 	private IInfoGenerator infoGenerator;
 	private IAlloyExecutor alloyExecutor;
-	
+
 	private String separator = File.separator;
 	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 	private static Logger log = Logger.getLogger(SwtView.class);
-	
+
 	private TabFolder tabFolder;
 	private TabItem itemAlloyUse,itemAlloyProperty;
-	private GridLayout gridItemAlloyUse,gridItemAlloyProp ;
-	private Panel panItemAlloyUse,panItemAlloyProp ;
-	
+	private Composite cpItemAlloyUse,cpdItemAlloyProp ;
+	private Table tabProperties;
+	private Table tabValueProperties;
+
 
 	/**
 	 * Create the composite.
@@ -75,11 +81,47 @@ public class SwtView extends Composite {
 		alloyExecutor = Factory.getInstance().newAlloyExecutor(alloyGenerator);
 
 		infoGenerator.setDestinationDirectory(userDir);
+
+		//TabFolder
+		tabFolder = new TabFolder(this, SWT.NONE);
+
+
+		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
+		itemAlloyUse.setText("Utilisation");
+		cpItemAlloyUse = new Composite(tabFolder, SWT.BORDER);
+		cpItemAlloyUse.setLayout(new GridLayout(2, false));
+		itemAlloyUse.setControl(cpItemAlloyUse);
+
+		itemAlloyProperty = new TabItem(tabFolder, SWT.NONE);
+		itemAlloyProperty.setText("Properties");
+		cpdItemAlloyProp= new Composite(tabFolder, SWT.BORDER);
+		cpdItemAlloyProp.setLayout(new GridLayout(3, false));
+		itemAlloyProperty.setControl(cpdItemAlloyProp);
 		
-		GridLayout gridLayout = new GridLayout(2, false);
+		tabProperties = new Table(cpdItemAlloyProp, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI );
+		tabProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabProperties.setLinesVisible(true);
+		tabProperties.setHeaderVisible(true);
+		addProperties();
+
+		tabValueProperties = new Table(cpdItemAlloyProp,  SWT.MULTI |SWT.BORDER | SWT.FULL_SELECTION);
+		tabValueProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabValueProperties.setHeaderVisible(true);
+		tabValueProperties.setLinesVisible(true);
+		
+		String[] titlesVP = { "Key", "Value" };
+		for (int i = 0; i < titlesVP.length; i++) {
+			TableColumn column = new TableColumn(tabValueProperties, SWT.NONE);
+			column.setText(titlesVP[i]);
+		}
+		
+		new Label(cpdItemAlloyProp, SWT.NONE);
+
+
+		GridLayout gridLayout = new GridLayout(1, false);
 		setLayout(gridLayout);
 
-		btnChooseDir = new Button(this, SWT.NONE);
+		btnChooseDir = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooseDir.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -95,14 +137,14 @@ public class SwtView extends Composite {
 		});
 		btnChooseDir.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
 		btnChooseDir.setText("Choose Dir");
-		
-		textDirectory = new Text(this, SWT.BORDER);
+
+		textDirectory = new Text(cpItemAlloyUse, SWT.BORDER);
 		textDirectory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		textDirectory.setText(userDir);
 
-		
-		
-		btnChooserFile = new Button(this, SWT.NONE);
+
+
+		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
 		GridData gd_btnChooserFile = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
 		gd_btnChooserFile.widthHint = 87;
 		btnChooserFile.setLayoutData(gd_btnChooserFile);
@@ -129,17 +171,22 @@ public class SwtView extends Composite {
 		});
 		btnChooserFile.setText("Chooser File");
 
-		text = new Text(this, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
+		text = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		GridData gd_text = new GridData(SWT.FILL, SWT.TOP, true, true, 1, 6);
-		gd_text.heightHint = 1000;
+		gd_text.widthHint = 297;
+		gd_text.heightHint = 192;
 		text.setLayoutData(gd_text);
 
-		btnExcuterAlloy = new Button(this, SWT.NONE);
+		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
 		GridData gd_btnExcuterAlloy = new GridData(SWT.LEFT, SWT.TOP, false,
 				false, 1, 1);
 		gd_btnExcuterAlloy.widthHint = 87;
 		btnExcuterAlloy.setLayoutData(gd_btnExcuterAlloy);
 		btnExcuterAlloy.setText("Exécuter Alloy");
+		new Label(cpItemAlloyUse, SWT.NONE);
+		new Label(cpItemAlloyUse, SWT.NONE);
+		new Label(cpItemAlloyUse, SWT.NONE);
+		new Label(cpItemAlloyUse, SWT.NONE);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
 		new Label(this, SWT.NONE);
@@ -150,7 +197,7 @@ public class SwtView extends Composite {
 			public void mouseDown(MouseEvent e) {
 				// on définit les propriétés...
 				infoGenerator.setProperties(null);
-				
+
 				log.debug("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
 				StringBuilder result = new StringBuilder();
 				try {
@@ -169,23 +216,8 @@ public class SwtView extends Composite {
 				System.out.println(log.getAllAppenders().toString());
 			}
 		});
-		
-		//TabFolder
-		tabFolder = new TabFolder(this, SWT.NONE);
-		GridData gd_tabFolder = new GridData(SWT.LEFT, SWT.CENTER, false, false, 2, 10);
-		gd_tabFolder.heightHint = 85;
-		gd_tabFolder.widthHint = 436;
-		
-		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
-		itemAlloyUse.setText("Utilisation");
 
-		//Button button = new Button(tabFolder, SWT.PUSH);
-		//item.setControl(button);
-		
-		itemAlloyProperty = new TabItem(tabFolder, SWT.NONE);
-		itemAlloyProperty.setText("Properties");
-		
-		tabFolder.setLayoutData(gd_tabFolder);
+
 
 		// on finit par une petite vérification...
 		this.checkDirectory(alloyGenerator);
@@ -211,4 +243,52 @@ public class SwtView extends Composite {
 		}
 	}
 
+
+
+	private void addProperties()
+	{
+		String[] titlesP = { " ", "Properties" };
+		for (int i = 0; i < titlesP.length; i++) {
+			TableColumn column = new TableColumn(tabProperties, SWT.NONE);
+			column.setText(titlesP[i]);
+		}
+
+		for (int i = 0; i < 10; i++) {
+			TableItem item = new TableItem(tabProperties, SWT.NONE);
+			item.setText(0, "" + i);
+			item.setText(1, "y");
+		}
+
+		for (int i=0; i<titlesP.length; i++) {
+			tabProperties.getColumn (i).pack ();
+		}     
+
+		tabProperties.addListener(SWT.Selection, new Listener() {
+
+			@Override
+			public void handleEvent(org.eclipse.swt.widgets.Event  e) {
+				String string = "";
+				TableItem[] selection = tabProperties.getSelection();
+				for (int i = 0; i < selection.length; i++)
+					string += selection[i] + " ";
+				showValueProperties(string);
+			}
+		});
+	}
+
+	private void showValueProperties(String nameProperty)
+	{
+
+		tabValueProperties.removeAll();
+		for (int i = 0; i < 10; i++) {
+			TableItem item = new TableItem(tabValueProperties, SWT.NONE);
+			item.setText(0, nameProperty);
+			item.setText(1, "y");
+		}
+
+		for (int i=0; i<2; i++) {
+			tabValueProperties.getColumn (i).pack ();
+		}     
+	}
+	
 }
