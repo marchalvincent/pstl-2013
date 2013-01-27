@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.views;
 
+import java.awt.Desktop;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -55,6 +56,7 @@ public class SwtView extends Composite {
 	private Text text;
 	private Button btnChooserFile;
 	private Button btnExcuterAlloy;
+	private Button btnReadLogs;
 
 	private IInfoParser infoParser;
 	private IInfoGenerator infoGenerator;
@@ -71,7 +73,6 @@ public class SwtView extends Composite {
 	private Table tabValueProperties;
 	private final TableEditor editor;
 	private final int EDITABLECOLUMN = 1;
-	private Button btnDlLogs;
 
 
 	/**
@@ -94,7 +95,7 @@ public class SwtView extends Composite {
 		//TabFolder
 		tabFolder = new TabFolder(this, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
+
 
 		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
 		itemAlloyUse.setText("Utilisation");
@@ -107,7 +108,7 @@ public class SwtView extends Composite {
 		cpdItemAlloyProp= new Composite(tabFolder, SWT.BORDER);
 		cpdItemAlloyProp.setLayout(new GridLayout(2, false));
 		itemAlloyProperty.setControl(cpdItemAlloyProp);
-		
+
 		tabProperties = new Table(cpdItemAlloyProp, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI );
 		tabProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabProperties.setLinesVisible(true);
@@ -120,7 +121,7 @@ public class SwtView extends Composite {
 		tabValueProperties.setHeaderVisible(true);
 		tabValueProperties.setLinesVisible(true);
 		editor = new TableEditor(tabValueProperties);
-		
+
 		String[] titlesVP = { "Key", "Value" };
 		for (int i = 0; i < titlesVP.length; i++) {
 			TableColumn column = new TableColumn(tabValueProperties, SWT.NONE);
@@ -198,28 +199,26 @@ public class SwtView extends Composite {
 		new Label(cpItemAlloyUse, SWT.NONE);
 		new Label(cpItemAlloyUse, SWT.NONE);
 		new Label(cpItemAlloyUse, SWT.NONE);
-		
-		btnDlLogs = new Button(cpItemAlloyUse, SWT.NONE);
-		btnDlLogs.addMouseListener(new MouseAdapter() {
+
+		btnReadLogs = new Button(cpItemAlloyUse, SWT.NONE);
+		btnReadLogs.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				try {
-					LogCreator.createLog(textDirectory.getText());
+					Desktop.getDesktop().open(new File(textDirectory.getText()+"log.html"));
 				} catch (IOException e1) {
-					log.error(e1.getMessage());
-					text.setText(e1.getMessage());
+					log.error(e1.toString());
 				}
 			}
 		});
-		btnDlLogs.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
-		btnDlLogs.setText("DL logs");
+		btnReadLogs.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
+		btnReadLogs.setText("Read logs");
 
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				// on définit les propriétés...
-				infoGenerator.setProperties(null);
-
+				getPropertiesSelected();
 				log.debug("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
 				StringBuilder result = new StringBuilder();
 				try {
@@ -236,7 +235,18 @@ public class SwtView extends Composite {
 				}
 				alloyExecutor.reset();
 				System.out.println(log.getAllAppenders().toString());
+				
+				//Création du fichier de log
+				try {
+					LogCreator.createLog(textDirectory.getText());
+				} catch (IOException e1) {
+					log.error(e1.getMessage());
+					text.setText(e1.getMessage());
+				}
 			}
+
+			
+
 		});
 
 		// on finit par une petite vérification...
@@ -263,8 +273,9 @@ public class SwtView extends Composite {
 		}
 	}
 
-
-
+	/***
+	 * Affiche toutes les proprietes dans la view.
+	 */
 	private void addProperties()
 	{
 		TableColumn column = new TableColumn(tabProperties, SWT.NONE);
@@ -281,6 +292,7 @@ public class SwtView extends Composite {
 			@Override
 			public void handleEvent(org.eclipse.swt.widgets.Event  e) {
 				String string = "";
+
 				TableItem[] selection = tabProperties.getSelection();
 				for (int i = 0; i < selection.length; i++)
 					string += selection[i] + " ";
@@ -289,11 +301,13 @@ public class SwtView extends Composite {
 		});
 	}
 
+	/***
+	 * Affiche toutes les attributs de la propriété séléctionné.
+	 */
 	private void showValueProperties(String nameProperty)
 	{
-
 		tabValueProperties.removeAll();
-		
+
 		tabValueProperties.addSelectionListener(new SelectionAdapter() {
 			public void widgetSelected(SelectionEvent e) {
 				// Clean up any previous editor control
@@ -324,18 +338,32 @@ public class SwtView extends Composite {
 				editor.setEditor(newEditor, item, EDITABLECOLUMN);
 			}
 		});
-		
+
 		for (int i = 0; i < 10; i++) {
 			TableItem item = new TableItem(tabValueProperties, SWT.NONE);
 			item.setText(0, nameProperty);
 			item.setText(1, "y");
 		}
-		
-		
 
 		for (int i=0; i<2; i++) {
-			tabValueProperties.getColumn (i).pack ();
+			tabValueProperties.getColumn(i).pack ();
 		}     
 	}
+
 	
+	/***
+	 * Récupère toutes les attributs des propriétés cochés.
+	 */
+	private void getPropertiesSelected() 
+	{
+		//TODO Récupéréer les clés valeurs.
+		infoGenerator.setProperties(null);
+		for (TableItem item : tabProperties.getItems()) {
+			if(item.getChecked())
+			{
+				
+			}
+		}
+	}
+
 }
