@@ -2,8 +2,6 @@ package com.upmc.pstl2013.alloyExecutor.impl;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 import org.apache.log4j.Logger;
 
@@ -33,7 +31,6 @@ public class AlloyExecutor implements IAlloyExecutor
 	
 	private IAlloyGenerator generator;
 	private static Logger log = Logger.getLogger(AlloyExecutor.class);
-	private List<String> results;
 	
 	/**
 	 * Constructeur
@@ -42,7 +39,6 @@ public class AlloyExecutor implements IAlloyExecutor
 	{
 		super();
 		this.generator = generator;
-		this.results = new ArrayList<String>();
 	}
 	
 	@Override
@@ -106,7 +102,7 @@ public class AlloyExecutor implements IAlloyExecutor
 						resultat.append("BitWidth : " +  ans.getBitwidth() + "   ");
 						resultat.append("is Incremental : " +  ans.isIncremental() + "   ");
 						resultat.append("Is Satisfiable : " +  ans.satisfiable() + "\n");
-						resultat.append("temps : " + (endTime - startTime) + "\n");
+						resultat.append("temps : " + (endTime - startTime)/1000000 + " ms \n");
 						
 						//TODO : Finir la stratégie de parcours
 						//getResults(ans);
