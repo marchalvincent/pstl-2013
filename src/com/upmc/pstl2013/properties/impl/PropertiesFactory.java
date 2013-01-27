@@ -40,7 +40,7 @@ public class PropertiesFactory {
 			else if (propertieName.equals("DeadLock")) properties.add(new DeadLock(cleVal));
 			// ici on peut ajouter les nouvelles propriétés
 			else {
-				log.error("Le nom de la propriété n'existe pas...");
+				log.warn("Le nom de la propriété n'existe pas : " + propertieName);
 			}
 		}
 		return properties;
