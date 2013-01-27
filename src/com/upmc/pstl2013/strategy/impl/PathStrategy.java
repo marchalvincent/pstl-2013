@@ -24,7 +24,7 @@ public class PathStrategy implements IStrategy {
 	@Override
 	public String parcours(A4Solution ans) {
 		
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder("Strategie de parcours - PathStrategy : ");
 		// on parcours tous les Sig "semantic/State"
 		for (Sig sig : ans.getAllReachableSigs()) {
 			if (sig.label.equals("semantic/State")) {

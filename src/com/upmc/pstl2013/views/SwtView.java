@@ -5,7 +5,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -27,7 +29,6 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.DirectoryDialog;
-import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
@@ -44,6 +45,8 @@ import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
+import com.upmc.pstl2013.strategy.IStrategy;
+import com.upmc.pstl2013.strategy.impl.PathStrategy;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 import edu.mit.csail.sdg.alloy4.Err;
@@ -185,10 +188,7 @@ public class SwtView extends Composite {
 		btnChooserFile.setText("Chooser File");
 
 		text = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		GridData gd_text = new GridData(SWT.FILL, SWT.FILL, true, true, 1, 6);
-		gd_text.widthHint = 297;
-		gd_text.heightHint = 192;
-		text.setLayoutData(gd_text);
+		text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 6));
 
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
 		GridData gd_btnExcuterAlloy = new GridData(SWT.LEFT, SWT.TOP, false,
@@ -196,9 +196,6 @@ public class SwtView extends Composite {
 		gd_btnExcuterAlloy.widthHint = 87;
 		btnExcuterAlloy.setLayoutData(gd_btnExcuterAlloy);
 		btnExcuterAlloy.setText("Exécuter Alloy");
-		new Label(cpItemAlloyUse, SWT.NONE);
-		new Label(cpItemAlloyUse, SWT.NONE);
-		new Label(cpItemAlloyUse, SWT.NONE);
 
 		btnReadLogs = new Button(cpItemAlloyUse, SWT.NONE);
 		btnReadLogs.addMouseListener(new MouseAdapter() {
@@ -218,11 +215,17 @@ public class SwtView extends Composite {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				// on définit les propriétés...
-				getPropertiesSelected();
-				log.debug("Ce bouton génère les fichiers Alloy et lance l'éxecution.");
+				infoGenerator.setProperties(getPropertiesSelected());
+				
+				// on définit les strategies de parcours
+				//TODO voir comment on génère les strategy
+				List<IStrategy> strategies = new ArrayList<IStrategy>();
+				strategies.add(new PathStrategy());
+				
+				log.debug("Génération et exécution des fichiers Alloy.");
 				StringBuilder result = new StringBuilder();
 				try {
-					result.append(alloyExecutor.executeFiles());
+					result.append(alloyExecutor.executeFiles(strategies));
 					result.append("Fin d'exécution des fichiers Alloy.");
 					log.debug(result.toString());
 					text.setText(result.toString());
@@ -351,19 +354,19 @@ public class SwtView extends Composite {
 	}
 
 	
-	/***
+	/**
 	 * Récupère toutes les attributs des propriétés cochés.
 	 */
-	private void getPropertiesSelected() 
-	{
-		//TODO Récupéréer les clés valeurs.
-		infoGenerator.setProperties(null);
+	private Map<String, Map<String, String>> getPropertiesSelected() {
+		Map<String, Map<String, String>> properties = new HashMap<String, Map<String,String>>();
+		
 		for (TableItem item : tabProperties.getItems()) {
-			if(item.getChecked())
-			{
-				
+			if(item.getChecked()) {
+				//TODO Récupéréer les clés valeurs.
+				properties.put(item.getText(), null);
 			}
 		}
+		return properties;
 	}
 
 }

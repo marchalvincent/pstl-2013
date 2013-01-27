@@ -2,20 +2,20 @@ package com.upmc.pstl2013.alloyExecutor.impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.JetException;
+import com.upmc.pstl2013.strategy.IStrategy;
 
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
 import edu.mit.csail.sdg.alloy4compiler.ast.Module;
-import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
-import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.parser.CompUtil;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Options;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -42,7 +42,7 @@ public class AlloyExecutor implements IAlloyExecutor
 	}
 	
 	@Override
-	public String executeFiles() throws Err, JetException
+	public String executeFiles(List<IStrategy> strategies) throws Err, JetException
 	{
 		//Résultat
 		StringBuilder resultat = new StringBuilder();
@@ -68,8 +68,6 @@ public class AlloyExecutor implements IAlloyExecutor
 		{
 			try {
 				filename = file.getCanonicalPath();
-				//TODO enlever
-				//filename = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\model\\alloy\\GEN-simple.als";
 
 				//Vérifie que le fichier soit de type ALLOY
 				if (filename.substring(filename.length()-3, filename.length()).equals("als"))
@@ -104,8 +102,9 @@ public class AlloyExecutor implements IAlloyExecutor
 						resultat.append("Is Satisfiable : " +  ans.satisfiable() + "\n");
 						resultat.append("temps : " + (endTime - startTime)/1000000 + " ms \n");
 						
-						//TODO : Finir la stratégie de parcours
-						//getResults(ans);
+						for (IStrategy iStrategy : strategies) {
+							resultat.append(iStrategy.parcours(ans));
+						}
 						
 						// If satisfiable...
 						if (ans.satisfiable()) {
@@ -134,21 +133,4 @@ public class AlloyExecutor implements IAlloyExecutor
 	public void reset() {
 		generator.reset();
 	}
-
-	@Override
-	public void getResults(A4Solution ans) 
-	{
-		
-		StringBuilder sb = new StringBuilder();
-		for (Sig sig : ans.getAllReachableSigs())
-		{
-			//Pour la stratégie de parcours
-			if (sig.label.equals("semantic/State"))
-			{
-				sb.append(sig.label).append("=").append(ans.eval(sig)).append("\n");
-	            for(Field f:sig.getFields()) sb.append(sig.label).append("<:").append(f.label).append("=").append(ans.eval(f)).append("\n");
-			}
-		}
-	}
-	
 }

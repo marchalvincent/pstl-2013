@@ -54,6 +54,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 		for (Activity activity : activities) {
 			log.debug("Génération du fichier n°" + i + ".");
 
+			// 3. On génère le contenu Alloy
 			String alloyTxt = this.getAlloyTxt(activity);
 
 			try {
