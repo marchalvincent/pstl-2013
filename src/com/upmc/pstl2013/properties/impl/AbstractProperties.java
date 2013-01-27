@@ -9,6 +9,7 @@ import com.upmc.pstl2013.properties.IProperties;
 public abstract class AbstractProperties implements IProperties {
 
 	// TODO a voir comment on gère les properties
+	@SuppressWarnings("unused")
 	private Map<String, String> properties;
 	protected String alloyCode;
 	
