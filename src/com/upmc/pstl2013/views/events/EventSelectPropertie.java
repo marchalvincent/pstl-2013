@@ -13,8 +13,8 @@ public class EventSelectPropertie implements Listener {
 	private Table tabValueProperties;
 	private Table tabProperties;
 
-	public EventSelectPropertie (TableEditor editor, Table tabValueProperties, Table tabProperties) 
-	{
+	public EventSelectPropertie(TableEditor editor, Table tabValueProperties, Table tabProperties) {
+
 		this.editor = editor;
 		this.tabValueProperties = tabValueProperties;
 		this.tabProperties = tabProperties;
@@ -22,33 +22,28 @@ public class EventSelectPropertie implements Listener {
 
 	@Override
 	public void handleEvent(Event event) {
-		TableItem[] selection = tabProperties.getSelection();
 
-		if (selection.length > 0)
-			showValueProperties(selection[0].getText());
+		TableItem[] selection = tabProperties.getSelection();
+		if (selection.length > 0) showValueProperties(selection[0].getText());
 	}
 
 	/***
 	 * Affiche toutes les attributs de la propriété séléctionné.
 	 */
-	private void showValueProperties(String nameProperty)
-	{
-		if(tabValueProperties != null) {
-			
+	private void showValueProperties(String nameProperty) {
+
+		if (tabValueProperties != null) {
 			tabValueProperties.removeAll();
 			tabValueProperties.addSelectionListener(new EventClickValueProperty(editor, tabValueProperties));
 			tabValueProperties.getColumn(0).setText("Attributes : " + nameProperty);
-
 			for (int i = 0; i < 10; i++) {
 				TableItem item = new TableItem(tabValueProperties, SWT.NONE);
 				item.setText(0, nameProperty);
 				item.setText(1, "y");
 			}
-
-			for (int i=0; i<2; i++) {
-				tabValueProperties.getColumn(i).pack ();
-			}    
+			for (int i = 0; i < 2; i++) {
+				tabValueProperties.getColumn(i).pack();
+			}
 		}
 	}
-
 }

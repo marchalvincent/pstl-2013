@@ -8,6 +8,7 @@ public interface IProperties {
 
 	/**
 	 * Renvoie le code Alloy associé à cette propriété.
+	 * 
 	 * @return
 	 */
 	String getAlloyCode();

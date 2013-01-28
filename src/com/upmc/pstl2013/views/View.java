@@ -3,11 +3,9 @@ package com.upmc.pstl2013.views;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.ui.part.ViewPart;
 
-
 public class View extends ViewPart {
-	
-	private Composite composite;
 
+	private Composite composite;
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
@@ -16,13 +14,15 @@ public class View extends ViewPart {
 	/**
 	 * The constructor.
 	 */
-	public View() {}
+	public View() {
+
+	}
 
 	/**
-	 * This is a callback that will allow us
-	 * to create the viewer and initialize it.
+	 * This is a callback that will allow us to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
+
 		composite = new SwtView(parent, 0);
 	}
 
@@ -30,6 +30,7 @@ public class View extends ViewPart {
 	 * Passing the focus request to the viewer's control.
 	 */
 	public void setFocus() {
+
 		composite.setFocus();
 	}
 }
