@@ -1,7 +1,9 @@
 package com.upmc.pstl2013.strategy.impl;
 
 import java.util.Iterator;
+
 import com.upmc.pstl2013.strategy.IStrategy;
+
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -15,6 +17,9 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4TupleSet;
  */
 public class PathStrategy implements IStrategy {
 
+	/**
+	 * Constructor
+	 */
 	public PathStrategy() {
 
 		super();

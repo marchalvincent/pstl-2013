@@ -2,21 +2,24 @@ package com.upmc.pstl2013.views.events;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
-import org.eclipse.swt.widgets.Text;
-import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
-import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
+
+import com.upmc.pstl2013.views.SwtView;
 
 public class EventCurrentExecutor extends AbstractEventExecutor {
 
 	private Table tabProperties;
 
-	public EventCurrentExecutor(Text txtLogs, Text textDirectory, IAlloyExecutor alloyExecutor,
-			IInfoGenerator infoGenerator, Table tabProperties) {
+	/**
+	 * Constructor
+	 * @param {{@link SwtView}
+	 */
+	public EventCurrentExecutor(SwtView swtView) {
 
-		super(txtLogs, textDirectory, alloyExecutor, infoGenerator);
-		this.tabProperties = tabProperties;
+		super(swtView);
+		this.tabProperties = swtView.getTabProperties();
 	}
 
 	@Override
