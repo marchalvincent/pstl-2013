@@ -10,5 +10,5 @@ Require-Bundle: org.eclipse.core.runtime,
 Bundle-ActivationPolicy: lazy
 Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: jars/alloy4.2.jar,
- .,
- jars/log4j-1.2.14.jar
+ jars/log4j-1.2.14.jar,
+ .
