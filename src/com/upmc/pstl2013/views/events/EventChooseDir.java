@@ -13,12 +13,12 @@ import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 public class EventChooseDir extends MouseAdapter
 {
 	private String separator = File.separator;
-	private Text txt;
+	private Text txtChooseDirectory;
 	private IInfoGenerator infoGenerator;
 	
-	public EventChooseDir (Text txt, IInfoGenerator infoGenerator)
+	public EventChooseDir (Text txtChooseDirectory, IInfoGenerator infoGenerator)
 	{
-		this.txt = txt;
+		this.txtChooseDirectory = txtChooseDirectory;
 		this.infoGenerator = infoGenerator;
 	}
 	
@@ -31,7 +31,7 @@ public class EventChooseDir extends MouseAdapter
 		{
 			chemin += separator;
 			// on met a jour l'IU et l'info générateur.
-			txt.setText(chemin);
+			txtChooseDirectory.setText(chemin);
 			infoGenerator.setDestinationDirectory(chemin);
 		}
 	}

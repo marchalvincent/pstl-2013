@@ -18,15 +18,15 @@ import com.upmc.pstl2013.views.LogCreator;
 
 public abstract class AbstractEventExecutor extends MouseAdapter 
 {
-	private Text textArea,textDirectory;
+	private Text txtLogs,txtDirectory;
 	private IAlloyExecutor alloyExecutor;
 	private IInfoGenerator infoGenerator;
 	private static Logger log = Logger.getLogger(AbstractEventExecutor.class);
 
-	public AbstractEventExecutor(Text textArea,Text textDirectory,IAlloyExecutor alloyExecutor,IInfoGenerator infoGenerator)
+	public AbstractEventExecutor(Text txtLogs,Text txtDirectory,IAlloyExecutor alloyExecutor,IInfoGenerator infoGenerator)
 	{
-		this.textArea = textArea;
-		this.textDirectory = textDirectory;
+		this.txtLogs = txtLogs;
+		this.txtDirectory = txtDirectory;
 		this.alloyExecutor = alloyExecutor;
 		this.infoGenerator = infoGenerator;
 	}
@@ -46,22 +46,25 @@ public abstract class AbstractEventExecutor extends MouseAdapter
 			result.append(alloyExecutor.executeFiles(strategies));
 			result.append("Fin d'exécution des fichiers Alloy.");
 			log.debug(result.toString());
-			textArea.setText(result.toString());
+			txtLogs.setText(result.toString());
 		} catch (Exception e) {
 			log.debug(e.getMessage());
-			textArea.setText(e.getMessage());
+			txtLogs.setText(e.getMessage());
 		}
 		alloyExecutor.reset();
 		System.out.println(log.getAllAppenders().toString());
 
 		//Création du fichier de log
 		try {
-			LogCreator.createLog(textDirectory.getText());
+			LogCreator.createLog(txtDirectory.getText());
 		} catch (IOException e1) {
 			log.error(e1.getMessage());
-			textArea.setText(e1.getMessage());
+			txtLogs.setText(e1.getMessage());
 		}
 	}
-
+	
+	/**
+	 * Récupère toutes les attributs des propriétés cochés.
+	 */
 	protected abstract Map<String, Map<String, String>> getProperties();
 }
