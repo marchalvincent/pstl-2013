@@ -11,16 +11,22 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.upmc.pstl2013.views.SwtView;
+
 public class EventClickValueProperty extends SelectionAdapter {
 
 	private final int EDITABLECOLUMN = 1;
 	private TableEditor editor;
 	private Table tabValueProperties;
 
-	public EventClickValueProperty(TableEditor editor, Table tabValueProperties) {
+	/**
+	 * Constructor
+	 * @param {{@link SwtView}
+	 */
+	public EventClickValueProperty(SwtView swtView) {
 
-		this.editor = editor;
-		this.tabValueProperties = tabValueProperties;
+		this.editor = swtView.getEditor();
+		this.tabValueProperties = swtView.getTabValueProperties();
 	}
 
 	@Override

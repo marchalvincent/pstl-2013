@@ -11,9 +11,8 @@ public interface IStrategy {
 	/**
 	 * Parcours une solution Alloy.
 	 * 
-	 * @param ans
-	 *            {@link A4Solution}.
-	 * @return
+	 * @param ans {@link A4Solution}.
+	 * @return Résultat du parcours.
 	 */
 	String parcours(A4Solution ans);
 }

@@ -38,6 +38,8 @@ public class SwtView extends Composite {
 	private Text txtLogs;
 	private Button btnChooserFile;
 	private Button btnExcuterAlloy;
+	
+
 	private Button btnReadLogs;
 	private IInfoParser infoParser;
 	private IInfoGenerator infoGenerator;
@@ -76,26 +78,28 @@ public class SwtView extends Composite {
 		tabFolder = new TabFolder(this, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		
+		//Items et composite pour la partie utilisation du tabeFolder
 		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
 		itemAlloyUse.setText("Utilisation");
-		
 		cpItemAlloyUse = new Composite(tabFolder, SWT.BORDER);
 		cpItemAlloyUse.setLayout(new GridLayout(2, false));
-		
 		itemAlloyUse.setControl(cpItemAlloyUse);
+		//Items et composite pour la partie propriete du tabeFolder
 		itemAlloyProperty = new TabItem(tabFolder, SWT.NONE);
 		itemAlloyProperty.setText("Properties");
-		
 		cpdItemAlloyProp = new Composite(tabFolder, SWT.BORDER);
 		cpdItemAlloyProp.setLayout(new GridLayout(2, false));
-		
 		itemAlloyProperty.setControl(cpdItemAlloyProp);
-		
+
+		/*
+		 * Debut contenu de la parite property 
+		 */
+		//Table des proprietes 
 		tabProperties = new Table(cpdItemAlloyProp, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
 		tabProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabProperties.setLinesVisible(true);
 		tabProperties.setHeaderVisible(true);
-		
+		//Table des attributs de la partie propriete
 		tabValueProperties = new Table(cpdItemAlloyProp, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tabValueProperties.setTouchEnabled(true);
 		tabValueProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -112,8 +116,11 @@ public class SwtView extends Composite {
 		GridLayout gridLayout = new GridLayout(1, false);
 		setLayout(gridLayout);
 		
+		/*
+		 * Debut contenu de la parite utilisation
+		 */
 		btnChooseDir = new Button(cpItemAlloyUse, SWT.NONE);
-		btnChooseDir.addMouseListener(new EventChooseDir(txtDirectory, infoGenerator));
+		btnChooseDir.addMouseListener(new EventChooseDir(this));
 		btnChooseDir.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnChooseDir.setText("Choose Dir");
 		
@@ -123,7 +130,7 @@ public class SwtView extends Composite {
 		
 		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooserFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		btnChooserFile.addMouseListener(new EventChooseFile(infoParser));
+		btnChooserFile.addMouseListener(new EventChooseFile(this));
 		btnChooserFile.setText("Choose File");
 		
 		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL
@@ -135,7 +142,7 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.setText("Execute Alloy");
 		
 		btnReadLogs = new Button(cpItemAlloyUse, SWT.NONE);
-		btnReadLogs.addMouseListener(new EventReadLogs(txtDirectory));
+		btnReadLogs.addMouseListener(new EventReadLogs(this));
 		btnReadLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnReadLogs.setText("Read logs");
 		new Label(cpItemAlloyUse, SWT.NONE);
@@ -150,10 +157,8 @@ public class SwtView extends Composite {
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
 		
-		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(txtLogs, txtDirectory, alloyExecutor,
-				infoGenerator, tabProperties));
-		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(txtLogs, txtDirectory, alloyExecutor,
-				infoGenerator, txtPersonalPropertie));
+		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
+		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
 		// on finit par une petite vérification...
 		this.checkDirectory(alloyGenerator);
 	}
@@ -189,7 +194,42 @@ public class SwtView extends Composite {
 			item.setText(0, prop);
 		}
 		tabProperties.getColumn(0).pack();
-		tabProperties.addListener(SWT.Selection, new EventSelectPropertie(editor, tabValueProperties,
-				tabProperties));
+		tabProperties.addListener(SWT.Selection, new EventSelectPropertie(this));
+	}
+	
+	public Text getTxtDirectory() {
+		return txtDirectory;
+	}
+
+	public Text getTxtLogs() {
+		return txtLogs;
+	}
+
+	public IInfoParser getInfoParser() {
+		return infoParser;
+	}
+
+	public IInfoGenerator getInfoGenerator() {
+		return infoGenerator;
+	}
+
+	public IAlloyExecutor getAlloyExecutor() {
+		return alloyExecutor;
+	}
+
+	public Table getTabProperties() {
+		return tabProperties;
+	}
+
+	public Table getTabValueProperties() {
+		return tabValueProperties;
+	}
+
+	public Text getTxtPersonalPropertie() {
+		return txtPersonalPropertie;
+	}
+
+	public TableEditor getEditor() {
+		return editor;
 	}
 }
