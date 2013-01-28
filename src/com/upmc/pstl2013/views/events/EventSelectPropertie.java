@@ -1,23 +1,28 @@
 package com.upmc.pstl2013.views.events;
 
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.upmc.pstl2013.views.SwtView;
+
 public class EventSelectPropertie implements Listener {
 
-	private TableEditor editor;
 	private Table tabValueProperties;
 	private Table tabProperties;
+	private SwtView swtView;
 
-	public EventSelectPropertie(TableEditor editor, Table tabValueProperties, Table tabProperties) {
+	/**
+	 * Constructor
+	 * @param {{@link SwtView}
+	 */
+	public EventSelectPropertie(SwtView swtView) {
 
-		this.editor = editor;
-		this.tabValueProperties = tabValueProperties;
-		this.tabProperties = tabProperties;
+		this.swtView = swtView;
+		this.tabValueProperties = swtView.getTabValueProperties();
+		this.tabProperties = swtView.getTabProperties();
 	}
 
 	@Override
@@ -34,7 +39,7 @@ public class EventSelectPropertie implements Listener {
 
 		if (tabValueProperties != null) {
 			tabValueProperties.removeAll();
-			tabValueProperties.addSelectionListener(new EventClickValueProperty(editor, tabValueProperties));
+			tabValueProperties.addSelectionListener(new EventClickValueProperty(swtView));
 			tabValueProperties.getColumn(0).setText("Attributes : " + nameProperty);
 			for (int i = 0; i < 10; i++) {
 				TableItem item = new TableItem(tabValueProperties, SWT.NONE);
