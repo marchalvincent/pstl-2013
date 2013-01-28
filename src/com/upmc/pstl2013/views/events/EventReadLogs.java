@@ -11,13 +11,13 @@ import org.eclipse.swt.widgets.Text;
 
 public class EventReadLogs extends MouseAdapter
 {
-	private Logger log;
+	private static Logger log = Logger.getLogger(EventReadLogs.class);
 	private Text textDirectory;
 	
-	public EventReadLogs (Text textDirectory, Logger log)
+	
+	public EventReadLogs (Text textDirectory)
 	{
 		this.textDirectory = textDirectory;
-		this.log = log;
 	}
 	
 	@Override
