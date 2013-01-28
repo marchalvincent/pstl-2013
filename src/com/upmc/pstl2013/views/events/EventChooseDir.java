@@ -7,6 +7,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
+import com.upmc.pstl2013.views.SwtView;
 
 public class EventChooseDir extends MouseAdapter {
 
@@ -14,10 +15,14 @@ public class EventChooseDir extends MouseAdapter {
 	private Text txtChooseDirectory;
 	private IInfoGenerator infoGenerator;
 
-	public EventChooseDir(Text txtChooseDirectory, IInfoGenerator infoGenerator) {
+	/**
+	 * Constructor
+	 * @param {{@link SwtView}
+	 */
+	public EventChooseDir(SwtView swtView) {
 
-		this.txtChooseDirectory = txtChooseDirectory;
-		this.infoGenerator = infoGenerator;
+		this.txtChooseDirectory = swtView.getTxtDirectory();
+		this.infoGenerator = swtView.getInfoGenerator();
 	}
 
 	@Override

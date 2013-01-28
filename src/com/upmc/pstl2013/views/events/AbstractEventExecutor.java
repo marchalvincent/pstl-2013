@@ -13,6 +13,7 @@ import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.strategy.IStrategy;
 import com.upmc.pstl2013.strategy.impl.PathStrategy;
 import com.upmc.pstl2013.views.LogCreator;
+import com.upmc.pstl2013.views.SwtView;
 
 public abstract class AbstractEventExecutor extends MouseAdapter {
 
@@ -21,13 +22,16 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 	private IInfoGenerator infoGenerator;
 	private static Logger log = Logger.getLogger(AbstractEventExecutor.class);
 
-	public AbstractEventExecutor(Text txtLogs, Text txtDirectory, IAlloyExecutor alloyExecutor,
-			IInfoGenerator infoGenerator) {
+	/**
+	 * Constructor
+	 * @param {@link SwtView} 
+	 */
+	public AbstractEventExecutor(SwtView swtView) {
 
-		this.txtLogs = txtLogs;
-		this.txtDirectory = txtDirectory;
-		this.alloyExecutor = alloyExecutor;
-		this.infoGenerator = infoGenerator;
+		this.txtLogs = swtView.getTxtLogs();
+		this.txtDirectory = swtView.getTxtDirectory();
+		this.alloyExecutor = swtView.getAlloyExecutor();
+		this.infoGenerator = swtView.getInfoGenerator();
 	}
 
 	@Override

@@ -10,14 +10,19 @@ import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Shell;
 import com.upmc.pstl2013.infoParser.IInfoParser;
+import com.upmc.pstl2013.views.SwtView;
 
 public class EventChooseFile extends MouseAdapter {
 
 	private IInfoParser infoParser;
 
-	public EventChooseFile(IInfoParser infoParser) {
+	/**
+	 * Constructor
+	 * @param {{@link SwtView}
+	 */
+	public EventChooseFile(SwtView swtView) {
 
-		this.infoParser = infoParser;
+		this.infoParser = swtView.getInfoParser();
 	}
 
 	@Override

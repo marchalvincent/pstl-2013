@@ -2,19 +2,23 @@ package com.upmc.pstl2013.views.events;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import org.eclipse.swt.widgets.Text;
-import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
-import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
+
+import com.upmc.pstl2013.views.SwtView;
 
 public class EventPersonalExecutor extends AbstractEventExecutor {
 
 	private Text txtPersonalPropertie;
 
-	public EventPersonalExecutor(Text txtLogs, Text textDirectory, IAlloyExecutor alloyExecutor,
-			IInfoGenerator infoGenerator, Text txtPersonalPropertie) {
+	/**
+	 * Constructor
+	 * @param {{@link SwtView}
+	 */
+	public EventPersonalExecutor(SwtView swtView) {
 
-		super(txtLogs, textDirectory, alloyExecutor, infoGenerator);
-		this.txtPersonalPropertie = txtPersonalPropertie;
+		super(swtView);
+		this.txtPersonalPropertie = swtView.getTxtPersonalPropertie();
 	}
 
 	@Override
