@@ -10,6 +10,7 @@ import com.upmc.pstl2013.alloyExecutor.impl.AlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.IJetHelper;
+import com.upmc.pstl2013.alloyGenerator.impl.IJetTemplate;
 import com.upmc.pstl2013.alloyGenerator.impl.JetHelper;
 import com.upmc.pstl2013.alloyGenerator.impl.JetTemplate;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
@@ -28,9 +29,7 @@ public class Factory implements IFactory {
 
 	private static final Factory instance = new Factory();
 
-	private Factory() {
-
-	}
+	private Factory() {}
 
 	/**
 	 * Renvoie l'unique instance de la Factory.
@@ -38,56 +37,47 @@ public class Factory implements IFactory {
 	 * @return {@link Factory}.
 	 */
 	public static Factory getInstance() {
-
 		return instance;
 	}
 
 	@Override
 	public IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, ActivityNode init,
 			ActivityNode fin, List<IProperties> properties) {
-
 		return new JetHelper(nodes, edges, init, fin, properties);
 	}
 
 	@Override
-	public JetTemplate newJetTemplate() {
-
+	public IJetTemplate newJetTemplate() {
 		return new JetTemplate();
 	}
 
 	@Override
 	public IInfoParser newInfoParser() {
-
 		return new InfoParser();
 	}
 
 	@Override
 	public IInfoGenerator newInfoGenerator() {
-
 		return new InfoGenerator();
 	}
 
 	@Override
 	public IUMLParser newParser(IInfoParser fileContainer) {
-
 		return new UMLParser(fileContainer);
 	}
 
 	@Override
 	public IAlloyGenerator newAlloyGenerator(IInfoGenerator infoGenerator, IUMLParser parser) {
-
 		return new AlloyGenerator(infoGenerator, parser);
 	}
 
 	@Override
 	public IAlloyExecutor newAlloyExecutor(IAlloyGenerator generator) {
-
 		return new AlloyExecutor(generator);
 	}
 
 	@Override
 	public List<IProperties> newPropertie(Map<String, Map<String, String>> map) {
-
 		return PropertiesFactory.createPropertie(map);
 	}
 }

@@ -7,7 +7,7 @@ import org.eclipse.uml2.uml.ActivityNode;
 import com.upmc.pstl2013.properties.IProperties;
 
 /**
- * Classe utilitaire pour le template Jet.
+ * Classe utilitaire pour le template Jet. Contiend toutes les infos nécessaires au générateur.
  */
 public class JetHelper implements IJetHelper {
 
@@ -30,35 +30,30 @@ public class JetHelper implements IJetHelper {
 		initialNode = init;
 		finalNode = fin;
 		properties = prop;
-		nameFinalPredicat = this.generateNamePredicat(nodes, edges, "predicatFinal");
+		nameFinalPredicat = this.generateNamePredicat("predicatFinal");
 	}
 
 	/**
-	 * Méthode récursive qui ajoutera un chiffre au nom si celui ci est déjà utilisé.
+	 * Méthode récursive qui ajoutera un chiffre au nom si celui ci est déjà utilisé par les noeuds ou les arcs.
 	 * 
-	 * @param nodes2
-	 *            la liste des noeuds.
-	 * @param edges2
-	 *            la liste des arcs.
 	 * @param name
-	 *            le nom temporaire du predicat. Il est sujet à modification si on trouve ce nom
-	 *            quelque part.
-	 * @return String le nouveau nom.
+	 *            le nom temporaire du predicat. Il est sujet à modification si ce nom est déjà utilisé quelque part.
+	 * @return String le nouveau final.
 	 */
-	private String generateNamePredicat(EList<ActivityNode> nodes2, EList<ActivityEdge> edges2, String name) {
+	private String generateNamePredicat(String name) {
 
 		// on parcours la liste des noeuds
-		for (ActivityNode activityNode : nodes2) {
+		for (ActivityNode activityNode : nodes) {
 			if (activityNode.getName().equals(name)) {
 				// si on trouve ce nom, on réessaye avec un nouveau nom
-				return this.generateNamePredicat(nodes2, edges2, name + "1");
+				return this.generateNamePredicat(name + "1");
 			}
 		}
 		// on parcours la liste des arcs
-		for (ActivityEdge activityEdge : edges2) {
+		for (ActivityEdge activityEdge : edges) {
 			if (activityEdge.getName().equals(name)) {
 				// si on trouve ce nom, on réessaye avec un nouveau nom
-				return this.generateNamePredicat(nodes2, edges2, name + "1");
+				return this.generateNamePredicat(name + "1");
 			}
 		}
 		// si on n'a trouvé aucun nom, on peut l'utiliser !
@@ -67,37 +62,31 @@ public class JetHelper implements IJetHelper {
 
 	@Override
 	public EList<ActivityNode> getNodes() {
-
 		return nodes;
 	}
 
 	@Override
 	public EList<ActivityEdge> getEdges() {
-
 		return edges;
 	}
 
 	@Override
 	public ActivityNode getInitialNode() {
-
 		return initialNode;
 	}
 
 	@Override
 	public ActivityNode getFinalNode() {
-
 		return finalNode;
 	}
 
 	@Override
 	public List<IProperties> getProperties() {
-
 		return properties;
 	}
 
 	@Override
 	public String getNameFinalPredicat() {
-
 		return nameFinalPredicat;
 	}
 }

@@ -6,29 +6,35 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
-import com.upmc.pstl2013.alloyExecutor.impl.AlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
-import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.IJetHelper;
-import com.upmc.pstl2013.alloyGenerator.impl.JetTemplate;
+import com.upmc.pstl2013.alloyGenerator.impl.IJetTemplate;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.umlParser.IUMLParser;
-import com.upmc.pstl2013.umlParser.impl.UMLParser;
 
 /**
  * Représente les objets que la factory doit savoir créer.
  */
 public interface IFactory {
 
+	/**
+	 * Créé un {@link IJetHelper}.
+	 * @param nodes la liste des {@link ActivityNode} à générer.
+	 * @param edges la liste des {@link ActivityEdge} à générer.
+	 * @param init le {@link ActivityNode} initial.
+	 * @param fina le {@link ActivityNode} final.
+	 * @param prop la liste des {@link IProperties}.
+	 * @return
+	 */
 	IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, ActivityNode init,
 			ActivityNode fina, List<IProperties> prop);
 
 	/**
-	 * Créé un {@link JetTemplate}.
+	 * Créé un {@link IJetTemplate}.
 	 */
-	JetTemplate newJetTemplate();
+	IJetTemplate newJetTemplate();
 
 	/**
 	 * Créé un {@link IInfoParser}.
@@ -41,7 +47,7 @@ public interface IFactory {
 	IInfoGenerator newInfoGenerator();
 
 	/**
-	 * Créé un {@link UMLParser}.
+	 * Créé un {@link IUMLParser}.
 	 * 
 	 * @param parser
 	 *            un {@link IInfoParser}.
@@ -49,7 +55,7 @@ public interface IFactory {
 	IUMLParser newParser(IInfoParser fc);
 
 	/**
-	 * Créé un {@link AlloyGenerator}.
+	 * Créé un {@link IAlloyGenerator}.
 	 * 
 	 * @param infoGenerator
 	 *            un {@link IInfoGenerator}.
@@ -59,7 +65,7 @@ public interface IFactory {
 	IAlloyGenerator newAlloyGenerator(IInfoGenerator infoGenerator, IUMLParser parser);
 
 	/**
-	 * Créé un {@link AlloyExecutor}.
+	 * Créé un {@link IAlloyExecutor}.
 	 * 
 	 * @param generator
 	 *            un {@link IAlloyGenerator}.
@@ -70,7 +76,8 @@ public interface IFactory {
 	 * Créer une liste de {@link IProperties}.
 	 * 
 	 * @param properties
-	 *            les propriétés sélectionnée par l'utilisateur.
+	 *            les propriétés sélectionnée par l'utilisateur sous le format suivant :
+	 *            {@code Map<String, Map<String, String>>}.
 	 */
 	List<IProperties> newPropertie(Map<String, Map<String, String>> properties);
 }

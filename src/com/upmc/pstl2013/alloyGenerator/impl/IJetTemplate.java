@@ -1,7 +1,5 @@
 package com.upmc.pstl2013.alloyGenerator.impl;
 
-import com.upmc.pstl2013.GenericException;
-
 /**
  * L'interface du template Jet.
  * 
@@ -11,9 +9,9 @@ public interface IJetTemplate {
 	/**
 	 * La méthode est dans la possibilité de renvoyer une exception en cas de problème.
 	 * 
-	 * @param argument
-	 * @return String
-	 * @throws GenericException
+	 * @param argument l'argument passé au template. Normalement un [@link IJetTempalte}.
+	 * @return String renvoie le texte Alloy sous forme de String.
+	 * @throws JetException en cas d'erreur lors de la génération.
 	 */
 	String generate(Object argument) throws JetException;
 }

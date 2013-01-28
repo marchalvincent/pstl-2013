@@ -42,9 +42,9 @@ public interface IJetHelper {
 	ActivityNode getFinalNode();
 
 	/**
-	 * Renvoie les propriétés.
+	 * Renvoie la liste des {@link IProperties}.
 	 * 
-	 * @return {@link IProperties}.
+	 * @return une {@link List}.
 	 */
 	List<IProperties> getProperties();
 

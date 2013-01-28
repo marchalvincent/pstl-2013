@@ -1,9 +1,10 @@
 package com.upmc.pstl2013.infoGenerator;
 
 import java.util.Map;
+import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 
 /**
- * Un {@code IInfoGenerator} permet de passer des paramètres au générateur de fichiers alloy.
+ * Un {@code IInfoGenerator} permet à l'IU de passer des paramètres au {@link IAlloyGenerator}.
  * 
  */
 public interface IInfoGenerator {
@@ -11,14 +12,14 @@ public interface IInfoGenerator {
 	/**
 	 * Setter pour le chemin du dossier de destination.
 	 * 
-	 * @param path
+	 * @param path le chemin de destination.
 	 */
 	void setDestinationDirectory(String path);
 
 	/**
 	 * Renvoie le chemin du dossier de destination où seront générés les fichiers alloy.
 	 * 
-	 * @return
+	 * @return String le chemin de destination.
 	 */
 	String getDestinationDirectory();
 

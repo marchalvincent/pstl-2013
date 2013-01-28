@@ -100,7 +100,8 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 * Fait appel a Jet et génère le contenu du fichier Alloy.
 	 * 
 	 * @param activity
-	 * @return le contenu du fichier alloy.
+	 *             l'{@link Activity} du fichier UML.
+	 * @return String le contenu du fichier alloy.
 	 * @throws JetException
 	 *             en cas d'erreur lors de la génération.
 	 */
@@ -110,11 +111,10 @@ public class AlloyGenerator implements IAlloyGenerator {
 		ActivityNode initialNode = this.getNodeByType(nodes, "InitialNode");
 		ActivityNode finalNode = this.getNodeByType(nodes, "ActivityFinalNode");
 		List<IProperties> properties = Factory.getInstance().newPropertie(infoGenerator.getProperties());
-		// on utilise un objet helper qui va nous permettre de passer les nodes/edges au template
-		// Jet.
+		// on utilise un objet helper qui va nous permettre de passer les nodes/edges au template Jet.
 		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, activity.getEdges(), initialNode,
 				finalNode, properties);
-		JetTemplate jetTemplate = Factory.getInstance().newJetTemplate();
+		IJetTemplate jetTemplate = Factory.getInstance().newJetTemplate();
 		return jetTemplate.generate(jetHelper);
 	}
 
@@ -122,8 +122,9 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 * Renvoie le premier noeud rencontré dont le type est en paramètre. Null, si aucun noeud n'est
 	 * trouvé.
 	 * 
-	 * @param type
-	 * @return
+	 * @param nodes la liste des noeuds à parcourir.
+	 * @param type le type de noeud qu'on cherche.
+	 * @return {@link ActivityNode} le premier noeud rencontré du type spécifié ou null si aucun noeud n'est trouvé.
 	 */
 	private ActivityNode getNodeByType(EList<ActivityNode> nodes, String type) {
 
