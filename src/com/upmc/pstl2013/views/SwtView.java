@@ -50,13 +50,14 @@ import com.upmc.pstl2013.strategy.impl.PathStrategy;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 import edu.mit.csail.sdg.alloy4.Err;
+import org.eclipse.swt.widgets.Label;
 
 public class SwtView extends Composite {
 
 	private Button btnChooseDir;
-	private Text textDirectory;
+	private Text txtDirectory;
 
-	private Text text;
+	private Text txtLogs;
 	private Button btnChooserFile;
 	private Button btnExcuterAlloy;
 	private Button btnReadLogs;
@@ -76,6 +77,8 @@ public class SwtView extends Composite {
 	private Table tabValueProperties;
 	private final TableEditor editor;
 	private final int EDITABLECOLUMN = 1;
+	private Text txtPersonalPropertie;
+	private Button btnPersonalPropertie;
 
 
 	/**
@@ -131,7 +134,6 @@ public class SwtView extends Composite {
 			column.setText(titlesVP[i]);
 		}
 
-
 		GridLayout gridLayout = new GridLayout(1, false);
 		setLayout(gridLayout);
 
@@ -144,30 +146,23 @@ public class SwtView extends Composite {
 				if (chemin != null) {
 					chemin += separator;
 					// on met a jour l'IU et l'info générateur.
-					textDirectory.setText(chemin);
+					txtDirectory.setText(chemin);
 					infoGenerator.setDestinationDirectory(chemin);
 				}
 			}
 		});
-		GridData gd_btnChooseDir = new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1);
-		gd_btnChooseDir.widthHint = 87;
-		btnChooseDir.setLayoutData(gd_btnChooseDir);
+		btnChooseDir.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnChooseDir.setText("Choose Dir");
 
-		textDirectory = new Text(cpItemAlloyUse, SWT.BORDER);
-		textDirectory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		textDirectory.setText(userDir);
-
-
+		txtDirectory = new Text(cpItemAlloyUse, SWT.BORDER);
+		txtDirectory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtDirectory.setText(userDir);
 
 		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
-		GridData gd_btnChooserFile = new GridData(SWT.LEFT, SWT.CENTER, false, false, 1, 1);
-		gd_btnChooserFile.widthHint = 87;
-		btnChooserFile.setLayoutData(gd_btnChooserFile);
+		btnChooserFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnChooserFile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-
 				// on créé un filtre pour les fichiers .uml
 				List<ViewerFilter> filters = new ArrayList<ViewerFilter>();
 				filters.add(new ViewerFilter() {
@@ -185,32 +180,77 @@ public class SwtView extends Composite {
 				}
 			}
 		});
-		btnChooserFile.setText("Chooser File");
+		btnChooserFile.setText("Choose File");
 
-		text = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		text.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 6));
+		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
+		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 5));
 
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
-		GridData gd_btnExcuterAlloy = new GridData(SWT.LEFT, SWT.TOP, false,
-				false, 1, 1);
-		gd_btnExcuterAlloy.widthHint = 87;
-		btnExcuterAlloy.setLayoutData(gd_btnExcuterAlloy);
-		btnExcuterAlloy.setText("Exécuter Alloy");
+		btnExcuterAlloy.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false,
+				false, 1, 1));
+		btnExcuterAlloy.setText("Execute Alloy");
 
 		btnReadLogs = new Button(cpItemAlloyUse, SWT.NONE);
 		btnReadLogs.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				try {
-					Desktop.getDesktop().open(new File(textDirectory.getText()+"log.html"));
+					Desktop.getDesktop().open(new File(txtDirectory.getText()+"log.html"));
 				} catch (IOException e1) {
 					log.error(e1.toString());
 				}
 			}
 		});
-		btnReadLogs.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
+		btnReadLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnReadLogs.setText("Read logs");
-
+		new Label(cpItemAlloyUse, SWT.NONE);
+		new Label(cpItemAlloyUse, SWT.NONE);
+		
+		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
+		btnPersonalPropertie.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				// on définit la propriété personnalisé...
+				infoGenerator.setProperties(getPersonnalPropertie());
+				
+				// on définit les strategies de parcours
+				//TODO voir comment on génère les strategy
+				List<IStrategy> strategies = new ArrayList<IStrategy>();
+				strategies.add(new PathStrategy());
+				
+				log.debug("Génération et exécution des fichiers Alloy.");
+				StringBuilder result = new StringBuilder();
+				try {
+					result.append(alloyExecutor.executeFiles(strategies));
+					result.append("Fin d'exécution des fichiers Alloy.");
+					log.debug(result.toString());
+					txtLogs.setText(result.toString());
+				} catch (JetException e1) {
+					log.error(e1.getMessage());
+					txtLogs.setText(e1.getMessage());
+				} catch (Err e1) {
+					log.debug(e1.toString());
+					txtLogs.setText(e1.toString());
+				}
+				alloyExecutor.reset();
+				
+				//Création du fichier de log
+				try {
+					LogCreator.createLog(txtDirectory.getText());
+				} catch (IOException e1) {
+					log.error(e1.getMessage());
+					txtLogs.setText(e1.getMessage());
+				}
+			}
+		});
+		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
+		btnPersonalPropertie.setText("Exec Perso");
+		
+		txtPersonalPropertie = new Text(cpItemAlloyUse, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_txtPersonalPropertie.heightHint = 65;
+		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
+		
 		btnExcuterAlloy.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -228,26 +268,24 @@ public class SwtView extends Composite {
 					result.append(alloyExecutor.executeFiles(strategies));
 					result.append("Fin d'exécution des fichiers Alloy.");
 					log.debug(result.toString());
-					text.setText(result.toString());
+					txtLogs.setText(result.toString());
 				} catch (JetException e1) {
 					log.error(e1.getMessage());
-					text.setText(e1.getMessage());
+					txtLogs.setText(e1.getMessage());
 				} catch (Err e1) {
 					log.debug(e1.toString());
-					text.setText(e1.toString());
+					txtLogs.setText(e1.toString());
 				}
 				alloyExecutor.reset();
-				System.out.println(log.getAllAppenders().toString());
 				
 				//Création du fichier de log
 				try {
-					LogCreator.createLog(textDirectory.getText());
+					LogCreator.createLog(txtDirectory.getText());
 				} catch (IOException e1) {
 					log.error(e1.getMessage());
-					text.setText(e1.getMessage());
+					txtLogs.setText(e1.getMessage());
 				}
 			}
-
 		});
 
 		// on finit par une petite vérification...
@@ -263,14 +301,14 @@ public class SwtView extends Composite {
 		// on vérifie que le dossier de génération alloy est correct
 		try {
 			alloyGenerator.fichiersPresents();
-			text.setText("Prêt pour la vérification de process.");
+			txtLogs.setText("Prêt pour la vérification de process.");
 		} catch (FileNotFoundException e2) {
 			MessageDialog dialog = new MessageDialog(new Shell(), 
 					"Des fichiers sont manquants", null, 
 					e2.toString(), 
 					MessageDialog.WARNING, new String[]{"Ok"}, 1);
 			dialog.open();
-			text.setText(e2.getMessage());
+			txtLogs.setText(e2.getMessage());
 		}
 	}
 
@@ -366,6 +404,23 @@ public class SwtView extends Composite {
 				properties.put(item.getText(), null);
 			}
 		}
+		return properties;
+	}
+	
+	/**
+	 * Construit la super map avec le code sélectionné par l'utilisateur
+	 * @return
+	 */
+	private Map<String, Map<String, String>> getPersonnalPropertie() {
+		Map<String, Map<String, String>> properties = new HashMap<String, Map<String,String>>();
+		
+		String name = "personnalPropertie";
+		Map<String, String> valeurs = new HashMap<String, String>();
+		valeurs.put("alloyCode", txtPersonalPropertie.getText());
+		System.out.println(txtPersonalPropertie.getText());
+		
+		properties.put(name, valeurs);
+		
 		return properties;
 	}
 
