@@ -55,7 +55,6 @@ public class AlloyExecutor implements IAlloyExecutor {
 			// For example, here we choose to display each "warning" by printing it to System.out
 			@Override
 			public void warning(ErrorWarning msg) {
-
 				System.out.print("Relevance Warning:\n" + (msg.toString().trim()) + "\n\n");
 				System.out.flush();
 			}
@@ -73,14 +72,14 @@ public class AlloyExecutor implements IAlloyExecutor {
 					// The required JNI library cannot be found: java.lang.UnsatisfiedLinkError: no
 					// minisatx5 in java.library.path
 					options.solver = A4Options.SatSolver.SAT4J; // TODO: minisatx5 JNI
+					
 					for (Command command : world.getAllCommands()) {
 						// Execute the command
 						resultat.append("=========== Executing " + command + " ============\n");
 						long startTime = System.nanoTime();
 						A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
 						long endTime = System.nanoTime();
-						// Print the outcome
-						// resultat.append(ans.toString());
+						
 						// Affichage des info de l'execution
 						resultat.append("Solver : " + options.solver.toString() + "   ");
 						resultat.append("MaxSeq : " + ans.getMaxSeq() + "   ");
@@ -88,9 +87,11 @@ public class AlloyExecutor implements IAlloyExecutor {
 						resultat.append("BitWidth : " + ans.getBitwidth() + "   ");
 						resultat.append("is Incremental : " + ans.isIncremental() + "   ");
 						resultat.append("Is Satisfiable : " + ans.satisfiable() + "\n");
+						
 						for (IStrategy iStrategy : strategies) {
 							resultat.append(iStrategy.parcours(ans) + "\n");
 						}
+						
 						resultat.append("temps : " + (endTime - startTime) / 1000000 + " ms \n");
 						// If satisfiable...
 						if (ans.satisfiable()) {
