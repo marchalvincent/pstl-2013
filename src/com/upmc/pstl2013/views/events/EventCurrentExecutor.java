@@ -1,15 +1,13 @@
 package com.upmc.pstl2013.views.events;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import java.util.List;
 import org.eclipse.swt.widgets.Table;
-import org.eclipse.swt.widgets.TableItem;
-
+import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventCurrentExecutor extends AbstractEventExecutor {
 
+	@SuppressWarnings("unused")
 	private Table tabProperties;
 
 	/**
@@ -23,15 +21,16 @@ public class EventCurrentExecutor extends AbstractEventExecutor {
 	}
 
 	@Override
-	protected Map<String, Map<String, String>> getProperties() {
+	protected List<IProperties> getProperties() {
 
-		Map<String, Map<String, String>> properties = new HashMap<String, Map<String, String>>();
-		for (TableItem item : tabProperties.getItems()) {
-			if (item.getChecked()) {
-				// TODO Récupéréer les clés valeurs.
-				properties.put(item.getText(), null);
-			}
-		}
-		return properties;
+//		List<IProperties> properties = new HashMap<String, Map<String, String>>();
+//		for (TableItem item : tabProperties.getItems()) {
+//			if (item.getChecked()) {
+//				// TODO Récupéréer les clés valeurs.
+//				properties.put(item.getText(), null);
+//			}
+//		}
+		//TODO MICHEL
+		return null;
 	}
 }
