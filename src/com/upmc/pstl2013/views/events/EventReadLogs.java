@@ -29,7 +29,7 @@ public class EventReadLogs extends MouseAdapter {
 	public void mouseDown(MouseEvent e) {
 
 		try {
-			Desktop.getDesktop().open(new File(textDirectory.getText() + "log.html"));
+			Desktop.getDesktop().open(new File(textDirectory.getText() + "logInfo.html"));
 		} catch (IOException e1) {
 			log.error(e1.toString());
 		}
