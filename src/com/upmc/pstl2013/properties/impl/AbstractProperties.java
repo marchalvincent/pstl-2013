@@ -17,10 +17,11 @@ public abstract class AbstractProperties implements IProperties {
 	
 	// TODO enlever si besoin, avoir plus tard
 	public static List<String> getProperties() {
-
 		List<String> liste = new ArrayList<String>();
 		liste.add("DeadLock");
-		liste.add("Properties2");
+		liste.add("EnoughState");
+		liste.add("Orga");
+		liste.add("Wf");
 		return liste;
 	}
 

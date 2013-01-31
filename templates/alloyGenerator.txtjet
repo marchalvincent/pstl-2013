@@ -92,7 +92,7 @@ one sig P extends Performer {} {
 %>
 
 pred testAll {
-	<% stringBuffer.append(predicatName); %>
+	<%=predicatName%>
 }
 
 assert tall {
@@ -100,8 +100,7 @@ assert tall {
 }
 
 <% // GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. SubTemplate)
-	stringBuffer.append(NL);
-	stringBuffer.append(propertie.getAlloyCode() + NL);
+	stringBuffer.append(propertie.getAlloyCode());
 %>
 
 /** *Visualization Variables */

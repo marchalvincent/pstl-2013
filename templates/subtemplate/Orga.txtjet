@@ -1,4 +1,4 @@
-<%@ jet package="com.upmc.pstl2013.alloyGenerator.jet.impl" class="DeadLockTemplate" 
+<%@ jet package="com.upmc.pstl2013.alloyGenerator.jet.impl" class="OrgaTemplate" 
 	imports="org.apache.log4j.Logger
 			com.upmc.pstl2013.alloyGenerator.jet.*
 			com.upmc.pstl2013.alloyGenerator.impl.*
@@ -16,8 +16,8 @@
 	final String predicatName = propertie.getString("predicatName");
 %>
 
-pred <%=predicatName%> {
-	some s:State | s.getTokens[<%=propertie.getString("finalNode")%>] > 0
+pred {<%=predicatName%>} {
+	all s:State | #{ node : ExecutableNode | s.hasTokens[node] } <= #RolePerformer
 }
 
 <%
