@@ -11,6 +11,6 @@ public class PersonalPropertie extends AbstractProperties implements IProperties
 	
 	public PersonalPropertie(Map<String, String> prop) {
 		super(prop);
-		super.alloyCode = prop.get("alloyCode");
+		setAlloyCode(prop.get("alloyCode"));
 	}
 }

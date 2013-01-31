@@ -1,10 +1,11 @@
-package com.upmc.pstl2013.alloyGenerator.impl;
+package com.upmc.pstl2013.alloyGenerator.jet.impl;
 
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.*;
+import com.upmc.pstl2013.alloyGenerator.jet.*;
+import com.upmc.pstl2013.alloyGenerator.impl.*;
 import com.upmc.pstl2013.properties.*;
-import java.util.List;
 
 public class JetTemplate implements IJetTemplate {
 
@@ -21,10 +22,10 @@ public class JetTemplate implements IJetTemplate {
   protected final String TEXT_1 = NL + "module process" + NL + "" + NL + "open syntax" + NL + "open semantic" + NL + "" + NL + "fact initTokens {" + NL + "\tInit[  " + NL + "\t\t";
   protected final String TEXT_2 = " -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + " + NL + "\t\tActivityEdge -> 0  // offers\t" + NL + "\t]" + NL + "}" + NL + "" + NL + "// Timing" + NL + "one sig T extends Timing {} {" + NL + "\ttiming = (ActivityNode -> 0) " + NL + "}" + NL + "" + NL + "// Role Performer" + NL + "one sig Yoann extends RolePerformer {}" + NL + "one sig P extends Performer {} {" + NL + "\tperformer = ActivityNode -> Yoann" + NL + "}" + NL;
   protected final String TEXT_3 = NL;
-  protected final String TEXT_4 = NL + "pred ";
-  protected final String TEXT_5 = " {" + NL + "\t//some s : State | s.getTokens[Final] = 1 // 4 Solution" + NL + "\tsome s:State | s.getTokens[";
-  protected final String TEXT_6 = "] > 0" + NL + "}" + NL + "" + NL + "pred testAll {" + NL + "\t";
-  protected final String TEXT_7 = NL + "}" + NL + "" + NL + "assert tall {" + NL + "\ttestAll" + NL + "}" + NL + "" + NL + "//TODO le nombre peux State peux augmenter ex: 20 State ou 30 State etc..." + NL + "//run testAll for 0 but 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 1" + NL + "//check tall for 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 0";
+  protected final String TEXT_4 = NL + NL + "pred testAll {" + NL + "\t";
+  protected final String TEXT_5 = NL + "}" + NL + "" + NL + "assert tall {" + NL + "\ttestAll" + NL + "}" + NL + "" + NL + "pred ";
+  protected final String TEXT_6 = " {" + NL + "\tsome s:State | s.getTokens[";
+  protected final String TEXT_7 = "] > 0" + NL + "}" + NL;
   protected final String TEXT_8 = NL + NL + NL + "/** *Visualization Variables */" + NL + "// http://alloy.mit.edu/community/node/548" + NL + "fun vNodeExecuting : State->ActivityNode {" + NL + "   {s:State, a:ActivityNode | s.getTokens[a] > 0}" + NL + "}" + NL + "fun vEdgeHaveOffers : State->ActivityEdge {" + NL + "   {s:State, e:ActivityEdge | s.getOffers[e] > 0}" + NL + "}" + NL + "" + NL + "fun pinInNode : State->Action->Pin->Int {" + NL + "\t {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}" + NL + "}";
   protected final String TEXT_9 = NL;
 
@@ -50,7 +51,7 @@ public class JetTemplate implements IJetTemplate {
 			log.error(error);
 			throw new JetException(error);
 		}
-		stringBuffer.append(initialNode.getName().replace("-", "")); 
+		stringBuffer.append(initialNode.getName()); 
     stringBuffer.append(TEXT_2);
      // GENERATION DES NOEUDS ET EDGES EN DYNAMIQUE
 	EList<ActivityNode> nodes = jetHelper.getNodes();
@@ -58,12 +59,12 @@ public class JetTemplate implements IJetTemplate {
 	
 	stringBuffer.append("------Generated Nodes------" + NL);
 	for (ActivityNode node : nodes) {
-		stringBuffer.append("one sig " + node.getName().replace("-", "") + " extends " + node.eClass().getName() + " {}{}" + NL);
+		stringBuffer.append("one sig " + node.getName() + " extends " + node.eClass().getName() + " {}{}" + NL);
 	}
 	
 	stringBuffer.append(NL + NL + "------Generated Edges------" + NL);
 	for (ActivityEdge edge : edges) {
-		stringBuffer.append("one sig " + edge.getName().replace("-", "") + " extends " + edge.eClass().getName() + " {}{" + NL);
+		stringBuffer.append("one sig " + edge.getName() + " extends " + edge.eClass().getName() + " {}{" + NL);
 		stringBuffer.append("    source = " + edge.getSource().getName() + NL);
 		stringBuffer.append("    target = " + edge.getTarget().getName() + NL);
 		stringBuffer.append("}" + NL);
@@ -85,22 +86,20 @@ public class JetTemplate implements IJetTemplate {
     stringBuffer.append(TEXT_4);
      stringBuffer.append(namePredicat); 
     stringBuffer.append(TEXT_5);
-     stringBuffer.append(finalNode.getName().replace("-", "")); 
-    stringBuffer.append(TEXT_6);
      stringBuffer.append(namePredicat); 
+    stringBuffer.append(TEXT_6);
+     stringBuffer.append(finalNode.getName()); 
     stringBuffer.append(TEXT_7);
     
-	List<IProperties> properties = jetHelper.getProperties();
-	if (properties == null) {
+	IProperties propertie = jetHelper.getPropertie();
+	if (propertie == null) {
 		final String error = "Les propriétés sont incorrectes.";
 		log.error(error);
 		throw new JetException(error);
 	}
 	
 	stringBuffer.append(NL);
-	for (IProperties prop : properties) {
-		stringBuffer.append(prop.getAlloyCode() + NL);
-	}
+	stringBuffer.append(propertie.getAlloyCode() + NL);
 
     stringBuffer.append(TEXT_8);
     stringBuffer.append(TEXT_9);

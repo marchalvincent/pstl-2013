@@ -1,6 +1,5 @@
 package com.upmc.pstl2013.alloyGenerator.impl;
 
-import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
@@ -15,21 +14,21 @@ public class JetHelper implements IJetHelper {
 	private EList<ActivityEdge> edges;
 	private ActivityNode initialNode;
 	private ActivityNode finalNode;
-	private List<IProperties> properties;
+	private IProperties propertie;
 	/**
 	 * Le nom du predicat final
 	 */
 	private String nameFinalPredicat;
 
 	public JetHelper(EList<ActivityNode> n, EList<ActivityEdge> e, ActivityNode init, ActivityNode fin,
-			List<IProperties> prop) {
+			IProperties prop) {
 
 		super();
 		nodes = n;
 		edges = e;
 		initialNode = init;
 		finalNode = fin;
-		properties = prop;
+		propertie = prop;
 		nameFinalPredicat = this.generateNamePredicat("predicatFinal");
 	}
 
@@ -81,8 +80,8 @@ public class JetHelper implements IJetHelper {
 	}
 
 	@Override
-	public List<IProperties> getProperties() {
-		return properties;
+	public IProperties getPropertie() {
+		return propertie;
 	}
 
 	@Override

@@ -8,7 +8,7 @@ import org.eclipse.uml2.uml.ActivityNode;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.IJetHelper;
-import com.upmc.pstl2013.alloyGenerator.impl.IJetTemplate;
+import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.properties.IProperties;
@@ -25,11 +25,11 @@ public interface IFactory {
 	 * @param edges la liste des {@link ActivityEdge} à générer.
 	 * @param init le {@link ActivityNode} initial.
 	 * @param fina le {@link ActivityNode} final.
-	 * @param prop la liste des {@link IProperties}.
+	 * @param prop la {@link IProperties}.
 	 * @return
 	 */
 	IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, ActivityNode init,
-			ActivityNode fina, List<IProperties> prop);
+			ActivityNode fina, IProperties prop);
 
 	/**
 	 * Créé un {@link IJetTemplate}.

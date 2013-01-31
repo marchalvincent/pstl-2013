@@ -12,4 +12,11 @@ public interface IProperties {
 	 * @return String du code alloy.
 	 */
 	String getAlloyCode();
+	
+	/**
+	 * Ajoute une association clé-valeur à la propriété.
+	 * @param key la clé
+	 * @param value la valeur
+	 */
+	void putProperties(String key, String value);
 }
