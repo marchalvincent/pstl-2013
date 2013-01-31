@@ -1,11 +1,17 @@
 package com.upmc.pstl2013.views.events;
 
+import java.util.Map;
+
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventSelectPropertie implements Listener {
@@ -13,6 +19,7 @@ public class EventSelectPropertie implements Listener {
 	private Table tabValueProperties;
 	private Table tabProperties;
 	private SwtView swtView;
+	private Logger log = Logger.getLogger(EventSelectPropertie.class);
 
 	/**
 	 * Constructor
@@ -37,18 +44,28 @@ public class EventSelectPropertie implements Listener {
 	 */
 	private void showValueProperties(String nameProperty) {
 
-		if (tabValueProperties != null) {
-			tabValueProperties.removeAll();
-			tabValueProperties.addSelectionListener(new EventClickValueProperty(swtView));
-			tabValueProperties.getColumn(0).setText("Attributes : " + nameProperty);
-			for (int i = 0; i < 10; i++) {
-				TableItem item = new TableItem(tabValueProperties, SWT.NONE);
-				item.setText(0, nameProperty);
-				item.setText(1, "y");
+		try {
+			IProperties property = Factory.getInstance().newPropertie(nameProperty);
+			Map <String,String> attributes = property.getStringAttributes();
+			
+			if (tabValueProperties != null) {
+				tabValueProperties.removeAll();
+				tabValueProperties.addSelectionListener(new EventClickValueProperty(swtView));
+				tabValueProperties.getColumn(0).setText("Attributes : " + nameProperty);
+				for (String key : attributes.keySet()) {
+					TableItem item = new TableItem(tabValueProperties, SWT.NONE);
+					item.setText(0, key);
+					item.setText(1, attributes.get(key));
+				}
+				for (int i = 0; i < 2; i++) {
+					tabValueProperties.getColumn(i).pack();
+				}
 			}
-			for (int i = 0; i < 2; i++) {
-				tabValueProperties.getColumn(i).pack();
-			}
+		} catch (PropertiesException e) {
+			log.error(e.getMessage());
+			swtView.getTxtLogs().append(e.getMessage());
 		}
+		
+		
 	}
 }
