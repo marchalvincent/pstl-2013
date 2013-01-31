@@ -14,6 +14,14 @@
 		throw new JetException(error);
 	}
 	IJetHelper jetHelper = (IJetHelper) argument;
+	
+	// on récupère la propriété
+	IProperties propertie = jetHelper.getPropertie();
+	if (propertie == null) {
+		final String error = "La propriété est incorrecte.";
+		log.error(error);
+		throw new JetException(error);
+	}
 %>
 
 module process
@@ -25,14 +33,14 @@ fact initTokens {
 	Init[  
 		<% //GENERATION DU NOEUD INITIAL EN DYNAMIQUE
 		// on gère les cas sans noeud initial...
-		ActivityNode initialNode = jetHelper.getInitialNode();
+		String initialNode = propertie.get("initialNode");
 		if (initialNode == null) {
-			final String error = "Le fichier n'a pas trouvé de noeud initial.";
+			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
 			log.error(error);
 			throw new JetException(error);
 		}
-		stringBuffer.append(initialNode.getName()); %> -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + 
-		ActivityEdge -> 0  // offers	
+		stringBuffer.append(initialNode); %> -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + 
+		ActivityEdge -> 0  // offers
 	]
 }
 
@@ -67,41 +75,34 @@ one sig P extends Performer {} {
 
 <% // GENERATION DU NOEUD FINAL EN DYNAMIQUE
 	// on gère les cas sans noeud finaux...
-	ActivityNode finalNode = jetHelper.getFinalNode();
+	String finalNode = propertie.get("finalNode");
 	if (finalNode == null) {
-		final String error = "Le fichier n'a pas trouvé de noeud final.";
+		final String error = "Le fichier Jet n'a pas trouvé de noeud final.";
 		log.error(error);
 		throw new JetException(error);
 	}
 	
-	// on génère également le nom du predicat en dynamique pour ne pas avoir de conflits avec les noms de node ou edge
-	String namePredicat = jetHelper.getNameFinalPredicat();
+	// on récupère le nom du predicat final
+	String predicatName = propertie.get("predicatName");
+	if (predicatName == null) {
+		final String error = "Le fichier Jet n'a pas trouvé de nom correct pour le predicat final.";
+		log.error(error);
+		throw new JetException(error);
+	}
 %>
 
 pred testAll {
-	<% stringBuffer.append(namePredicat); %>
+	<% stringBuffer.append(predicatName); %>
 }
 
 assert tall {
 	testAll
 }
 
-pred <% stringBuffer.append(namePredicat); %> {
-	some s:State | s.getTokens[<% stringBuffer.append(finalNode.getName()); %>] > 0
-}
-
-<%
-	IProperties propertie = jetHelper.getPropertie();
-	if (propertie == null) {
-		final String error = "Les propriétés sont incorrectes.";
-		log.error(error);
-		throw new JetException(error);
-	}
-	
+<% // GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. SubTemplate)
 	stringBuffer.append(NL);
 	stringBuffer.append(propertie.getAlloyCode() + NL);
 %>
-
 
 /** *Visualization Variables */
 // http://alloy.mit.edu/community/node/548

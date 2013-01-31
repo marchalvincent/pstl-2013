@@ -15,8 +15,17 @@ public interface IProperties {
 	
 	/**
 	 * Ajoute une association clé-valeur à la propriété.
+	 * 
 	 * @param key la clé
 	 * @param value la valeur
 	 */
-	void putProperties(String key, String value);
+	void put(String key, String value);
+	
+	/**
+	 * Renvoie la valeur associée à la clé passée en paramètre.
+	 * 
+	 * @param key la clé.
+	 * @return String la valeur associée.
+	 */
+	String get(String key);
 }

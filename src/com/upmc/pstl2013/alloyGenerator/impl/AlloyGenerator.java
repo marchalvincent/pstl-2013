@@ -50,7 +50,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 		new File(userDir).mkdir();
 		// 2. On récupère les activités groupées par fichier et les propriétés
 		Map<String, List<Activity>> activities = parser.getActivities();
-		List<IProperties> properties = Factory.getInstance().newPropertie(infoGenerator.getProperties());
+		List<IProperties> properties = Factory.getInstance().newPropertie(infoGenerator.getAttributes());
 		
 		log.info("Début des générations pour " + properties.size() + " propriété(s).");
 		
@@ -133,17 +133,17 @@ public class AlloyGenerator implements IAlloyGenerator {
 		ActivityNode initialNode = this.getNodeByType(nodes, "InitialNode");
 		ActivityNode finalNode = this.getNodeByType(nodes, "ActivityFinalNode");
 		
-		// on ajoute à la propriété les infos de base, nbNodes, nbEdges et nbObjects
-		String nbNodes = Integer.toString(nodes.size());
-		String nbEdges = Integer.toString(edges.size());
-		String nbObjects = Integer.toString(edges.size() + nodes.size());
+		// on ajoute à la propriété les infos de base...
+		iPropertie.put("nbNodes", Integer.toString(nodes.size()));
+		iPropertie.put("nbEdges", Integer.toString(edges.size()));
+		iPropertie.put("nbObjects", Integer.toString(edges.size() + nodes.size()));
 		
-		iPropertie.putProperties("nbNodes", nbNodes);
-		iPropertie.putProperties("nbEdges", nbEdges);
-		iPropertie.putProperties("nbObjects", nbObjects);
+		iPropertie.put("initialNode", initialNode.getName());
+		iPropertie.put("finalNode", finalNode.getName());
+		iPropertie.put("predicatName", this.generateNamePredicat("predicatPropertie", nodes, edges));
 		
-		// on utilise un objet helper qui va nous permettre de passer les nodes/edges au template Jet.
-		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, edges, initialNode, finalNode, iPropertie);
+		// on utilise un objet helper qui va nous permettre de passer les nodes/edges et la propriété au template Jet.
+		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, edges, iPropertie);
 		IJetTemplate jetTemplate = Factory.getInstance().newJetTemplate();
 		return jetTemplate.generate(jetHelper);
 	}
@@ -191,5 +191,34 @@ public class AlloyGenerator implements IAlloyGenerator {
 			activityEdges.setName(activityEdges.getName().replace("-", ""));
 		}
 		return egdes;
+	}
+
+	/**
+	 * Méthode récursive qui ajoutera un chiffre au nom si celui ci est déjà utilisé par les noeuds ou les arcs.
+	 * 
+	 * @param name
+	 *            le nom temporaire du predicat. Il est sujet à modification si ce nom est déjà utilisé quelque part.
+	 * @param nodes la liste des {@link ActivityNode}.
+	 * @param edges la liste des {@link ActivityEdge}.
+	 * @return String le nouveau final.
+	 */
+	private String generateNamePredicat(String name, EList<ActivityNode> nodes, EList<ActivityEdge> edges) {
+
+		// on parcours la liste des noeuds
+		for (ActivityNode activityNode : nodes) {
+			if (activityNode.getName().equals(name)) {
+				// si on trouve ce nom, on réessaye avec un nouveau nom
+				return this.generateNamePredicat(name + "1", nodes, edges);
+			}
+		}
+		// on parcours la liste des arcs
+		for (ActivityEdge activityEdge : edges) {
+			if (activityEdge.getName().equals(name)) {
+				// si on trouve ce nom, on réessaye avec un nouveau nom
+				return this.generateNamePredicat(name + "1", nodes, edges);
+			}
+		}
+		// si on n'a trouvé aucun nom, on peut l'utiliser !
+		return name;
 	}
 }

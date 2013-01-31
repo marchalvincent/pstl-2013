@@ -12,8 +12,7 @@ import com.upmc.pstl2013.properties.IProperties;
  */
 public abstract class AbstractProperties implements IProperties {
 
-	private Map<String, String> properties;
-	private String alloyCode;
+	protected Map<String, String> attributes;
 	
 
 	// TODO enlever si besoin, avoir plus tard
@@ -25,23 +24,19 @@ public abstract class AbstractProperties implements IProperties {
 		return liste;
 	}
 
-	public AbstractProperties(Map<String, String> prop) {
+	public AbstractProperties(Map<String, String> attr) {
 		super();
-		if (prop == null) properties = new HashMap<String, String>();
-		else properties = prop;
-	}
-
-	@Override
-	public String getAlloyCode() {
-		return alloyCode;
+		if (attr == null) attributes = new HashMap<String, String>();
+		else attributes = attr;
 	}
 	
 	@Override
-	public void putProperties(String key, String value) {
-		properties.put(key, value);
+	public void put(String key, String value) {
+		attributes.put(key, value);
 	}
 	
-	protected void setAlloyCode(String code) {
-		alloyCode = code;
+	@Override
+	public String get(String key) {
+		return attributes.get(key);
 	}
 }

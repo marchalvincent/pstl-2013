@@ -41,9 +41,8 @@ public class Factory implements IFactory {
 	}
 
 	@Override
-	public IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, ActivityNode init,
-			ActivityNode fin, IProperties propertie) {
-		return new JetHelper(nodes, edges, init, fin, propertie);
+	public IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, IProperties propertie) {
+		return new JetHelper(nodes, edges, propertie);
 	}
 
 	@Override

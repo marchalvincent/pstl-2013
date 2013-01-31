@@ -8,10 +8,16 @@ import java.util.Map;
  */
 public class DeadLock extends AbstractProperties {
 	
-	public DeadLock(Map<String, String> properties) {
-		super(properties);
-		StringBuilder sb = new StringBuilder();
-		sb.append("check ");
-		setAlloyCode("run testAll for 0 but 20 State, 15 Object, 5 ActivityNode, 4 ActivityEdge expect 1");
+	public DeadLock(Map<String, String> attributes) {
+		super(attributes);
+		attributes.put("attribut1", "toto");
+		attributes.put("attribut2", "tata");
+		attributes.put("attribut3", "tutu");
+	}
+
+	@Override
+	public String getAlloyCode() {
+
+		return null;
 	}
 }

@@ -27,31 +27,9 @@ public interface IJetHelper {
 	EList<ActivityEdge> getEdges();
 
 	/**
-	 * Renvoie le noeud initial.
-	 * 
-	 * @return {@link ActivityNode}.
-	 */
-	ActivityNode getInitialNode();
-
-	/**
-	 * Renvoie le noeud final.
-	 * 
-	 * @return {@link ActivityNode}.
-	 */
-	ActivityNode getFinalNode();
-
-	/**
 	 * Renvoie la {@link IProperties}.
 	 * 
 	 * @return une {@link IProperties}.
 	 */
 	IProperties getPropertie();
-
-	/**
-	 * Renvoie le nom du predicat final. Il faut que ce nom soit différent des autres noms de "node"
-	 * ou "edge".
-	 * 
-	 * @return {@code String}.
-	 */
-	String getNameFinalPredicat();
 }

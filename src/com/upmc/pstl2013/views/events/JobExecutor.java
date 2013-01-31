@@ -38,7 +38,7 @@ public class JobExecutor extends Job {
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 
-		infoGenerator.setProperties(properties);
+		infoGenerator.setAttributes(properties);
 		// on définit les strategies de parcours
 		// TODO voir comment on génère les strategy
 		List<IStrategy> strategies = new ArrayList<IStrategy>();

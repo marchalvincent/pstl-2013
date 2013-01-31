@@ -26,15 +26,15 @@ public interface IInfoGenerator {
 	/**
 	 * Spécifie les propriétés de génération.
 	 * 
-	 * @param properties
+	 * @param attributes
 	 *            . Contient une association String-Map. Le string correspond au nom de la
 	 *            propriété. La sous-map représente l'association clé-valeur de propriété
 	 *            personnalisée par l'utilisateur.
 	 */
-	void setProperties(Map<String, Map<String, String>> properties);
+	void setAttributes(Map<String, Map<String, String>> attributes);
 
 	/**
 	 * Renvoie les propriétés de génération alloy.
 	 */
-	Map<String, Map<String, String>> getProperties();
+	Map<String, Map<String, String>> getAttributes();
 }

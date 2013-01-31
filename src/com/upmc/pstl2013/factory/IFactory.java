@@ -23,13 +23,10 @@ public interface IFactory {
 	 * Créé un {@link IJetHelper}.
 	 * @param nodes la liste des {@link ActivityNode} à générer.
 	 * @param edges la liste des {@link ActivityEdge} à générer.
-	 * @param init le {@link ActivityNode} initial.
-	 * @param fina le {@link ActivityNode} final.
 	 * @param prop la {@link IProperties}.
 	 * @return
 	 */
-	IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, ActivityNode init,
-			ActivityNode fina, IProperties prop);
+	IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, IProperties prop);
 
 	/**
 	 * Créé un {@link IJetTemplate}.

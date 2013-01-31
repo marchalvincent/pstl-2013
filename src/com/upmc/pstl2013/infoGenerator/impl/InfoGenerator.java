@@ -30,12 +30,12 @@ public class InfoGenerator implements IInfoGenerator {
 	}
 
 	@Override
-	public void setProperties(Map<String, Map<String, String>> prop) {
+	public void setAttributes(Map<String, Map<String, String>> prop) {
 		properties = prop;
 	}
 
 	@Override
-	public Map<String, Map<String, String>> getProperties() {
+	public Map<String, Map<String, String>> getAttributes() {
 		return properties;
 	}
 }

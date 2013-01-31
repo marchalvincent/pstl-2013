@@ -20,14 +20,12 @@ public class JetTemplate implements IJetTemplate {
 
   public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl;
   protected final String TEXT_1 = NL + "module process" + NL + "" + NL + "open syntax" + NL + "open semantic" + NL + "" + NL + "fact initTokens {" + NL + "\tInit[  " + NL + "\t\t";
-  protected final String TEXT_2 = " -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + " + NL + "\t\tActivityEdge -> 0  // offers\t" + NL + "\t]" + NL + "}" + NL + "" + NL + "// Timing" + NL + "one sig T extends Timing {} {" + NL + "\ttiming = (ActivityNode -> 0) " + NL + "}" + NL + "" + NL + "// Role Performer" + NL + "one sig Yoann extends RolePerformer {}" + NL + "one sig P extends Performer {} {" + NL + "\tperformer = ActivityNode -> Yoann" + NL + "}" + NL;
+  protected final String TEXT_2 = " -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + " + NL + "\t\tActivityEdge -> 0  // offers" + NL + "\t]" + NL + "}" + NL + "" + NL + "// Timing" + NL + "one sig T extends Timing {} {" + NL + "\ttiming = (ActivityNode -> 0) " + NL + "}" + NL + "" + NL + "// Role Performer" + NL + "one sig Yoann extends RolePerformer {}" + NL + "one sig P extends Performer {} {" + NL + "\tperformer = ActivityNode -> Yoann" + NL + "}" + NL;
   protected final String TEXT_3 = NL;
   protected final String TEXT_4 = NL + NL + "pred testAll {" + NL + "\t";
-  protected final String TEXT_5 = NL + "}" + NL + "" + NL + "assert tall {" + NL + "\ttestAll" + NL + "}" + NL + "" + NL + "pred ";
-  protected final String TEXT_6 = " {" + NL + "\tsome s:State | s.getTokens[";
-  protected final String TEXT_7 = "] > 0" + NL + "}" + NL;
-  protected final String TEXT_8 = NL + NL + NL + "/** *Visualization Variables */" + NL + "// http://alloy.mit.edu/community/node/548" + NL + "fun vNodeExecuting : State->ActivityNode {" + NL + "   {s:State, a:ActivityNode | s.getTokens[a] > 0}" + NL + "}" + NL + "fun vEdgeHaveOffers : State->ActivityEdge {" + NL + "   {s:State, e:ActivityEdge | s.getOffers[e] > 0}" + NL + "}" + NL + "" + NL + "fun pinInNode : State->Action->Pin->Int {" + NL + "\t {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}" + NL + "}";
-  protected final String TEXT_9 = NL;
+  protected final String TEXT_5 = NL + "}" + NL + "" + NL + "assert tall {" + NL + "\ttestAll" + NL + "}" + NL;
+  protected final String TEXT_6 = NL + NL + "/** *Visualization Variables */" + NL + "// http://alloy.mit.edu/community/node/548" + NL + "fun vNodeExecuting : State->ActivityNode {" + NL + "   {s:State, a:ActivityNode | s.getTokens[a] > 0}" + NL + "}" + NL + "fun vEdgeHaveOffers : State->ActivityEdge {" + NL + "   {s:State, e:ActivityEdge | s.getOffers[e] > 0}" + NL + "}" + NL + "" + NL + "fun pinInNode : State->Action->Pin->Int {" + NL + "\t {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}" + NL + "}";
+  protected final String TEXT_7 = NL;
 
 	@Override
 	public String generate(Object argument) throws JetException
@@ -41,17 +39,25 @@ public class JetTemplate implements IJetTemplate {
 		throw new JetException(error);
 	}
 	IJetHelper jetHelper = (IJetHelper) argument;
+	
+	// on récupère la propriété
+	IProperties propertie = jetHelper.getPropertie();
+	if (propertie == null) {
+		final String error = "La propriété est incorrecte.";
+		log.error(error);
+		throw new JetException(error);
+	}
 
     stringBuffer.append(TEXT_1);
      //GENERATION DU NOEUD INITIAL EN DYNAMIQUE
 		// on gère les cas sans noeud initial...
-		ActivityNode initialNode = jetHelper.getInitialNode();
+		String initialNode = propertie.get("initialNode");
 		if (initialNode == null) {
-			final String error = "Le fichier n'a pas trouvé de noeud initial.";
+			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
 			log.error(error);
 			throw new JetException(error);
 		}
-		stringBuffer.append(initialNode.getName()); 
+		stringBuffer.append(initialNode); 
     stringBuffer.append(TEXT_2);
      // GENERATION DES NOEUDS ET EDGES EN DYNAMIQUE
 	EList<ActivityNode> nodes = jetHelper.getNodes();
@@ -73,36 +79,30 @@ public class JetTemplate implements IJetTemplate {
     stringBuffer.append(TEXT_3);
      // GENERATION DU NOEUD FINAL EN DYNAMIQUE
 	// on gère les cas sans noeud finaux...
-	ActivityNode finalNode = jetHelper.getFinalNode();
+	String finalNode = propertie.get("finalNode");
 	if (finalNode == null) {
-		final String error = "Le fichier n'a pas trouvé de noeud final.";
+		final String error = "Le fichier Jet n'a pas trouvé de noeud final.";
 		log.error(error);
 		throw new JetException(error);
 	}
 	
-	// on génère également le nom du predicat en dynamique pour ne pas avoir de conflits avec les noms de node ou edge
-	String namePredicat = jetHelper.getNameFinalPredicat();
+	// on récupère le nom du predicat final
+	String predicatName = propertie.get("predicatName");
+	if (predicatName == null) {
+		final String error = "Le fichier Jet n'a pas trouvé de nom correct pour le predicat final.";
+		log.error(error);
+		throw new JetException(error);
+	}
 
     stringBuffer.append(TEXT_4);
-     stringBuffer.append(namePredicat); 
+     stringBuffer.append(predicatName); 
     stringBuffer.append(TEXT_5);
-     stringBuffer.append(namePredicat); 
-    stringBuffer.append(TEXT_6);
-     stringBuffer.append(finalNode.getName()); 
-    stringBuffer.append(TEXT_7);
-    
-	IProperties propertie = jetHelper.getPropertie();
-	if (propertie == null) {
-		final String error = "Les propriétés sont incorrectes.";
-		log.error(error);
-		throw new JetException(error);
-	}
-	
+     // GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. SubTemplate)
 	stringBuffer.append(NL);
 	stringBuffer.append(propertie.getAlloyCode() + NL);
 
-    stringBuffer.append(TEXT_8);
-    stringBuffer.append(TEXT_9);
+    stringBuffer.append(TEXT_6);
+    stringBuffer.append(TEXT_7);
     return stringBuffer.toString();
   }
 }
