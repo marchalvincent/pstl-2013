@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.properties.impl;
 
-import java.util.Map;
+import com.upmc.pstl2013.alloyGenerator.impl.JetException;
+import com.upmc.pstl2013.alloyGenerator.jet.impl.DeadLockTemplate;
 
 /**
  * Représente une propriété de vérification alloy. Exécute un "run".
@@ -8,16 +9,16 @@ import java.util.Map;
  */
 public class DeadLock extends AbstractProperties {
 	
-	public DeadLock(Map<String, String> attributes) {
-		super(attributes);
-		attributes.put("attribut1", "toto");
+	public DeadLock() {
+		super();
+		attributes.put("inc", "20");
 		attributes.put("attribut2", "tata");
 		attributes.put("attribut3", "tutu");
+		attributes.put("attribut4", "toto");
 	}
 
 	@Override
-	public String getAlloyCode() {
-
-		return null;
+	public String getAlloyCode() throws JetException {
+		return new DeadLockTemplate().generate(this);
 	}
 }

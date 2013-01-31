@@ -1,9 +1,5 @@
 package com.upmc.pstl2013.properties.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
 import org.apache.log4j.Logger;
 import com.upmc.pstl2013.properties.IProperties;
 
@@ -18,27 +14,20 @@ public class PropertiesFactory {
 	/**
 	 * Méthode static pour la création des propriétés.
 	 * 
-	 * @param prop
-	 *            une Map<String, Map<String, String>> associant le nom de la propriété à son ensemble
-	 *            de clé-valeur personnalisées.
-	 * @return une liste de {@link IProperties}.
+	 * @param name le nom de la propriété.
+	 * @return une {@link IProperties}.
+	 * @throws PropertiesException si le nom de la propriété est introuvable.
 	 */
-	public static List<IProperties> createPropertie(Map<String, Map<String, String>> prop) {
+	public static IProperties createPropertie(String name) throws PropertiesException {
 
-		List<IProperties> properties = new ArrayList<IProperties>();
-		
-		// pour chaque nom de propriété, on récupère l'association de clé-valeur
-		Set<String> allKeys = prop.keySet();
-		for (String propertieName : allKeys) {
-			Map<String, String> cleVal = prop.get(propertieName);
-			// puis on créer l'objet propertie
-			if (propertieName.equals(PersonalPropertie.class.getSimpleName())) properties.add(new PersonalPropertie(cleVal));
-			else if (propertieName.equals(DeadLock.class.getSimpleName())) properties.add(new DeadLock(cleVal));
-			// ici on peut ajouter les nouvelles propriétés
-			else {
-				log.warn("Le nom de la propriété n'existe pas : " + propertieName);
-			}
+		// puis on créer l'objet propertie
+		if (name.equals(PersonalPropertie.class.getSimpleName())) return new PersonalPropertie();
+		else if (name.equals(DeadLock.class.getSimpleName())) return new DeadLock();
+		// ici on peut ajouter les nouvelles propriétés
+		else {
+			final String error = "Le nom de la propriété n'existe pas dans la factory : " + name;
+			log.warn(error);
+			throw new PropertiesException(error);
 		}
-		return properties;
 	}
 }
