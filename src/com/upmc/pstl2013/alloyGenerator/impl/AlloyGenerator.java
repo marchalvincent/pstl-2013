@@ -6,11 +6,15 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Activity;
+import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.properties.IProperties;
@@ -31,7 +35,6 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 * Constructeur
 	 */
 	public AlloyGenerator(IInfoGenerator infoGen, IUMLParser pars) {
-
 		super();
 		infoGenerator = infoGen;
 		parser = pars;
@@ -40,35 +43,53 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 	@Override
 	public void generateFile() throws JetException {
-
-		log.debug("Début des générations.");
+		int i;
+		
 		// 1. On créé le répertoire qui contiendra les fichiers Alloy s'il n'existe pas.
 		String userDir = infoGenerator.getDestinationDirectory();
 		new File(userDir).mkdir();
-		// 2. On récupère les activités
-		List<Activity> activities = parser.getActivities();
-		int i = 1;
-		for (Activity activity : activities) {
-			log.debug("Génération du fichier n°" + i + ".");
-			// 3. On génère le contenu Alloy
-			String alloyTxt = this.getAlloyTxt(activity);
-			try {
-				// on créé le fichier a générer
-				File fichier = new File(userDir + "generated" + i + ".als");
-				filesGenerated.add(fichier);
-				// puis on écrit le contenu dedans
-				FileOutputStream out = new FileOutputStream(fichier);
-				out.write(alloyTxt.getBytes());
-				out.close();
-				log.debug("Génération terminée.");
-			} catch (FileNotFoundException e) {
-				log.error("Impossible de trouver le fichier : " + e.toString(), e);
-			} catch (IOException e) {
-				log.error("Impossible de créer le fichier : " + e.toString(), e);
+		// 2. On récupère les activités groupées par fichier et les propriétés
+		Map<String, List<Activity>> activities = parser.getActivities();
+		List<IProperties> properties = Factory.getInstance().newPropertie(infoGenerator.getProperties());
+		
+		log.info("Début des générations pour " + properties.size() + " propriété(s).");
+		
+		// 3a. Pour chaque fichier
+		Set<String> names = activities.keySet();
+		for (String nameFile : names) {
+			i = 0;
+			List<Activity> act = activities.get(nameFile);
+			// 3b. Pour chaque activité
+			for (Activity activity : act) {
+				i++;
+				// 3c. Pour chaque propriété
+				for (IProperties iPropertie : properties) {
+					String pathFile = userDir + "gen_" + nameFile + "_" + i + "_" + iPropertie.getClass().getSimpleName() + ".als";
+					log.info("Génération du fichier : " + pathFile + ".");
+					
+					// On génère le contenu Alloy
+					String alloyTxt = this.getAlloyTxt(activity, iPropertie);
+					FileOutputStream out = null;
+					try {
+						// on créé le fichier a générer
+						File fichier = new File(pathFile);
+						filesGenerated.add(fichier);
+						// puis on écrit le contenu dedans
+						out = new FileOutputStream(fichier);
+						out.write(alloyTxt.getBytes());
+						out.close();
+					} catch (FileNotFoundException e) {
+						log.error("Impossible de trouver le fichier : " + e.toString(), e);
+					} catch (IOException e) {
+						log.error("Impossible de créer le fichier : " + e.toString(), e);
+					} finally {
+						// on ferme le flux en cas de problèmes...
+						try {if (out != null) out.close();} catch (IOException e) {}
+					}
+				}
 			}
-			i++;
 		}
-		log.debug("Générations finies.");
+		log.info("Générations terminées.");
 	}
 
 	@Override
@@ -85,13 +106,11 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 	@Override
 	public List<File> getGeneratedFiles() {
-
 		return filesGenerated;
 	}
 
 	@Override
 	public void reset() {
-
 		filesGenerated.clear();
 		parser.reset();
 	}
@@ -101,19 +120,30 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 * 
 	 * @param activity
 	 *             l'{@link Activity} du fichier UML.
+	 * @param iPropertie
+	 *             la {@link IPropertie} à générer.
 	 * @return String le contenu du fichier alloy.
 	 * @throws JetException
 	 *             en cas d'erreur lors de la génération.
 	 */
-	private String getAlloyTxt(Activity activity) throws JetException {
+	private String getAlloyTxt(Activity activity, IProperties iPropertie) throws JetException {
 
-		EList<ActivityNode> nodes = activity.getNodes();
+		EList<ActivityNode> nodes = this.cleanNodes(activity.getNodes());
+		EList<ActivityEdge> edges = this.cleanEdges(activity.getEdges());
 		ActivityNode initialNode = this.getNodeByType(nodes, "InitialNode");
 		ActivityNode finalNode = this.getNodeByType(nodes, "ActivityFinalNode");
-		List<IProperties> properties = Factory.getInstance().newPropertie(infoGenerator.getProperties());
+		
+		// on ajoute à la propriété les infos de base, nbNodes, nbEdges et nbObjects
+		String nbNodes = Integer.toString(nodes.size());
+		String nbEdges = Integer.toString(edges.size());
+		String nbObjects = Integer.toString(edges.size() + nodes.size());
+		
+		iPropertie.putProperties("nbNodes", nbNodes);
+		iPropertie.putProperties("nbEdges", nbEdges);
+		iPropertie.putProperties("nbObjects", nbObjects);
+		
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges au template Jet.
-		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, activity.getEdges(), initialNode,
-				finalNode, properties);
+		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, edges, initialNode, finalNode, iPropertie);
 		IJetTemplate jetTemplate = Factory.getInstance().newJetTemplate();
 		return jetTemplate.generate(jetHelper);
 	}
@@ -128,12 +158,38 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 */
 	private ActivityNode getNodeByType(EList<ActivityNode> nodes, String type) {
 
-		// on cherche le noeud initial
+		// on cherche le noeud selon son type
 		for (ActivityNode activityNode : nodes) {
 			if (activityNode.eClass().getName().equals(type)) {
 				return activityNode;
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Nettoie les noms des noeuds par rapport à la syntax d'Alloy.
+	 * 
+	 * @param nodes la liste des noeuds à nettoyer.
+	 * @return une liste d'{@link ActivityNode}.
+	 */
+	private EList<ActivityNode> cleanNodes(EList<ActivityNode> nodes) {
+		for (ActivityNode activityNode : nodes) {
+			activityNode.setName(activityNode.getName().replace("-", ""));
+		}
+		return nodes;
+	}
+	
+	/**
+	 * Nettoie les noms des arcs par rapport à la syntax d'Alloy.
+	 * 
+	 * @param egdes la liste des arcs à nettoyer.
+	 * @return une liste d'{@link ActivityEdge}.
+	 */
+	private EList<ActivityEdge> cleanEdges(EList<ActivityEdge> egdes) {
+		for (ActivityEdge activityEdges : egdes) {
+			activityEdges.setName(activityEdges.getName().replace("-", ""));
+		}
+		return egdes;
 	}
 }

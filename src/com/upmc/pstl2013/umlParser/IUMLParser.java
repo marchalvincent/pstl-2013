@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.umlParser;
 
 import java.util.List;
+import java.util.Map;
 import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.IProcess;
 
@@ -10,9 +11,9 @@ import com.upmc.pstl2013.IProcess;
 public interface IUMLParser extends IProcess {
 
 	/**
-	 * Renvoie la liste des {@link Activity} que peut récupérer le parseur.
+	 * Renvoie la liste des {@link Activity} que peut récupérer le parseur groupée par fichier.
 	 * 
-	 * @return une {@link List} d'{@link Activity}.
+	 * @return une {@link Map} qui associe un nom de fichier et une {@link List} d'{@link Activity}.
 	 */
-	List<Activity> getActivities();
+	Map<String, List<Activity>> getActivities();
 }

@@ -10,9 +10,9 @@ import com.upmc.pstl2013.alloyExecutor.impl.AlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.impl.IJetHelper;
-import com.upmc.pstl2013.alloyGenerator.impl.IJetTemplate;
 import com.upmc.pstl2013.alloyGenerator.impl.JetHelper;
-import com.upmc.pstl2013.alloyGenerator.impl.JetTemplate;
+import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
+import com.upmc.pstl2013.alloyGenerator.jet.impl.JetTemplate;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.infoGenerator.impl.InfoGenerator;
 import com.upmc.pstl2013.infoParser.IInfoParser;
@@ -42,8 +42,8 @@ public class Factory implements IFactory {
 
 	@Override
 	public IJetHelper newJetHelper(EList<ActivityNode> nodes, EList<ActivityEdge> edges, ActivityNode init,
-			ActivityNode fin, List<IProperties> properties) {
-		return new JetHelper(nodes, edges, init, fin, properties);
+			ActivityNode fin, IProperties propertie) {
+		return new JetHelper(nodes, edges, init, fin, propertie);
 	}
 
 	@Override
