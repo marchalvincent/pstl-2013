@@ -1,6 +1,5 @@
 package com.upmc.pstl2013.alloyGenerator.impl;
 
-import java.util.List;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
@@ -42,11 +41,11 @@ public interface IJetHelper {
 	ActivityNode getFinalNode();
 
 	/**
-	 * Renvoie la liste des {@link IProperties}.
+	 * Renvoie la {@link IProperties}.
 	 * 
-	 * @return une {@link List}.
+	 * @return une {@link IProperties}.
 	 */
-	List<IProperties> getProperties();
+	IProperties getPropertie();
 
 	/**
 	 * Renvoie le nom du predicat final. Il faut que ce nom soit différent des autres noms de "node"

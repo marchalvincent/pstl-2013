@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.properties.impl;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import com.upmc.pstl2013.properties.IProperties;
@@ -11,10 +12,8 @@ import com.upmc.pstl2013.properties.IProperties;
  */
 public abstract class AbstractProperties implements IProperties {
 
-	// TODO a voir comment on gère les properties
-	@SuppressWarnings("unused")
 	private Map<String, String> properties;
-	protected String alloyCode;
+	private String alloyCode;
 	
 
 	// TODO enlever si besoin, avoir plus tard
@@ -28,11 +27,21 @@ public abstract class AbstractProperties implements IProperties {
 
 	public AbstractProperties(Map<String, String> prop) {
 		super();
-		properties = prop;
+		if (prop == null) properties = new HashMap<String, String>();
+		else properties = prop;
 	}
 
 	@Override
 	public String getAlloyCode() {
 		return alloyCode;
+	}
+	
+	@Override
+	public void putProperties(String key, String value) {
+		properties.put(key, value);
+	}
+	
+	protected void setAlloyCode(String code) {
+		alloyCode = code;
 	}
 }
