@@ -43,16 +43,16 @@ public class JobExecutor extends Job {
 		// TODO voir comment on génère les strategy
 		List<IStrategy> strategies = new ArrayList<IStrategy>();
 		strategies.add(new PathStrategy());
-		log.debug("Génération et exécution des fichiers Alloy.");
+		log.info("Génération et exécution des fichiers Alloy.");
 		StringBuilder result = new StringBuilder();
 
 		try {
 			result.append(alloyExecutor.executeFiles(strategies));
 			result.append("Fin d'exécution des fichiers Alloy.");
-			log.debug(result.toString());
+			log.info(result.toString());
 			showToView(result.toString());
 		} catch (Exception e) {
-			log.debug(e.getMessage());
+			log.error(e.getMessage());
 			showToView(e.getMessage());
 		}
 		alloyExecutor.reset();
