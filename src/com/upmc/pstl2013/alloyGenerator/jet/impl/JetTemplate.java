@@ -95,11 +95,10 @@ public class JetTemplate implements IJetTemplate {
 	}
 
     stringBuffer.append(TEXT_4);
-     stringBuffer.append(predicatName); 
+    stringBuffer.append(predicatName);
     stringBuffer.append(TEXT_5);
      // GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. SubTemplate)
-	stringBuffer.append(NL);
-	stringBuffer.append(propertie.getAlloyCode() + NL);
+	stringBuffer.append(propertie.getAlloyCode());
 
     stringBuffer.append(TEXT_6);
     stringBuffer.append(TEXT_7);

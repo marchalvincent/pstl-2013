@@ -5,28 +5,27 @@ import com.upmc.pstl2013.alloyGenerator.jet.*;
 import com.upmc.pstl2013.alloyGenerator.impl.*;
 import com.upmc.pstl2013.properties.*;
 
-public class DeadLockTemplate implements IJetTemplate {
+public class EnoughStateTemplate implements IJetTemplate {
 
   protected static String nl;
-  public static synchronized DeadLockTemplate create(String lineSeparator)
+  public static synchronized EnoughStateTemplate create(String lineSeparator)
   {
     nl = lineSeparator;
-    DeadLockTemplate result = new DeadLockTemplate();
+    EnoughStateTemplate result = new EnoughStateTemplate();
     nl = null;
     return result;
   }
 
   public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl;
-  protected final String TEXT_1 = NL + "pred ";
-  protected final String TEXT_2 = " {" + NL + "\tsome s:State | s.getTokens[";
-  protected final String TEXT_3 = "] > 0" + NL + "}" + NL;
-  protected final String TEXT_4 = NL + "check {";
-  protected final String TEXT_5 = "} for ";
-  protected final String TEXT_6 = " State, ";
-  protected final String TEXT_7 = " Object, ";
-  protected final String TEXT_8 = " ActivityNode, ";
-  protected final String TEXT_9 = " ActivityEdge";
-  protected final String TEXT_10 = NL;
+  protected final String TEXT_1 = NL + "pred {";
+  protected final String TEXT_2 = "} {" + NL + "\tsome s:State | s.running = Finished" + NL + "}" + NL;
+  protected final String TEXT_3 = NL + "check {";
+  protected final String TEXT_4 = "} for ";
+  protected final String TEXT_5 = " State, ";
+  protected final String TEXT_6 = " Object, ";
+  protected final String TEXT_7 = " ActivityNode, ";
+  protected final String TEXT_8 = " ActivityEdge";
+  protected final String TEXT_9 = NL;
 
 	@Override
 	public String generate(Object argument) throws JetException
@@ -46,26 +45,24 @@ public class DeadLockTemplate implements IJetTemplate {
     stringBuffer.append(TEXT_1);
     stringBuffer.append(predicatName);
     stringBuffer.append(TEXT_2);
-    stringBuffer.append(propertie.getString("finalNode"));
-    stringBuffer.append(TEXT_3);
     
 	final String inc = propertie.getString("inc");
 	final String nbObjects = propertie.getString("nbObjects");
 	final String nbNodes = propertie.getString("nbNodes");
 	final String nbEdges = propertie.getString("nbEdges");
 
-    stringBuffer.append(TEXT_4);
+    stringBuffer.append(TEXT_3);
     stringBuffer.append(predicatName);
-    stringBuffer.append(TEXT_5);
+    stringBuffer.append(TEXT_4);
     stringBuffer.append(inc);
-    stringBuffer.append(TEXT_6);
+    stringBuffer.append(TEXT_5);
     stringBuffer.append(nbObjects);
-    stringBuffer.append(TEXT_7);
+    stringBuffer.append(TEXT_6);
     stringBuffer.append(nbNodes);
-    stringBuffer.append(TEXT_8);
+    stringBuffer.append(TEXT_7);
     stringBuffer.append(nbEdges);
+    stringBuffer.append(TEXT_8);
     stringBuffer.append(TEXT_9);
-    stringBuffer.append(TEXT_10);
     return stringBuffer.toString();
   }
 }

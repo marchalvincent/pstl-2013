@@ -21,8 +21,11 @@ public class PropertiesFactory {
 	public static IProperties createPropertie(String name) throws PropertiesException {
 
 		// puis on créer l'objet propertie
-		if (name.equals(PersonalPropertie.class.getSimpleName())) return new PersonalPropertie();
-		else if (name.equals(DeadLock.class.getSimpleName())) return new DeadLock();
+		if (name.equals(PersonalPropertie.class.getSimpleName())) 	return new PersonalPropertie();
+		else if (name.equals(DeadLock.class.getSimpleName())) 		return new DeadLock();
+		else if (name.equals(EnoughState.class.getSimpleName())) 	return new EnoughState();
+		else if (name.equals(Orga.class.getSimpleName())) 			return new Orga();
+		else if (name.equals(Wf.class.getSimpleName())) 			return new Wf();
 		// ici on peut ajouter les nouvelles propriétés
 		else {
 			final String error = "Le nom de la propriété n'existe pas dans la factory : " + name;
