@@ -1,6 +1,8 @@
 package com.upmc.pstl2013.views.events;
 
 import java.io.File;
+
+import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.DirectoryDialog;
@@ -13,7 +15,9 @@ public class EventChooseDir extends MouseAdapter {
 
 	private String separator = File.separator;
 	private Text txtChooseDirectory;
+	private Text txtLogs;
 	private IInfoGenerator infoGenerator;
+	private Logger log = Logger.getLogger(SwtView.class);
 
 	/**
 	 * Constructor
@@ -22,7 +26,9 @@ public class EventChooseDir extends MouseAdapter {
 	public EventChooseDir(SwtView swtView) {
 
 		this.txtChooseDirectory = swtView.getTxtDirectory();
+		this.txtLogs = swtView.getTxtLogs();
 		this.infoGenerator = swtView.getInfoGenerator();
+		
 	}
 
 	@Override
@@ -34,6 +40,8 @@ public class EventChooseDir extends MouseAdapter {
 			chemin += separator;
 			// on met a jour l'IU et l'info générateur.
 			txtChooseDirectory.setText(chemin);
+			log.info("Modification du répertoir : " + chemin);
+			txtLogs.setText(txtLogs.getText() + "Modification du répertoir : " + chemin);
 			infoGenerator.setDestinationDirectory(chemin);
 		}
 	}
