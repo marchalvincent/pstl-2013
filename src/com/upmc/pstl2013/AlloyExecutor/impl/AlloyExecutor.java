@@ -72,6 +72,8 @@ public class AlloyExecutor implements IAlloyExecutor {
 					// The required JNI library cannot be found: java.lang.UnsatisfiedLinkError: no
 					// minisatx5 in java.library.path
 					options.solver = A4Options.SatSolver.SAT4J; // TODO: minisatx5 JNI
+					//options.solverDirectory = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\jars\\minisatjni1.jar";
+					
 					
 					for (Command command : world.getAllCommands()) {
 						// Execute the command
@@ -102,6 +104,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 							// You can then visualize the XML file by calling this:
 							if (viz == null) {
 								viz = new VizGUI(false, "alloy_example_output.xml", null);
+								viz.loadThemeFile("D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\theme\\theme.thm");
 							} else {
 								viz.loadXML("alloy_example_output.xml", true);
 							}
