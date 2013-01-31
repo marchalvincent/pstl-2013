@@ -63,7 +63,7 @@ public class JobExecutor extends Job {
 
 	private void showToView(String msg){
 		
-		Display.getDefault().asyncExec(new RunnableUpDateExecutor(txtLogs, msg));
+		Display.getDefault().asyncExec(new RunnableUpdateExecutor(txtLogs, msg));
 	}
 
 }

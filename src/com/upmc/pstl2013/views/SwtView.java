@@ -123,7 +123,6 @@ public class SwtView extends Composite {
 		 * Debut contenu de la parite utilisation
 		 */
 		btnChooseDir = new Button(cpItemAlloyUse, SWT.NONE);
-		btnChooseDir.addMouseListener(new EventChooseDir(this));
 		btnChooseDir.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnChooseDir.setText("Choose Dir");
 		
@@ -133,11 +132,9 @@ public class SwtView extends Composite {
 		
 		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooserFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		btnChooserFile.addMouseListener(new EventChooseFile(this));
 		btnChooserFile.setText("Choose File");
 		
-		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL
-				| SWT.CANCEL | SWT.MULTI);
+		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 5));
 		
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
@@ -145,7 +142,6 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.setText("Execute Alloy");
 		
 		btnReadLogs = new Button(cpItemAlloyUse, SWT.NONE);
-		btnReadLogs.addMouseListener(new EventReadLogs(this));
 		btnReadLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnReadLogs.setText("Read logs");
 		new Label(cpItemAlloyUse, SWT.NONE);
@@ -160,8 +156,13 @@ public class SwtView extends Composite {
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
 		
+		//Ajout des events
 		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
 		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
+		btnChooseDir.addMouseListener(new EventChooseDir(this));
+		btnReadLogs.addMouseListener(new EventReadLogs(this));
+		btnChooserFile.addMouseListener(new EventChooseFile(this));
+		
 		// on finit par une petite vérification...
 		this.checkDirectory(alloyGenerator);
 		
@@ -184,7 +185,7 @@ public class SwtView extends Composite {
 			MessageDialog dialog = new MessageDialog(new Shell(), "Des fichiers sont manquants", null,
 					e2.toString(), MessageDialog.WARNING, new String[] { "Ok" }, 1);
 			dialog.open();
-			txtLogs.setText(e2.getMessage());
+			log.error(e2.getMessage());
 		}
 	}
 

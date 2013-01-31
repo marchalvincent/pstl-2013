@@ -17,7 +17,7 @@ public class EventChooseDir extends MouseAdapter {
 	private Text txtChooseDirectory;
 	private Text txtLogs;
 	private IInfoGenerator infoGenerator;
-	private Logger log = Logger.getLogger(SwtView.class);
+	private Logger log = Logger.getLogger(EventChooseDir.class);
 
 	/**
 	 * Constructor
@@ -41,7 +41,7 @@ public class EventChooseDir extends MouseAdapter {
 			// on met a jour l'IU et l'info générateur.
 			txtChooseDirectory.setText(chemin);
 			log.info("Modification du répertoir : " + chemin);
-			txtLogs.setText(txtLogs.getText() + "Modification du répertoir : " + chemin);
+			txtLogs.append("Modification du répertoir : " + chemin);
 			infoGenerator.setDestinationDirectory(chemin);
 		}
 	}

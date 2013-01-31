@@ -2,19 +2,19 @@ package com.upmc.pstl2013.views.events;
 
 import org.eclipse.swt.widgets.Text;
 
-public class RunnableUpDateExecutor implements Runnable {
+public class RunnableUpdateExecutor implements Runnable {
 
-	private Text control;
+	private Text txtLogs;
 	private String message;
 	
-	public RunnableUpDateExecutor(Text control, String message) {
-		this.control = control;
+	public RunnableUpdateExecutor(Text control, String message) {
+		this.txtLogs = control;
 		this.message = message;
 	}
 
 	@Override
 	public void run() {
-		control.setText(message);
+		txtLogs.append(message);
 	}
 
 }
