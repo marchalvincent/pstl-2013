@@ -2,6 +2,8 @@ package com.upmc.pstl2013.views;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+
+import org.apache.log4j.Logger;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -17,6 +19,7 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
+
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.factory.Factory;
@@ -46,7 +49,7 @@ public class SwtView extends Composite {
 	private IAlloyExecutor alloyExecutor;
 	private String separator = File.separator;
 	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
-	// private static Logger log = Logger.getLogger(SwtView.class);
+	private static Logger log = Logger.getLogger(SwtView.class);
 	private TabFolder tabFolder;
 	private TabItem itemAlloyUse, itemAlloyProperty;
 	private Composite cpItemAlloyUse, cpdItemAlloyProp;
@@ -161,6 +164,9 @@ public class SwtView extends Composite {
 		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
 		// on finit par une petite vérification...
 		this.checkDirectory(alloyGenerator);
+		
+		//Suppression des anciens logs
+		deleteOldLogs();
 	}
 
 	/**
@@ -195,6 +201,18 @@ public class SwtView extends Composite {
 		}
 		tabProperties.getColumn(0).pack();
 		tabProperties.addListener(SWT.Selection, new EventSelectPropertie(this));
+	}
+	
+	/**
+	 * Supprime tous les logs générés à la derniere utilisation du plugin.
+	 */
+	private void deleteOldLogs()
+	{
+		log.debug("Suppression des anciens logs");
+		File logInfo = new File(userDir + "logInfo.html");
+		File logDebug = new File(userDir + "logDebug.html");
+		logInfo.delete();
+		logDebug.delete();
 	}
 	
 	public Text getTxtDirectory() {
