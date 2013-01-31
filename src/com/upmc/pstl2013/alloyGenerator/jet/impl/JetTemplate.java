@@ -51,7 +51,7 @@ public class JetTemplate implements IJetTemplate {
     stringBuffer.append(TEXT_1);
      //GENERATION DU NOEUD INITIAL EN DYNAMIQUE
 		// on gère les cas sans noeud initial...
-		String initialNode = propertie.get("initialNode");
+		String initialNode = propertie.getString("initialNode");
 		if (initialNode == null) {
 			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
 			log.error(error);
@@ -79,7 +79,7 @@ public class JetTemplate implements IJetTemplate {
     stringBuffer.append(TEXT_3);
      // GENERATION DU NOEUD FINAL EN DYNAMIQUE
 	// on gère les cas sans noeud finaux...
-	String finalNode = propertie.get("finalNode");
+	String finalNode = propertie.getString("finalNode");
 	if (finalNode == null) {
 		final String error = "Le fichier Jet n'a pas trouvé de noeud final.";
 		log.error(error);
@@ -87,7 +87,7 @@ public class JetTemplate implements IJetTemplate {
 	}
 	
 	// on récupère le nom du predicat final
-	String predicatName = propertie.get("predicatName");
+	String predicatName = propertie.getString("predicatName");
 	if (predicatName == null) {
 		final String error = "Le fichier Jet n'a pas trouvé de nom correct pour le predicat final.";
 		log.error(error);

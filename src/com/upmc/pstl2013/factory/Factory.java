@@ -1,7 +1,5 @@
 package com.upmc.pstl2013.factory;
 
-import java.util.List;
-import java.util.Map;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
@@ -18,6 +16,7 @@ import com.upmc.pstl2013.infoGenerator.impl.InfoGenerator;
 import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.infoParser.impl.InfoParser;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.properties.impl.PropertiesFactory;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.umlParser.impl.UMLParser;
@@ -76,7 +75,7 @@ public class Factory implements IFactory {
 	}
 
 	@Override
-	public List<IProperties> newPropertie(Map<String, Map<String, String>> map) {
-		return PropertiesFactory.createPropertie(map);
+	public IProperties newPropertie(String name) throws PropertiesException {
+		return PropertiesFactory.createPropertie(name);
 	}
 }

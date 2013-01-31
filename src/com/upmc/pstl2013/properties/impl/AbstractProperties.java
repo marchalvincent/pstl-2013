@@ -13,8 +13,8 @@ import com.upmc.pstl2013.properties.IProperties;
 public abstract class AbstractProperties implements IProperties {
 
 	protected Map<String, String> attributes;
+	protected Map<String, Boolean> attributesBoolean;
 	
-
 	// TODO enlever si besoin, avoir plus tard
 	public static List<String> getProperties() {
 
@@ -24,10 +24,10 @@ public abstract class AbstractProperties implements IProperties {
 		return liste;
 	}
 
-	public AbstractProperties(Map<String, String> attr) {
+	public AbstractProperties() {
 		super();
-		if (attr == null) attributes = new HashMap<String, String>();
-		else attributes = attr;
+		attributes = new HashMap<String, String>();
+		attributesBoolean = new HashMap<String, Boolean>();
 	}
 	
 	@Override
@@ -36,7 +36,27 @@ public abstract class AbstractProperties implements IProperties {
 	}
 	
 	@Override
-	public String get(String key) {
+	public void put(String key, Boolean value) {
+		attributesBoolean.put(key, value);
+	}
+	
+	@Override
+	public String getString(String key) {
 		return attributes.get(key);
+	}
+	
+	@Override
+	public Boolean getBoolean(String key) {
+		return attributesBoolean.get(key);
+	}
+	
+	@Override
+	public Map<String, String> getStringAttributes() {
+		return attributes;
+	}
+	
+	@Override
+	public Map<String, Boolean> getBooleanAttributes() {
+		return attributesBoolean;
 	}
 }

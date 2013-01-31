@@ -1,10 +1,8 @@
 package com.upmc.pstl2013.views.events;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import org.eclipse.swt.widgets.Text;
-
+import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventPersonalExecutor extends AbstractEventExecutor {
@@ -22,14 +20,9 @@ public class EventPersonalExecutor extends AbstractEventExecutor {
 	}
 
 	@Override
-	protected Map<String, Map<String, String>> getProperties() {
-
-		Map<String, Map<String, String>> properties = new HashMap<String, Map<String, String>>();
-		String name = "personnalPropertie";
-		Map<String, String> valeurs = new HashMap<String, String>();
-		valeurs.put("alloyCode", txtPersonalPropertie.getText());
-		System.out.println(txtPersonalPropertie.getText());
-		properties.put(name, valeurs);
-		return properties;
+	protected IProperties getProperties() {
+		IProperties prop = Factory.getInstance().newPropertie("personnalPropertie");
+		prop.put("alloyCode", txtPersonalPropertie.getText());
+		return prop;
 	}
 }
