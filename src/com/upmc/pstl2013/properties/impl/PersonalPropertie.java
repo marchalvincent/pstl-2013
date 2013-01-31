@@ -1,6 +1,5 @@
 package com.upmc.pstl2013.properties.impl;
 
-import java.util.Map;
 import com.upmc.pstl2013.properties.IProperties;
 
 /**
@@ -9,8 +8,8 @@ import com.upmc.pstl2013.properties.IProperties;
  */
 public class PersonalPropertie extends AbstractProperties implements IProperties {
 	
-	public PersonalPropertie(Map<String, String> prop) {
-		super(prop);
+	public PersonalPropertie() {
+		super();
 	}
 
 	@Override
