@@ -1,8 +1,11 @@
 package com.upmc.pstl2013.views.events;
 
+import java.util.ArrayList;
+import java.util.List;
 import org.eclipse.swt.widgets.Text;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventPersonalExecutor extends AbstractEventExecutor {
@@ -20,9 +23,11 @@ public class EventPersonalExecutor extends AbstractEventExecutor {
 	}
 
 	@Override
-	protected IProperties getProperties() {
+	protected List<IProperties> getProperties() throws PropertiesException {
 		IProperties prop = Factory.getInstance().newPropertie("personnalPropertie");
 		prop.put("alloyCode", txtPersonalPropertie.getText());
-		return prop;
+		List<IProperties> liste = new ArrayList<IProperties>();
+		liste.add(prop);
+		return liste;
 	}
 }

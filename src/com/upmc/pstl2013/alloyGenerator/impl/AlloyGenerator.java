@@ -50,7 +50,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 		new File(userDir).mkdir();
 		// 2. On récupère les activités groupées par fichier et les propriétés
 		Map<String, List<Activity>> activities = parser.getActivities();
-		List<IProperties> properties = Factory.getInstance().newPropertie(infoGenerator.getAttributes());
+		List<IProperties> properties = infoGenerator.getProperties();
 		
 		log.info("Début des générations pour " + properties.size() + " propriété(s).");
 		

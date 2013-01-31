@@ -1,7 +1,8 @@
 package com.upmc.pstl2013.infoGenerator;
 
-import java.util.Map;
+import java.util.List;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
+import com.upmc.pstl2013.properties.IProperties;
 
 /**
  * Un {@code IInfoGenerator} permet à l'IU de passer des paramètres au {@link IAlloyGenerator}.
@@ -26,15 +27,12 @@ public interface IInfoGenerator {
 	/**
 	 * Spécifie les propriétés de génération.
 	 * 
-	 * @param attributes
-	 *            . Contient une association String-Map. Le string correspond au nom de la
-	 *            propriété. La sous-map représente l'association clé-valeur de propriété
-	 *            personnalisée par l'utilisateur.
+	 * @param properties une liste de {@link IProperties}.
 	 */
-	void setAttributes(Map<String, Map<String, String>> attributes);
+	void setProperties(List<IProperties> properties);
 
 	/**
 	 * Renvoie les propriétés de génération alloy.
 	 */
-	Map<String, Map<String, String>> getAttributes();
+	List<IProperties> getProperties();
 }

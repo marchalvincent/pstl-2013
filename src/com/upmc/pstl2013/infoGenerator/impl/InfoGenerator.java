@@ -1,8 +1,9 @@
 package com.upmc.pstl2013.infoGenerator.impl;
 
-import java.util.Map;
+import java.util.List;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
+import com.upmc.pstl2013.properties.IProperties;
 
 /**
  * Cette classe va servir à passer des paramètres au {@link IAlloyGenerator}.
@@ -11,7 +12,7 @@ import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 public class InfoGenerator implements IInfoGenerator {
 
 	private String directoryPath;
-	private Map<String, Map<String, String>> properties;
+	private List<IProperties> properties;
 
 	public InfoGenerator() {
 		super();
@@ -30,12 +31,12 @@ public class InfoGenerator implements IInfoGenerator {
 	}
 
 	@Override
-	public void setAttributes(Map<String, Map<String, String>> prop) {
+	public void setProperties(List<IProperties> prop) {
 		properties = prop;
 	}
 
 	@Override
-	public Map<String, Map<String, String>> getAttributes() {
+	public List<IProperties> getProperties() {
 		return properties;
 	}
 }
