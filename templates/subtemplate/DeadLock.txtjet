@@ -1,24 +1,28 @@
 <%@ jet package="com.upmc.pstl2013.alloyGenerator.jet.impl" class="DeadLockTemplate" 
-	imports="import java.util.Map
-			org.apache.log4j.Logger
+	imports="org.apache.log4j.Logger
 			com.upmc.pstl2013.alloyGenerator.jet.*
 			com.upmc.pstl2013.alloyGenerator.impl.*
 			com.upmc.pstl2013.properties.*"
 	skeleton="../alloyGenerator.skeleton" %>
 <% 
 	final Logger log = Logger.getLogger(DeadLockTemplate.class);
-	if (!(argument instanceof Map<?, ?>)) {
-		final String error = "L'argument passé au template Jet n'est pas une Map.";
+	if (!(argument instanceof IProperties)) {
+		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
 		log.error(error);
 		throw new JetException(error);
 	}
 
-	Map<String, String> properties = (Map) argument;
-	
+	IProperties propertie = (IProperties) argument;
 %>
 
-pred final {	
-	some s:State | s.getTokens[$FINALNODE$] > 0
+pred <%=propertie.getString("predicatName")%> {
+	some s:State | s.getTokens[<% stringBuffer.append(propertie.getString("finalNode")); %>] > 0
 }
 
-check {final}  for $INC$ State, $NB$ Object, $NAN$ ActivityNode, $NAE$ ActivityEdge
+<%
+	final String inc = propertie.getString("inc");
+	final String nbObjects = propertie.getString("nbObjects");
+	final String nbNodes = propertie.getString("nbNodes");
+	final String nbEdges = propertie.getString("nbEdges");
+%>
+check {final} for <%=inc%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge
