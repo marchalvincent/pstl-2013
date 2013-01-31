@@ -1,4 +1,6 @@
-package com.upmc.pstl2013.alloyGenerator.impl;
+package com.upmc.pstl2013.alloyGenerator.jet;
+
+import com.upmc.pstl2013.alloyGenerator.impl.JetException;
 
 /**
  * L'interface du template Jet.

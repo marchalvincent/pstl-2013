@@ -3,7 +3,7 @@ package com.upmc.pstl2013.alloyExecutor;
 import java.util.List;
 import com.upmc.pstl2013.IProcess;
 import com.upmc.pstl2013.alloyGenerator.impl.JetException;
-import com.upmc.pstl2013.alloyGenerator.impl.JetTemplate;
+import com.upmc.pstl2013.alloyGenerator.jet.impl.JetTemplate;
 import com.upmc.pstl2013.strategy.IStrategy;
 import edu.mit.csail.sdg.alloy4.Err;
 

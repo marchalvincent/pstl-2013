@@ -1,9 +1,10 @@
-<%@ jet package="com.upmc.pstl2013.alloyGenerator.impl" class="JetTemplate" 
+<%@ jet package="com.upmc.pstl2013.alloyGenerator.jet.impl" class="JetTemplate" 
 	imports="org.apache.log4j.Logger 
 			org.eclipse.emf.common.util.EList
 			org.eclipse.uml2.uml.*
-			com.upmc.pstl2013.properties.*
-			java.util.List" 
+			com.upmc.pstl2013.alloyGenerator.jet.*
+			com.upmc.pstl2013.alloyGenerator.impl.*
+			com.upmc.pstl2013.properties.*" 
 	skeleton="alloyGenerator.skeleton" %>
 <% 
 	final Logger log = Logger.getLogger(JetTemplate.class);
@@ -30,7 +31,7 @@ fact initTokens {
 			log.error(error);
 			throw new JetException(error);
 		}
-		stringBuffer.append(initialNode.getName().replace("-", "")); %> -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + 
+		stringBuffer.append(initialNode.getName()); %> -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + 
 		ActivityEdge -> 0  // offers	
 	]
 }
@@ -52,12 +53,12 @@ one sig P extends Performer {} {
 	
 	stringBuffer.append("------Generated Nodes------" + NL);
 	for (ActivityNode node : nodes) {
-		stringBuffer.append("one sig " + node.getName().replace("-", "") + " extends " + node.eClass().getName() + " {}{}" + NL);
+		stringBuffer.append("one sig " + node.getName() + " extends " + node.eClass().getName() + " {}{}" + NL);
 	}
 	
 	stringBuffer.append(NL + NL + "------Generated Edges------" + NL);
 	for (ActivityEdge edge : edges) {
-		stringBuffer.append("one sig " + edge.getName().replace("-", "") + " extends " + edge.eClass().getName() + " {}{" + NL);
+		stringBuffer.append("one sig " + edge.getName() + " extends " + edge.eClass().getName() + " {}{" + NL);
 		stringBuffer.append("    source = " + edge.getSource().getName() + NL);
 		stringBuffer.append("    target = " + edge.getTarget().getName() + NL);
 		stringBuffer.append("}" + NL);
@@ -76,10 +77,6 @@ one sig P extends Performer {} {
 	// on génère également le nom du predicat en dynamique pour ne pas avoir de conflits avec les noms de node ou edge
 	String namePredicat = jetHelper.getNameFinalPredicat();
 %>
-pred <% stringBuffer.append(namePredicat); %> {
-	//some s : State | s.getTokens[Final] = 1 // 4 Solution
-	some s:State | s.getTokens[<% stringBuffer.append(finalNode.getName().replace("-", "")); %>] > 0
-}
 
 pred testAll {
 	<% stringBuffer.append(namePredicat); %>
@@ -89,21 +86,20 @@ assert tall {
 	testAll
 }
 
-//TODO le nombre peux State peux augmenter ex: 20 State ou 30 State etc...
-//run testAll for 0 but 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 1
-//check tall for 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 0
+pred <% stringBuffer.append(namePredicat); %> {
+	some s:State | s.getTokens[<% stringBuffer.append(finalNode.getName()); %>] > 0
+}
+
 <%
-	List<IProperties> properties = jetHelper.getProperties();
-	if (properties == null) {
+	IProperties propertie = jetHelper.getPropertie();
+	if (propertie == null) {
 		final String error = "Les propriétés sont incorrectes.";
 		log.error(error);
 		throw new JetException(error);
 	}
 	
 	stringBuffer.append(NL);
-	for (IProperties prop : properties) {
-		stringBuffer.append(prop.getAlloyCode() + NL);
-	}
+	stringBuffer.append(propertie.getAlloyCode() + NL);
 %>
 
 
