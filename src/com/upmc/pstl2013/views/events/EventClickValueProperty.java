@@ -55,7 +55,7 @@ public class EventClickValueProperty extends SelectionAdapter {
 				Text text = (Text) editor.getEditor();
 				editor.getItem().setText(EDITABLECOLUMN, text.getText());
 				try {
-					IProperties propertie = Factory.getInstance().newPropertie((String)(editor.getItem().getData()));
+					IProperties propertie = Factory.getInstance().getPropertie((String)(editor.getItem().getData()));
 					propertie.put(editor.getItem().getText(),  text.getText());
 					
 				} catch (PropertiesException e1) {

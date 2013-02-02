@@ -45,7 +45,7 @@ public class EventSelectPropertie implements Listener {
 	private void showValueProperties(String nameProperty) {
 
 		try {
-			IProperties property = Factory.getInstance().newPropertie(nameProperty);
+			IProperties property = Factory.getInstance().getPropertie(nameProperty);
 			Map <String,String> attributes = property.getStringAttributes();
 			
 			if (tabValueProperties != null) {
