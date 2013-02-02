@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.properties.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import com.upmc.pstl2013.properties.IProperties;
@@ -11,7 +12,7 @@ import com.upmc.pstl2013.properties.IProperties;
 public class PropertiesFactory {
 
 	private static Logger log = Logger.getLogger(PropertiesFactory.class);
-	private static Map<String, IProperties> properties;
+	private static Map<String, IProperties> properties = new HashMap<String, IProperties>();
 
 	/**
 	 * Méthode static pour la création des propriétés.
