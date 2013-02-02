@@ -8,8 +8,9 @@ public class Wf extends AbstractProperties {
 
 	public Wf() {
 		super();
-		attributes.put("attribut2wf", "tata");
+		attributes.put("predicatName", "");
 		attributes.put("attribut3wf", "tutu");
+		attributes.put("attribut4wf", "toto");
 		attributes.put("attribut4wf", "toto");
 		attributesBoolean.put("initial", Boolean.TRUE);
 		attributesBoolean.put("final", Boolean.TRUE);

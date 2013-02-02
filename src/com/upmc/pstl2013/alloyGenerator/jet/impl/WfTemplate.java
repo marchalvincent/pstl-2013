@@ -42,7 +42,8 @@ public class WfTemplate implements IJetTemplate {
 	final Boolean isInitial = propertie.getBoolean("initial");
 	final Boolean isFinal = propertie.getBoolean("final");
 	final Boolean isMerge = propertie.getBoolean("merge");
-	
+	final String predicatName = propertie.getString("predicatName");
+
 	// CAS INITIAL
 	if (isInitial) {
 

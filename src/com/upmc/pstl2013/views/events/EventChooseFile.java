@@ -59,7 +59,7 @@ public class EventChooseFile extends MouseAdapter {
 		
 		for (IFile iFile : file) {
 			infoParser.addFile(iFile);
-			sb.append("\n" + iFile.getName());
+			sb.append("\n" + iFile.getName() + "\n");
 		}
 
 		log.info(sb.toString());
