@@ -75,7 +75,7 @@ public class Factory implements IFactory {
 	}
 
 	@Override
-	public IProperties newPropertie(String name) throws PropertiesException {
+	public IProperties getPropertie(String name) throws PropertiesException {
 		return PropertiesFactory.createPropertie(name);
 	}
 }
