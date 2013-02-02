@@ -17,8 +17,8 @@ public class OrgaTemplate implements IJetTemplate {
   }
 
   public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl;
-  protected final String TEXT_1 = NL + "pred {";
-  protected final String TEXT_2 = "} {" + NL + "\tall s:State | #{ node : ExecutableNode | s.hasTokens[node] } <= #RolePerformer" + NL + "}" + NL;
+  protected final String TEXT_1 = NL + "pred ";
+  protected final String TEXT_2 = " {" + NL + "\tall s:State | #{ node : ExecutableNode | s.hasTokens[node] } <= #RolePerformer" + NL + "}" + NL;
   protected final String TEXT_3 = NL + "check {";
   protected final String TEXT_4 = "} for ";
   protected final String TEXT_5 = " State, ";

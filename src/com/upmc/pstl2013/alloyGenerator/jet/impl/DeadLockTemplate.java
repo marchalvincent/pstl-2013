@@ -25,7 +25,7 @@ public class DeadLockTemplate implements IJetTemplate {
   protected final String TEXT_6 = " State, ";
   protected final String TEXT_7 = " Object, ";
   protected final String TEXT_8 = " ActivityNode, ";
-  protected final String TEXT_9 = " ActivityEdge";
+  protected final String TEXT_9 = " ActivityEdge expect 0" + NL + "//check tall for 20 State ,  15 Object, 5 ActivityNode, 4 ActivityEdge expect 0";
   protected final String TEXT_10 = NL;
 
 	@Override

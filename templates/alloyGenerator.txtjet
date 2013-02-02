@@ -55,7 +55,8 @@ one sig P extends Performer {} {
 	performer = ActivityNode -> Yoann
 }
 
-<% // GENERATION DES NOEUDS ET EDGES EN DYNAMIQUE
+<% 
+	// GENERATION DES NOEUDS ET EDGES EN DYNAMIQUE
 	EList<ActivityNode> nodes = jetHelper.getNodes();
 	EList<ActivityEdge> edges = jetHelper.getEdges();
 	
@@ -71,35 +72,8 @@ one sig P extends Performer {} {
 		stringBuffer.append("    target = " + edge.getTarget().getName() + NL);
 		stringBuffer.append("}" + NL);
 	}
-%>
 
-<% // GENERATION DU NOEUD FINAL EN DYNAMIQUE
-	// on gère les cas sans noeud finaux...
-	String finalNode = propertie.getString("finalNode");
-	if (finalNode == null) {
-		final String error = "Le fichier Jet n'a pas trouvé de noeud final.";
-		log.error(error);
-		throw new JetException(error);
-	}
-	
-	// on récupère le nom du predicat final
-	String predicatName = propertie.getString("predicatName");
-	if (predicatName == null) {
-		final String error = "Le fichier Jet n'a pas trouvé de nom correct pour le predicat final.";
-		log.error(error);
-		throw new JetException(error);
-	}
-%>
-
-pred testAll {
-	<%=predicatName%>
-}
-
-assert tall {
-	testAll
-}
-
-<% // GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. SubTemplate)
+	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. SubTemplate)
 	stringBuffer.append(propertie.getAlloyCode());
 %>
 

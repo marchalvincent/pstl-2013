@@ -16,7 +16,7 @@
 	final String predicatName = propertie.getString("predicatName");
 %>
 
-pred {<%=predicatName%>} {
+pred <%=predicatName%> {
 	some s:State | s.running = Finished
 }
 

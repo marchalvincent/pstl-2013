@@ -25,7 +25,6 @@ public class JobExecutor extends Job {
 	private static Logger log = Logger.getLogger(AbstractEventExecutor.class);
 
 	public JobExecutor(String name, List<IProperties> properties, SwtView swtView) {
-		
 		super(name);
 		this.properties = properties;
 		this.txtLogs = swtView.getTxtLogs();
@@ -54,7 +53,6 @@ public class JobExecutor extends Job {
 			showToView(e.getMessage());
 		}
 		alloyExecutor.reset();
-		System.out.println(log.getAllAppenders().toString());
 
 		return Status.OK_STATUS;
 	}
