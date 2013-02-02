@@ -69,10 +69,10 @@ public interface IFactory {
 	IAlloyExecutor newAlloyExecutor(IAlloyGenerator generator);
 
 	/**
-	 * Créer une {@link IProperties}.
+	 * Renvoie la {@link IProperties} associée au nom passé en paramètre.
 	 * 
 	 * @param name le nom de la propriété.
 	 * @throws PropertiesException si le nom de la propertie est incorrect.
 	 */
-	IProperties newPropertie(String name) throws PropertiesException;
+	IProperties getPropertie(String name) throws PropertiesException;
 }
