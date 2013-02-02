@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.views.events;
 
+import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.ModifyEvent;
@@ -11,6 +12,9 @@ import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 
+import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventClickValueProperty extends SelectionAdapter {
@@ -18,6 +22,7 @@ public class EventClickValueProperty extends SelectionAdapter {
 	private final int EDITABLECOLUMN = 1;
 	private TableEditor editor;
 	private Table tabValueProperties;
+	private Logger log = Logger.getLogger(EventClickValueProperty.class);
 
 	/**
 	 * Constructor
@@ -49,6 +54,15 @@ public class EventClickValueProperty extends SelectionAdapter {
 
 				Text text = (Text) editor.getEditor();
 				editor.getItem().setText(EDITABLECOLUMN, text.getText());
+				try {
+					IProperties propertie = Factory.getInstance().newPropertie((String)(editor.getItem().getData()));
+					propertie.put(editor.getItem().getText(),  text.getText());
+					
+				} catch (PropertiesException e1) {
+					log.error(e1.getMessage());
+				}
+				
+			
 			}
 		});
 		newEditor.selectAll();

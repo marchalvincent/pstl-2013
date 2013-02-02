@@ -2,15 +2,20 @@ package com.upmc.pstl2013.views.events;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.apache.log4j.Logger;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 
+import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventCurrentExecutor extends AbstractEventExecutor {
 
 	private Table tabProperties;
+	private Logger log = Logger.getLogger(EventCurrentExecutor.class);
 
 	/**
 	 * Constructor
@@ -28,12 +33,13 @@ public class EventCurrentExecutor extends AbstractEventExecutor {
 		List<IProperties> properties = new ArrayList<IProperties>();
 		for (TableItem item : tabProperties.getItems()) {
 			if (item.getChecked()) {
-				// TODO Récupéréer les clés valeurs.
-				
-				//properties.put(item.getText(), null);
+				try {
+					properties.add(Factory.getInstance().newPropertie(item.getText()));
+				} catch (PropertiesException e) {
+					log.error(e.getMessage());
+				}
 			}
 		}
-		//TODO MICHEL
-		return null;
+		return properties;
 	}
 }

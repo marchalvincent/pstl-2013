@@ -56,6 +56,7 @@ public class EventSelectPropertie implements Listener {
 					TableItem item = new TableItem(tabValueProperties, SWT.NONE);
 					item.setText(0, key);
 					item.setText(1, attributes.get(key));
+					item.setData(nameProperty);
 				}
 				for (int i = 0; i < 2; i++) {
 					tabValueProperties.getColumn(i).pack();
