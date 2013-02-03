@@ -32,7 +32,7 @@ import com.upmc.pstl2013.views.events.EventChooseFile;
 import com.upmc.pstl2013.views.events.EventCurrentExecutor;
 import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
-import com.upmc.pstl2013.views.events.EventSelectPropertie;
+import com.upmc.pstl2013.views.events.EventSelectProperty;
 
 public class SwtView extends Composite {
 
@@ -54,8 +54,8 @@ public class SwtView extends Composite {
 	private TabItem itemAlloyUse, itemAlloyProperty;
 	private Composite cpItemAlloyUse, cpdItemAlloyProp;
 	private Table tabProperties;
-	private Table tabValueProperties;
-	private final TableEditor editor;
+	private Table tabValuePropertiesString,tabValuePropertiesBool;
+	private final TableEditor editorString, editorBool;
 	private Text txtPersonalPropertie;
 	private Button btnPersonalPropertie;
 
@@ -91,7 +91,7 @@ public class SwtView extends Composite {
 		itemAlloyProperty = new TabItem(tabFolder, SWT.NONE);
 		itemAlloyProperty.setText("Properties");
 		cpdItemAlloyProp = new Composite(tabFolder, SWT.BORDER);
-		cpdItemAlloyProp.setLayout(new GridLayout(2, false));
+		cpdItemAlloyProp.setLayout(new GridLayout(3, false));
 		itemAlloyProperty.setControl(cpdItemAlloyProp);
 
 		/*
@@ -102,23 +102,33 @@ public class SwtView extends Composite {
 		tabProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabProperties.setLinesVisible(true);
 		tabProperties.setHeaderVisible(true);
-		//Table des attributs de la partie propriete
-		tabValueProperties = new Table(cpdItemAlloyProp, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
-		tabValueProperties.setTouchEnabled(true);
-		tabValueProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		tabValueProperties.setHeaderVisible(true);
-		tabValueProperties.setLinesVisible(true);
+		//Table des attributs de la partie proprieteString
+		tabValuePropertiesString = new Table(cpdItemAlloyProp, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		tabValuePropertiesString.setTouchEnabled(true);
+		tabValuePropertiesString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabValuePropertiesString.setHeaderVisible(true);
+		tabValuePropertiesString.setLinesVisible(true);
 		
-		editor = new TableEditor(tabValueProperties);
+		editorString = new TableEditor(tabValuePropertiesString);
 		String[] titlesVP = { "Key", "Value" };
 		for (int i = 0; i < titlesVP.length; i++) {
-			TableColumn column = new TableColumn(tabValueProperties, SWT.NONE);
+			TableColumn column = new TableColumn(tabValuePropertiesString, SWT.NONE);
 			column.setText(titlesVP[i]);
 		}
+
+		//Table des attributs de la partie proprieteBoolean
+		tabValuePropertiesBool = new Table(cpdItemAlloyProp,  SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
+		tabValuePropertiesBool.setTouchEnabled(true);
+		tabValuePropertiesBool.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabValuePropertiesBool.setHeaderVisible(true);
+		tabValuePropertiesBool.setLinesVisible(true);
+		editorBool = new TableEditor(tabValuePropertiesBool);
+		TableColumn column = new TableColumn(tabValuePropertiesBool, SWT.NONE);
+		column.setText("Key");
+		
 		addProperties();
 		GridLayout gridLayout = new GridLayout(1, false);
 		setLayout(gridLayout);
-		
 		/*
 		 * Debut contenu de la parite utilisation
 		 */
@@ -201,7 +211,7 @@ public class SwtView extends Composite {
 			item.setText(0, prop);
 		}
 		tabProperties.getColumn(0).pack();
-		tabProperties.addListener(SWT.Selection, new EventSelectPropertie(this));
+		tabProperties.addListener(SWT.Selection, new EventSelectProperty(this));
 	}
 	
 	/**
@@ -240,15 +250,23 @@ public class SwtView extends Composite {
 		return tabProperties;
 	}
 
-	public Table getTabValueProperties() {
-		return tabValueProperties;
+	public Table getTabValuePropertiesString() {
+		return tabValuePropertiesString;
+	}
+	
+	public Table getTabValuePropertiesBool() {
+		return tabValuePropertiesBool;
 	}
 
 	public Text getTxtPersonalPropertie() {
 		return txtPersonalPropertie;
 	}
 
-	public TableEditor getEditor() {
-		return editor;
+	public TableEditor getEditorString() {
+		return editorString;
+	}
+	
+	public TableEditor getEditorBool() {
+		return editorBool;
 	}
 }

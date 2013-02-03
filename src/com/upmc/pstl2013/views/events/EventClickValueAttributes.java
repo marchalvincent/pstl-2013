@@ -17,21 +17,21 @@ import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.views.SwtView;
 
-public class EventClickValueProperty extends SelectionAdapter {
+public class EventClickValueAttributes extends SelectionAdapter {
 
 	private final int EDITABLECOLUMN = 1;
 	private TableEditor editor;
 	private Table tabValueProperties;
-	private Logger log = Logger.getLogger(EventClickValueProperty.class);
+	private Logger log = Logger.getLogger(EventClickValueAttributes.class);
 
 	/**
 	 * Constructor
 	 * @param {{@link SwtView}
 	 */
-	public EventClickValueProperty(SwtView swtView) {
+	public EventClickValueAttributes(SwtView swtView) {
 
-		this.editor = swtView.getEditor();
-		this.tabValueProperties = swtView.getTabValueProperties();
+		this.editor = swtView.getEditorString();
+		this.tabValueProperties = swtView.getTabValuePropertiesString();
 	}
 
 	@Override
