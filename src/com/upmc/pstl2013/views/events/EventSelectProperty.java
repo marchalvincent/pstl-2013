@@ -49,12 +49,9 @@ public class EventSelectProperty implements Listener {
 		try {
 			IProperties property = Factory.getInstance().getPropertie(nameProperty);
 			Map <String,String> stringAttributes = property.getStringAttributes();
-
 			if (tabValuePropertiesString != null) {
-
 				tabValuePropertiesString.removeAll();
 				if (stringAttributes.size()>0) {
-
 					tabValuePropertiesString.addSelectionListener(new EventClickValueAttributes(swtView));
 					tabValuePropertiesString.getColumn(0).setText("Attributes : " + nameProperty);
 					for (String key : stringAttributes.keySet()) {
@@ -70,12 +67,9 @@ public class EventSelectProperty implements Listener {
 			}
 
 			Map <String,Boolean> boolAttributes = property.getBooleanAttributes();
-
 			if (tabValuePropertiesBool != null) {
-
 				tabValuePropertiesBool.removeAll();
-				if (stringAttributes.size()>0) {
-
+				if (boolAttributes.size()>0) {
 					tabValuePropertiesBool.addListener(SWT.Selection, new EventCheckAttributes());
 					tabValuePropertiesBool.getColumn(0).setText("Attributes Vrai/Faux : " + nameProperty);
 					for (String key : boolAttributes.keySet()) {

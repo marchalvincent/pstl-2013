@@ -9,11 +9,11 @@ import com.upmc.pstl2013.properties.IProperties;
 public class PersonalPropertie extends AbstractProperties implements IProperties {
 	
 	public PersonalPropertie() {
-		super();
+		super(null, null);
 	}
 
 	@Override
 	public String getAlloyCode() {
-		return attributes.get("alloyCode");
+		return super.getString("alloyCode");
 	}
 }

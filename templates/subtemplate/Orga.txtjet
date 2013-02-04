@@ -1,7 +1,6 @@
 <%@ jet package="com.upmc.pstl2013.alloyGenerator.jet.impl" class="OrgaTemplate" 
 	imports="org.apache.log4j.Logger
 			com.upmc.pstl2013.alloyGenerator.jet.*
-			com.upmc.pstl2013.alloyGenerator.impl.*
 			com.upmc.pstl2013.properties.*"
 	skeleton="../alloyGenerator.skeleton" %>
 <% 

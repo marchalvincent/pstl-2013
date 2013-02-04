@@ -1,13 +1,11 @@
 package com.upmc.pstl2013.alloyExecutor.impl;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import org.apache.log4j.Logger;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
+import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
-import com.upmc.pstl2013.alloyGenerator.impl.JetException;
-import com.upmc.pstl2013.strategy.IStrategy;
+import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
@@ -38,7 +36,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 	}
 
 	@Override
-	public String executeFiles(List<IStrategy> strategies) throws Err, JetException {
+	public String executeFiles() throws Err, JetException {
 
 		// Résultat
 		StringBuilder resultat = new StringBuilder();
@@ -59,9 +57,11 @@ public class AlloyExecutor implements IAlloyExecutor {
 				System.out.flush();
 			}
 		};
-		for (File file : generator.getGeneratedFiles()) {
+		
+		for (IAlloyGenerated generated : generator.getGeneratedFiles()) {
+			
 			try {
-				filename = file.getCanonicalPath();
+				filename = generated.getFile().getCanonicalPath();
 				// Vérifie que le fichier soit de type ALLOY
 				if (filename.substring(filename.length() - 3, filename.length()).equals("als")) {
 					// Parse+typecheck the model
@@ -90,8 +90,24 @@ public class AlloyExecutor implements IAlloyExecutor {
 						resultat.append("is Incremental : " + ans.isIncremental() + "   ");
 						resultat.append("Is Satisfiable : " + ans.satisfiable() + "\n");
 						
-						for (IStrategy iStrategy : strategies) {
-							resultat.append(iStrategy.parcours(ans) + "\n");
+						// on ajoute le résultat du parcours de la stratégie
+						// si on est dans un run
+						if(!generated.isCheck()) {
+							if (ans.satisfiable()) {
+								resultat.append("VALID, Solution found = " + generated.getStrategy().parcours(ans));
+							}
+							else {
+								resultat.append("INVALID no solution found.");
+							}
+						}
+						// si on est dans un check
+						else if (generated.isCheck()) {
+							if (ans.satisfiable()) {
+								resultat.append("INVALID, counter-example = " + generated.getStrategy().parcours(ans));
+							}
+							else {
+								resultat.append("VALID, property valid, no counter-example found.");
+							}
 						}
 						
 						resultat.append("temps : " + (endTime - startTime) / 1000000 + " ms \n");
@@ -110,6 +126,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 								viz.loadXML("alloy_example_output.xml", true);
 							}
 						}
+						log.info(resultat.toString());
 					}
 				}
 			} catch (IOException e) {

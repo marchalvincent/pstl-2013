@@ -13,8 +13,11 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
+import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
+import com.upmc.pstl2013.alloyGenerator.jet.IJetHelper;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
+import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.properties.IProperties;
@@ -28,7 +31,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 	private IInfoGenerator infoGenerator;
 	private IUMLParser parser;
-	private List<File> filesGenerated;
+	private List<IAlloyGenerated> filesGenerated;
 	private static Logger log = Logger.getLogger(AlloyGenerator.class);
 
 	/**
@@ -38,7 +41,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 		super();
 		infoGenerator = infoGen;
 		parser = pars;
-		filesGenerated = new ArrayList<File>();
+		filesGenerated = new ArrayList<IAlloyGenerated>();
 	}
 
 	@Override
@@ -73,11 +76,12 @@ public class AlloyGenerator implements IAlloyGenerator {
 					try {
 						// on créé le fichier a générer
 						File fichier = new File(pathFile);
-						filesGenerated.add(fichier);
 						// puis on écrit le contenu dedans
 						out = new FileOutputStream(fichier);
 						out.write(alloyTxt.getBytes());
 						out.close();
+						filesGenerated.add(Factory.getInstance().
+								newAlloyGenerated(fichier, iPropertie.isCheck(), iPropertie.getStrategy()));
 					} catch (FileNotFoundException e) {
 						log.error("Impossible de trouver le fichier : " + e.toString(), e);
 					} catch (IOException e) {
@@ -105,7 +109,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 	}
 
 	@Override
-	public List<File> getGeneratedFiles() {
+	public List<IAlloyGenerated> getGeneratedFiles() {
 		return filesGenerated;
 	}
 
@@ -134,13 +138,13 @@ public class AlloyGenerator implements IAlloyGenerator {
 		ActivityNode finalNode = this.getNodeByType(nodes, "ActivityFinalNode");
 		
 		// on ajoute à la propriété les infos de base...
-		iPropertie.put("nbNodes", Integer.toString(nodes.size()));
-		iPropertie.put("nbEdges", Integer.toString(edges.size()));
-		iPropertie.put("nbObjects", Integer.toString(edges.size() + nodes.size()));
+		iPropertie.putPrivate("nbNodes", Integer.toString(nodes.size()));
+		iPropertie.putPrivate("nbEdges", Integer.toString(edges.size()));
+		iPropertie.putPrivate("nbObjects", Integer.toString(edges.size() + nodes.size()));
 		
-		iPropertie.put("initialNode", initialNode.getName());
-		iPropertie.put("finalNode", finalNode.getName());
-		iPropertie.put("predicatName", this.generateNamePredicat("predicatPropertie", nodes, edges));
+		iPropertie.putPrivate("initialNode", initialNode.getName());
+		iPropertie.putPrivate("finalNode", finalNode.getName());
+		iPropertie.putPrivate("predicatName", this.generateNamePredicat("predicatPropertie", nodes, edges));
 		
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges et la propriété au template Jet.
 		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, edges, iPropertie);

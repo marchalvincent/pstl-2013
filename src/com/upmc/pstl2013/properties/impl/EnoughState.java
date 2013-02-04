@@ -1,17 +1,18 @@
 package com.upmc.pstl2013.properties.impl;
 
-import com.upmc.pstl2013.alloyGenerator.impl.JetException;
+import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.alloyGenerator.jet.impl.EnoughStateTemplate;
+import com.upmc.pstl2013.factory.Factory;
 
 
 public class EnoughState extends AbstractProperties {
 
 	public EnoughState() {
-		super();
-		attributes.put("inc", "20");
-		attributes.put("attribut2enough", "tata");
-		attributes.put("attribut3enough", "tutu");
-		attributes.put("attribut4enough", "toto");
+		super(Boolean.TRUE, Factory.getInstance().newPathStrategy());
+		super.put("inc", "20");
+		super.put("attribut2enough", "tata");
+		super.put("attribut3enough", "tutu");
+		super.put("attribut4enough", "toto");
 	}
 
 	@Override
