@@ -1,9 +1,15 @@
-package com.upmc.pstl2013.properties.impl;
+package com.upmc.pstl2013.properties;
 
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.impl.Attribute;
+import com.upmc.pstl2013.properties.impl.DeadLock;
+import com.upmc.pstl2013.properties.impl.EnoughState;
+import com.upmc.pstl2013.properties.impl.Orga;
+import com.upmc.pstl2013.properties.impl.PersonalPropertie;
+import com.upmc.pstl2013.properties.impl.PropertiesException;
+import com.upmc.pstl2013.properties.impl.Wf;
 
 /**
  * Se charge de créer les propriétés.
@@ -12,8 +18,13 @@ import com.upmc.pstl2013.properties.IProperties;
 public class PropertiesFactory {
 
 	private static Logger log = Logger.getLogger(PropertiesFactory.class);
-	private static Map<String, IProperties> properties = new HashMap<String, IProperties>();
+	private static PropertiesFactory instance = new PropertiesFactory();
+	private Map<String, IProperties> properties = new HashMap<String, IProperties>();
 
+	public static PropertiesFactory getInstance() {
+		return instance;
+	}
+	
 	/**
 	 * Méthode static pour la création des propriétés.
 	 * 
@@ -21,7 +32,7 @@ public class PropertiesFactory {
 	 * @return une {@link IProperties}.
 	 * @throws PropertiesException si le nom de la propriété est introuvable.
 	 */
-	public static IProperties createPropertie(String name) throws PropertiesException {
+	public IProperties createPropertie(String name) throws PropertiesException {
 
 		// si l'objet est déjà créé, on le renvoie
 		IProperties prop = properties.get(name);
@@ -42,5 +53,15 @@ public class PropertiesFactory {
 			throw new PropertiesException(error);
 		}
 		return properties.get(name);
+	}
+	
+	/**
+	 * Créé un attribut d'une {@link IProperties}.
+	 * @param key la clé.
+	 * @param value la valeur.
+	 * @param isPrivate spécifie si cet attribut doit être affiche dans l'IU.
+	 */
+	public IAttribute newAttribute(String key, Object value, Boolean isPrivate) {
+		return new Attribute(key, value, isPrivate);
 	}
 }

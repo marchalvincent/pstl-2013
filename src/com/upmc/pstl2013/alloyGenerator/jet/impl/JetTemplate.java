@@ -4,7 +4,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.*;
 import com.upmc.pstl2013.alloyGenerator.jet.*;
-import com.upmc.pstl2013.alloyGenerator.impl.*;
 import com.upmc.pstl2013.properties.*;
 
 public class JetTemplate implements IJetTemplate {

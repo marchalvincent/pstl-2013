@@ -1,8 +1,9 @@
-package com.upmc.pstl2013.alloyGenerator.impl;
+package com.upmc.pstl2013.alloyGenerator.jet.impl;
 
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
+import com.upmc.pstl2013.alloyGenerator.jet.IJetHelper;
 import com.upmc.pstl2013.properties.IProperties;
 
 /**
