@@ -106,7 +106,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 								resultat.append("INVALID, counter-example = " + generated.getStrategy().parcours(ans));
 							}
 							else {
-								resultat.append("VALID, property valid, no counter-example found.");
+								resultat.append("VALID, no counter-example found, assertion may be valid.");
 							}
 						}
 						
