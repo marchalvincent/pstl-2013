@@ -1,27 +1,51 @@
 package com.upmc.pstl2013.util;
 
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
 
 public class ConfPropertiesManager {
 
-	private static Properties prop;
+	private Properties prop;
+	
+	private static final ConfPropertiesManager instance = new ConfPropertiesManager();
 
-	public static void loadConfProperties()
-	{
+	private ConfPropertiesManager() {	
 		try {
 			prop = new Properties();
 			//load a properties file
 			prop.load(ConfPropertiesManager.class.getClassLoader().getResourceAsStream("build.properties"));
 
-			//get the property value and print it out
-			System.out.println(prop.getProperty("database"));
-			System.out.println(prop.getProperty("dbuser"));
-			System.out.println(prop.getProperty("dbpassword"));
-
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 	}
+
+	/**
+	 * Renvoie l'unique instance de la Factory.
+	 * 
+	 * @return {@link ConfPropertiesManager}.
+	 */
+	public static ConfPropertiesManager getInstance() {
+		return instance;
+	}
+
+	public String getPathFolder() {
+		return prop.getProperty("pathFolder") ;
+	}
+
+	public void setPathFolder(String pathFolder) {
+		prop.setProperty("pathFolder",pathFolder);
+		try {
+			//ConfPropertiesManager.class.getClassLoader().getResource("")
+			prop.store(new FileOutputStream("build.properties"), null);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 
 }
