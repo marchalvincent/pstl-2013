@@ -69,6 +69,9 @@ public class SwtView extends Composite {
 
 		super(parent, style);
 		
+		//TODO : ENLEVER
+		//ConfPropertiesManager.loadConfProperties();
+		
 		infoParser = Factory.getInstance().newInfoParser();
 		infoGenerator = Factory.getInstance().newInfoGenerator();
 		IUMLParser parser = Factory.getInstance().newParser(infoParser);
@@ -190,7 +193,7 @@ public class SwtView extends Composite {
 		// on vérifie que le dossier de génération alloy est correct
 		try {
 			alloyGenerator.fichiersPresents();
-			txtLogs.setText("Prêt pour la vérification de process.");
+			txtLogs.append("Prêt pour la vérification de process.");
 		} catch (FileNotFoundException e2) {
 			MessageDialog dialog = new MessageDialog(new Shell(), "Des fichiers sont manquants", null,
 					e2.toString(), MessageDialog.WARNING, new String[] { "Ok" }, 1);

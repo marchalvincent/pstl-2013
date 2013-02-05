@@ -120,8 +120,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 							// You can then visualize the XML file by calling this:
 							if (viz == null) {
 								viz = new VizGUI(false, "alloy_example_output.xml", null);
-								//viz.loadThemeFile("D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\theme\\theme.thm");
-								viz.loadThemeFile("C:\\Users\\Vincent\\Dropbox\\Master STL\\PSTL\\theme.thm");
+								viz.loadThemeFile(AlloyExecutor.class.getClassLoader().getResource("theme/theme.thm").getPath());
 							} else {
 								viz.loadXML("alloy_example_output.xml", true);
 							}
