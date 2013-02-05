@@ -136,7 +136,7 @@ public class PathStrategy implements IStrategy {
 		for (int i = 1; i <= mySolution.getNbRunning(); i++) {
 			sb.append("( ");
 			// on récupère tous les éléments de l'objet mySolution
-			for (String name : mySolution.getRound(i)) {
+			for (String name : mySolution.getRound(new Integer(i))) {
 				sb.append(name);
 				sb.append(" ");
 			}
