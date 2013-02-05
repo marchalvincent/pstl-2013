@@ -50,8 +50,10 @@ public class MyA4Solution {
 	
 	public List<String> getRound(Integer i) {
 		List<String> liste = new ArrayList<String>();
-		liste.addAll(heldTokens.get(i));
-		liste.addAll(offers.get(i));
+		if (heldTokens.get(i) != null)
+			liste.addAll(heldTokens.get(i));
+		if (offers.get(i) != null)
+			liste.addAll(offers.get(i));
 		return liste;
 	}
 }
