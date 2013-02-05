@@ -5,7 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-
+/**
+ * Classe utilitaire pour la stratégie {@link PathStrategy}. Permet de stocker 
+ * seulement les informations nécessaires lors du parcours de la solution Alloy.
+ *
+ */
 public class MyA4Solution {
 
 	public static int HELD_TOKEN = 1;

@@ -11,8 +11,8 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4TupleSet;
 
 /**
- * Représente une strategie de parcours qui permet de récupérer le chemin trouvé par la génération
- * Alloy.
+ * Représente une strategie de parcours qui permet de récupérer 
+ * le chemin trouvé par la génération Alloy.
  * 
  */
 public class PathStrategy implements IStrategy {
@@ -136,7 +136,7 @@ public class PathStrategy implements IStrategy {
 		for (int i = 1; i <= mySolution.getNbRunning(); i++) {
 			sb.append("( ");
 			// on récupère tous les éléments de l'objet mySolution
-			for (String name : mySolution.getRound(i)) {
+			for (String name : mySolution.getRound(new Integer(i))) {
 				sb.append(name);
 				sb.append(" ");
 			}
