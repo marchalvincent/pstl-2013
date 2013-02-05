@@ -64,7 +64,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 		};
 		
 		for (IAlloyGenerated generated : generator.getGeneratedFiles()) {
-			
+
 			try {
 				filename = generated.getFile().getCanonicalPath();
 				// Vérifie que le fichier soit de type ALLOY
