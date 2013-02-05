@@ -11,8 +11,8 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Tuple;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4TupleSet;
 
 /**
- * Représente une strategie de parcours qui permet de récupérer le chemin trouvé par la génération
- * Alloy.
+ * Représente une strategie de parcours qui permet de récupérer 
+ * le chemin trouvé par la génération Alloy.
  * 
  */
 public class PathStrategy implements IStrategy {
