@@ -7,6 +7,10 @@ import org.eclipse.swt.widgets.Text;
 import com.upmc.pstl2013.views.LogCreator;
 import com.upmc.pstl2013.views.SwtView;
 
+/**
+ * 
+ *
+ */
 public class RunnableUpdateExecutor implements Runnable {
 
 	private Text txtLogs,txtDirectory;
