@@ -70,13 +70,17 @@ public class SwtView extends Composite {
 
 		super(parent, style);
 
-		if (ConfPropertiesManager.getInstance().getPathFolder().equals(""))
+		if (ConfPropertiesManager.getInstance().getPathFolder().equals("")) {
 			userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
-		else
+			try {
+				ConfPropertiesManager.getInstance().setPathFolder(userDir);
+			} catch (Exception e) {
+				txtLogs.append(e.getMessage());
+			}
+		}
+		else {
 			userDir = ConfPropertiesManager.getInstance().getPathFolder();
-
-		//TODO : ENLEVER
-		//ConfPropertiesManager.loadConfProperties();
+		}
 
 		infoParser = Factory.getInstance().newInfoParser();
 		infoGenerator = Factory.getInstance().newInfoGenerator();
@@ -199,7 +203,7 @@ public class SwtView extends Composite {
 		// on vérifie que le dossier de génération alloy est correct
 		try {
 			alloyGenerator.fichiersPresents();
-			txtLogs.append("Prêt pour la vérification de process.");
+			txtLogs.append("Prêt pour la vérification de process.\n");
 		} catch (FileNotFoundException e2) {
 			MessageDialog dialog = new MessageDialog(new Shell(), "Des fichiers sont manquants", null,
 					e2.toString(), MessageDialog.WARNING, new String[] { "Ok" }, 1);
@@ -218,6 +222,12 @@ public class SwtView extends Composite {
 		for (String prop : AbstractProperties.getProperties()) {
 			TableItem item = new TableItem(tabProperties, SWT.NONE);
 			item.setText(0, prop);
+			
+			// si la propriété est dans les préférences, on coche par défaut
+			String prefs = ConfPropertiesManager.getInstance().getProperties();
+			if (prefs.contains(prop)) {
+				item.setChecked(true);
+			}
 		}
 		tabProperties.getColumn(0).pack();
 		tabProperties.addListener(SWT.Selection, new EventSelectProperty(this));

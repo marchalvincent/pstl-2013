@@ -10,6 +10,7 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.SwtView;
 
 public class JobExecutor extends Job {
@@ -27,6 +28,9 @@ public class JobExecutor extends Job {
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 
+		// tout d'abord on enregistre dans les préférences les propriétés
+		this.saveProperties();
+		
 		swtView.getInfoGenerator().setProperties(properties);
 		log.info("Génération et exécution des fichiers Alloy.");
 		StringBuilder result = new StringBuilder();
@@ -46,8 +50,22 @@ public class JobExecutor extends Job {
 	}
 
 	private void showToView(String msg){
-		
 		Display.getDefault().asyncExec(new RunnableUpdateExecutor(swtView, msg));
 	}
 
+	/**
+	 * Met à jour les préférences des propriétés.
+	 */
+	private void saveProperties() {
+		StringBuilder sb = new StringBuilder();
+		for (IProperties prop : properties) {
+			sb.append(prop.getClass().getSimpleName());
+			sb.append("|");
+		}
+		try {
+			ConfPropertiesManager.getInstance().setProperties(sb.toString());
+		} catch (Exception e) {
+			showToView(e.getMessage());
+		}
+	}
 }

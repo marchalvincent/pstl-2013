@@ -26,7 +26,6 @@ public class EventSelectProperty implements Listener {
 	 * @param {{@link SwtView}
 	 */
 	public EventSelectProperty(SwtView swtView) {
-
 		this.swtView = swtView;
 		this.tabValuePropertiesString = swtView.getTabValuePropertiesString();
 		this.tabValuePropertiesBool = swtView.getTabValuePropertiesBool();
