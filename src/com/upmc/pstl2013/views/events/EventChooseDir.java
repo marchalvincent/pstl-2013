@@ -41,10 +41,15 @@ public class EventChooseDir extends MouseAdapter {
 			chemin += separator;
 			// on met a jour l'IU et l'info générateur.
 			txtChooseDirectory.setText(chemin);
-			ConfPropertiesManager.getInstance().setPathFolder(chemin);
-			log.info("Modification du répertoir : " + chemin);
-			txtLogs.append("Modification du répertoir : " + chemin);
-			infoGenerator.setDestinationDirectory(chemin);
+			try {
+				ConfPropertiesManager.getInstance().setPathFolder(chemin);
+				log.info("Modification du répertoir : " + chemin);
+				txtLogs.append("Modification du répertoir : " + chemin + "\n");
+				infoGenerator.setDestinationDirectory(chemin);
+			} catch (Exception e1) {
+				txtLogs.append(e1.getMessage());
+			}
+			
 		}
 	}
 }

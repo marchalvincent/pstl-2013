@@ -53,13 +53,14 @@ public class EventChooseFile extends MouseAdapter {
 		
 		StringBuilder sb = new StringBuilder();
 		if (file.length > 0)
-			sb.append("\nSelection des fichiers suivant : ");
+			sb.append("Selection des fichiers suivant : ");
 		else
-			sb.append("\nAucun fichier n'a été sélectionné.");
+			sb.append("Aucun fichier n'a été sélectionné.");
 		
 		for (IFile iFile : file) {
 			infoParser.addFile(iFile);
-			sb.append("\n" + iFile.getName() + "\n");
+			sb.append(iFile.getName());
+			sb.append(" ");
 		}
 
 		log.info(sb.toString());
