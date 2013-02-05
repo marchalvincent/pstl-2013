@@ -29,13 +29,17 @@ public class PathStrategy implements IStrategy {
 
 	@Override
 	public String parcours(A4Solution ans) {
-
 		// 1. On parse la solution alloy
 		this.parse(ans);
-
-		return "";
+		// 2. On renvoie le parcours de la solution
+		return getParcours();
 	}
 
+	/**
+	 * Parse le {@link A4Solution} d'alloy, et ne garde que les infos dont on a besoin dans l'instance
+	 * de {@lkink MyA4Solution}.
+	 * @param ans le {@link A4Solution}.
+	 */
 	private void parse(A4Solution ans) {
 		// on parcours tous les Sig "semantic/State"
 		for (Sig sig : ans.getAllReachableSigs()) {
@@ -119,5 +123,25 @@ public class PathStrategy implements IStrategy {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Print le parcours de l'objet {@link MyA4Solution} qui est en variable d'instance.
+	 * @return String, le chemin de la solution.
+	 */
+	private String getParcours() {
+		
+		StringBuilder sb = new StringBuilder();
+		// pour chaque étape de la solution
+		for (int i = 1; i <= mySolution.getNbRunning(); i++) {
+			sb.append("( ");
+			// on récupère tous les éléments de l'objet mySolution
+			for (String name : mySolution.getRound(i)) {
+				sb.append(name);
+				sb.append(" ");
+			}
+			sb.append(" )");
+		}
+		return sb.toString();
 	}
 }
