@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
+import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.views.SwtView;
@@ -28,7 +29,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 		JobExecutor jobExec;
 		try {
-			jobExec = new JobExecutor("Execution", getProperties(), swtView);
+			jobExec = Factory.getInstance().newJobExecutor("Execution", getProperties(), swtView);
 			jobExec.setUser(true);
 			jobExec.schedule();
 

@@ -27,6 +27,7 @@ import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
 import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.umlParser.IUMLParser;
+import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.events.EventChooseDir;
 import com.upmc.pstl2013.views.events.EventChooseFile;
 import com.upmc.pstl2013.views.events.EventCurrentExecutor;
@@ -41,14 +42,14 @@ public class SwtView extends Composite {
 	private Text txtLogs;
 	private Button btnChooserFile;
 	private Button btnExcuterAlloy;
-	
+
 
 	private Button btnReadLogs;
 	private IInfoParser infoParser;
 	private IInfoGenerator infoGenerator;
 	private IAlloyExecutor alloyExecutor;
 	private String separator = File.separator;
-	private final String userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+	private final String userDir;
 	private static Logger log = Logger.getLogger(SwtView.class);
 	private TabFolder tabFolder;
 	private TabItem itemAlloyUse, itemAlloyProperty;
@@ -68,22 +69,27 @@ public class SwtView extends Composite {
 	public SwtView(Composite parent, int style) {
 
 		super(parent, style);
-		
+
+		if (ConfPropertiesManager.getInstance().getPathFolder().equals(""))
+			userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
+		else
+			userDir = ConfPropertiesManager.getInstance().getPathFolder();
+
 		//TODO : ENLEVER
 		//ConfPropertiesManager.loadConfProperties();
-		
+
 		infoParser = Factory.getInstance().newInfoParser();
 		infoGenerator = Factory.getInstance().newInfoGenerator();
 		IUMLParser parser = Factory.getInstance().newParser(infoParser);
 		IAlloyGenerator alloyGenerator = Factory.getInstance().newAlloyGenerator(infoGenerator, parser);
-		alloyExecutor = Factory.getInstance().newAlloyExecutor(alloyGenerator);
-		
+		alloyExecutor = Factory.getInstance().newAlloyExecutor(alloyGenerator,userDir);
+
 		infoGenerator.setDestinationDirectory(userDir);
-		
+
 		// TabFolder
 		tabFolder = new TabFolder(this, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		
+
 		//Items et composite pour la partie utilisation du tabeFolder
 		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
 		itemAlloyUse.setText("Utilisation");
@@ -111,7 +117,7 @@ public class SwtView extends Composite {
 		tabValuePropertiesString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabValuePropertiesString.setHeaderVisible(true);
 		tabValuePropertiesString.setLinesVisible(true);
-		
+
 		editorString = new TableEditor(tabValuePropertiesString);
 		String[] titlesVP = { "Key", "Value" };
 		for (int i = 0; i < titlesVP.length; i++) {
@@ -128,7 +134,7 @@ public class SwtView extends Composite {
 		editorBool = new TableEditor(tabValuePropertiesBool);
 		TableColumn column = new TableColumn(tabValuePropertiesBool, SWT.NONE);
 		column.setText("Key");
-		
+
 		addProperties();
 		GridLayout gridLayout = new GridLayout(1, false);
 		setLayout(gridLayout);
@@ -138,47 +144,47 @@ public class SwtView extends Composite {
 		btnChooseDir = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooseDir.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnChooseDir.setText("Choose Dir");
-		
+
 		txtDirectory = new Text(cpItemAlloyUse, SWT.BORDER);
 		txtDirectory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtDirectory.setText(userDir);
-		
+
 		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooserFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnChooserFile.setText("Choose File");
-		
+
 		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 5));
-		
+
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
 		btnExcuterAlloy.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnExcuterAlloy.setText("Execute Alloy");
-		
+
 		btnReadLogs = new Button(cpItemAlloyUse, SWT.NONE);
 		btnReadLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnReadLogs.setText("Read logs");
 		new Label(cpItemAlloyUse, SWT.NONE);
 		new Label(cpItemAlloyUse, SWT.NONE);
-		
+
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
 		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnPersonalPropertie.setText("Exec Perso");
-		
+
 		txtPersonalPropertie = new Text(cpItemAlloyUse, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
-		
+
 		//Ajout des events
 		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
 		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
 		btnChooseDir.addMouseListener(new EventChooseDir(this));
 		btnReadLogs.addMouseListener(new EventReadLogs(this));
 		btnChooserFile.addMouseListener(new EventChooseFile(this));
-		
+
 		// on finit par une petite vérification...
 		this.checkDirectory(alloyGenerator);
-		
+
 		//Suppression des anciens logs
 		deleteOldLogs();
 	}
@@ -216,7 +222,7 @@ public class SwtView extends Composite {
 		tabProperties.getColumn(0).pack();
 		tabProperties.addListener(SWT.Selection, new EventSelectProperty(this));
 	}
-	
+
 	/**
 	 * Supprime tous les logs générés à la derniere utilisation du plugin.
 	 */
@@ -228,7 +234,7 @@ public class SwtView extends Composite {
 		logInfo.delete();
 		logDebug.delete();
 	}
-	
+
 	public Text getTxtDirectory() {
 		return txtDirectory;
 	}
@@ -256,7 +262,7 @@ public class SwtView extends Composite {
 	public Table getTabValuePropertiesString() {
 		return tabValuePropertiesString;
 	}
-	
+
 	public Table getTabValuePropertiesBool() {
 		return tabValuePropertiesBool;
 	}
@@ -268,7 +274,7 @@ public class SwtView extends Composite {
 	public TableEditor getEditorString() {
 		return editorString;
 	}
-	
+
 	public TableEditor getEditorBool() {
 		return editorBool;
 	}

@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.DirectoryDialog;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
+import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventChooseDir extends MouseAdapter {
@@ -40,6 +41,7 @@ public class EventChooseDir extends MouseAdapter {
 			chemin += separator;
 			// on met a jour l'IU et l'info générateur.
 			txtChooseDirectory.setText(chemin);
+			ConfPropertiesManager.getInstance().setPathFolder(chemin);
 			log.info("Modification du répertoir : " + chemin);
 			txtLogs.append("Modification du répertoir : " + chemin);
 			infoGenerator.setDestinationDirectory(chemin);

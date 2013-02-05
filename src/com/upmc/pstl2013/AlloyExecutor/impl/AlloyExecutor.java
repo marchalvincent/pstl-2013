@@ -1,11 +1,14 @@
 package com.upmc.pstl2013.alloyExecutor.impl;
 
 import java.io.IOException;
+
 import org.apache.log4j.Logger;
+
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
+
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
@@ -24,15 +27,17 @@ import edu.mit.csail.sdg.alloy4viz.VizGUI;
 public class AlloyExecutor implements IAlloyExecutor {
 
 	private IAlloyGenerator generator;
+	private String userDir;
 	private static Logger log = Logger.getLogger(AlloyExecutor.class);
 
 	/**
 	 * Constructeur
 	 */
-	public AlloyExecutor(IAlloyGenerator generator) {
+	public AlloyExecutor(IAlloyGenerator generator, String userDir) {
 
 		super();
 		this.generator = generator;
+		this.userDir = userDir;
 	}
 
 	@Override
@@ -120,7 +125,9 @@ public class AlloyExecutor implements IAlloyExecutor {
 							// You can then visualize the XML file by calling this:
 							if (viz == null) {
 								viz = new VizGUI(false, "alloy_example_output.xml", null);
-								viz.loadThemeFile(AlloyExecutor.class.getClassLoader().getResource("theme/theme.thm").getPath());
+								if (!viz.loadThemeFile(userDir + "theme\\theme.thm"))
+									resultat.append("Le fichier theme n'a pas été pris en compte\n." +
+											"Etes vous sûre d'avoir le fichier theme.thm dans le repertoir : " + userDir + "theme ?");
 							} else {
 								viz.loadXML("alloy_example_output.xml", true);
 							}
