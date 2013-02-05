@@ -89,12 +89,15 @@ public class AlloyExecutor implements IAlloyExecutor {
 						resultat.append("BitWidth : " + ans.getBitwidth() + "   ");
 						resultat.append("is Incremental : " + ans.isIncremental() + "   ");
 						resultat.append("Is Satisfiable : " + ans.satisfiable() + "\n");
+
+						resultat.append("temps : " + (endTime - startTime) / 1000000 + " ms \n");
 						
 						// on ajoute le résultat du parcours de la stratégie
 						// si on est dans un run
 						if(!generated.isCheck()) {
 							if (ans.satisfiable()) {
-								resultat.append("VALID, Solution found = " + generated.getStrategy().parcours(ans));
+								resultat.append("VALID, Solution found = ");
+								resultat.append(generated.getStrategy().parcours(ans));
 							}
 							else {
 								resultat.append("INVALID no solution found.");
@@ -103,14 +106,15 @@ public class AlloyExecutor implements IAlloyExecutor {
 						// si on est dans un check
 						else if (generated.isCheck()) {
 							if (ans.satisfiable()) {
-								resultat.append("INVALID, counter-example = " + generated.getStrategy().parcours(ans));
+								resultat.append("INVALID, counter-example = ");
+								resultat.append(generated.getStrategy().parcours(ans));
 							}
 							else {
 								resultat.append("VALID, no counter-example found, assertion may be valid.");
 							}
 						}
+						resultat.append("\n");
 						
-						resultat.append("temps : " + (endTime - startTime) / 1000000 + " ms \n");
 						// If satisfiable...
 						if (ans.satisfiable()) {
 							// You can query "ans" to find out the values of each set or type.
@@ -126,7 +130,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 								viz.loadXML("alloy_example_output.xml", true);
 							}
 						}
-						log.info(resultat.toString());
+						//log.info(resultat.toString());
 					}
 				}
 			} catch (IOException e) {

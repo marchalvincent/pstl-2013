@@ -34,8 +34,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 			jobExec.schedule();
 			try {
 				jobExec.join();
-				if (jobExec.getResult() != null && jobExec.getResult() == Status.OK_STATUS)
-				{
+				if (jobExec.getResult() != null && jobExec.getResult() == Status.OK_STATUS)	{
 					// Création du fichier de log
 					try {
 						LogCreator.createLog(swtView.getTxtDirectory().getText());
