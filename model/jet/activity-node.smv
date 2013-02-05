@@ -1,0 +1,90 @@
+
+
+<%=NSHelper.lineSeparator("ActivityNode")%>
+MODULE ActivityNode(container, p_inc-cond, p_out-cond, p_initial-tokens)
+DEFINE
+	inc-cond     := running & asynch & !firing & p_inc-cond;
+	out-cond     := running & asynch & firing  & p_out-cond;
+	haveTokens := running & (tokens > 0);
+VAR
+	asynch : boolean;
+	running : boolean;
+	firing : boolean;
+	tokens : 0..<%=NSHelper.maxTokens()%>;
+INIT
+	running = FALSE &
+	tokens  = p_initial-tokens &
+	firing  = (p_initial-tokens > 0);
+TRANS
+	next(running) = container.running;
+TRANS
+	case
+		inc-cond : next(tokens) = (tokens + 1) & next(firing) = TRUE; 
+		out-cond : next(tokens) = (tokens - 1) & next(firing) = FALSE;
+		TRUE     : next(tokens) = tokens       & next(firing) = firing;
+	esac;
+JUSTICE asynch;
+
+<%=NSHelper.lineSeparator("DecisionNode")%>
+MODULE DecisionNode(container, p_inc-cond, p_out-cond, p_initial-tokens, p_nb-decision)
+DEFINE
+	inc-cond     := running & asynch & !firing & p_inc-cond;
+	out-cond     := running & asynch & firing  & p_out-cond;
+	haveTokens := running & (tokens > 0);
+VAR
+	asynch : boolean;
+	running : boolean;
+	firing : boolean;
+	tokens : 0..<%=NSHelper.maxTokens()%>;
+	decision : 0..<%=NSHelper.maxTokens()%>;
+INIT
+	running = FALSE &
+	tokens  = p_initial-tokens &
+	firing  = (p_initial-tokens > 0) &
+	decision = 0;
+TRANS
+	next(running) = container.running;
+TRANS
+	case
+		inc-cond : next(tokens) = (tokens + 1) & next(firing) = TRUE & 
+						(next(decision) in 0..<%=NSHelper.maxTokens()%> 
+							& next(decision) >= 0
+							& next(decision) <= p_nb-decision) ; 
+		out-cond : next(tokens) = (tokens - 1) & next(firing) = FALSE & 
+						next(decision) = decision;
+		TRUE     : next(tokens) = tokens       & next(firing) = firing &
+						next(decision) = decision;
+	esac;
+JUSTICE asynch;
+
+<%=NSHelper.lineSeparator("MergeNode")%>
+MODULE MergeNode(container, p_inc-cond, p_out-cond, p_initial-tokens, p_nb-decision, p_pull-cond)
+DEFINE
+	inc-cond     := running & asynch & !firing & p_inc-cond;
+	out-cond     := running & asynch & firing  & p_out-cond;
+	haveTokens := running & (tokens > 0);
+VAR
+	asynch : boolean;
+	running : boolean;
+	firing : boolean;
+	tokens : 0..<%=NSHelper.maxTokens()%>;
+	decision : 0..<%=NSHelper.maxTokens()%>;
+INIT
+	running = FALSE &
+	tokens  = p_initial-tokens &
+	firing  = (p_initial-tokens > 0) &
+	decision = 0;
+TRANS
+	next(running) = container.running;
+TRANS
+	case
+		inc-cond : next(tokens) = (tokens + 1) & next(firing) = TRUE & 
+						(next(decision) in 0..10 
+							& p_pull-cond) ; 
+		out-cond : next(tokens) = (tokens - 1) & next(firing) = FALSE & 
+						next(decision) = decision;
+		TRUE     : next(tokens) = tokens       & next(firing) = firing &
+						next(decision) = decision;
+	esac;
+JUSTICE asynch;
+	
