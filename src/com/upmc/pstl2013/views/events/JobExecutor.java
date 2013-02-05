@@ -16,7 +16,7 @@ public class JobExecutor extends Job {
 
 	private List<IProperties> properties;
 	private SwtView swtView;
-	private static Logger log = Logger.getLogger(AbstractEventExecutor.class);
+	private static Logger log = Logger.getLogger(JobExecutor.class);
 
 	public JobExecutor(String name, List<IProperties> properties, SwtView swtView) {
 		super(name);
