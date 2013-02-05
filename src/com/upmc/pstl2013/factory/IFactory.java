@@ -1,6 +1,8 @@
 package com.upmc.pstl2013.factory;
 
 import java.io.File;
+import java.util.List;
+
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
@@ -18,6 +20,8 @@ import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.strategy.IStrategy;
 import com.upmc.pstl2013.strategy.impl.PathStrategy;
 import com.upmc.pstl2013.umlParser.IUMLParser;
+import com.upmc.pstl2013.views.SwtView;
+import com.upmc.pstl2013.views.events.JobExecutor;
 
 /**
  * Représente les objets que la factory doit savoir créer.
@@ -70,8 +74,9 @@ public interface IFactory {
 	 * 
 	 * @param generator
 	 *            un {@link IAlloyGenerator}.
+	 * @param userDir est le dossier de travail du plugin.
 	 */
-	IAlloyExecutor newAlloyExecutor(IAlloyGenerator generator);
+	IAlloyExecutor newAlloyExecutor(IAlloyGenerator generator, String userDir);
 
 	/**
 	 * Créé la {@link IProperties} associée au nom passé en paramètre.
@@ -101,4 +106,12 @@ public interface IFactory {
 	 * @param isPrivate booléen qui spécifie si l'attribut doit être affiché dans l'IU.
 	 */
 	IAttribute newAttribute(String key, Object value, Boolean isPrivate);
+	
+	/**
+	 * Créé un {@link JobExecutor}
+	 * @param name le nom du job qui sera affiché lors de son exécution.
+	 * @param properties la liste des propriétes a exécuter 
+	 * @param swtView la vue, qui serra passer au RunnableUpdate afin de mettre à jour l'interface.
+	 */
+	JobExecutor newJobExecutor(String name, List<IProperties> properties, SwtView swtView);
 }
