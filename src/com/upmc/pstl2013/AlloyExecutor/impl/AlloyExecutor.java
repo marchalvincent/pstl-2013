@@ -70,7 +70,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 				// Vérifie que le fichier soit de type ALLOY
 				if (filename.substring(filename.length() - 3, filename.length()).equals("als")) {
 					// Parse+typecheck the model
-					resultat.append("=========== Parsing+Typechecking " + filename + " =============\n");
+					resultat.append("\n\n=========== Parsing+Typechecking " + filename + " =============\n");
 					Module world = CompUtil.parseEverything_fromFile(rep, null, filename);
 					// Choose some default options for how you want to execute the commands
 					A4Options options = new A4Options();
