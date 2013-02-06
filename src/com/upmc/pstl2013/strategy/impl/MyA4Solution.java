@@ -15,23 +15,23 @@ public class MyA4Solution {
 	public static int HELD_TOKEN = 1;
 	public static int OFFERS = 2;
 	
-	private int nbRunning;
+	private int numStateFinished;
 	private Map<Integer, List<String>> offers;
 	private Map<Integer, List<String>> heldTokens;
 	
 	public MyA4Solution() {
 		super();
-		nbRunning = 0;
+		numStateFinished = 0;
 		offers = new HashMap<Integer, List<String>>();
 		heldTokens = new HashMap<Integer, List<String>>();
 	}
 	
-	public void setNbRunning(int nb) {
-		nbRunning = nb;
+	public void setNumStateFinished(int nb) {
+		numStateFinished = nb;
 	}
 	
-	public int getNbRunning() {
-		return nbRunning;
+	public int getNumStateFinished() {
+		return numStateFinished;
 	}
 	
 	public void addOffers(Integer nbRound, String name) {
@@ -48,12 +48,7 @@ public class MyA4Solution {
 		heldTokens.get(nbRound).add(name);
 	}
 	
-	public List<String> getRound(Integer i) {
-		List<String> liste = new ArrayList<String>();
-		if (heldTokens.get(i) != null)
-			liste.addAll(heldTokens.get(i));
-		if (offers.get(i) != null)
-			liste.addAll(offers.get(i));
-		return liste;
+	public Map<Integer, List<String>> getHeldTokens() {
+		return heldTokens;
 	}
 }

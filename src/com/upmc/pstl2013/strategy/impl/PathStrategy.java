@@ -1,9 +1,9 @@
 package com.upmc.pstl2013.strategy.impl;
 
 import java.util.Iterator;
-
+import java.util.List;
+import java.util.Map;
 import com.upmc.pstl2013.strategy.IStrategy;
-
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -79,7 +79,7 @@ public class PathStrategy implements IStrategy {
 				nbRunning++;
 			}
 		}
-		mySolution.setNbRunning(nbRunning);
+		mySolution.setNumStateFinished(nbRunning);
 	}
 
 	/**
@@ -130,17 +130,22 @@ public class PathStrategy implements IStrategy {
 	 * @return String, le chemin de la solution.
 	 */
 	private String getParcours() {
+		Map<Integer, List<String>> heldTokens = mySolution.getHeldTokens();
+		int numStateFinished = mySolution.getNumStateFinished();
 		
 		StringBuilder sb = new StringBuilder();
 		// pour chaque étape de la solution
-		for (int i = 0; i < mySolution.getNbRunning(); i++) {
-			sb.append("(");
-			// on récupère tous les éléments de l'objet mySolution
-			for (String name : mySolution.getRound(new Integer(i))) {
-				sb.append(" ");
-				sb.append(name);
+		for (Integer key : heldTokens.keySet()) {
+			// si ce numéro de state est encore dans l'état "running"
+			if (key < numStateFinished) {
+				sb.append("(");
+				// on récupère tous les éléments de l'objet mySolution
+				for (String name : heldTokens.get(key)) {
+					sb.append(" ");
+					sb.append(name);
+				}
+				sb.append(" )");
 			}
-			sb.append(" )");
 		}
 		return sb.toString();
 	}
