@@ -74,8 +74,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 					Module world = CompUtil.parseEverything_fromFile(rep, null, filename);
 					// Choose some default options for how you want to execute the commands
 					A4Options options = new A4Options();
-					// The required JNI library cannot be found: java.lang.UnsatisfiedLinkError: no
-					// minisatx5 in java.library.path
+					// The required JNI library cannot be found: java.lang.UnsatisfiedLinkError: no minisatx5 in java.library.path
 					options.solver = A4Options.SatSolver.SAT4J; // TODO: minisatx5 JNI
 					//options.solverDirectory = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\jars\\minisatjni1.jar";
 					
