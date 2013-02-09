@@ -1,6 +1,8 @@
 package com.upmc.pstl2013.alloyExecutor.impl;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,7 +76,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 			public void solve(int primaryVars, int totalVars, int clauses) {
 				System.out.println("appel a solve : primaryVars : " + primaryVars + ", totalVars : " + totalVars + ", clauses : " + clauses);
 			}
-			
+
 			// For example, here we choose to display each "warning" by printing it to System.out
 			@Override
 			public void warning(ErrorWarning msg) {
@@ -87,12 +89,12 @@ public class AlloyExecutor implements IAlloyExecutor {
 			generatedFile = generated.getFile();
 			// on créé un résultat pour cette activité
 			activityResult = Factory.getInstance().newActivityResult(generatedFile.getAbsolutePath());
-			
+
 			try {
 				filenameAlloy = generatedFile.getCanonicalPath();
 				// On vérifie que le fichier soit de type ALLOY
 				if (filenameAlloy.substring(filenameAlloy.length() - 3, filenameAlloy.length()).equals("als")) {
-					
+
 					// On parse le fichier pour le transformer en objet Alloy.
 					activityResult.appendLog("\n\n=========== Parsing+Typechecking " + filenameAlloy + " =============\n");
 					Module world = CompUtil.parseEverything_fromFile(rep, null, filenameAlloy);
@@ -143,11 +145,12 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 						// Si la solution est satisfiable
 						if (ans.satisfiable()) {
-							filenameXML = dirDestination + filenameAlloy + ".xml";
+							filenameXML = filenameAlloy.substring(0, (filenameAlloy.length() -3)) + "xml";
 							activityResult.setPathXMLResult(filenameXML);
-							
+
 							// On écrit le résultat dans un fichier XML
-							ans.writeXML("alloySolution.xml");
+							this.writeXML(ans, filenameXML);
+
 							// Et on lance le visualisateur de solution
 							if (viz == null) {
 								viz = new VizGUI(false, "alloySolution.xml", null);
@@ -167,8 +170,43 @@ public class AlloyExecutor implements IAlloyExecutor {
 			// et enfin on ajoute le résultat de l'activityResult
 			activityResults.add(activityResult);
 		}
-		
+
 		// On peut enfin retourner l'objet IFileResult
 		return Factory.getInstance().newFileResult(UMLFile.getName(), activityResults);
+	}
+
+	/**
+	 * Ecrit le résultat de la solution trouvée par Alloy dans le chemin spécifier en paramètre.
+	 * @param ans la {@link A4Solution} alloy.
+	 * @param fileName un string représentant le chemin du fichier XML.
+	 * @throws Err 
+	 * @throws IOException 
+	 */
+	private void writeXML(A4Solution ans, String fileName) throws Err, IOException {
+
+		// Le "writeXML" de Alloy ne marche pas avec un path absolut.
+		// 1. On l'écrit par défaut
+		ans.writeXML("alloySolution.xml");
+		
+		// 2. On le copie dans le bon répertoire
+		File oldFile = new File("alloySolution.xml");
+		File newFile = new File(fileName);
+		if (!newFile.exists()) {
+			newFile.createNewFile();
+		}
+
+		FileOutputStream out = new FileOutputStream(newFile);
+		FileInputStream in = new FileInputStream(oldFile);
+		
+		int b;
+		while ((b = in.read()) != -1) {
+			out.write(b);
+		}
+		
+		// 3. On supprime l'ancien fichier
+		oldFile.delete();
+
+		out.close();
+		in.close();
 	}
 }
