@@ -40,9 +40,9 @@ public class JobExecutor extends Job {
 		IAlloyExecutor alloyExecutor = Factory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property);
 		
 		try {
-			@SuppressWarnings("unused")
+			
 			IFileResult iFileResult = alloyExecutor.executeFiles();
-
+			showToDetails(iFileResult);
 			// TODO michou traitement avec le IFileResult
 			result.append("Fin d'exécution des fichiers Alloy.");
 			log.info(result.toString());
@@ -57,6 +57,10 @@ public class JobExecutor extends Job {
 
 	private void showToView(String msg){
 		Display.getDefault().asyncExec(new RunnableUpdateExecutor(swtView, msg));
+	}
+	
+	private void showToDetails(IFileResult iFileResult){
+		Display.getDefault().asyncExec(new RunnableUpdateDetails(swtView, iFileResult));
 	}
 
 }
