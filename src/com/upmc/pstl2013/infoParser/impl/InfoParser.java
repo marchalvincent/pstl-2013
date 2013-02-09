@@ -28,9 +28,4 @@ public class InfoParser implements IInfoParser {
 	public void addFile(IFile file) {
 		files.add(file);
 	}
-
-	@Override
-	public void reset() {
-		// files.clear();
-	}
 }

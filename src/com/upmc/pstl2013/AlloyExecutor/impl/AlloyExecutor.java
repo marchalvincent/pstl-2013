@@ -1,14 +1,19 @@
 package com.upmc.pstl2013.alloyExecutor.impl;
 
+import java.io.File;
 import java.io.IOException;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
-
+import org.eclipse.core.resources.IFile;
+import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
+import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
-
+import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.properties.IProperties;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4.ErrorWarning;
@@ -27,34 +32,49 @@ import edu.mit.csail.sdg.alloy4viz.VizGUI;
 public class AlloyExecutor implements IAlloyExecutor {
 
 	private IAlloyGenerator generator;
-	private String userDir;
+	private IFile UMLFile;
+	private String dirDestination;
+	//TODO faire le système d'itération
+	@SuppressWarnings("unused")
+	private IProperties property;
 	private static Logger log = Logger.getLogger(AlloyExecutor.class);
 
 	/**
 	 * Constructeur
 	 */
-	public AlloyExecutor(IAlloyGenerator generator, String userDir) {
+	public AlloyExecutor(IFile UMLFile, String dirDestination, IProperties property) {
 
 		super();
-		this.generator = generator;
-		this.userDir = userDir;
+		this.generator = Factory.getInstance().newAlloyGenerator(UMLFile, dirDestination, property);
+		this.UMLFile = UMLFile;
+		this.dirDestination = dirDestination;
+		this.property = property;
 	}
 
 	@Override
-	public String executeFiles() throws Err, JetException {
+	public IFileResult executeFiles() throws Err, JetException {
 
-		// Résultat
-		StringBuilder resultat = new StringBuilder();
-		// on lance la génération des fichiers Alloy
-		generator.generateFile();
-		// The visualizer (We will initialize it to nonnull when we visualize an Alloy solution)
+		// Déclaration des variables
 		VizGUI viz = null;
-		String filename;
+		String filenameAlloy, filenameXML;
+		File generatedFile;
+		IActivityResult activityResult;
+		List<IActivityResult> activityResults = new ArrayList<IActivityResult>();
+
+		// 1. On lance la génération des fichiers Alloy
+		List<IAlloyGenerated> filesGenerated = generator.generateFile();
+
 		// Alloy4 sends diagnostic messages and progress reports to the A4Reporter.
 		// By default, the A4Reporter ignores all these events (but you can extend the A4Reporter to
 		// display the event for the user)
 		A4Reporter rep = new A4Reporter() {
 
+			// TODO redéfinir la méthode solve???
+			@Override
+			public void solve(int primaryVars, int totalVars, int clauses) {
+				System.out.println("appel a solve : primaryVars : " + primaryVars + ", totalVars : " + totalVars + ", clauses : " + clauses);
+			}
+			
 			// For example, here we choose to display each "warning" by printing it to System.out
 			@Override
 			public void warning(ErrorWarning msg) {
@@ -62,93 +82,93 @@ public class AlloyExecutor implements IAlloyExecutor {
 				System.out.flush();
 			}
 		};
-		
-		for (IAlloyGenerated generated : generator.getGeneratedFiles()) {
 
+		for (IAlloyGenerated generated : filesGenerated) {
+			generatedFile = generated.getFile();
+			// on créé un résultat pour cette activité
+			activityResult = Factory.getInstance().newActivityResult(generatedFile.getAbsolutePath());
+			
 			try {
-				filename = generated.getFile().getCanonicalPath();
-				// Vérifie que le fichier soit de type ALLOY
-				if (filename.substring(filename.length() - 3, filename.length()).equals("als")) {
-					// Parse+typecheck the model
-					resultat.append("\n\n=========== Parsing+Typechecking " + filename + " =============\n");
-					Module world = CompUtil.parseEverything_fromFile(rep, null, filename);
+				filenameAlloy = generatedFile.getCanonicalPath();
+				// On vérifie que le fichier soit de type ALLOY
+				if (filenameAlloy.substring(filenameAlloy.length() - 3, filenameAlloy.length()).equals("als")) {
+					
+					// On parse le fichier pour le transformer en objet Alloy.
+					activityResult.appendLog("\n\n=========== Parsing+Typechecking " + filenameAlloy + " =============\n");
+					Module world = CompUtil.parseEverything_fromFile(rep, null, filenameAlloy);
 					// Choose some default options for how you want to execute the commands
 					A4Options options = new A4Options();
 					// The required JNI library cannot be found: java.lang.UnsatisfiedLinkError: no minisatx5 in java.library.path
 					options.solver = A4Options.SatSolver.SAT4J; // TODO: minisatx5 JNI
-					//options.solverDirectory = "D:\\INFORMATIQUE\\JAVA\\workspaces\\workspacePSTL\\pstl-2013\\jars\\minisatjni1.jar";
-					
-					
+
 					for (Command command : world.getAllCommands()) {
-						// Execute the command
-						resultat.append("=========== Executing " + command + " ============\n");
+						// On exécute la génération de la solution Alloy.
+						activityResult.appendLog("=========== Executing " + command + " ============\n");
 						long startTime = System.nanoTime();
 						A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
 						long endTime = System.nanoTime();
-						
-						// Affichage des info de l'execution
-						resultat.append("Solver : " + options.solver.toString() + "   ");
-						resultat.append("MaxSeq : " + ans.getMaxSeq() + "   ");
-						resultat.append("SkolemsDepth : " + ans.getAllSkolems() + "   ");
-						resultat.append("BitWidth : " + ans.getBitwidth() + "   ");
-						resultat.append("is Incremental : " + ans.isIncremental() + "   ");
-						resultat.append("Is Satisfiable : " + ans.satisfiable() + "\n");
 
-						resultat.append("temps : " + (endTime - startTime) / 1000000 + " ms \n");
-						
+						// Affichage des info de l'execution
+						activityResult.appendLog("Solver : " + options.solver.toString() + "   ");
+						activityResult.appendLog("MaxSeq : " + ans.getMaxSeq() + "   ");
+						activityResult.appendLog("SkolemsDepth : " + ans.getAllSkolems() + "   ");
+						activityResult.appendLog("BitWidth : " + ans.getBitwidth() + "   ");
+						activityResult.appendLog("is Incremental : " + ans.isIncremental() + "   ");
+						activityResult.appendLog("Is Satisfiable : " + ans.satisfiable() + "\n");
+
+						activityResult.appendLog("temps : " + (endTime - startTime) / 1000000 + " ms \n");
+
 						// on ajoute le résultat du parcours de la stratégie
 						// si on est dans un run
 						if(!generated.isCheck()) {
 							if (ans.satisfiable()) {
-								resultat.append("VALID, Solution found = ");
-								resultat.append(generated.getStrategy().parcours(ans));
+								activityResult.appendLog("VALID, Solution found = ");
+								activityResult.appendLog(generated.getStrategy().parcours(ans));
 							}
 							else {
-								resultat.append("INVALID no solution found.");
+								activityResult.appendLog("INVALID no solution found.");
 							}
 						}
 						// si on est dans un check
 						else if (generated.isCheck()) {
 							if (ans.satisfiable()) {
-								resultat.append("INVALID, counter-example = ");
-								resultat.append(generated.getStrategy().parcours(ans));
+								activityResult.appendLog("INVALID, counter-example = ");
+								activityResult.appendLog(generated.getStrategy().parcours(ans));
 							}
 							else {
-								resultat.append("VALID, no counter-example found, assertion may be valid.");
+								activityResult.appendLog("VALID, no counter-example found, assertion may be valid.");
 							}
 						}
-						resultat.append("\n");
-						
-						// If satisfiable...
+						activityResult.appendLog("\n");
+
+						// Si la solution est satisfiable
 						if (ans.satisfiable()) {
-							// You can query "ans" to find out the values of each set or type.
-							// This can be useful for debugging.
-							// You can also write the outcome to an XML file
-							ans.writeXML("alloy_example_output.xml");
-							// You can then visualize the XML file by calling this:
+							filenameXML = dirDestination + filenameAlloy + ".xml";
+							activityResult.setPathXMLResult(filenameXML);
+							
+							// On écrit le résultat dans un fichier XML
+							ans.writeXML("alloySolution.xml");
+							// Et on lance le visualisateur de solution
 							if (viz == null) {
-								viz = new VizGUI(false, "alloy_example_output.xml", null);
-								if (!viz.loadThemeFile(userDir + "theme\\theme.thm"))
-									resultat.append("Le fichier theme n'a pas été pris en compte\n." +
-											"Etes vous sûre d'avoir le fichier theme.thm dans le repertoir : " + userDir + "theme ?");
+								viz = new VizGUI(false, "alloySolution.xml", null);
+								if (!viz.loadThemeFile(dirDestination + "theme\\theme.thm"))
+									activityResult.appendLog("Le fichier theme n'a pas été pris en compte\n." +
+											"Etes vous sûre d'avoir le fichier theme.thm dans le répertoire : " + dirDestination + "theme ?");
 							} else {
-								viz.loadXML("alloy_example_output.xml", true);
+								viz.loadXML("alloySolution.xml", true);
 							}
 						}
-						//log.info(resultat.toString());
 					}
 				}
 			} catch (IOException e) {
-				resultat.append("Impossible de récupérer le chemin du fichier : " + e.toString() + "\n");
+				activityResult.appendLog("Impossible de récupérer le chemin du fichier : " + e.toString() + "\n");
 				log.error("Impossible de récupérer le chemin du fichier : " + e.toString(), e);
 			}
+			// et enfin on ajoute le résultat de l'activityResult
+			activityResults.add(activityResult);
 		}
-		return resultat.toString();
-	}
-
-	@Override
-	public void reset() {
-
-		generator.reset();
+		
+		// On peut enfin retourner l'objet IFileResult
+		return Factory.getInstance().newFileResult(UMLFile.getName(), activityResults);
 	}
 }

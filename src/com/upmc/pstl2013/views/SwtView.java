@@ -1,17 +1,16 @@
 package com.upmc.pstl2013.views;
 
 import java.io.File;
-import java.io.FileNotFoundException;
-
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
-import org.eclipse.jface.dialogs.MessageDialog;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
@@ -20,14 +19,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
-
-import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
-import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
-import com.upmc.pstl2013.factory.Factory;
-import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
-import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
-import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.events.EventChooseDir;
 import com.upmc.pstl2013.views.events.EventChooseFile;
@@ -43,15 +35,7 @@ public class SwtView extends Composite {
 	private Text txtLogs;
 	private Button btnChooserFile;
 	private Button btnExcuterAlloy;
-
-
 	private Button btnReadLogs;
-	private IInfoParser infoParser;
-	private IInfoGenerator infoGenerator;
-	private IAlloyExecutor alloyExecutor;
-	private String separator = File.separator;
-	private final String userDir;
-	private static Logger log = Logger.getLogger(SwtView.class);
 	private TabFolder tabFolder;
 	private TabItem itemAlloyUse, itemAlloyProperty;
 	private Composite cpItemAlloyUse, cpdItemAlloyProp;
@@ -63,6 +47,11 @@ public class SwtView extends Composite {
 	private Text txtTimeOut;
 	private Tree treeExecResult;
 
+	private String separator = File.separator;
+	private String userDir;
+	private List<IFile> UMLFilesSelected;
+	private static Logger log = Logger.getLogger(SwtView.class);
+
 	/**
 	 * Create the composite.
 	 * 
@@ -73,6 +62,7 @@ public class SwtView extends Composite {
 
 		super(parent, style);
 
+		UMLFilesSelected = new ArrayList<IFile>();
 		if (ConfPropertiesManager.getInstance().getPathFolder().equals("")) {
 			userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 			try {
@@ -84,14 +74,6 @@ public class SwtView extends Composite {
 		else {
 			userDir = ConfPropertiesManager.getInstance().getPathFolder();
 		}
-
-		infoParser = Factory.getInstance().newInfoParser();
-		infoGenerator = Factory.getInstance().newInfoGenerator();
-		IUMLParser parser = Factory.getInstance().newParser(infoParser);
-		IAlloyGenerator alloyGenerator = Factory.getInstance().newAlloyGenerator(infoGenerator, parser);
-		alloyExecutor = Factory.getInstance().newAlloyExecutor(alloyGenerator,userDir);
-
-		infoGenerator.setDestinationDirectory(userDir);
 
 		// TabFolder
 		tabFolder = new TabFolder(this, SWT.NONE);
@@ -162,7 +144,6 @@ public class SwtView extends Composite {
 		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooserFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnChooserFile.setText("Choose File");
-		btnChooserFile.addMouseListener(new EventChooseFile(this));
 
 		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4));
@@ -171,9 +152,6 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnExcuterAlloy.setText("Execute Alloy");
 
-		//Ajout des events
-		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
-
 		txtTimeOut = new Text(cpItemAlloyUse, SWT.BORDER);
 		txtTimeOut.setText("Time Out");
 		txtTimeOut.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
@@ -181,45 +159,27 @@ public class SwtView extends Composite {
 		btnReadLogs = new Button(cpItemAlloyUse, SWT.NONE);
 		btnReadLogs.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnReadLogs.setText("Read logs");
-		btnReadLogs.addMouseListener(new EventReadLogs(this));
 
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
 		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnPersonalPropertie.setText("Exec Perso");
-		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
 
 		txtPersonalPropertie = new Text(cpItemAlloyUse, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
-		btnChooseDir.addMouseListener(new EventChooseDir(this));
-
-		// on finit par une petite vérification...
-		this.checkDirectory(alloyGenerator);
 
 		//Suppression des anciens logs
 		deleteOldLogs();
 		
 		updaTreeExecResult();
-	}
-
-	/**
-	 * Vérifie que le dossiers de destinations des générations est correcte.
-	 * 
-	 * @param alloyGenerator {@link IAlloyGenerator}.
-	 */
-	private void checkDirectory(IAlloyGenerator alloyGenerator) {
-
-		// on vérifie que le dossier de génération alloy est correct
-		try {
-			alloyGenerator.fichiersPresents();
-			txtLogs.append("Prêt pour la vérification de process.\n");
-		} catch (FileNotFoundException e2) {
-			MessageDialog dialog = new MessageDialog(new Shell(), "Des fichiers sont manquants", null,
-					e2.toString(), MessageDialog.WARNING, new String[] { "Ok" }, 1);
-			dialog.open();
-			log.error(e2.getMessage());
-		}
+		
+		// ajout des event listener
+		btnChooserFile.addMouseListener(new EventChooseFile(this));
+		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
+		btnReadLogs.addMouseListener(new EventReadLogs(this));
+		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
+		btnChooseDir.addMouseListener(new EventChooseDir(this));
 	}
 
 	/**
@@ -279,18 +239,6 @@ public class SwtView extends Composite {
 		return txtLogs;
 	}
 
-	public IInfoParser getInfoParser() {
-		return infoParser;
-	}
-
-	public IInfoGenerator getInfoGenerator() {
-		return infoGenerator;
-	}
-
-	public IAlloyExecutor getAlloyExecutor() {
-		return alloyExecutor;
-	}
-
 	public Table getTabProperties() {
 		return tabProperties;
 	}
@@ -313,5 +261,17 @@ public class SwtView extends Composite {
 
 	public TableEditor getEditorBool() {
 		return editorBool;
+	}
+
+	public List<IFile> getUMLFilesSelected() {
+		return UMLFilesSelected;
+	}
+	
+	public String getUserDir() {
+		return userDir;
+	}
+
+	public void setUserDir(String userDir) {
+		this.userDir = userDir;
 	}
 }

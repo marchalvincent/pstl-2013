@@ -14,15 +14,14 @@ import com.upmc.pstl2013.views.SwtView;
 
 public class EventCurrentExecutor extends AbstractEventExecutor {
 
-	private Table tabProperties;
 	private Logger log = Logger.getLogger(EventCurrentExecutor.class);
+	private Table tabProperties;
 
 	/**
 	 * Constructor
-	 * @param {{@link SwtView}
+	 * @param {@link SwtView}
 	 */
 	public EventCurrentExecutor(SwtView swtView) {
-
 		super(swtView);
 		this.tabProperties = swtView.getTabProperties();
 	}
