@@ -3,6 +3,7 @@ package com.upmc.pstl2013.views;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
@@ -19,6 +20,9 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+
+import com.upmc.pstl2013.alloyExecutor.IActivityResult;
+import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.events.EventChooseDir;
@@ -37,20 +41,22 @@ public class SwtView extends Composite {
 	private Button btnExcuterAlloy;
 	private Button btnReadLogs;
 	private TabFolder tabFolder;
-	private TabItem itemAlloyUse, itemAlloyProperty;
-	private Composite cpItemAlloyUse, cpdItemAlloyProp;
+	private TabItem itemAlloyUse, itemAlloyProperty, itemDetails;
+	private Composite cpItemAlloyUse, cpItemAlloyProp, cpItemDetails;
 	private Table tabProperties;
 	private Table tabValuePropertiesString,tabValuePropertiesBool;
 	private final TableEditor editorString, editorBool;
 	private Text txtPersonalPropertie;
 	private Button btnPersonalPropertie;
 	private Text txtTimeOut;
-	private Tree treeExecResult;
 
 	private String separator = File.separator;
 	private String userDir;
 	private List<IFile> UMLFilesSelected;
 	private static Logger log = Logger.getLogger(SwtView.class);
+	private Tree treeFilesExecuted;
+	private Text txtDetailsLogs;
+	private Button btnAlloyVisualisation;
 
 	/**
 	 * Create the composite.
@@ -83,25 +89,32 @@ public class SwtView extends Composite {
 		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
 		itemAlloyUse.setText("Utilisation");
 		cpItemAlloyUse = new Composite(tabFolder, SWT.BORDER);
-		cpItemAlloyUse.setLayout(new GridLayout(3, false));
+		cpItemAlloyUse.setLayout(new GridLayout(2, false));
 		itemAlloyUse.setControl(cpItemAlloyUse);
 		//Items et composite pour la partie propriete du tabeFolder
 		itemAlloyProperty = new TabItem(tabFolder, SWT.NONE);
 		itemAlloyProperty.setText("Properties");
-		cpdItemAlloyProp = new Composite(tabFolder, SWT.BORDER);
-		cpdItemAlloyProp.setLayout(new GridLayout(3, false));
-		itemAlloyProperty.setControl(cpdItemAlloyProp);
+		cpItemAlloyProp = new Composite(tabFolder, SWT.BORDER);
+		cpItemAlloyProp.setLayout(new GridLayout(3, false));
+		itemAlloyProperty.setControl(cpItemAlloyProp);
+		//
+		itemDetails = new TabItem(tabFolder, SWT.NONE);
+		itemDetails.setText("Details");
+		cpItemDetails = new Composite(tabFolder, SWT.BORDER);
+		cpItemDetails.setLayout(new GridLayout(2, false));
+		itemDetails.setControl(cpItemDetails);
+
 
 		/*
 		 * Debut contenu de la parite property 
 		 */
 		//Table des proprietes 
-		tabProperties = new Table(cpdItemAlloyProp, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
+		tabProperties = new Table(cpItemAlloyProp, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
 		tabProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabProperties.setLinesVisible(true);
 		tabProperties.setHeaderVisible(true);
 		//Table des attributs de la partie proprieteString
-		tabValuePropertiesString = new Table(cpdItemAlloyProp, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
+		tabValuePropertiesString = new Table(cpItemAlloyProp, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tabValuePropertiesString.setTouchEnabled(true);
 		tabValuePropertiesString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabValuePropertiesString.setHeaderVisible(true);
@@ -115,7 +128,7 @@ public class SwtView extends Composite {
 		}
 
 		//Table des attributs de la partie proprieteBoolean
-		tabValuePropertiesBool = new Table(cpdItemAlloyProp,  SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
+		tabValuePropertiesBool = new Table(cpItemAlloyProp,  SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
 		tabValuePropertiesBool.setTouchEnabled(true);
 		tabValuePropertiesBool.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabValuePropertiesBool.setHeaderVisible(true);
@@ -123,6 +136,7 @@ public class SwtView extends Composite {
 		editorBool = new TableEditor(tabValuePropertiesBool);
 		TableColumn column = new TableColumn(tabValuePropertiesBool, SWT.NONE);
 		column.setText("Key");
+
 
 		addProperties();
 		GridLayout gridLayout = new GridLayout(1, false);
@@ -137,9 +151,6 @@ public class SwtView extends Composite {
 		txtDirectory = new Text(cpItemAlloyUse, SWT.BORDER);
 		txtDirectory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtDirectory.setText(userDir);
-
-		treeExecResult = new Tree(cpItemAlloyUse, SWT.BORDER);
-		treeExecResult.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 5));
 
 		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooserFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -165,15 +176,32 @@ public class SwtView extends Composite {
 		btnPersonalPropertie.setText("Exec Perso");
 
 		txtPersonalPropertie = new Text(cpItemAlloyUse, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
-		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 2, 1);
+		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
 
+
+		/*
+		 *Debut de la partie Details
+		 */
+		treeFilesExecuted = new Tree(cpItemDetails, SWT.BORDER);
+		GridData gd_treeFilesExecuted = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
+		gd_treeFilesExecuted.widthHint = 128;
+		treeFilesExecuted.setLayoutData(gd_treeFilesExecuted);
+
+		txtDetailsLogs = new Text(cpItemDetails, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
+		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
+		
+		btnAlloyVisualisation = new Button(cpItemDetails, SWT.NONE);
+		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		btnAlloyVisualisation.setText("Visualiser");
+		//updaTreeExecResult();
+
+
 		//Suppression des anciens logs
 		deleteOldLogs();
-		
-		updaTreeExecResult();
-		
+
+
 		// ajout des event listener
 		btnChooserFile.addMouseListener(new EventChooseFile(this));
 		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
@@ -214,21 +242,29 @@ public class SwtView extends Composite {
 		logInfo.delete();
 		logDebug.delete();
 	}
-	
-	public void updaTreeExecResult()
+
+	public void updateTreeExecResult(IFileResult iFileResult)
 	{
+		TreeItem item0 = new TreeItem(treeFilesExecuted, 0);
+		item0.setText(iFileResult.getNom());
+		for (IActivityResult actResult : iFileResult.getListActivityResult()) {
+			TreeItem item1 = new TreeItem(item0, 0);
+			item1.setText(actResult.getNom());
+		}
+		
+		/*
 		for (int loopIndex1 = 0; loopIndex1 < 5; loopIndex1++) {
-		      TreeItem item0 = new TreeItem(treeExecResult, 0);
-		      item0.setText("Level 0 Item " + loopIndex1);
-		      for (int loopIndex2 = 0; loopIndex2 < 5; loopIndex2++) {
-		        TreeItem item1 = new TreeItem(item0, 0);
-		        item1.setText("Level 1 Item " + loopIndex2);
-		        for (int loopIndex3 = 0; loopIndex3 < 5; loopIndex3++) {
-		          TreeItem item2 = new TreeItem(item1, 0);
-		          item2.setText("Level 2 Item " + loopIndex3);
-		        }
-		      }
-		    }
+			TreeItem item0 = new TreeItem(treeFilesExecuted, 0);
+			item0.setText("Level 0 Item " + loopIndex1);
+			for (int loopIndex2 = 0; loopIndex2 < 5; loopIndex2++) {
+				TreeItem item1 = new TreeItem(item0, 0);
+				item1.setText("Level 1 Item " + loopIndex2);
+				for (int loopIndex3 = 0; loopIndex3 < 5; loopIndex3++) {
+					TreeItem item2 = new TreeItem(item1, 0);
+					item2.setText("Level 2 Item " + loopIndex3);
+				}
+			}
+		}*/
 	}
 
 	public Text getTxtDirectory() {
@@ -266,7 +302,7 @@ public class SwtView extends Composite {
 	public List<IFile> getUMLFilesSelected() {
 		return UMLFilesSelected;
 	}
-	
+
 	public String getUserDir() {
 		return userDir;
 	}
