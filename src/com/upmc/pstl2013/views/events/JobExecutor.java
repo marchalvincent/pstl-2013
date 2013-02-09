@@ -1,42 +1,49 @@
 package com.upmc.pstl2013.views.events;
 
-import java.util.List;
-
 import org.apache.log4j.Logger;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
-
+import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
+import com.upmc.pstl2013.alloyExecutor.IFileResult;
+import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
-import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.SwtView;
 
 public class JobExecutor extends Job {
 
-	private List<IProperties> properties;
-	private SwtView swtView;
 	private static Logger log = Logger.getLogger(JobExecutor.class);
+	private SwtView swtView;
+	private IFile UMLFile;
+	private IProperties property;
+	private String dirDestination;
+	
 
-	public JobExecutor(String name, List<IProperties> properties, SwtView swtView) {
+	public JobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property) {
 		super(name);
-		this.properties = properties;
 		this.swtView = swtView;
+		this.UMLFile = UMLFile;
+		this.property = property;
+		this.dirDestination = swtView.getUserDir();
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 
-		// tout d'abord on enregistre dans les préférences les propriétés
-		this.saveProperties();
-		
-		swtView.getInfoGenerator().setProperties(properties);
 		log.info("Génération et exécution des fichiers Alloy.");
 		StringBuilder result = new StringBuilder();
 
+		// 1. On créé l'objet exécutor
+		IAlloyExecutor alloyExecutor = Factory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property);
+		
 		try {
-			result.append(swtView.getAlloyExecutor().executeFiles());
+			@SuppressWarnings("unused")
+			IFileResult iFileResult = alloyExecutor.executeFiles();
+
+			// TODO michou traitement avec le IFileResult
 			result.append("Fin d'exécution des fichiers Alloy.");
 			log.info(result.toString());
 			showToView(result.toString());
@@ -44,7 +51,6 @@ public class JobExecutor extends Job {
 			log.error(e.getMessage());
 			showToView(e.getMessage());
 		}
-		swtView.getAlloyExecutor().reset();
 		
 		return Status.OK_STATUS;
 	}
@@ -53,19 +59,4 @@ public class JobExecutor extends Job {
 		Display.getDefault().asyncExec(new RunnableUpdateExecutor(swtView, msg));
 	}
 
-	/**
-	 * Met à jour les préférences des propriétés.
-	 */
-	private void saveProperties() {
-		StringBuilder sb = new StringBuilder();
-		for (IProperties prop : properties) {
-			sb.append(prop.getClass().getSimpleName());
-			sb.append("|");
-		}
-		try {
-			ConfPropertiesManager.getInstance().setProperties(sb.toString());
-		} catch (Exception e) {
-			showToView(e.getMessage());
-		}
-	}
 }
