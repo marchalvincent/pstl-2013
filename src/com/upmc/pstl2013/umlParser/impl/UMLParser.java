@@ -1,7 +1,5 @@
 package com.upmc.pstl2013.umlParser.impl;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.TreeIterator;
@@ -19,18 +17,23 @@ import com.upmc.pstl2013.umlParser.IUMLParser;
 public class UMLParser implements IUMLParser {
 
 	private IFile UMLFile;
+	private Activity activities;
 	private static Logger log = Logger.getLogger(UMLParser.class);
 
 	public UMLParser(IFile file) {
 		super();
 		this.UMLFile = file;
+		this.activities = null;
 	}
 
 	@Override
-	public List<Activity> getActivities() {
+	public Activity getActivities() {
+		if (activities != null) {
+			return activities;
+		}
+		
 		log.info("Debut du parsing du fichier : " + UMLFile.getName() + ".");
 
-		List<Activity> activities = new ArrayList<Activity>();
 		if (UMLFile != null) {
 
 			URI uri = URI.createFileURI(UMLFile.getRawLocationURI().getPath());
@@ -42,11 +45,11 @@ public class UMLParser implements IUMLParser {
 				EObject eo = tree.next();
 				if (eo instanceof Activity) {
 					log.debug("Une activité est trouvée.");
-					activities.add((Activity) eo);
+					activities = (Activity) eo;
+					break;
 				}
 			}
 		}
-		log.info("Bilan du parsing : " + activities.size() + " activité(s) trouvée(s).");
 		return activities;
 	}
 }

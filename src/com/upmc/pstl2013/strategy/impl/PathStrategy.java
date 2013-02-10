@@ -3,7 +3,7 @@ package com.upmc.pstl2013.strategy.impl;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import com.upmc.pstl2013.strategy.IStrategy;
+import com.upmc.pstl2013.strategy.IStrategyParcours;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -15,7 +15,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4TupleSet;
  * le chemin trouvé par la génération Alloy.
  * 
  */
-public class PathStrategy implements IStrategy {
+public class PathStrategy implements IStrategyParcours {
 
 	private MyA4Solution mySolution;
 
@@ -133,7 +133,7 @@ public class PathStrategy implements IStrategy {
 		Map<Integer, List<String>> heldTokens = mySolution.getHeldTokens();
 		int numStateFinished = mySolution.getNumStateFinished();
 		
-		StringBuilder sb = new StringBuilder();
+		StringBuilder sb = new StringBuilder("Path Strategie : ");
 		// pour chaque étape de la solution
 		for (Integer key : heldTokens.keySet()) {
 			// si ce numéro de state est encore dans l'état "running"

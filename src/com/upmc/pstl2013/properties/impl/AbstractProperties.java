@@ -7,7 +7,7 @@ import java.util.Map;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
-import com.upmc.pstl2013.strategy.IStrategy;
+import com.upmc.pstl2013.strategy.IStrategyParcours;
 
 /**
  * Représente la classe mère de toutes les propriétés de vérification Alloy.
@@ -17,8 +17,8 @@ public abstract class AbstractProperties implements IProperties {
 
 	private List<IAttribute> attributes;
 	private Boolean isCheck;
-	private IStrategy strategy;
-	
+	private IStrategyParcours strategy;
+
 	// TODO enlever si besoin, avoir plus tard
 	public static List<String> getProperties() {
 		List<String> liste = new ArrayList<String>();
@@ -29,28 +29,31 @@ public abstract class AbstractProperties implements IProperties {
 		return liste;
 	}
 
-	public AbstractProperties(Boolean isCheck, IStrategy strategy) {
+	public AbstractProperties(Boolean isCheck, IStrategyParcours strategy) {
 		super();
 		attributes = new ArrayList<IAttribute>();
 		this.isCheck = isCheck;
 		this.strategy = strategy;
 	}
-	
+
 	@Override
 	public void putPrivate(String key, String value) {
+		this.remove(key);
 		attributes.add(Factory.getInstance().newAttribute(key, value, Boolean.TRUE));
 	}
-	
+
 	@Override
 	public void put(String key, String value) {
+		this.remove(key);
 		attributes.add(Factory.getInstance().newAttribute(key, value, Boolean.FALSE));
 	}
-	
+
 	@Override
 	public void put(String key, Boolean value) {
+		this.remove(key);
 		attributes.add(Factory.getInstance().newAttribute(key, value, Boolean.FALSE));
 	}
-	
+
 	@Override
 	public String getString(String key) {
 		for (IAttribute iAttribute : attributes) {
@@ -60,7 +63,7 @@ public abstract class AbstractProperties implements IProperties {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Boolean getBoolean(String key) {
 		for (IAttribute iAttribute : attributes) {
@@ -70,7 +73,7 @@ public abstract class AbstractProperties implements IProperties {
 		}
 		return null;
 	}
-	
+
 	@Override
 	public Map<String, String> getStringAttributes() {
 		Map<String, String> retour = new HashMap<String, String>();
@@ -81,7 +84,7 @@ public abstract class AbstractProperties implements IProperties {
 		}
 		return retour;
 	}
-	
+
 	@Override
 	public Map<String, Boolean> getBooleanAttributes() {
 		Map<String, Boolean> retour = new HashMap<String, Boolean>();
@@ -92,14 +95,27 @@ public abstract class AbstractProperties implements IProperties {
 		}
 		return retour;
 	}
-	
+
 	@Override
 	public Boolean isCheck() {
 		return isCheck;
 	}
-	
+
 	@Override
-	public IStrategy getStrategy() {
+	public IStrategyParcours getStrategy() {
 		return strategy;
+	}
+
+	/**
+	 * Supprime la clé si elle existe. Ne fait rien sinon.
+	 * @param key
+	 */
+	private void remove(String key) {
+		for (IAttribute iAttribute : attributes) {
+			if (iAttribute.getKey().equals(key)) {
+				attributes.remove(iAttribute);
+				break;
+			}
+		}
 	}
 }

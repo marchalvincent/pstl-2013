@@ -9,7 +9,7 @@ public class Orga extends AbstractProperties {
 
 	public Orga() {
 		super(Boolean.TRUE, Factory.getInstance().newPathStrategy());
-		super.put("inc", "20");
+		super.put("nbState", "20");
 		super.put("attribut2orga", "tata");
 		super.put("attribut3orga", "tutu");
 		super.put("attribut4orga", "toto");

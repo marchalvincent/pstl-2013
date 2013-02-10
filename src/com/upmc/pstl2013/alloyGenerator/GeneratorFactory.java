@@ -12,7 +12,7 @@ import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
 import com.upmc.pstl2013.alloyGenerator.jet.impl.JetHelper;
 import com.upmc.pstl2013.alloyGenerator.jet.impl.JetTemplate;
 import com.upmc.pstl2013.properties.IProperties;
-import com.upmc.pstl2013.strategy.IStrategy;
+import com.upmc.pstl2013.strategy.IStrategyParcours;
 
 /**
  * Représente la factory des objets utilisés dans le générateur alloy.
@@ -40,7 +40,7 @@ public class GeneratorFactory {
 		return new JetTemplate();
 	}
 	
-	public IAlloyGenerated newAlloyGenerated(File fi, Boolean isC, IStrategy strat) {
+	public IAlloyGenerated newAlloyGenerated(File fi, Boolean isC, IStrategyParcours strat) {
 		return new AlloyGenerated(fi, isC, strat);
 	}
 }

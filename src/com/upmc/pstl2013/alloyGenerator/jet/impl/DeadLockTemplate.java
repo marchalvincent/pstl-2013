@@ -48,7 +48,7 @@ public class DeadLockTemplate implements IJetTemplate {
     stringBuffer.append(propertie.getString("finalNode"));
     stringBuffer.append(TEXT_3);
     
-	final String inc = propertie.getString("inc");
+	final String inc = propertie.getString("nbState");
 	final String nbObjects = propertie.getString("nbObjects");
 	final String nbNodes = propertie.getString("nbNodes");
 	final String nbEdges = propertie.getString("nbEdges");

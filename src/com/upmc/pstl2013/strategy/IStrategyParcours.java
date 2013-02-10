@@ -6,7 +6,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
  * Interface des différents parcours de solutions.
  * 
  */
-public interface IStrategy {
+public interface IStrategyParcours {
 
 	/**
 	 * Parcours une solution Alloy.
