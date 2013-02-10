@@ -2,7 +2,6 @@ package com.upmc.pstl2013.factory;
 
 import java.io.File;
 import java.util.List;
-
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
@@ -10,17 +9,16 @@ import org.eclipse.uml2.uml.ActivityNode;
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
+import com.upmc.pstl2013.alloyExecutor.impl.MyA4Reporter;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetHelper;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
-import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
-import com.upmc.pstl2013.infoParser.IInfoParser;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.Attribute;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
-import com.upmc.pstl2013.strategy.IStrategy;
+import com.upmc.pstl2013.strategy.IStrategyParcours;
 import com.upmc.pstl2013.strategy.impl.PathStrategy;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.views.SwtView;
@@ -67,19 +65,9 @@ public interface IFactory {
 	 * Créé un {@link IAlloyGenerated} qui sera utilisé par le {@link IAlloyExecutor}.
 	 * @param file le {@link File} généré.
 	 * @param isCheck un booléen qui dit si le fichier est considéré comme un "check" alloy ou un "run".
-	 * @param strategy la {@link IStrategy} de parcours de la solution Alloy.
+	 * @param strategy la {@link IStrategyParcours} de parcours de la solution Alloy.
 	 */
-	IAlloyGenerated newAlloyGenerated(File file, Boolean isCheck, IStrategy strategy);
-
-	/**
-	 * Créé un {@link IInfoParser}.
-	 */
-	IInfoParser newInfoParser();
-
-	/**
-	 * Créé un {@link IInfoGenerator}.
-	 */
-	IInfoGenerator newInfoGenerator();
+	IAlloyGenerated newAlloyGenerated(File file, Boolean isCheck, IStrategyParcours strategy);
 
 	
 	//-------------------------EXECUTOR-------------------------
@@ -105,6 +93,11 @@ public interface IFactory {
 	 */
 	IFileResult newFileResult(String nom, List<IActivityResult> activityResults);
 	
+	/**
+	 * Créé un reporter Alloy, pour récupérer des infos sur la génération de la solution Alloy.
+	 */
+	MyA4Reporter newReporter();
+	
 	
 	//-------------------------PROPERTIES-------------------------
 	/**
@@ -128,7 +121,7 @@ public interface IFactory {
 	/**
 	 * Créé un {@link PathStrategy}.
 	 */
-	IStrategy newPathStrategy();
+	IStrategyParcours newPathStrategy();
 	
 	/**
 	 * Créé un {@link JobExecutor}
