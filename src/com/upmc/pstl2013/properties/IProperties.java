@@ -2,7 +2,7 @@ package com.upmc.pstl2013.properties;
 
 import java.util.Map;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
-import com.upmc.pstl2013.strategy.IStrategy;
+import com.upmc.pstl2013.strategy.IStrategyParcours;
 
 /**
  * Représente une méthode de vérification d'un fichier Alloy.
@@ -42,10 +42,10 @@ public interface IProperties {
 	void put(String key, Boolean value);
 	
 	/**
-	 * Renvoie la valeur string associée à la clé passée en paramètre.
+	 * Renvoie la valeur string associée à la clé passée en paramètre. Null si l'attribut n'existe pas.
 	 * 
 	 * @param key la clé.
-	 * @return String la valeur associée.
+	 * @return String la valeur associée ou null.
 	 */
 	String getString(String key);
 	
@@ -78,8 +78,8 @@ public interface IProperties {
 	Boolean isCheck();
 	
 	/**
-	 * Renvoie la {@link IStrategy} de parcours Alloy associée à cette propriété.
+	 * Renvoie la {@link IStrategyParcours} de parcours Alloy associée à cette propriété.
 	 * @return
 	 */
-	IStrategy getStrategy();
+	IStrategyParcours getStrategy();
 }

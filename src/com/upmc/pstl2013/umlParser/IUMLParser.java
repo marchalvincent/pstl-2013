@@ -1,6 +1,5 @@
 package com.upmc.pstl2013.umlParser;
 
-import java.util.List;
 import org.eclipse.uml2.uml.Activity;
 
 /**
@@ -9,9 +8,9 @@ import org.eclipse.uml2.uml.Activity;
 public interface IUMLParser {
 
 	/**
-	 * Renvoie la liste des {@link Activity} que peut récupérer le parseur.
+	 * Renvoie l'{@link Activity} que peut récupérer le parseur.
 	 * 
-	 * @return la {@link List} d'{@link Activity}.
+	 * @return une {@link Activity}.
 	 */
-	List<Activity> getActivities();
+	Activity getActivities();
 }

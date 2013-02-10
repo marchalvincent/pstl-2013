@@ -45,7 +45,7 @@ public class OrgaTemplate implements IJetTemplate {
     stringBuffer.append(predicatName);
     stringBuffer.append(TEXT_2);
     
-	final String inc = propertie.getString("inc");
+	final String inc = propertie.getString("nbState");
 	final String nbObjects = propertie.getString("nbObjects");
 	final String nbNodes = propertie.getString("nbNodes");
 	final String nbEdges = propertie.getString("nbEdges");

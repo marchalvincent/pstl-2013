@@ -45,7 +45,7 @@ public class EnoughStateTemplate implements IJetTemplate {
     stringBuffer.append(predicatName);
     stringBuffer.append(TEXT_2);
     
-	final String inc = propertie.getString("inc");
+	final String nbState = propertie.getString("nbState");
 	final String nbObjects = propertie.getString("nbObjects");
 	final String nbNodes = propertie.getString("nbNodes");
 	final String nbEdges = propertie.getString("nbEdges");
@@ -53,7 +53,7 @@ public class EnoughStateTemplate implements IJetTemplate {
     stringBuffer.append(TEXT_3);
     stringBuffer.append(predicatName);
     stringBuffer.append(TEXT_4);
-    stringBuffer.append(inc);
+    stringBuffer.append(nbState);
     stringBuffer.append(TEXT_5);
     stringBuffer.append(nbObjects);
     stringBuffer.append(TEXT_6);

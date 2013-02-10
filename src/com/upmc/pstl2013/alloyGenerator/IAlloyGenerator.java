@@ -1,19 +1,25 @@
 package com.upmc.pstl2013.alloyGenerator;
 
-import java.util.List;
+import java.util.Iterator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 
 /**
  * L'interface d'un générateur de fichier Alloy.
  * 
  */
-public interface IAlloyGenerator {
+public interface IAlloyGenerator extends Iterator<IAlloyGenerated> {
 
 	/**
-	 * Génère et renvoie le(s) fichier(s) Alloy générés (à l'aide d'une classe conteneur
+	 * Génère et renvoie le fichier Alloy générés (à l'aide d'une classe conteneur
 	 * pour passer des informations à l'éxecuteur).
 	 * 
-	 * @return {@link List} de {@link IAlloyGenerated}.
+	 * @return {@link IAlloyGenerated}.
 	 */
-	List<IAlloyGenerated> generateFile() throws JetException;
+	IAlloyGenerated generateFile() throws JetException;
+	
+	/**
+	 * Informe le générateur que le fichier généré est satisfaisable ou non.
+	 * @param bool
+	 */
+	void setSatisfiable(boolean bool);
 }

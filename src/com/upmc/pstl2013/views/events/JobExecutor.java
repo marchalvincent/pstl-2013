@@ -44,7 +44,7 @@ public class JobExecutor extends Job {
 			IFileResult iFileResult = alloyExecutor.executeFiles();
 			showToDetails(iFileResult);
 			// TODO michou traitement avec le IFileResult
-			result.append("Fin d'exécution des fichiers Alloy.");
+			result.append("Fin d'exécution des fichiers Alloy.\n");
 			log.info(result.toString());
 			showToView(result.toString());
 		} catch (Exception e) {
