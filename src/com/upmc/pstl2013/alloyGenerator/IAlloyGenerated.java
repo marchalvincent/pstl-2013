@@ -1,7 +1,7 @@
 package com.upmc.pstl2013.alloyGenerator;
 
 import java.io.File;
-import com.upmc.pstl2013.strategy.IStrategyParcours;
+import com.upmc.pstl2013.properties.IProperties;
 
 
 public interface IAlloyGenerated {
@@ -10,5 +10,5 @@ public interface IAlloyGenerated {
 	
 	Boolean isCheck();
 	
-	IStrategyParcours getStrategy();
+	public IProperties getProperty();
 }

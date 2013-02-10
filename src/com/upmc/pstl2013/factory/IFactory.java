@@ -18,8 +18,12 @@ import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.Attribute;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
-import com.upmc.pstl2013.strategy.IStrategyParcours;
-import com.upmc.pstl2013.strategy.impl.PathStrategy;
+import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
+import com.upmc.pstl2013.strategyExecution.impl.IncrementalExecutionStrategy;
+import com.upmc.pstl2013.strategyExecution.impl.SimpleExecutionStrategy;
+import com.upmc.pstl2013.strategyParcours.IStrategyParcours;
+import com.upmc.pstl2013.strategyParcours.impl.PathStrategy;
+import com.upmc.pstl2013.strategyParcours.impl.VoidStrategy;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.views.SwtView;
 import com.upmc.pstl2013.views.events.JobExecutor;
@@ -64,10 +68,9 @@ public interface IFactory {
 	/**
 	 * Créé un {@link IAlloyGenerated} qui sera utilisé par le {@link IAlloyExecutor}.
 	 * @param file le {@link File} généré.
-	 * @param isCheck un booléen qui dit si le fichier est considéré comme un "check" alloy ou un "run".
-	 * @param strategy la {@link IStrategyParcours} de parcours de la solution Alloy.
+	 * @param la {@link IProperties} qui a permis de générer ce fichier.
 	 */
-	IAlloyGenerated newAlloyGenerated(File file, Boolean isCheck, IStrategyParcours strategy);
+	IAlloyGenerated newAlloyGenerated(File file, IProperties property);
 
 	
 	//-------------------------EXECUTOR-------------------------
@@ -117,12 +120,29 @@ public interface IFactory {
 	IAttribute newAttribute(String key, Object value, Boolean isPrivate);
 	
 	
-	//-------------------------OTHERS-------------------------
+	//-------------------------STRATEGIES-------------------------
 	/**
 	 * Créé un {@link PathStrategy}.
 	 */
 	IStrategyParcours newPathStrategy();
 	
+	/**
+	 * Créé un {@link VoidStrategy}.
+	 */
+	IStrategyParcours newVoidStrategy();
+	
+	/**
+	 * Créé un {@link IncrementalExecutionStrategy}.
+	 */
+	IStrategyExecution newIncrementalExecutionStrategy();
+	
+	/**
+	 * Créé un {@link SimpleExecutionStrategy}.
+	 */
+	IStrategyExecution newSimpleExecutionStrategy();
+	
+	
+	//-------------------------OTHERS-------------------------
 	/**
 	 * Créé un {@link JobExecutor}
 	 * @param name le nom de l'exécutor.
