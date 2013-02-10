@@ -1,4 +1,4 @@
-package com.upmc.pstl2013.strategy;
+package com.upmc.pstl2013.strategyParcours;
 
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 

@@ -7,19 +7,27 @@ import java.util.Map;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
-import com.upmc.pstl2013.strategy.IStrategyParcours;
+import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
+import com.upmc.pstl2013.strategyParcours.IStrategyParcours;
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 /**
  * Représente la classe mère de toutes les propriétés de vérification Alloy.
  * 
+ * Cette classe implémente {@link IStrategyExecution} mais ne fait que déléguer le travail
+ * à sa stratégie d'exécution en fait.
  */
 public abstract class AbstractProperties implements IProperties {
 
 	private List<IAttribute> attributes;
 	private Boolean isCheck;
-	private IStrategyParcours strategy;
+	private IStrategyExecution strategyExecution;
+	private IStrategyParcours strategyParcours;
 
-	// TODO enlever si besoin, avoir plus tard
+	/**
+	 * Renvoie la liste des propriétés de vérification alloy possible.
+	 * @return une liste de String.
+	 */
 	public static List<String> getProperties() {
 		List<String> liste = new ArrayList<String>();
 		liste.add(DeadLock.class.getSimpleName());
@@ -29,11 +37,12 @@ public abstract class AbstractProperties implements IProperties {
 		return liste;
 	}
 
-	public AbstractProperties(Boolean isCheck, IStrategyParcours strategy) {
+	public AbstractProperties(Boolean isCheck, IStrategyExecution strategyExecution, IStrategyParcours strategy) {
 		super();
 		attributes = new ArrayList<IAttribute>();
 		this.isCheck = isCheck;
-		this.strategy = strategy;
+		this.strategyExecution = strategyExecution;
+		this.strategyParcours = strategy;
 	}
 
 	@Override
@@ -102,10 +111,28 @@ public abstract class AbstractProperties implements IProperties {
 	}
 
 	@Override
-	public IStrategyParcours getStrategy() {
-		return strategy;
+	public IStrategyExecution getStrategyExecution() {
+		return strategyExecution;
 	}
 
+	@Override
+	public IStrategyParcours getStrategyParcours() {
+		return strategyParcours;
+	}
+
+	@Override
+	public abstract boolean continueExecution();
+
+	@Override
+	public void setSatisfiable(boolean satisfiable) {
+		this.getStrategyExecution().setSatisfiable(satisfiable);
+	}
+	
+	@Override
+	public String parcours(A4Solution ans) {
+		return this.getStrategyParcours().parcours(ans);
+	}
+	
 	/**
 	 * Supprime la clé si elle existe. Ne fait rien sinon.
 	 * @param key

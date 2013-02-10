@@ -2,13 +2,17 @@ package com.upmc.pstl2013.properties;
 
 import java.util.Map;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
-import com.upmc.pstl2013.strategy.IStrategyParcours;
+import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
+import com.upmc.pstl2013.strategyParcours.IStrategyParcours;
 
 /**
  * Représente une méthode de vérification d'un fichier Alloy.
  * 
+ * Une propriété doit être capable de déléguer les opérations que doit savoir faire
+ * une stratégie d'exécution à sa propre stratégie d'exécution. De même pour la stratégie
+ * de parcours.
  */
-public interface IProperties {
+public interface IProperties extends IStrategyExecution, IStrategyParcours {
 
 	/**
 	 * Renvoie le code Alloy associé à cette propriété.
@@ -78,8 +82,14 @@ public interface IProperties {
 	Boolean isCheck();
 	
 	/**
+	 * Renvoie la {@link IStrategyExecution} d'exécution Alloy associée à cette propriété.
+	 * @return
+	 */
+	IStrategyExecution getStrategyExecution();
+	
+	/**
 	 * Renvoie la {@link IStrategyParcours} de parcours Alloy associée à cette propriété.
 	 * @return
 	 */
-	IStrategyParcours getStrategy();
+	IStrategyParcours getStrategyParcours();
 }
