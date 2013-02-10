@@ -33,6 +33,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 	private IAlloyGenerator generator;
 	private IFile UMLFile;
+	private static final Boolean XMLLock = Boolean.TRUE;
 	private static Logger log = Logger.getLogger(AlloyExecutor.class);
 
 	/**
@@ -64,8 +65,10 @@ public class AlloyExecutor implements IAlloyExecutor {
 			A4Reporter rep = Factory.getInstance().newReporter();
 
 			File generatedFile = generated.getFile();
-			// on créé un résultat pour cette activité
-			activityResult = Factory.getInstance().newActivityResult(generatedFile.getAbsolutePath());
+			// on créé un résultat pour cette activité si elle n'existe pas déjà
+			if (activityResult == null) {
+				activityResult = Factory.getInstance().newActivityResult(generatedFile.getAbsolutePath());
+			}
 
 			try {
 				String filenameAlloy = generatedFile.getCanonicalPath();
@@ -102,16 +105,6 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 							// On écrit le résultat dans un fichier XML
 							this.writeXML(ans, filenameXML);
-
-							// Et on lance le visualisateur de solution
-							//								if (viz == null) {
-							//									viz = new VizGUI(false, filenameXML, null);
-							//									if (!viz.loadThemeFile(dirDestination + "theme\\theme.thm"))
-							//										activityResult.appendLog("Le fichier theme n'a pas été pris en compte\n." +
-							//												"Etes vous sûre d'avoir le fichier theme.thm dans le répertoire : " + dirDestination + "theme ?");
-							//								} else {
-							//									viz.loadXML(filenameXML, true);
-							//								}
 						}
 						else {
 							// on spécifie au générateur qu'on n'a pas trouvé de solution, a lui de voir s'il nous regénère un truc
@@ -143,30 +136,33 @@ public class AlloyExecutor implements IAlloyExecutor {
 	 */
 	private void writeXML(A4Solution ans, String fileName) throws Err, IOException {
 
-		// Le "writeXML" de Alloy ne marche pas avec un path absolut.
-		// 1. On l'écrit par défaut
-		ans.writeXML("alloySolution.xml");
+		// on se synchronise sur une variable static, comme ca pas de problème de concurence entre les exécutors
+		synchronized (XMLLock) {
+			// Le "writeXML" de Alloy ne marche pas avec un path absolut.
+			// 1. On l'écrit par défaut
+			ans.writeXML("alloySolutionTmp.xml");
 
-		// 2. On le copie dans le bon répertoire
-		File oldFile = new File("alloySolution.xml");
-		File newFile = new File(fileName);
-		if (!newFile.exists()) {
-			newFile.createNewFile();
+			// 2. On le copie dans le bon répertoire
+			File oldFile = new File("alloySolutionTmp.xml");
+			File newFile = new File(fileName);
+			if (!newFile.exists()) {
+				newFile.createNewFile();
+			}
+
+			FileOutputStream out = new FileOutputStream(newFile);
+			FileInputStream in = new FileInputStream(oldFile);
+
+			int b;
+			while ((b = in.read()) != -1) {
+				out.write(b);
+			}
+
+			// 3. On supprime l'ancien fichier
+			oldFile.delete();
+
+			out.close();
+			in.close();
 		}
-
-		FileOutputStream out = new FileOutputStream(newFile);
-		FileInputStream in = new FileInputStream(oldFile);
-
-		int b;
-		while ((b = in.read()) != -1) {
-			out.write(b);
-		}
-
-		// 3. On supprime l'ancien fichier
-		oldFile.delete();
-
-		out.close();
-		in.close();
 	}
 
 	/**
@@ -196,7 +192,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 		if(!generated.isCheck()) {
 			if (ans.satisfiable()) {
 				sb.append("VALID, Solution found. ");
-				sb.append(generated.getStrategy().parcours(ans));
+				sb.append(generated.getProperty().parcours(ans));
 			}
 			else {
 				sb.append("INVALID no solution found.");
@@ -206,7 +202,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 		else if (generated.isCheck()) {
 			if (ans.satisfiable()) {
 				sb.append("INVALID, counterexample found. ");
-				sb.append(generated.getStrategy().parcours(ans));
+				sb.append(generated.getProperty().parcours(ans));
 			}
 			else {
 				sb.append("VALID, no counter-example found, assertion may be valid.");

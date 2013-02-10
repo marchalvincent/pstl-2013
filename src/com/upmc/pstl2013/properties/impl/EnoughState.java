@@ -8,16 +8,38 @@ import com.upmc.pstl2013.factory.Factory;
 public class EnoughState extends AbstractProperties {
 
 	public EnoughState() {
-		super(Boolean.TRUE, Factory.getInstance().newPathStrategy());
+		super(Boolean.TRUE, Factory.getInstance().newIncrementalExecutionStrategy(), Factory.getInstance().newVoidStrategy());
 		super.put("nbState", "1");
 		super.put("incrementation", "1");
-		super.put("attribut2enough", "tata");
-		super.put("attribut3enough", "tutu");
-		super.put("attribut4enough", "toto");
 	}
 
 	@Override
 	public String getAlloyCode() throws JetException {
 		return new EnoughStateTemplate().generate(this);
+	}
+
+
+	@Override
+	public boolean continueExecution() {
+		// si notre stratégie nous demande de continuer, on incrémente notre nbState au passage.
+		if (super.getStrategyExecution().continueExecution()) {
+			this.incrementation();
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Incrémente le nombre de State de la propriété.
+	 */
+	private void incrementation() {
+		int nbState = Integer.parseInt(super.getString("nbState"));
+		String sIncr = super.getString("incrementation");
+		if (sIncr != null) {
+			nbState = nbState + Integer.parseInt(sIncr);
+		} else {
+			nbState += 10;
+		}
+		super.put("nbState", String.valueOf(nbState));
 	}
 }

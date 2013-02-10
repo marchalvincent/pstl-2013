@@ -1,4 +1,4 @@
-package com.upmc.pstl2013.strategy.impl;
+package com.upmc.pstl2013.strategyParcours.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;

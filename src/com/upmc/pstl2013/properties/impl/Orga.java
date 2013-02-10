@@ -8,7 +8,7 @@ import com.upmc.pstl2013.factory.Factory;
 public class Orga extends AbstractProperties {
 
 	public Orga() {
-		super(Boolean.TRUE, Factory.getInstance().newPathStrategy());
+		super(Boolean.TRUE, Factory.getInstance().newSimpleExecutionStrategy(), Factory.getInstance().newVoidStrategy());
 		super.put("nbState", "20");
 		super.put("attribut2orga", "tata");
 		super.put("attribut3orga", "tutu");
@@ -18,5 +18,10 @@ public class Orga extends AbstractProperties {
 	@Override
 	public String getAlloyCode() throws JetException {
 		return new OrgaTemplate().generate(this);
+	}
+
+	@Override
+	public boolean continueExecution() {
+		return super.getStrategyExecution().continueExecution();
 	}
 }
