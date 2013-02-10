@@ -17,7 +17,6 @@ import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
-import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 
 /**
@@ -30,8 +29,6 @@ public class AlloyGenerator implements IAlloyGenerator {
 	private IFile UMLFile;
 	private String dirDestination;
 	private IProperties property;
-	private boolean isFirst;
-	private boolean satisfiable;
 	private static Logger log = Logger.getLogger(AlloyGenerator.class);
 
 	/**
@@ -43,36 +40,11 @@ public class AlloyGenerator implements IAlloyGenerator {
 		this.UMLFile = file;
 		this.dirDestination = dirDestination;
 		this.property = property;
-		isFirst = true;
-		satisfiable = false;
 	}
 
 	@Override
 	public boolean hasNext() {
-		if (isFirst) return true;
-		// si on est a enoughState et qu'on trouvé un contre exemple, on augmente le nombre de variable.
-		if (property instanceof EnoughState) {
-			if (satisfiable) {
-				// On incrémente le nbState de la propriété et on renvoie vrai
-				this.incrementation();
-				return true;
-			}
-		}
-		return false;
-	}
-
-	/**
-	 * Incrémente le nombre de state que vérifie la propriété de génération.
-	 */
-	private void incrementation() {
-		Integer nbState = new Integer(property.getString("nbState"));
-		String sIncr = property.getString("incrementation");
-		if (sIncr != null) {
-			nbState = nbState + new Integer(sIncr);
-		} else {
-			nbState += 10;
-		}
-		property.put("nbState", nbState + "");
+		return property.continueExecution();
 	}
 
 	@Override
@@ -115,7 +87,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 			out = new FileOutputStream(fichier);
 			out.write(alloyTxt.getBytes());
 			out.close();
-			fileGenerated = Factory.getInstance().newAlloyGenerated(fichier, property.isCheck(), property.getStrategy());
+			fileGenerated = Factory.getInstance().newAlloyGenerated(fichier, property);
 
 		} catch (FileNotFoundException e) {
 			log.error("Impossible de trouver le fichier : " + e.toString(), e);
@@ -127,13 +99,12 @@ public class AlloyGenerator implements IAlloyGenerator {
 		}
 
 		log.info("Générations terminées.");
-		isFirst = false;
 		return fileGenerated;
 	}
 
 	@Override
 	public void setSatisfiable(boolean bool) {
-		this.satisfiable = bool;
+		this.property.getStrategyExecution().setSatisfiable(bool);
 	}
 
 	/**

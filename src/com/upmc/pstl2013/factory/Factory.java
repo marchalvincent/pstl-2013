@@ -20,8 +20,10 @@ import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
-import com.upmc.pstl2013.strategy.IStrategyParcours;
-import com.upmc.pstl2013.strategy.impl.PathStrategy;
+import com.upmc.pstl2013.strategyExecution.ExecutionFactory;
+import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
+import com.upmc.pstl2013.strategyParcours.IStrategyParcours;
+import com.upmc.pstl2013.strategyParcours.ParcoursFactory;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.umlParser.impl.UMLParser;
 import com.upmc.pstl2013.views.SwtView;
@@ -70,8 +72,8 @@ public class Factory implements IFactory {
 	}
 
 	@Override
-	public IAlloyGenerated newAlloyGenerated(File file, Boolean isCheck, IStrategyParcours strategy) {
-		return GeneratorFactory.getInstance().newAlloyGenerated(file, isCheck, strategy);
+	public IAlloyGenerated newAlloyGenerated(File file, IProperties property) {
+		return GeneratorFactory.getInstance().newAlloyGenerated(file, property);
 	}
 	
 
@@ -109,12 +111,29 @@ public class Factory implements IFactory {
 	}
 
 	
-	//-------------------------OTHERS-------------------------
+	//-------------------------STRATEGIES-------------------------
 	@Override
 	public IStrategyParcours newPathStrategy() {
-		return new PathStrategy();
+		return ParcoursFactory.getInstance().newPathStrategy();
 	}
 
+	@Override
+	public IStrategyParcours newVoidStrategy() {
+		return ParcoursFactory.getInstance().newVoidStrategy();
+	}
+
+	@Override
+	public IStrategyExecution newIncrementalExecutionStrategy() {
+		return ExecutionFactory.getInstance().newIncrementalExecutionStrategy();
+	}
+
+	@Override
+	public IStrategyExecution newSimpleExecutionStrategy() {
+		return ExecutionFactory.getInstance().newSimpleExecutionStrategy();
+	}
+
+	
+	//-------------------------OTHERS-------------------------
 	@Override
 	public JobExecutor newJobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property) {
 		return new JobExecutor(name, swtView, UMLFile, property);

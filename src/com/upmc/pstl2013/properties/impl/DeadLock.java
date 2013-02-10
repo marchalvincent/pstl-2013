@@ -12,7 +12,7 @@ public class DeadLock extends AbstractProperties {
 	
 	public DeadLock() {
 		// le DeadLock est un check avec la strategie PathStrategy
-		super(Boolean.TRUE, Factory.getInstance().newPathStrategy());
+		super(Boolean.TRUE, Factory.getInstance().newSimpleExecutionStrategy(), Factory.getInstance().newPathStrategy());
 		super.put("nbState", "20");
 		super.put("attribut2deadlock", "tata");
 		super.put("attribut3deadlock", "tutu");
@@ -22,5 +22,10 @@ public class DeadLock extends AbstractProperties {
 	@Override
 	public String getAlloyCode() throws JetException {
 		return new DeadLockTemplate().generate(this);
+	}
+
+	@Override
+	public boolean continueExecution() {
+		return super.getStrategyExecution().continueExecution();
 	}
 }

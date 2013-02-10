@@ -1,9 +1,9 @@
-package com.upmc.pstl2013.strategy.impl;
+package com.upmc.pstl2013.strategyParcours.impl;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import com.upmc.pstl2013.strategy.IStrategyParcours;
+import com.upmc.pstl2013.strategyParcours.IStrategyParcours;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig;
 import edu.mit.csail.sdg.alloy4compiler.ast.Sig.Field;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;

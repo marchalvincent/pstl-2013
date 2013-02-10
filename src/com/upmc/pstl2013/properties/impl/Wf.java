@@ -8,7 +8,7 @@ import com.upmc.pstl2013.factory.Factory;
 public class Wf extends AbstractProperties {
 
 	public Wf() {
-		super(Boolean.FALSE, Factory.getInstance().newPathStrategy());
+		super(Boolean.FALSE, Factory.getInstance().newSimpleExecutionStrategy(), Factory.getInstance().newVoidStrategy());
 		super.putPrivate("predicatName", "");
 		super.put("initial", Boolean.TRUE);
 		super.put("final", Boolean.TRUE);
@@ -18,5 +18,10 @@ public class Wf extends AbstractProperties {
 	@Override
 	public String getAlloyCode() throws JetException {
 		return new WfTemplate().generate(this);
+	}
+
+	@Override
+	public boolean continueExecution() {
+		return super.getStrategyExecution().continueExecution();
 	}
 }
