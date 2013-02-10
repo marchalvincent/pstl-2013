@@ -10,20 +10,17 @@ import com.upmc.pstl2013.alloyExecutor.ExecutorFactory;
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
+import com.upmc.pstl2013.alloyExecutor.impl.MyA4Reporter;
 import com.upmc.pstl2013.alloyGenerator.GeneratorFactory;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetHelper;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
-import com.upmc.pstl2013.infoGenerator.IInfoGenerator;
-import com.upmc.pstl2013.infoGenerator.impl.InfoGenerator;
-import com.upmc.pstl2013.infoParser.IInfoParser;
-import com.upmc.pstl2013.infoParser.impl.InfoParser;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
-import com.upmc.pstl2013.strategy.IStrategy;
+import com.upmc.pstl2013.strategy.IStrategyParcours;
 import com.upmc.pstl2013.strategy.impl.PathStrategy;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.umlParser.impl.UMLParser;
@@ -73,19 +70,8 @@ public class Factory implements IFactory {
 	}
 
 	@Override
-	public IAlloyGenerated newAlloyGenerated(File file, Boolean isCheck, IStrategy strategy) {
+	public IAlloyGenerated newAlloyGenerated(File file, Boolean isCheck, IStrategyParcours strategy) {
 		return GeneratorFactory.getInstance().newAlloyGenerated(file, isCheck, strategy);
-	}
-
-	
-	@Override
-	public IInfoParser newInfoParser() {
-		return new InfoParser();
-	}
-
-	@Override
-	public IInfoGenerator newInfoGenerator() {
-		return new InfoGenerator();
 	}
 	
 
@@ -104,6 +90,11 @@ public class Factory implements IFactory {
 	public IFileResult newFileResult(String nom, List<IActivityResult> activityResults) {
 		return ExecutorFactory.getInstance().newFileResult(nom, activityResults);
 	}
+
+	@Override
+	public MyA4Reporter newReporter() {
+		return ExecutorFactory.getInstance().newReporter();
+	}
 	
 
 	//-------------------------PROPERTIES-------------------------
@@ -120,7 +111,7 @@ public class Factory implements IFactory {
 	
 	//-------------------------OTHERS-------------------------
 	@Override
-	public IStrategy newPathStrategy() {
+	public IStrategyParcours newPathStrategy() {
 		return new PathStrategy();
 	}
 

@@ -4,7 +4,7 @@ import java.io.File;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
-import com.upmc.pstl2013.strategy.IStrategy;
+import com.upmc.pstl2013.strategy.IStrategyParcours;
 
 /**
  * Cette classe représente un fichier généré par le {@link IAlloyGenerator} 
@@ -15,9 +15,9 @@ public class AlloyGenerated implements IAlloyGenerated {
 	
 	private File file;
 	private Boolean isCheck;
-	private IStrategy strategie;
+	private IStrategyParcours strategie;
 	
-	public AlloyGenerated(File fi, Boolean isC, IStrategy strat) {
+	public AlloyGenerated(File fi, Boolean isC, IStrategyParcours strat) {
 		super();
 		file = fi;
 		isCheck = isC;
@@ -35,7 +35,7 @@ public class AlloyGenerated implements IAlloyGenerated {
 	}
 
 	@Override
-	public IStrategy getStrategy() {
+	public IStrategyParcours getStrategy() {
 		return strategie;
 	}
 }
