@@ -50,9 +50,9 @@ public class EventSelectProperty implements Listener {
 			Map <String,String> stringAttributes = property.getStringAttributes();
 			if (tabValuePropertiesString != null) {
 				tabValuePropertiesString.removeAll();
+				tabValuePropertiesString.getColumn(0).setText("Attributes : " + nameProperty);
 				if (stringAttributes.size()>0) {
-					tabValuePropertiesString.addSelectionListener(new EventClickValueAttributes(swtView));
-					tabValuePropertiesString.getColumn(0).setText("Attributes : " + nameProperty);
+					tabValuePropertiesString.addSelectionListener(new EventClickValueAttributes(swtView));		
 					for (String key : stringAttributes.keySet()) {
 						TableItem item = new TableItem(tabValuePropertiesString, SWT.NONE);
 						item.setText(0, key);
@@ -68,9 +68,9 @@ public class EventSelectProperty implements Listener {
 			Map <String,Boolean> boolAttributes = property.getBooleanAttributes();
 			if (tabValuePropertiesBool != null) {
 				tabValuePropertiesBool.removeAll();
+				tabValuePropertiesBool.getColumn(0).setText("Attributes Vrai/Faux : " + nameProperty);
 				if (boolAttributes.size()>0) {
 					tabValuePropertiesBool.addListener(SWT.Selection, new EventCheckAttributes());
-					tabValuePropertiesBool.getColumn(0).setText("Attributes Vrai/Faux : " + nameProperty);
 					for (String key : boolAttributes.keySet()) {
 						TableItem item = new TableItem(tabValuePropertiesBool, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
 						item.setText(0, key);
