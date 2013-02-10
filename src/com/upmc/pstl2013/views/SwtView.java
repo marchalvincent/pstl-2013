@@ -27,10 +27,12 @@ import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.events.EventChooseDir;
 import com.upmc.pstl2013.views.events.EventChooseFile;
+import com.upmc.pstl2013.views.events.EventClickVisualisationAlloy;
 import com.upmc.pstl2013.views.events.EventCurrentExecutor;
 import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
 import com.upmc.pstl2013.views.events.EventSelectProperty;
+import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
 
 public class SwtView extends Composite {
 
@@ -49,7 +51,7 @@ public class SwtView extends Composite {
 	private Text txtPersonalPropertie;
 	private Button btnPersonalPropertie;
 	private Text txtTimeOut;
-	private IFileResult currentFileResult;
+	private IActivityResult currentActivityeResult;
 
 	private String separator = File.separator;
 	private String userDir;
@@ -192,11 +194,11 @@ public class SwtView extends Composite {
 
 		txtDetailsLogs = new Text(cpItemDetails, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
-		
+
 		btnAlloyVisualisation = new Button(cpItemDetails, SWT.NONE);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualiser");
-		//updaTreeExecResult();
+		
 
 
 		//Suppression des anciens logs
@@ -208,6 +210,7 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
 		btnReadLogs.addMouseListener(new EventReadLogs(this));
 		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
+		btnAlloyVisualisation.addMouseListener(new EventClickVisualisationAlloy(this));
 		btnChooseDir.addMouseListener(new EventChooseDir(this));
 	}
 
@@ -244,13 +247,19 @@ public class SwtView extends Composite {
 		logDebug.delete();
 	}
 
-	public void updateTreeExecResult(IFileResult iFileResult)
+	/**
+	 * TODO michou
+	 * @param fileResult
+	 */
+	public void updateTreeExecResult(IFileResult fileResult)
 	{
+	    treeFilesExecuted.addListener(SWT.Selection, new EventSelectTreeItemDetail(this));
 		TreeItem item0 = new TreeItem(treeFilesExecuted, 0);
-		item0.setText(iFileResult.getNom());
-		for (IActivityResult actResult : iFileResult.getListActivityResult()) {
+		item0.setText(fileResult.getNom());
+		for (IActivityResult actResult : fileResult.getListActivityResult()) {
 			TreeItem item1 = new TreeItem(item0, 0);
 			item1.setText(actResult.getNom());
+			item1.setData(actResult);	
 		}
 	}
 
@@ -297,14 +306,23 @@ public class SwtView extends Composite {
 	public void setUserDir(String userDir) {
 		this.userDir = userDir;
 	}
-	
-	public IFileResult getCurrentFileResult()
+
+	public IActivityResult getCurrentActivityeResult()
 	{
-		return currentFileResult;
+		return currentActivityeResult;
 	}
 	
+	public void setCurrentActivityeResult(IActivityResult currentActivityeResult)
+	{
+		this.currentActivityeResult= currentActivityeResult ;
+	}
+
 	public Text getTxtDetailsLogs()
 	{
 		return txtDetailsLogs;
+	}
+
+	public Button getBtnVisualisationAlloy() {
+		return btnAlloyVisualisation;
 	}
 }
