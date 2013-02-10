@@ -85,7 +85,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 						A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
 
 						// Affichage des info de l'execution
-						activityResult.appendLog(this.getInfosLogs(command, options, ans, rep));
+						activityResult.appendLog(this.getInfosLogs(command, rep));
 
 						// On parcours la solution Alloy
 						activityResult.appendLog(this.executionTravel(generated, ans));
@@ -172,22 +172,14 @@ public class AlloyExecutor implements IAlloyExecutor {
 	/**
 	 * Renvoie les logs à afficher dans l'interface graphique.
 	 * @param command
-	 * @param options
-	 * @param ans
 	 * @param rep
 	 * @return
 	 */
-	private String getInfosLogs(Command command, A4Options options, A4Solution ans, A4Reporter rep) {
+	private String getInfosLogs(Command command, A4Reporter rep) {
 		StringBuilder sb = new StringBuilder();
-		sb.append("Executing");
+		sb.append("Executing \"");
 		sb.append(command.toString());
-		sb.append("\n");
-		sb.append("Solver=" + options.solver.toString());
-		sb.append(" BitWidth=" + ans.getBitwidth());
-		sb.append(" MaxSeq=" + ans.getMaxSeq());
-		sb.append(" SkolemsDepth=" + ans.getAllSkolems());
-		sb.append(" is Incremental=" + ans.isIncremental());
-		sb.append(" is Satisfiable=" + ans.satisfiable() + "\n");
+		sb.append("\"\n");
 		sb.append(rep.toString() + "\n");
 		return sb.toString();
 	}
