@@ -145,13 +145,17 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 						// Si la solution est satisfiable
 						if (ans.satisfiable()) {
+							
+							activityResult.setSatisfiable(true);
+							
 							filenameXML = filenameAlloy.substring(0, (filenameAlloy.length() -3)) + "xml";
 							activityResult.setPathXMLResult(filenameXML);
 
 							// On écrit le résultat dans un fichier XML
 							this.writeXML(ans, filenameXML);
-
+							
 							// Et on lance le visualisateur de solution
+							
 							if (viz == null) {
 								viz = new VizGUI(false, "alloySolution.xml", null);
 								if (!viz.loadThemeFile(dirDestination + "theme\\theme.thm"))
