@@ -27,12 +27,14 @@ import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.events.EventChooseDir;
 import com.upmc.pstl2013.views.events.EventChooseFile;
+import com.upmc.pstl2013.views.events.EventChooseFolderExec;
 import com.upmc.pstl2013.views.events.EventClickVisualisationAlloy;
 import com.upmc.pstl2013.views.events.EventCurrentExecutor;
 import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
 import com.upmc.pstl2013.views.events.EventSelectProperty;
 import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
+import org.eclipse.swt.widgets.Label;
 
 public class SwtView extends Composite {
 
@@ -60,6 +62,7 @@ public class SwtView extends Composite {
 	private Tree treeFilesExecuted;
 	private Text txtDetailsLogs;
 	private Button btnAlloyVisualisation;
+	private Button btnChooseFolderExec;
 
 	/**
 	 * Create the composite.
@@ -157,10 +160,15 @@ public class SwtView extends Composite {
 
 		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooserFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		btnChooserFile.setText("Choose File");
+		btnChooserFile.setText("Choose File Exec");
 
 		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4));
+		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 5));
+		
+		btnChooseFolderExec = new Button(cpItemAlloyUse, SWT.NONE);
+		btnChooseFolderExec.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnChooseFolderExec.setText("Choose Folder Exec");
+		btnChooseFolderExec.addMouseListener(new EventChooseFolderExec(this));
 
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
 		btnExcuterAlloy.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -183,7 +191,6 @@ public class SwtView extends Composite {
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
 
-
 		/*
 		 *Debut de la partie Details
 		 */
@@ -196,6 +203,7 @@ public class SwtView extends Composite {
 		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
 
 		btnAlloyVisualisation = new Button(cpItemDetails, SWT.NONE);
+		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualiser");
 		
