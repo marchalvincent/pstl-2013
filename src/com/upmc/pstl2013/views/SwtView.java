@@ -38,7 +38,7 @@ import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
 
 public class SwtView extends Composite {
 
-	
+
 	private Button btnChooseDir;
 	private Text txtDirectory;
 	private Text txtLogs;
@@ -65,7 +65,7 @@ public class SwtView extends Composite {
 	private Button btnAlloyVisualisation;
 	private Button btnChooseFolderExec;
 	private Button btnLogsErrors;
-	
+
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
 
@@ -108,7 +108,7 @@ public class SwtView extends Composite {
 		cpItemAlloyProp = new Composite(tabFolder, SWT.BORDER);
 		cpItemAlloyProp.setLayout(new GridLayout(3, false));
 		itemAlloyProperty.setControl(cpItemAlloyProp);
-		
+
 		itemDetails = new TabItem(tabFolder, SWT.NONE);
 		itemDetails.setText("Details");
 		cpItemDetails = new Composite(tabFolder, SWT.BORDER);
@@ -169,14 +169,14 @@ public class SwtView extends Composite {
 		btnChooseFolderExec = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooseFolderExec.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnChooseFolderExec.setText("Folder Exec");
-		
+
 		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4));
 
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
 		btnExcuterAlloy.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		btnExcuterAlloy.setText("Execute Alloy");
-		
+
 
 		txtTimeOut = new Text(cpItemAlloyUse, SWT.BORDER);
 		txtTimeOut.setText("Time Out");
@@ -185,7 +185,7 @@ public class SwtView extends Composite {
 		btnLogsInfos = new Button(cpItemAlloyUse, SWT.NONE);
 		btnLogsInfos.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnLogsInfos.setText("Logs infos");
-		
+
 		btnLogsErrors = new Button(cpItemAlloyUse, SWT.NONE);
 		btnLogsErrors.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnLogsErrors.setText("Logs errors");
@@ -193,7 +193,7 @@ public class SwtView extends Composite {
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
 		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
 		btnPersonalPropertie.setText("Exec Perso");
-		
+
 
 		txtPersonalPropertie = new Text(cpItemAlloyUse, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
@@ -223,7 +223,7 @@ public class SwtView extends Composite {
 		btnLogsErrors.addMouseListener(new EventReadLogs(this, nameLogError));
 		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
 		btnChooseFolderExec.addMouseListener(new EventChooseFolderExec(this));
-		
+
 		//Suppression des anciens logs
 		deleteOldLogs();
 		btnAlloyVisualisation.addMouseListener(new EventClickVisualisationAlloy(this));
@@ -347,5 +347,17 @@ public class SwtView extends Composite {
 
 	public Button getBtnVisualisationAlloy() {
 		return btnAlloyVisualisation;
+	}
+
+	public int getTimeout() {
+		try
+		{
+			int resultat = Integer.parseInt(txtTimeOut.getText());
+			return resultat;
+		} catch (NumberFormatException e){
+			log.error(e.getMessage());
+			return 3 * 60;
+		}
+
 	}
 }

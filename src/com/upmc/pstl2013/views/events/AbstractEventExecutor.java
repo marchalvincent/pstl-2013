@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.views.events;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -16,7 +17,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 	private Logger log = Logger.getLogger(AbstractEventExecutor.class);
 	private SwtView swtView;
-
+	
 	/**
 	 * Constructor
 	 * @param {@link SwtView} 
@@ -29,6 +30,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 	@Override
 	public void mouseDown(MouseEvent evt) {
 		JobExecutor jobExec;
+		List<JobExecutor> listJobsExec = new ArrayList<JobExecutor>();
 		
 		// 1. On récupère tous les fichiers UML
 		List<IFile> UMLFileSelected = swtView.getUMLFilesSelected();
@@ -46,9 +48,12 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 						jobExec = Factory.getInstance().newJobExecutor("Execution Alloy en cours...", swtView, iFile, property);
 						jobExec.setUser(true);
 						jobExec.schedule();
+						listJobsExec.add(jobExec);
 					}
 				}
 			}
+			ThreadTimeout threadTimeout = new ThreadTimeout(listJobsExec, swtView.getTimeout());
+			threadTimeout.start();
 		} catch (PropertiesException e) {
 			showToView(e.getMessage());
 		}
