@@ -6,16 +6,16 @@ import com.upmc.pstl2013.views.SwtView;
 public class RunnableUpdateDetails implements Runnable {
 
 	private SwtView swtView;
-	private IFileResult iFileResult;
+	private IFileResult fileResult;
 
 	public RunnableUpdateDetails(SwtView swtView, IFileResult iFileResult) {
 		this.swtView = swtView;
-		this.iFileResult = iFileResult;
+		this.fileResult = iFileResult;
 	}
 
 	@Override
 	public void run() {
-		swtView.updateTreeExecResult(iFileResult);
+		swtView.updateTreeExecResult(fileResult);
 
 	}
 

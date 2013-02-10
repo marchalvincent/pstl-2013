@@ -49,6 +49,7 @@ public class SwtView extends Composite {
 	private Text txtPersonalPropertie;
 	private Button btnPersonalPropertie;
 	private Text txtTimeOut;
+	private IFileResult currentFileResult;
 
 	private String separator = File.separator;
 	private String userDir;
@@ -251,20 +252,6 @@ public class SwtView extends Composite {
 			TreeItem item1 = new TreeItem(item0, 0);
 			item1.setText(actResult.getNom());
 		}
-		
-		/*
-		for (int loopIndex1 = 0; loopIndex1 < 5; loopIndex1++) {
-			TreeItem item0 = new TreeItem(treeFilesExecuted, 0);
-			item0.setText("Level 0 Item " + loopIndex1);
-			for (int loopIndex2 = 0; loopIndex2 < 5; loopIndex2++) {
-				TreeItem item1 = new TreeItem(item0, 0);
-				item1.setText("Level 1 Item " + loopIndex2);
-				for (int loopIndex3 = 0; loopIndex3 < 5; loopIndex3++) {
-					TreeItem item2 = new TreeItem(item1, 0);
-					item2.setText("Level 2 Item " + loopIndex3);
-				}
-			}
-		}*/
 	}
 
 	public Text getTxtDirectory() {
@@ -309,5 +296,15 @@ public class SwtView extends Composite {
 
 	public void setUserDir(String userDir) {
 		this.userDir = userDir;
+	}
+	
+	public IFileResult getCurrentFileResult()
+	{
+		return currentFileResult;
+	}
+	
+	public Text getTxtDetailsLogs()
+	{
+		return txtDetailsLogs;
 	}
 }
