@@ -17,8 +17,8 @@ public class EventSelectTreeItemDetail implements Listener {
 
 
 	/**
-	 * 
-	 * @param swtView
+	 * Affiche le resultat des l'activité séléctionné.
+	 * @param {@link SwtView} la vue courrante
 	 */
 	public EventSelectTreeItemDetail(SwtView swtView) {
 		this.txtDetailsLogs = swtView.getTxtDetailsLogs();

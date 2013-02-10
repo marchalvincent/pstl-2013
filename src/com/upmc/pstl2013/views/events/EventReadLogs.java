@@ -15,21 +15,23 @@ public class EventReadLogs extends MouseAdapter {
 
 	private static Logger log = Logger.getLogger(EventReadLogs.class);
 	private Text textDirectory;
+	private String nameLog;
 
 	/**
 	 * Constructor
 	 * @param {{@link SwtView}
 	 */
-	public EventReadLogs(SwtView swtView) {
+	public EventReadLogs(SwtView swtView,String nameLog) {
 
 		this.textDirectory = swtView.getTxtDirectory();
+		this.nameLog = nameLog;
 	}
 
 	@Override
 	public void mouseDown(MouseEvent e) {
 
 		try {
-			Desktop.getDesktop().open(new File(textDirectory.getText() + "logInfo.html"));
+			Desktop.getDesktop().open(new File(textDirectory.getText() + nameLog));
 		} catch (IOException e1) {
 			log.error(e1.toString());
 		}
