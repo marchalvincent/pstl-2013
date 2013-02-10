@@ -97,9 +97,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 						if (ans.satisfiable()) {
 							// on spécifie au générateur qu'on a trouvé une solution, a lui de voir s'il nous regénère un truc
 							generator.setSatisfiable(true);
-
 							activityResult.setSatisfiable(true);
-
 							String filenameXML = filenameAlloy.substring(0, (filenameAlloy.length() -3)) + "xml";
 							activityResult.setPathXMLResult(filenameXML);
 
@@ -109,6 +107,8 @@ public class AlloyExecutor implements IAlloyExecutor {
 						else {
 							// on spécifie au générateur qu'on n'a pas trouvé de solution, a lui de voir s'il nous regénère un truc
 							generator.setSatisfiable(false);
+							activityResult.setSatisfiable(false);
+							activityResult.setPathXMLResult(null);
 						}
 					}
 				}
