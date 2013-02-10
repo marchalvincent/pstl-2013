@@ -23,7 +23,7 @@ public class EventSelectProperty implements Listener {
 
 	/**
 	 * Constructor
-	 * @param {{@link SwtView}
+	 * @param {@link SwtView}
 	 */
 	public EventSelectProperty(SwtView swtView) {
 		this.swtView = swtView;
