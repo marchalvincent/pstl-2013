@@ -1,0 +1,28 @@
+<%@ jet package="com.upmc.pstl2013.alloyGenerator.jet.impl" class="EnoughStateTemplate" 
+	imports="org.apache.log4j.Logger
+			com.upmc.pstl2013.alloyGenerator.jet.*
+			com.upmc.pstl2013.properties.*"
+	skeleton="../alloyGenerator.skeleton" %>
+<% 
+	final Logger log = Logger.getLogger(DeadLockTemplate.class);
+	if (!(argument instanceof IProperties)) {
+		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
+		log.error(error);
+		throw new JetException(error);
+	}
+
+	IProperties propertie = (IProperties) argument;
+	final String predicatName = propertie.getString("predicatName");
+%>
+
+pred <%=predicatName%> {
+	some s:State | s.running = Finished
+}
+
+<%
+	final String nbState = propertie.getString("nbState");
+	final String nbObjects = propertie.getString("nbObjects");
+	final String nbNodes = propertie.getString("nbNodes");
+	final String nbEdges = propertie.getString("nbEdges");
+%>
+check {<%=predicatName%>} for <%=nbState%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge
