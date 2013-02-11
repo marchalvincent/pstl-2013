@@ -37,6 +37,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 		// 2. On récupère toutes les propriétés seléctionnées
 		List<IProperties> properties = null;
+		IProperties TMPProperty = null;
 		try {
 			properties = this.getProperties();
 			// 3a. Pour chaque fichier
@@ -44,7 +45,10 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 				// 3b. Pour chaque propriété
 				if (properties != null) {
 					for (IProperties property : properties) {
-						// 3c. On lance le job
+						//4. On créé une copie de la propriété pour des raisons de concurrence
+						//TODO Vincent le clone incrémental
+								
+						// 5. On lance le job
 						jobExec = Factory.getInstance().newJobExecutor("Execution Alloy en cours...", swtView, iFile, property);
 						jobExec.setUser(true);
 						jobExec.schedule();

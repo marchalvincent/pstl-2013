@@ -49,7 +49,7 @@ public class ThreadTimeout extends Thread {
 		for (JobExecutor job : listJobsExec) {
 			if (job.getResult() == null)
 			{
-				if (job.cancel())
+				if (job.cancel() || !job.getThread().isInterrupted())
 					log.info("job " + job.getName() + " was stopped !");
 				else
 					log.info("job " + job.getName() + " couldn't be stopped !");
