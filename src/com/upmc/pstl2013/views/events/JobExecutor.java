@@ -7,6 +7,7 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
+
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.factory.Factory;
@@ -62,11 +63,13 @@ public class JobExecutor extends Job {
 		Display.getDefault().asyncExec(new RunnableUpdateDetails(swtView, iFileResult));
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Override
 	public void canceling()
 	{
 		this.getThread().interrupt();
-		System.out.println("Interruption de : " + this.getName());
+		this.getThread().stop();
+		log.info("Interruption de : " + this.getName());
 	}
 
 }

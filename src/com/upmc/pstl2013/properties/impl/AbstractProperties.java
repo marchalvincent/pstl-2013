@@ -19,7 +19,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
  */
 public abstract class AbstractProperties implements IProperties {
 
-	private List<IAttribute> attributes;
+	protected List<IAttribute> attributes;
 	private Boolean isCheck;
 	private IStrategyExecution strategyExecution;
 	private IStrategyParcours strategyParcours;
