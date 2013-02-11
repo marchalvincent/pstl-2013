@@ -224,7 +224,14 @@ abstract sig StructuredActivityNode extends Action {
 	//structuredNodeInput : set InputPin
 }
 
-
+abstract sig OpaqueAction extends Action {
+	//node : set ActivityNode,
+	//activity : Activity,
+	//mustIsolate : Boolean,
+	//edge : set ActivityEdge,
+	//structuredNodeOutput : set OutputPin,
+	//structuredNodeInput : set InputPin
+}
 
 
 /************************************************************************
