@@ -34,7 +34,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 	private IAlloyGenerator generator;
 	private IFile UMLFile;
 	private static final Boolean XMLLock = Boolean.TRUE;
-	private static Logger log = Logger.getLogger(AlloyExecutor.class);
+	private Logger log = Logger.getLogger(AlloyExecutor.class);
 
 	/**
 	 * Constructeur

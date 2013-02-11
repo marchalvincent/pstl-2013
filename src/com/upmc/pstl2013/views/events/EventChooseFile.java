@@ -49,6 +49,7 @@ public class EventChooseFile extends MouseAdapter {
 			sb.append("Aucun fichier n'a été sélectionné.");
 		
 		List<IFile> UMLFilesSelected = swtView.getUMLFilesSelected();
+		UMLFilesSelected.clear();
 		for (IFile iFile : file) {
 			UMLFilesSelected.add(iFile);
 			sb.append(iFile.getName());

@@ -24,13 +24,23 @@ public class ThreadTimeout extends Thread {
 	{
 		long endTime, timeSpend = 0;
 		long startTime = System.nanoTime();
+		Boolean isEnd = false;
 		
-		while (timeSpend < timeout)
+		while ((timeSpend < timeout) && !isEnd)
 		{
+			
 			try {
 				Thread.sleep(1000);
 				endTime = System.nanoTime();
 				timeSpend = (endTime - startTime) / 1000000000; // en sec
+				isEnd = true;
+				for (JobExecutor job : listJobsExec) {
+					if((job.getResult() != null) && !job.getResult().isOK())
+					{
+						isEnd = false;
+						break;
+					}
+				}
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}

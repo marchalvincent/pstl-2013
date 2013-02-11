@@ -17,7 +17,7 @@ import com.upmc.pstl2013.properties.impl.Wf;
  */
 public class PropertiesFactory {
 
-	private static Logger log = Logger.getLogger(PropertiesFactory.class);
+	private Logger log = Logger.getLogger(PropertiesFactory.class);
 	private static PropertiesFactory instance = new PropertiesFactory();
 	private Map<String, IProperties> properties = new HashMap<String, IProperties>();
 

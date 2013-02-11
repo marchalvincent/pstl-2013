@@ -15,7 +15,7 @@ import com.upmc.pstl2013.views.SwtView;
 
 public class JobExecutor extends Job {
 
-	private static Logger log = Logger.getLogger(JobExecutor.class);
+	private Logger log = Logger.getLogger(JobExecutor.class);
 	private SwtView swtView;
 	private IFile UMLFile;
 	private IProperties property;
@@ -43,7 +43,6 @@ public class JobExecutor extends Job {
 			
 			IFileResult iFileResult = alloyExecutor.executeFiles();
 			showToDetails(iFileResult);
-			// TODO michou traitement avec le IFileResult
 			result.append("Fin d'exécution des fichiers Alloy.\n");
 			log.info(result.toString());
 			showToView(result.toString());
@@ -61,6 +60,13 @@ public class JobExecutor extends Job {
 	
 	private void showToDetails(IFileResult iFileResult){
 		Display.getDefault().asyncExec(new RunnableUpdateDetails(swtView, iFileResult));
+	}
+	
+	@Override
+	public void canceling()
+	{
+		this.getThread().interrupt();
+		System.out.println("Interruption de : " + this.getName());
 	}
 
 }
