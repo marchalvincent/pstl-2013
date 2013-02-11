@@ -18,7 +18,7 @@ public class UMLParser implements IUMLParser {
 
 	private IFile UMLFile;
 	private Activity activities;
-	private static Logger log = Logger.getLogger(UMLParser.class);
+	private Logger log = Logger.getLogger(UMLParser.class);
 
 	public UMLParser(IFile file) {
 		super();

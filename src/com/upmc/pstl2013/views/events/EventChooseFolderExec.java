@@ -58,7 +58,7 @@ public class EventChooseFolderExec extends MouseAdapter{
 				sb.append("Aucun fichier n'a été sélectionné.");
 
 			UMLFilesSelected = swtView.getUMLFilesSelected();
-
+			UMLFilesSelected.clear();
 			for (IContainer iContainer : container) {	
 				addFolder(iContainer.members());
 			}

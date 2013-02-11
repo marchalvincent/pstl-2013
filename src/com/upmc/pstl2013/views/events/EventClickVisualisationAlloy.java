@@ -28,13 +28,13 @@ public class EventClickVisualisationAlloy extends MouseAdapter{
 	 */
 	public void mouseDown(MouseEvent e) {
 
-		IActivityResult activityResult =  swtView.getCurrentActivityeResult();
+		IActivityResult activityResult =  swtView.getCurrentActivityResult();
 		if (activityResult != null)
 		{
 			// Et on lance le visualisateur de solution
 			if (viz == null) {
 				viz = new VizGUI(false, activityResult.getPathXMLResult(), null);
-				if (!viz.loadThemeFile(dirDestination + "theme" + File.separator + "theme.thm")) //TODO michou : rempalcer le \\ par une variable généraliser
+				if (!viz.loadThemeFile(dirDestination + "theme" + File.separator + "theme.thm"))
 					activityResult.appendLog("Le fichier theme n'a pas été pris en compte\n." +
 							"Etes vous sûre d'avoir le fichier theme.thm dans le répertoire : " + dirDestination + "theme ?");
 			} else {

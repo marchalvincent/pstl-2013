@@ -54,17 +54,18 @@ public class SwtView extends Composite {
 	private Text txtPersonalPropertie;
 	private Button btnPersonalPropertie;
 	private Text txtTimeOut;
-	private IActivityResult currentActivityeResult;
-
-	private String separator = File.separator;
-	private String userDir;
-	private List<IFile> UMLFilesSelected;
-	private static Logger log = Logger.getLogger(SwtView.class);
 	private Tree treeFilesExecuted;
 	private Text txtDetailsLogs;
 	private Button btnAlloyVisualisation;
 	private Button btnChooseFolderExec;
 	private Button btnLogsErrors;
+	
+	private IActivityResult currentActivityeResult;
+	private String separator = File.separator;
+	private String userDir;
+	private List<IFile> UMLFilesSelected;
+	private Logger log = Logger.getLogger(SwtView.class);
+
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
@@ -330,7 +331,7 @@ public class SwtView extends Composite {
 		this.userDir = userDir;
 	}
 
-	public IActivityResult getCurrentActivityeResult()
+	public IActivityResult getCurrentActivityResult()
 	{
 		return currentActivityeResult;
 	}
