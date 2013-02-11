@@ -18,6 +18,8 @@ import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.umlParser.IUMLParser;
+import com.upmc.pstl2013.util.PluginPath;
+import com.upmc.pstl2013.util.Utils;
 
 /**
  * Cette classe se charge de générer le fichier Alloy à partir
@@ -63,12 +65,12 @@ public class AlloyGenerator implements IAlloyGenerator {
 	@Override
 	public IAlloyGenerated generateFile() throws JetException {
 		IAlloyGenerated fileGenerated = null;
-		
+
 		// 1. On créé le répertoire qui contiendra les fichiers Alloy s'il n'existe pas.
 		new File(dirDestination).mkdir();
 
 		// 2. On y ajoute les fichiers requis
-		//TODO créer le syntax et sémantic + theme ici
+		this.addNeddedFile();
 
 		// 2. On récupère l'activité parsée
 		Activity activity = parser.getActivities();
@@ -100,6 +102,29 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 		log.info("Générations terminées.");
 		return fileGenerated;
+	}
+
+	private void addNeddedFile() {
+
+		try {
+			// 1. On check que syntax et semantic sont là
+			File syntax = new File(dirDestination + "syntax.als");
+			File semantic = new File(dirDestination + "semantic.als");
+
+			// 2. S'il ne sont pas là on les copie
+			if (!syntax.exists()) {
+				File trueSyntax = new File(PluginPath.pluginPath + "model" + File.separator + "syntax.als");
+				Utils.copyContentFile(trueSyntax, syntax);
+			}
+
+			if (!semantic.exists()) {
+				File trueSemantic = new File(PluginPath.pluginPath + "model" + File.separator + "semantic.als");
+				Utils.copyContentFile(trueSemantic, semantic);
+			}
+		} catch (Exception e) {
+			log.error("Impossible de copier les fichiers : " + e.getMessage());
+		}
+
 	}
 
 	@Override
