@@ -13,7 +13,7 @@ import com.upmc.pstl2013.views.SwtView;
 
 public class EventReadLogs extends MouseAdapter {
 
-	private static Logger log = Logger.getLogger(EventReadLogs.class);
+	private Logger log = Logger.getLogger(EventReadLogs.class);
 	private Text textDirectory;
 	private String nameLog;
 

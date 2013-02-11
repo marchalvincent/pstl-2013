@@ -15,7 +15,7 @@ import com.upmc.pstl2013.views.SwtView;
 
 public class JobExecutor extends Job {
 
-	private static Logger log = Logger.getLogger(JobExecutor.class);
+	private Logger log = Logger.getLogger(JobExecutor.class);
 	private SwtView swtView;
 	private IFile UMLFile;
 	private IProperties property;
