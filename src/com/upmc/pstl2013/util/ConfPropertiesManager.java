@@ -12,10 +12,10 @@ import org.apache.log4j.Logger;
 public class ConfPropertiesManager {
 
 	private Properties prop;
-	private static final ConfPropertiesManager instance = new ConfPropertiesManager();
-	private Logger log = Logger.getLogger(ConfPropertiesManager.class);
 	private File file;
-
+	private Logger log = Logger.getLogger(ConfPropertiesManager.class);
+	private static final ConfPropertiesManager instance = new ConfPropertiesManager();
+	
 	/**
 	 * Renvoie l'unique instance du Singleton.
 	 * 
@@ -26,8 +26,9 @@ public class ConfPropertiesManager {
 	}
 	
 	private ConfPropertiesManager() {
+		
 		try {
-			file = new File("pstl2013.properties");
+			file = new File(PluginPath.pluginPath + "pstl2013.properties");
 			if (!file.exists())
 				file.createNewFile();
 			
