@@ -29,7 +29,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 	private IFile UMLFile;
 	private String dirDestination;
 	private IProperties property;
-	private static Logger log = Logger.getLogger(AlloyGenerator.class);
+	private Logger log = Logger.getLogger(AlloyGenerator.class);
 
 	/**
 	 * Constructeur
