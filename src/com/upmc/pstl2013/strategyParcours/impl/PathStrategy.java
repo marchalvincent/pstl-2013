@@ -149,4 +149,16 @@ public class PathStrategy implements IStrategyParcours {
 		}
 		return sb.toString();
 	}
+
+	@Override
+	public IStrategyParcours clone() throws CloneNotSupportedException {
+		PathStrategy object = null;
+		
+		object = (PathStrategy) super.clone();
+		// pas besoin de cloner cet objet, quand on fait appel à la méthode clone
+		// l'objet n'a pas encore été rempli
+		object.mySolution = new MyA4Solution();
+		
+		return object;
+	}
 }

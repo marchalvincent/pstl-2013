@@ -20,7 +20,6 @@ public class IncrementalExecutionStrategy implements IStrategyExecution {
 
 	@Override
 	public boolean continueExecution() {
-		System.out.println("Appel a continueExecution de IncrementalExecutionStrategy");
 		// pour la première exécution on dit qu'on peut générer le fichier.
 		if (isFirst) {
 			isFirst = false;
@@ -37,5 +36,10 @@ public class IncrementalExecutionStrategy implements IStrategyExecution {
 	@Override
 	public void setSatisfiable(boolean satisfiable) {
 		this.satisfiable = satisfiable;
+	}
+	
+	@Override
+	public IStrategyExecution clone() throws CloneNotSupportedException {
+		return (IStrategyExecution) super.clone();
 	}
 }

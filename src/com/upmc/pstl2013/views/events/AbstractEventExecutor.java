@@ -46,10 +46,11 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 				if (properties != null) {
 					for (IProperties property : properties) {
 						//4. On créé une copie de la propriété pour des raisons de concurrence
-						//TODO Vincent le clone incrémental
+						TMPProperty = property.clone();
+						assert TMPProperty != property;
 								
 						// 5. On lance le job
-						jobExec = Factory.getInstance().newJobExecutor("Execution Alloy en cours...", swtView, iFile, property);
+						jobExec = Factory.getInstance().newJobExecutor("Execution Alloy en cours...", swtView, iFile, TMPProperty);
 						jobExec.setUser(true);
 						jobExec.schedule();
 						listJobsExec.add(jobExec);

@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import org.apache.log4j.Logger;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
@@ -19,10 +20,11 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
  */
 public abstract class AbstractProperties implements IProperties {
 
-	protected List<IAttribute> attributes;
+	private List<IAttribute> attributes;
 	private Boolean isCheck;
 	private IStrategyExecution strategyExecution;
 	private IStrategyParcours strategyParcours;
+	private Logger log = Logger.getLogger(AbstractProperties.class);
 
 	/**
 	 * Renvoie la liste des propriétés de vérification alloy possible.
@@ -131,6 +133,29 @@ public abstract class AbstractProperties implements IProperties {
 	@Override
 	public String parcours(A4Solution ans) {
 		return this.getStrategyParcours().parcours(ans);
+	}
+
+	@Override
+	public IProperties clone() {
+		AbstractProperties object = null;
+		try {
+			// On récupère la copie de l'objet
+			object = (AbstractProperties) super.clone();
+			// On copie la liste d'attributs
+			// on veut une "deep copy" (en profondeur) donc on parcours tous les éléments de la liste
+			object.attributes = new ArrayList<IAttribute>();
+			for (IAttribute attr : this.attributes) {
+				object.attributes.add(attr.clone());
+			}
+			
+			// On copie les stratégies
+			object.strategyExecution = strategyExecution.clone();
+			object.strategyParcours = strategyParcours.clone();
+			
+		} catch (CloneNotSupportedException e) {
+			log.error("Impossible de cloner la propriété...");
+		}
+		return object;
 	}
 	
 	/**

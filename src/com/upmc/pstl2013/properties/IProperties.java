@@ -11,8 +11,16 @@ import com.upmc.pstl2013.strategyParcours.IStrategyParcours;
  * Une propriété doit être capable de déléguer les opérations que doit savoir faire
  * une stratégie d'exécution à sa propre stratégie d'exécution. De même pour la stratégie
  * de parcours.
+ * 
+ * @extends IStrategyExecution, une propriété doit être capable de déléguer le travail d'une stratégie
+ * d'exécution.
+ * @extends IStrategyParcours, de même une propriété doit pouvoir déléguer le travail d'une stratégie
+ * de parcours.
+ * @extends Cloneable, une propriété doit pouvoir être clonée car l'exécution Alloy se fait en parallèle
+ * pour chaque fichier. Les propriétés seront donc changées selon l'exécution du fichier, c'est pourquoi 
+ * une copie doit être faite pour ne pas avoir de conflit.
  */
-public interface IProperties extends IStrategyExecution, IStrategyParcours {
+public interface IProperties extends IStrategyExecution, IStrategyParcours, Cloneable {
 
 	/**
 	 * Renvoie le code Alloy associé à cette propriété.
@@ -92,4 +100,9 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours {
 	 * @return
 	 */
 	IStrategyParcours getStrategyParcours();
+	
+	/**
+	 * Clone la propriété.
+	 */
+	IProperties clone();
 }

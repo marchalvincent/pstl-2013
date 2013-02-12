@@ -33,4 +33,9 @@ public class Attribute implements IAttribute {
 	public Boolean isPrivate() {
 		return isPrivate;
 	}
+	
+	@Override
+	public IAttribute clone() throws CloneNotSupportedException {
+		return (IAttribute) super.clone();
+	}
 }
