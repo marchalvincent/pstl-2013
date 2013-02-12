@@ -18,7 +18,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 	private Logger log = Logger.getLogger(AbstractEventExecutor.class);
 	private SwtView swtView;
-	
+
 	/**
 	 * Constructor
 	 * @param {@link SwtView} 
@@ -31,7 +31,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 	@Override
 	public void mouseDown(MouseEvent evt) {
 		List<JobExecutor> listJobsExec = new ArrayList<JobExecutor>();
-		
+
 		// 1. On récupère tous les fichiers UML
 		List<IFile> UMLFileSelected = swtView.getUMLFilesSelected();
 
@@ -43,13 +43,13 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 			for (IFile iFile : UMLFileSelected) {
 				// 3b. Pour chaque propriété
 				if (properties != null) {
-					
+
 					// Dans un premier temps, on exécute la propriété EnoughState pour avoir le nombre de state 
 					// à utiliser avec les autres propriétés
-					String nbState = this.execute(listJobsExec, iFile, properties, true, "");
+					JobExecutor jobEnough = this.execute(listJobsExec, iFile, properties, true, null);
 
-					// Puis ensuite on lance l'exécution pour les autres propriétés
-					this.execute(listJobsExec, iFile, properties, false, nbState);
+					// Puis ensuite on lance l'exécution pour les autres propriétés avec la référence du premier job
+					this.execute(listJobsExec, iFile, properties, false, jobEnough);
 				}
 			}
 			ThreadTimeout threadTimeout = new ThreadTimeout(listJobsExec, swtView.getTimeout());
@@ -67,53 +67,37 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 	 * @param iFile Le fichier als à exécuter.
 	 * @param properties La {@link IProperties} d'exécution.
 	 * @param isEnoughState un booléen qui spécifie si on veut lancer la propriété {@link EnoughState} ou une autre.
-	 * @param nbState String le nombre de state que l'on souhaite utiliser, ou un string vide si on prend les paramètres par défaut
-	 * @return String le nombre de state utilisé pour générer la solution ou vide si on n'est pas dans le cas EnoughState.
+	 * @param jobToWait JobExecutor le job qui exécute (a exécuté) la propriété EnoughState ou null si c'est celui ci qui doit le faire.
+	 * @return JobExecutor Le {@link JobExecutor} qui vient d'être lancé.
 	 */
-	private String execute(List<JobExecutor> listJobsExec, IFile iFile, List<IProperties> properties, boolean isEnoughState, String nbState) {
+	private JobExecutor execute(List<JobExecutor> listJobsExec, IFile iFile, List<IProperties> properties, boolean isEnoughState, JobExecutor jobToWait) {
+
 		IProperties TMPProperty = null;
 		JobExecutor jobExec = null;
 		for (IProperties property : properties) {
 			if ((isEnoughState && property.getClass().getSimpleName().equals("EnoughState")) 
 					|| (!isEnoughState && !property.getClass().getSimpleName().equals("EnoughState"))) {
-				
+
 				// On créé une copie de la propriété pour des raisons de concurrence (une propriété est sujette à modification pendant l'exécution)
 				TMPProperty = property.clone();
-				
-				// si on a spécifier un nombre de state, on le put
-				if (!nbState.equals("")) {
-					TMPProperty.put("nbState", nbState);
-				}
-				
+
 				// On lance le job
 				String nomJob = "Execution Alloy de " + iFile.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
-				jobExec = Factory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty);
+				jobExec = Factory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty, jobToWait);
 				jobExec.setUser(true);
 				jobExec.schedule();
 				listJobsExec.add(jobExec);
 			}
 		}
-		
-		// si on exécute EnoughState, on attend la fin du thread pour renvoyer le nombre de state utile pour les autres properties
-		if (isEnoughState) {
-			//TODO Voir si le join ne peut pas être fait dans un thread à part
-			try {
-				jobExec.join();
-			} catch (InterruptedException e) {
-				log.error("Le Job a été interrompu.");
-			}
-			return jobExec.getNbState();
-		}
-		else {
-			return "";
-		}
+
+		return jobExec;
 	}
 
 	/**
 	 * Méthode qui récupère la liste de IProperties à exécuter sur le(s) fichier(s) UML.
 	 */
 	protected abstract List<IProperties> getProperties() throws PropertiesException;
-	
+
 	/**
 	 * Met à jour les préférences des propriétés.
 	 * @param la liste des {@link IProperties}.
@@ -132,7 +116,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 			}
 		}
 	}
-	
+
 	private void showToView(String msg){
 		log.error(msg);
 		Display.getDefault().asyncExec(new RunnableUpdateExecutor(swtView, msg));
