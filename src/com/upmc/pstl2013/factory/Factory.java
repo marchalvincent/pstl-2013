@@ -135,7 +135,7 @@ public class Factory implements IFactory {
 	
 	//-------------------------OTHERS-------------------------
 	@Override
-	public JobExecutor newJobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property) {
-		return new JobExecutor(name, swtView, UMLFile, property);
+	public JobExecutor newJobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait) {
+		return new JobExecutor(name, swtView, UMLFile, property, jobToWait);
 	}
 }

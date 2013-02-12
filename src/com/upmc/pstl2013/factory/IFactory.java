@@ -149,6 +149,7 @@ public interface IFactory {
 	 * @param swtView la vue de l'interface graphique.
 	 * @param UMLFile le fichier UML a exécuter.
 	 * @param property la propriété d'exécution.
+	 * @param jobToWait le job qu'il faut attendre avant de s'exécuter ou null s'il n'y a pas besoin.
 	 */
-	JobExecutor newJobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property);
+	JobExecutor newJobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait);
 }
