@@ -42,4 +42,18 @@ public interface IActivityResult {
 	 * Met le flag satifiable à {@code bool}.
 	 */
 	void setSatisfiable(boolean bool);
+	
+	/**
+	 * Setter permettant de spécifier le nombre de state qui a été utilisé pour générer 
+	 * cette solution.
+	 * @param nbState String, le nombre de state.
+	 */
+	void setNbState(String nbState);
+	
+	/**
+	 * Renvoie le nombre de state qui a été utilisé pour générer cette solution Alloy.
+	 * Cette méthode est surtout utile lorsqu'on exécute la propriété EnoughState.
+	 */
+	String getNbState();
+	
 }

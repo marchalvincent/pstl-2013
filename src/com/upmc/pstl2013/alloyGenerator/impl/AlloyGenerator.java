@@ -238,4 +238,9 @@ public class AlloyGenerator implements IAlloyGenerator {
 		// si on n'a trouvé aucun nom, on peut l'utiliser !
 		return name;
 	}
+
+	@Override
+	public String getNbState() {
+		return property.getString("nbState");
+	}
 }

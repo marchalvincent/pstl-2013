@@ -26,7 +26,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 
 /**
- * Cette classe se charge d'éxécuter les fichiers Alloy généré précédement
+ * Cette classe se charge d'éxécuter les fichiers Alloy généré précédement par le {@link IAlloyGenerator}.
  * 
  */
 public class AlloyExecutor implements IAlloyExecutor {
@@ -110,14 +110,16 @@ public class AlloyExecutor implements IAlloyExecutor {
 							activityResult.setSatisfiable(false);
 							activityResult.setPathXMLResult(null);
 						}
+						// on spécifie au résultat le nombre de state utilisé
+						activityResult.setNbState(generator.getNbState());
 					}
 				}
 			} catch (IOException e) {
 				activityResult.appendLog("Impossible de récupérer le chemin du fichier : " + e.toString() + "\n");
 				log.error("Impossible de récupérer le chemin du fichier : " + e.toString(), e);
 			}
-			System.out.println(activityResult.getLogResult());
 		}
+		System.out.println(activityResult.getLogResult());
 		// et enfin on ajoute le résultat de l'activityResult
 		if (activityResult != null) {
 			activityResults.add(activityResult);
