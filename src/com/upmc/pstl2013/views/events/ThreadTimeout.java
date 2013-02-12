@@ -3,6 +3,7 @@ package com.upmc.pstl2013.views.events;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.eclipse.core.runtime.IStatus;
 
 public class ThreadTimeout extends Thread {
 
@@ -35,7 +36,7 @@ public class ThreadTimeout extends Thread {
 				timeSpend = (endTime - startTime) / 1000000000; // en sec
 				isEnd = true;
 				for (JobExecutor job : listJobsExec) {
-					if((job.getResult() != null) && !job.getResult().isOK())
+					if((job.getResult() != null))
 					{
 						isEnd = false;
 						break;
