@@ -18,4 +18,9 @@ public class VoidStrategy implements IStrategyParcours {
 	public String parcours(A4Solution ans) {
 		return "";
 	}
+	
+	@Override
+	public IStrategyParcours clone() throws CloneNotSupportedException {
+		return (VoidStrategy) super.clone();
+	}
 }

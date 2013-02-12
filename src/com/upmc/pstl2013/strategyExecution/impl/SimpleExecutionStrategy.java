@@ -17,7 +17,6 @@ public class SimpleExecutionStrategy implements IStrategyExecution {
 	
 	@Override
 	public boolean continueExecution() {
-		System.out.println("Appel a continueExecution de SimpleExecutionStrategy");
 		if (isFirst) {
 			isFirst = false;
 			return true;
@@ -27,4 +26,9 @@ public class SimpleExecutionStrategy implements IStrategyExecution {
 
 	@Override
 	public void setSatisfiable(boolean satisfiable) {}
+	
+	@Override
+	public IStrategyExecution clone() throws CloneNotSupportedException {
+		return (IStrategyExecution) super.clone();
+	}
 }
