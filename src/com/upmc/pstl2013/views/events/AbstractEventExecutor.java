@@ -9,6 +9,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.SwtView;
@@ -29,7 +30,6 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 	@Override
 	public void mouseDown(MouseEvent evt) {
-		JobExecutor jobExec;
 		List<JobExecutor> listJobsExec = new ArrayList<JobExecutor>();
 		
 		// 1. On récupère tous les fichiers UML
@@ -37,24 +37,19 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 		// 2. On récupère toutes les propriétés seléctionnées
 		List<IProperties> properties = null;
-		IProperties TMPProperty = null;
 		try {
 			properties = this.getProperties();
 			// 3a. Pour chaque fichier
 			for (IFile iFile : UMLFileSelected) {
 				// 3b. Pour chaque propriété
 				if (properties != null) {
-					for (IProperties property : properties) {
-						//4. On créé une copie de la propriété pour des raisons de concurrence
-						TMPProperty = property.clone();
-						assert TMPProperty != property;
-								
-						// 5. On lance le job
-						jobExec = Factory.getInstance().newJobExecutor("Execution Alloy en cours...", swtView, iFile, TMPProperty);
-						jobExec.setUser(true);
-						jobExec.schedule();
-						listJobsExec.add(jobExec);
-					}
+					
+					// Dans un premier temps, on exécute la propriété EnoughState pour avoir le nombre de state 
+					// à utiliser avec les autres propriétés
+					String nbState = this.execute(listJobsExec, iFile, properties, true, "");
+
+					// Puis ensuite on lance l'exécution pour les autres propriétés
+					this.execute(listJobsExec, iFile, properties, false, nbState);
 				}
 			}
 //			ThreadTimeout threadTimeout = new ThreadTimeout(listJobsExec, swtView.getTimeout());
@@ -64,6 +59,54 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		}
 		// 4. On enregistre dans les préférences les propriétés
 		this.saveProperties(properties);
+	}
+
+	/**
+	 * Exécute un fichier als pour une propriété donnée.
+	 * @param listJobsExec La liste des {@link JobExecutor} en cours d'exécution.
+	 * @param iFile Le fichier als à exécuter.
+	 * @param properties La {@link IProperties} d'exécution.
+	 * @param isEnoughState un booléen qui spécifie si on veut lancer la propriété {@link EnoughState} ou une autre.
+	 * @param nbState String le nombre de state que l'on souhaite utiliser, ou un string vide si on prend les paramètres par défaut
+	 * @return String le nombre de state utilisé pour générer la solution ou vide si on n'est pas dans le cas EnoughState.
+	 */
+	private String execute(List<JobExecutor> listJobsExec, IFile iFile, List<IProperties> properties, boolean isEnoughState, String nbState) {
+		IProperties TMPProperty = null;
+		JobExecutor jobExec = null;
+		for (IProperties property : properties) {
+			if ((isEnoughState && property.getClass().getSimpleName().equals("EnoughState")) 
+					|| (!isEnoughState && !property.getClass().getSimpleName().equals("EnoughState"))) {
+				
+				// On créé une copie de la propriété pour des raisons de concurrence (une propriété est sujette à modification pendant l'exécution)
+				TMPProperty = property.clone();
+				
+				// si on a spécifier un nombre de state, on le put
+				if (!nbState.equals("")) {
+					TMPProperty.put("nbState", nbState);
+				}
+				
+				// On lance le job
+				String nomJob = "Execution Alloy de " + iFile.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
+				jobExec = Factory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty);
+				jobExec.setUser(true);
+				jobExec.schedule();
+				listJobsExec.add(jobExec);
+			}
+		}
+		
+		// si on exécute EnoughState, on attend la fin du thread pour renvoyer le nombre de state utile pour les autres properties
+		if (isEnoughState) {
+			//TODO Voir si le join ne peut pas être fait dans un thread à part
+			try {
+				jobExec.join();
+			} catch (InterruptedException e) {
+				log.error("Le Job a été interrompu.");
+			}
+			return jobExec.getNbState();
+		}
+		else {
+			return "";
+		}
 	}
 
 	/**

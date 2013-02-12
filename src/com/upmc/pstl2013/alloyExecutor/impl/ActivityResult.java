@@ -12,6 +12,7 @@ public class ActivityResult implements IActivityResult {
 	private StringBuilder logs;
 	private String XMLFile;
 	private boolean satifiable;
+	private String nbState;
 	
 	public ActivityResult(String nom) {
 		super();
@@ -19,6 +20,7 @@ public class ActivityResult implements IActivityResult {
 		this.logs = new StringBuilder();
 		this.XMLFile = null;
 		this.satifiable = false;
+		nbState = "";
 	}
 	
 	@Override
@@ -54,5 +56,14 @@ public class ActivityResult implements IActivityResult {
 	@Override
 	public void setSatisfiable(boolean bool) {
 		satifiable = bool;
+	}
+	
+	public String getNbState() {
+		return nbState;
+	}
+
+	@Override
+	public void setNbState(String nbState) {
+		this.nbState = nbState;
 	}
 }

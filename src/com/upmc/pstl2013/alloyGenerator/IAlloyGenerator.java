@@ -22,4 +22,9 @@ public interface IAlloyGenerator extends Iterator<IAlloyGenerated> {
 	 * @param bool
 	 */
 	void setSatisfiable(boolean bool);
+
+	/**
+	 * Renvoie le nombre de state de la propriété du generator.
+	 */
+	String getNbState();
 }

@@ -21,14 +21,15 @@ public class JobExecutor extends Job {
 	private IFile UMLFile;
 	private IProperties property;
 	private String dirDestination;
+	private String nbState;
 	
-
 	public JobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property) {
 		super(name);
 		this.swtView = swtView;
 		this.UMLFile = UMLFile;
 		this.property = property;
 		this.dirDestination = swtView.getUserDir();
+		nbState = "";
 	}
 
 	@Override
@@ -41,8 +42,15 @@ public class JobExecutor extends Job {
 		IAlloyExecutor alloyExecutor = Factory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property);
 		
 		try {
-			
+			// On lance l'exécution
 			IFileResult iFileResult = alloyExecutor.executeFiles();
+			
+			// On récupère le nombre de state (utile quand on exécute EnoughState)
+			// pour l'instant, on ne traite qu'une activité à la fois
+			// TODO modifier ici si on traite plusieurs activité à la fois...
+			nbState = iFileResult.getListActivityResult().get(0).getNbState();
+			
+			// Puis on affiche les résultats sur l'interface graphique
 			showToDetails(iFileResult);
 			result.append("Fin d'exécution des fichiers Alloy.\n");
 			log.info(result.toString());
@@ -65,11 +73,14 @@ public class JobExecutor extends Job {
 	
 	@SuppressWarnings("deprecation")
 	@Override
-	public void canceling()
-	{
+	public void canceling() {
 		this.getThread().interrupt();
 		this.getThread().stop();
 		log.info("Interruption de : " + this.getName());
+	}
+	
+	public String getNbState() {
+		return nbState;
 	}
 
 }
