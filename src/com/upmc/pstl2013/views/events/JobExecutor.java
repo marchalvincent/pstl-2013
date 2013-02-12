@@ -22,20 +22,42 @@ public class JobExecutor extends Job {
 	private IProperties property;
 	private String dirDestination;
 	private String nbState;
+	private JobExecutor jobToWait;
 	
-	public JobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property) {
+	public JobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait) {
 		super(name);
 		this.swtView = swtView;
 		this.UMLFile = UMLFile;
 		this.property = property;
 		this.dirDestination = swtView.getUserDir();
-		nbState = "";
+		this.nbState = "";
+		this.jobToWait = jobToWait;
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 
-		log.info("Génération et exécution des fichiers Alloy.");
+		StringBuilder sbInfo = new StringBuilder();
+		sbInfo.append("Génération et exécution du fichier ");
+		sbInfo.append(UMLFile.getName());
+		sbInfo.append(" : propriété ");
+		sbInfo.append(property.getClass().getSimpleName());
+		sbInfo.append(".\n");
+		log.info(sbInfo.toString());
+		showToView(sbInfo.toString());
+		
+		// Si on a un job à attendre, on se "join" sur lui
+		if (jobToWait != null) {
+			try {
+				jobToWait.join();
+			} catch (InterruptedException e) {
+				log.error("Impossible d'attendre le thread, il a été interrompu...");
+			}
+
+			// Puis on spécifie la nouvelle variable nbState du job qui vient de finir (EnoughState).
+			property.put("nbState", jobToWait.getNbState());
+		}
+		
 		StringBuilder result = new StringBuilder();
 
 		// 1. On créé l'objet exécutor
@@ -52,12 +74,19 @@ public class JobExecutor extends Job {
 			
 			// Puis on affiche les résultats sur l'interface graphique
 			showToDetails(iFileResult);
-			result.append("Fin d'exécution des fichiers Alloy.\n");
+			
+			result.append("Fin d'exécution du fichier ");
+			result.append(UMLFile.getName());
+			result.append(" : propriété ");
+			result.append(property.getClass().getSimpleName());
+			result.append(".\n");
+			
 			log.info(result.toString());
 			showToView(result.toString());
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			showToView(e.getMessage());
+			return Status.CANCEL_STATUS;
 		}
 		
 		return Status.OK_STATUS;
