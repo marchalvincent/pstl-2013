@@ -57,8 +57,8 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 					}
 				}
 			}
-			ThreadTimeout threadTimeout = new ThreadTimeout(listJobsExec, swtView.getTimeout());
-			threadTimeout.start();
+//			ThreadTimeout threadTimeout = new ThreadTimeout(listJobsExec, swtView.getTimeout());
+//			threadTimeout.start();
 		} catch (PropertiesException e) {
 			showToView(e.getMessage());
 		}
