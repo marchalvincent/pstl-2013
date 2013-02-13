@@ -1,35 +1,29 @@
 package com.upmc.pstl2013.views.events;
 
 import java.util.List;
-
 import org.apache.log4j.Logger;
-import org.eclipse.core.runtime.IStatus;
 
 public class ThreadTimeout extends Thread {
 
-	
+
 	private List<JobExecutor> listJobsExec;
 	private long timeout;
 	private Logger log = Logger.getLogger(ThreadTimeout.class);
 
 
-	public ThreadTimeout(List<JobExecutor> listJobsExec,int timeout)
-	{
+	public ThreadTimeout(List<JobExecutor> listJobsExec,int timeout) {
 		this.listJobsExec = listJobsExec;
 		this.timeout = timeout;
 	}
-	
-	
+
+
 	@Override
-	public void run()
-	{
+	public void run() {
 		long endTime, timeSpend = 0;
 		long startTime = System.nanoTime();
 		Boolean isEnd = false;
-		
-		while ((timeSpend < timeout) && !isEnd)
-		{
-			
+
+		while ((timeSpend < timeout) && !isEnd) {
 			try {
 				Thread.sleep(1000);
 				endTime = System.nanoTime();
@@ -46,10 +40,9 @@ public class ThreadTimeout extends Thread {
 				e.printStackTrace();
 			}
 		}
-		
+
 		for (JobExecutor job : listJobsExec) {
-			if (job.getResult() == null)
-			{
+			if (job.getResult() == null) {
 				if (job.cancel() || !job.getThread().isInterrupted())
 					log.info("job " + job.getName() + " was stopped !");
 				else
