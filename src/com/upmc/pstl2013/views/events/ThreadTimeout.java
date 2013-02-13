@@ -22,17 +22,17 @@ public class ThreadTimeout extends Thread {
 		long endTime, timeSpend = 0;
 		long startTime = System.nanoTime();
 		Boolean isEnd = false;
-
+		System.out.println("TIMEOUT : " + timeout);
 		while ((timeSpend < timeout) && !isEnd) {
 			try {
 				Thread.sleep(1000);
 				endTime = System.nanoTime();
 				timeSpend = (endTime - startTime) / 1000000000; // en sec
-				isEnd = true;
+				
 				for (JobExecutor job : listJobsExec) {
 					if((job.getResult() != null))
 					{
-						isEnd = false;
+						isEnd = true;
 						break;
 					}
 				}
@@ -41,12 +41,14 @@ public class ThreadTimeout extends Thread {
 			}
 		}
 
-		for (JobExecutor job : listJobsExec) {
-			if (job.getResult() == null) {
-				if (job.cancel() || !job.getThread().isInterrupted())
-					log.info("job " + job.getName() + " was stopped !");
-				else
-					log.info("job " + job.getName() + " couldn't be stopped !");
+		if(!isEnd){
+			for (JobExecutor job : listJobsExec) {
+				if (job.getResult() == null) {
+					if (job.cancel() || !job.getThread().isInterrupted())
+						log.info("job " + job.getName() + " was stopped !");
+					else
+						log.info("job " + job.getName() + " couldn't be stopped !");
+				}
 			}
 		}
 	}
