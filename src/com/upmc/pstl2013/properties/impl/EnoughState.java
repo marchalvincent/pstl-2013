@@ -7,10 +7,13 @@ import com.upmc.pstl2013.factory.Factory;
 
 public class EnoughState extends AbstractProperties {
 
+	private boolean firstIncrement;
+	
 	public EnoughState() {
 		super(Boolean.TRUE, Factory.getInstance().newIncrementalExecutionStrategy(), Factory.getInstance().newVoidStrategy());
 		super.put("nbState", "1");
 		super.put("incrementation", "1");
+		firstIncrement = true;
 	}
 
 	@Override
@@ -33,6 +36,11 @@ public class EnoughState extends AbstractProperties {
 	 * Incrémente le nombre de State de la propriété.
 	 */
 	private void incrementation() {
+		// pour la première exécution, on n'incrémente pas
+		if (firstIncrement) {
+			firstIncrement = false;
+			return;
+		}
 		int nbState = Integer.parseInt(super.getString("nbState"));
 		String sIncr = super.getString("incrementation");
 		if (sIncr != null) {
