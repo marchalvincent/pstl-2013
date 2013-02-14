@@ -28,7 +28,7 @@ public class ConfPropertiesManager {
 	private ConfPropertiesManager() {
 		
 		try {
-			file = new File(PluginPath.pluginPath + "pstl2013.properties");
+			file = new File(Utils.pluginPath + "pstl2013.properties");
 			if (!file.exists())
 				file.createNewFile();
 			
