@@ -59,7 +59,7 @@ public class SwtView extends Composite {
 	private Button btnAlloyVisualisation;
 	private Button btnChooseFolderExec;
 	private Button btnLogsErrors;
-	
+
 	private IActivityResult currentActivityeResult;
 	private String separator = File.separator;
 	private String userDir;
@@ -278,13 +278,30 @@ public class SwtView extends Composite {
 	public void updateTreeExecResult(IFileResult fileResult)
 	{
 		treeFilesExecuted.addListener(SWT.Selection, new EventSelectTreeItemDetail(this));
-		TreeItem item0 = new TreeItem(treeFilesExecuted, 0);
-		item0.setText(fileResult.getNom());
+
+		TreeItem item0 = null;
+		// on regarde s'il n'y a pas déjà un résultat pour ce fichier
+		for (int i = 0; i < treeFilesExecuted.getItemCount(); i++) {
+			// S'il existe on le récupère
+			if (treeFilesExecuted.getItem(i).getText().equals(fileResult.getNom())) {
+				item0 = treeFilesExecuted.getItem(i);
+			}
+		}
+
+		// sinon on n'a rien trouvé, on le créé
+		if (item0 == null) {
+			item0 = new TreeItem(treeFilesExecuted, 0);
+			item0.setText(fileResult.getNom());
+		}
+
+		// et enfin, on ajoute les IActivityResult
 		for (IActivityResult actResult : fileResult.getListActivityResult()) {
 			TreeItem item1 = new TreeItem(item0, 0);
 			item1.setText(actResult.getNom());
 			item1.setData(actResult);	
 		}
+
+
 	}
 
 	public Text getTxtDirectory() {

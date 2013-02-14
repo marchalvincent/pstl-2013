@@ -23,8 +23,9 @@ public class JobExecutor extends Job {
 	private String dirDestination;
 	private String nbState;
 	private JobExecutor jobToWait;
+	private int counterExecution;
 	
-	public JobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait) {
+	public JobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait, int counterExecution) {
 		super(name);
 		this.swtView = swtView;
 		this.UMLFile = UMLFile;
@@ -32,6 +33,7 @@ public class JobExecutor extends Job {
 		this.dirDestination = swtView.getUserDir();
 		this.nbState = "";
 		this.jobToWait = jobToWait;
+		this.counterExecution = counterExecution;
 	}
 
 	@Override
@@ -61,7 +63,7 @@ public class JobExecutor extends Job {
 		StringBuilder result = new StringBuilder();
 
 		// 1. On créé l'objet exécutor
-		IAlloyExecutor alloyExecutor = Factory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property);
+		IAlloyExecutor alloyExecutor = Factory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property, counterExecution);
 		
 		try {
 			// On lance l'exécution

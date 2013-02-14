@@ -80,8 +80,9 @@ public interface IFactory {
 	 * @param UMLFile un {@link IFile} correspondant au fichier UML.
 	 * @param dirDestination un String pour le dossier de travail du plugin.
 	 * @param property la {@link IProperties} de génération Alloy.
+	 * @param counterExecution le numéro de l'exécution.
 	 */
-	IAlloyExecutor newAlloyExecutor(IFile UMLFile, String dirDestination, IProperties property);
+	IAlloyExecutor newAlloyExecutor(IFile UMLFile, String dirDestination, IProperties property, int counterExecution);
 	
 	/**
 	 * Créé un {@link IActivityResult}.
@@ -150,6 +151,7 @@ public interface IFactory {
 	 * @param UMLFile le fichier UML a exécuter.
 	 * @param property la propriété d'exécution.
 	 * @param jobToWait le job qu'il faut attendre avant de s'exécuter ou null s'il n'y a pas besoin.
+	 * @param counterExecution le numéro de l'exécution.
 	 */
-	JobExecutor newJobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait);
+	JobExecutor newJobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait, int counterExecution);
 }

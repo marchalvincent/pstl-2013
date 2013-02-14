@@ -18,6 +18,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 	private Logger log = Logger.getLogger(AbstractEventExecutor.class);
 	private SwtView swtView;
+	private static int counterExecution;
 
 	/**
 	 * Constructor
@@ -26,10 +27,12 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 	public AbstractEventExecutor(SwtView swtView) {
 		super();
 		this.swtView = swtView;
+		counterExecution = 0;
 	}
 
 	@Override
 	public void mouseDown(MouseEvent evt) {
+		counterExecution++;
 		List<JobExecutor> listJobsExec = new ArrayList<JobExecutor>();
 
 		// 1. On récupère tous les fichiers UML
@@ -83,7 +86,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 				// On lance le job
 				String nomJob = "Execution Alloy de " + iFile.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
-				jobExec = Factory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty, jobToWait);
+				jobExec = Factory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty, jobToWait, counterExecution);
 				jobExec.setUser(true);
 				jobExec.schedule();
 				listJobsExec.add(jobExec);

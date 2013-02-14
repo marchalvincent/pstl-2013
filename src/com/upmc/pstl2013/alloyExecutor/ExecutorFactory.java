@@ -23,8 +23,8 @@ public class ExecutorFactory {
 	
 	private ExecutorFactory() {}
 
-	public IAlloyExecutor newAlloyExecutor(IFile UMLFile, String dirDestination, IProperties property) {
-		return new AlloyExecutor(UMLFile, dirDestination, property);
+	public IAlloyExecutor newAlloyExecutor(IFile UMLFile, String dirDestination, IProperties property, int counterExecution) {
+		return new AlloyExecutor(UMLFile, dirDestination, property, counterExecution);
 	}
 	
 	public IActivityResult newActivityResult(String nom) {

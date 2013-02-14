@@ -79,8 +79,8 @@ public class Factory implements IFactory {
 
 	//-------------------------EXECUTOR-------------------------
 	@Override
-	public IAlloyExecutor newAlloyExecutor(IFile UMLFile, String dirDestination, IProperties property) {
-		return ExecutorFactory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property);
+	public IAlloyExecutor newAlloyExecutor(IFile UMLFile, String dirDestination, IProperties property, int counterExecution) {
+		return ExecutorFactory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property, counterExecution);
 	}
 	
 	@Override
@@ -135,7 +135,7 @@ public class Factory implements IFactory {
 	
 	//-------------------------OTHERS-------------------------
 	@Override
-	public JobExecutor newJobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait) {
-		return new JobExecutor(name, swtView, UMLFile, property, jobToWait);
+	public JobExecutor newJobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait, int counterExecution) {
+		return new JobExecutor(name, swtView, UMLFile, property, jobToWait, counterExecution);
 	}
 }

@@ -33,17 +33,21 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 	private IAlloyGenerator generator;
 	private IFile UMLFile;
+	private IProperties property;
+	private int counterExecution;
 	private static final Boolean XMLLock = Boolean.TRUE;
 	private Logger log = Logger.getLogger(AlloyExecutor.class);
 
 	/**
 	 * Constructeur
 	 */
-	public AlloyExecutor(IFile UMLFile, String dirDestination, IProperties property) {
+	public AlloyExecutor(IFile UMLFile, String dirDestination, IProperties property, int counterExecution) {
 
 		super();
 		this.generator = Factory.getInstance().newAlloyGenerator(UMLFile, dirDestination, property);
 		this.UMLFile = UMLFile;
+		this.property = property;
+		this.counterExecution = counterExecution;
 	}
 
 	@Override
@@ -67,7 +71,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 			File generatedFile = generated.getFile();
 			// on créé un résultat pour cette activité si elle n'existe pas déjà
 			if (activityResult == null) {
-				activityResult = Factory.getInstance().newActivityResult(generatedFile.getAbsolutePath());
+				activityResult = Factory.getInstance().newActivityResult(property.getClass().getSimpleName());
 			}
 
 			try {
@@ -126,7 +130,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 		}
 
 		// On peut enfin retourner l'objet IFileResult
-		return Factory.getInstance().newFileResult(UMLFile.getName(), activityResults);
+		return Factory.getInstance().newFileResult(counterExecution + ". " + UMLFile.getName(), activityResults);
 	}
 
 	/**

@@ -28,14 +28,15 @@ public class EventSelectTreeItemDetail implements Listener {
 	
 	@Override
 	public void handleEvent(Event event) {
-		if (event.item.getData() != null)
-		{
+		if (event.item.getData() != null) {
 			IActivityResult activityResult = (IActivityResult)event.item.getData();
 			txtDetailsLogs.setText(activityResult.getLogResult());
-			if (activityResult.isSatisfiable())
-			{
+			if (activityResult.isSatisfiable()) {
 				btnVisualisationAlloy.setEnabled(true);
 				swtView.setCurrentActivityeResult(activityResult);
+			}
+			else {
+				btnVisualisationAlloy.setEnabled(false);
 			}
 			
 		}
