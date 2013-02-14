@@ -18,7 +18,6 @@ import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.umlParser.IUMLParser;
-import com.upmc.pstl2013.util.PluginPath;
 import com.upmc.pstl2013.util.Utils;
 
 /**
@@ -113,12 +112,12 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 			// 2. S'il ne sont pas là on les copie
 			if (!syntax.exists()) {
-				File trueSyntax = new File(PluginPath.pluginPath + "model" + File.separator + "syntax.als");
+				File trueSyntax = new File(Utils.pluginPath + "model" + File.separator + "syntax.als");
 				Utils.copyContentFile(trueSyntax, syntax);
 			}
 
 			if (!semantic.exists()) {
-				File trueSemantic = new File(PluginPath.pluginPath + "model" + File.separator + "semantic.als");
+				File trueSemantic = new File(Utils.pluginPath + "model" + File.separator + "semantic.als");
 				Utils.copyContentFile(trueSemantic, semantic);
 			}
 		} catch (Exception e) {

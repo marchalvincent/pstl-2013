@@ -26,6 +26,7 @@ import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
+import com.upmc.pstl2013.util.Utils;
 import com.upmc.pstl2013.views.events.EventChooseDir;
 import com.upmc.pstl2013.views.events.EventChooseFile;
 import com.upmc.pstl2013.views.events.EventChooseFolderExec;
@@ -35,6 +36,9 @@ import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
 import com.upmc.pstl2013.views.events.EventSelectProperty;
 import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
+import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 
 public class SwtView extends Composite {
 
@@ -156,25 +160,43 @@ public class SwtView extends Composite {
 		 * Debut contenu de la parite utilisation
 		 */
 		btnChooseDir = new Button(cpItemAlloyUse, SWT.NONE);
+		btnChooseDir.setToolTipText("Choose the directory path for the generated alloy files");
+		btnChooseDir.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "choose_folder.gif"));
+		btnChooseDir.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		btnChooseDir.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
-		btnChooseDir.setText("Choose Dir");
+		btnChooseDir.setText("Choose dest.");
 
 		txtDirectory = new Text(cpItemAlloyUse, SWT.BORDER);
 		txtDirectory.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		txtDirectory.setText(userDir);
 
 		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
+		btnChooserFile.setToolTipText("Choose files for the execution");
+		btnChooserFile.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "select_file.gif"));
 		btnChooserFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		btnChooserFile.setText("File Exec");
+		btnChooserFile.setText("File");
 
 		btnChooseFolderExec = new Button(cpItemAlloyUse, SWT.NONE);
+		btnChooseFolderExec.setToolTipText("Choose all files of one folder for the execution");
+		btnChooseFolderExec.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "select_folder.gif"));
+		btnChooseFolderExec.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		btnChooseFolderExec.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
-		btnChooseFolderExec.setText("Folder Exec");
+		btnChooseFolderExec.setText("Folder");
 
 		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4));
 
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
+		btnExcuterAlloy.setToolTipText("Run the execution Alloy");
+		btnExcuterAlloy.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run.gif"));
 		btnExcuterAlloy.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		btnExcuterAlloy.setText("Execute Alloy");
 
@@ -184,14 +206,25 @@ public class SwtView extends Composite {
 		txtTimeOut.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
 
 		btnLogsInfos = new Button(cpItemAlloyUse, SWT.NONE);
+		btnLogsInfos.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "info_log.gif"));
+		btnLogsInfos.setToolTipText("Open the infos logs");
 		btnLogsInfos.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
-		btnLogsInfos.setText("Logs infos");
+		btnLogsInfos.setText("Logs");
 
 		btnLogsErrors = new Button(cpItemAlloyUse, SWT.NONE);
+		btnLogsErrors.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "error_log.gif"));
+		btnLogsErrors.setToolTipText("Open the errors logs");
 		btnLogsErrors.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
-		btnLogsErrors.setText("Logs errors");
+		btnLogsErrors.setText("Logs");
 
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
+		btnPersonalPropertie.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run_perso.gif"));
+		btnPersonalPropertie.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
+		btnPersonalPropertie.setToolTipText("Execute the user alloy text");
 		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
 		btnPersonalPropertie.setText("Exec Perso");
 
@@ -213,6 +246,12 @@ public class SwtView extends Composite {
 		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
 
 		btnAlloyVisualisation = new Button(cpItemDetails, SWT.NONE);
+		btnAlloyVisualisation.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "insp_sbook.gif"));
+		btnAlloyVisualisation.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
 		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualiser");
