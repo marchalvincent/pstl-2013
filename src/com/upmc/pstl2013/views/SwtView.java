@@ -9,6 +9,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -21,6 +23,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
@@ -36,9 +39,7 @@ import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
 import com.upmc.pstl2013.views.events.EventSelectProperty;
 import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
-import org.eclipse.wb.swt.SWTResourceManager;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.widgets.Label;
 
 public class SwtView extends Composite {
 
@@ -50,14 +51,13 @@ public class SwtView extends Composite {
 	private Button btnExcuterAlloy;
 	private Button btnLogsInfos;
 	private TabFolder tabFolder;
-	private TabItem itemAlloyUse, itemAlloyProperty, itemDetails;
-	private Composite cpItemAlloyUse, cpItemAlloyProp, cpItemDetails;
+	private TabItem itemAlloyUse, itemAlloyProperty, itemDetails, itemOptions;
+	private Composite cpItemAlloyUse, cpItemAlloyProp, cpItemDetails, cpItemOptions;
 	private Table tabProperties;
 	private Table tabValuePropertiesString,tabValuePropertiesBool;
 	private final TableEditor editorString, editorBool;
 	private Text txtPersonalPropertie;
 	private Button btnPersonalPropertie;
-	private Text txtTimeOut;
 	private Tree treeFilesExecuted;
 	private Text txtDetailsLogs;
 	private Button btnAlloyVisualisation;
@@ -73,6 +73,10 @@ public class SwtView extends Composite {
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
+	private Text txtTimeout;
+	private Label lblTimeout;
+	private Label txtNbNodeMax;
+	private Text text;
 
 	/**
 	 * Create the composite.
@@ -103,22 +107,32 @@ public class SwtView extends Composite {
 
 		//Items et composite pour la partie utilisation du tabeFolder
 		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
+		itemAlloyUse.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "start_cheatsheet.gif"));
 		itemAlloyUse.setText("Utilisation");
 		cpItemAlloyUse = new Composite(tabFolder, SWT.BORDER);
 		cpItemAlloyUse.setLayout(new GridLayout(3, false));
 		itemAlloyUse.setControl(cpItemAlloyUse);
 		//Items et composite pour la partie propriete du tabeFolder
 		itemAlloyProperty = new TabItem(tabFolder, SWT.NONE);
+		itemAlloyProperty.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "properties.gif"));
 		itemAlloyProperty.setText("Properties");
 		cpItemAlloyProp = new Composite(tabFolder, SWT.BORDER);
 		cpItemAlloyProp.setLayout(new GridLayout(3, false));
 		itemAlloyProperty.setControl(cpItemAlloyProp);
-
+		//Items et composite pour la partie Details du tabeFolder
 		itemDetails = new TabItem(tabFolder, SWT.NONE);
+		itemDetails.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "console_view.gif"));
 		itemDetails.setText("Details");
 		cpItemDetails = new Composite(tabFolder, SWT.BORDER);
 		cpItemDetails.setLayout(new GridLayout(2, false));
 		itemDetails.setControl(cpItemDetails);
+		//Items et composite pour la partie Options du tabeFolder
+		itemOptions = new TabItem(tabFolder, SWT.NONE);
+		itemOptions.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "bkmrk_nav.gif"));
+		itemOptions.setText("Options");
+		cpItemOptions= new Composite(tabFolder, SWT.BORDER);
+		cpItemOptions.setLayout(new GridLayout(2, false));
+		itemOptions.setControl(cpItemOptions);
 
 		/*
 		 * Debut contenu de la parite property 
@@ -199,23 +213,21 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run.gif"));
 		btnExcuterAlloy.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		btnExcuterAlloy.setText("Execute Alloy");
-
-
-		txtTimeOut = new Text(cpItemAlloyUse, SWT.BORDER);
-		txtTimeOut.setText("Time Out");
-		txtTimeOut.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
-
-		btnLogsInfos = new Button(cpItemAlloyUse, SWT.NONE);
-		btnLogsInfos.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "info_log.gif"));
-		btnLogsInfos.setToolTipText("Open the infos logs");
-		btnLogsInfos.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
-		btnLogsInfos.setText("Logs");
+		new Label(cpItemAlloyUse, SWT.NONE);
+		new Label(cpItemAlloyUse, SWT.NONE);
 
 		btnLogsErrors = new Button(cpItemAlloyUse, SWT.NONE);
 		btnLogsErrors.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "error_log.gif"));
 		btnLogsErrors.setToolTipText("Open the errors logs");
 		btnLogsErrors.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnLogsErrors.setText("Logs");
+
+		btnLogsInfos = new Button(cpItemAlloyUse, SWT.NONE);
+		btnLogsInfos.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "info_log.gif"));
+		btnLogsInfos.setToolTipText("Open the infos logs");
+		btnLogsInfos.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
+		btnLogsInfos.setText("Logs");
+		btnLogsInfos.addMouseListener(new EventReadLogs(this,nameLogInfo));
 
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
 		btnPersonalPropertie.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run_perso.gif"));
@@ -255,11 +267,33 @@ public class SwtView extends Composite {
 		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualiser");
+		
+		lblTimeout = new Label(cpItemOptions, SWT.NONE);
+		lblTimeout.setAlignment(SWT.CENTER);
+		lblTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		lblTimeout.setText("Time Out (en seconde)");
+		txtTimeout = new Text(cpItemOptions, SWT.BORDER);
+		txtTimeout.setText("180");
+		GridData gd_txtTimeout = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_txtTimeout.widthHint = 80;
+		txtTimeout.setLayoutData(gd_txtTimeout);
+		
+		txtNbNodeMax = new Label(cpItemOptions, SWT.NONE);
+		txtNbNodeMax.setAlignment(SWT.CENTER);
+		txtNbNodeMax.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
+		txtNbNodeMax.setText("Nombre de nodes Max");
+		
+		text = new Text(cpItemOptions, SWT.BORDER);
+		text.setText("100");
+		text.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+
+		
+		
 
 		// ajout des events listener
 		btnChooserFile.addMouseListener(new EventChooseFile(this));
 		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
-		btnLogsInfos.addMouseListener(new EventReadLogs(this,nameLogInfo));
 		btnLogsErrors.addMouseListener(new EventReadLogs(this, nameLogError));
 		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
 		btnChooseFolderExec.addMouseListener(new EventChooseFolderExec(this));
@@ -409,7 +443,7 @@ public class SwtView extends Composite {
 	public int getTimeout() {
 		try
 		{
-			int resultat = Integer.parseInt(txtTimeOut.getText());
+			int resultat = Integer.parseInt(txtTimeout.getText());
 			return resultat;
 		} catch (NumberFormatException e){
 			log.error(e.getMessage());
