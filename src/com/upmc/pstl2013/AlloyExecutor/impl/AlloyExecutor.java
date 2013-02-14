@@ -58,13 +58,13 @@ public class AlloyExecutor implements IAlloyExecutor {
 		IActivityResult activityResult = null;
 		
 		// tant qu'on peut généré un fichier (Cf. conditions dans la méthode redéfinie)
-		while (generator.hasNext()) {
+		while (generator.hasNext() && (Integer.parseInt(generator.getNbState()) <= 100)) {
 			// 1. On lance la génération des fichiers Alloy
 			IAlloyGenerated generated = generator.next();
 			if (generated == null) {
 				break;
 			}
-
+			
 			// 2. On créé notre reporter sur la génération de la solution
 			A4Reporter rep = Factory.getInstance().newReporter();
 
@@ -99,8 +99,8 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 						// Si la solution est satisfiable
 						if (ans.satisfiable()) {
-							// on spécifie au générateur qu'on a trouvé une solution, a lui de voir s'il nous regénère un truc
-							generator.setSatisfiable(true);
+							//On passe au generateur la solution.
+							generator.setSolution(ans);
 							activityResult.setSatisfiable(true);
 							String filenameXML = filenameAlloy.substring(0, (filenameAlloy.length() -3)) + "xml";
 							activityResult.setPathXMLResult(filenameXML);
@@ -109,8 +109,8 @@ public class AlloyExecutor implements IAlloyExecutor {
 							this.writeXML(ans, filenameXML);
 						}
 						else {
-							// on spécifie au générateur qu'on n'a pas trouvé de solution, a lui de voir s'il nous regénère un truc
-							generator.setSatisfiable(false);
+							//On passe au generateur la solution.
+							generator.setSolution(ans);
 							activityResult.setSatisfiable(false);
 							activityResult.setPathXMLResult(null);
 						}
