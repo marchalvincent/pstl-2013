@@ -20,6 +20,8 @@ import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.util.Utils;
 
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
+
 /**
  * Cette classe se charge de générer le fichier Alloy à partir
  * 
@@ -127,8 +129,8 @@ public class AlloyGenerator implements IAlloyGenerator {
 	}
 
 	@Override
-	public void setSatisfiable(boolean bool) {
-		this.property.getStrategyExecution().setSatisfiable(bool);
+	public void setSolution(A4Solution solution) {
+		this.property.getStrategyExecution().setSolution(solution);
 	}
 
 	/**

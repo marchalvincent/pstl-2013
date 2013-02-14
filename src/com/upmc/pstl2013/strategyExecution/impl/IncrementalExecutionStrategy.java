@@ -2,6 +2,8 @@ package com.upmc.pstl2013.strategyExecution.impl;
 
 import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
 
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
+
 /**
  * Représente la stratégie d'exécution qui permet d'augmenter le nombre de State tant
  * qu'on trouve un contre exemple à l'exécution Alloy.
@@ -10,14 +12,13 @@ import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
 public class IncrementalExecutionStrategy implements IStrategyExecution {
 
 	private boolean isFirst;
-	private boolean satisfiable;
+	private A4Solution solution;
 
 	public IncrementalExecutionStrategy() {
 		super();
 		this.isFirst = true;
-		this.satisfiable = false;
 	}
-
+		
 	@Override
 	public boolean continueExecution() {
 		// pour la première exécution on dit qu'on peut générer le fichier.
@@ -26,7 +27,7 @@ public class IncrementalExecutionStrategy implements IStrategyExecution {
 			return true;
 		}
 		// tant qu'on a un contre exemple, on continue la génération.
-		if (satisfiable) {
+		if (solution.satisfiable()) {
 			return true;
 		}
 
@@ -34,12 +35,14 @@ public class IncrementalExecutionStrategy implements IStrategyExecution {
 	}
 
 	@Override
-	public void setSatisfiable(boolean satisfiable) {
-		this.satisfiable = satisfiable;
+	public void setSolution(A4Solution solution) {
+		this.solution = solution;
 	}
 	
 	@Override
 	public IStrategyExecution clone() throws CloneNotSupportedException {
 		return (IStrategyExecution) super.clone();
 	}
+
+
 }

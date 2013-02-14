@@ -124,10 +124,10 @@ public abstract class AbstractProperties implements IProperties {
 
 	@Override
 	public abstract boolean continueExecution();
-
+	
 	@Override
-	public void setSatisfiable(boolean satisfiable) {
-		this.getStrategyExecution().setSatisfiable(satisfiable);
+	public void setSolution(A4Solution solution) {
+		this.getStrategyExecution().setSolution(solution);
 	}
 	
 	@Override

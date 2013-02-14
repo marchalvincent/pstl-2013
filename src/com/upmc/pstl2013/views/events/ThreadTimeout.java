@@ -22,7 +22,7 @@ public class ThreadTimeout extends Thread {
 		long endTime, timeSpend = 0;
 		long startTime = System.nanoTime();
 		Boolean isEnd = false;
-		System.out.println("TIMEOUT : " + timeout);
+		log.info("Durée timeout : " + timeout);
 		while ((timeSpend < timeout) && !isEnd) {
 			try {
 				Thread.sleep(1000);
@@ -37,7 +37,7 @@ public class ThreadTimeout extends Thread {
 					}
 				}
 			} catch (InterruptedException e) {
-				e.printStackTrace();
+				log.error(e.getMessage());
 			}
 		}
 
