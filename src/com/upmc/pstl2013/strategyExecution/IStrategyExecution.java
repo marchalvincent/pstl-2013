@@ -2,6 +2,8 @@ package com.upmc.pstl2013.strategyExecution;
 
 import com.upmc.pstl2013.properties.IProperties;
 
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
+
 /**
  * Représente la façon dont on exécute un fichier Alloy.
  *
@@ -17,9 +19,9 @@ public interface IStrategyExecution extends Cloneable {
 	boolean continueExecution();
 	
 	/**
-	 * Spécifie à la stratégie que la précédente vérification est satisfaisable ou non.
+	 * Descend à la stratégie la solution.
 	 */
-	void setSatisfiable(boolean satisfiable);
+	void setSolution(A4Solution solution);
 	
 	/**
 	 * Méthode clone de {@link Cloneable}.

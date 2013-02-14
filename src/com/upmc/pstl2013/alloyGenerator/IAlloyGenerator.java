@@ -3,6 +3,8 @@ package com.upmc.pstl2013.alloyGenerator;
 import java.util.Iterator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 
+import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
+
 /**
  * L'interface d'un générateur de fichier Alloy.
  * 
@@ -18,10 +20,10 @@ public interface IAlloyGenerator extends Iterator<IAlloyGenerated> {
 	IAlloyGenerated generateFile() throws JetException;
 	
 	/**
-	 * Informe le générateur que le fichier généré est satisfaisable ou non.
-	 * @param bool
+	 * Passe au générateur la solution de l'execution.
+	 * @param A4Solution
 	 */
-	void setSatisfiable(boolean bool);
+	void setSolution(A4Solution solution);
 
 	/**
 	 * Renvoie le nombre de state de la propriété du generator.
