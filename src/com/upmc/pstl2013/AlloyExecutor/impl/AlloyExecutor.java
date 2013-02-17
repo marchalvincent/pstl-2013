@@ -58,7 +58,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 		IActivityResult activityResult = null;
 		
 		// tant qu'on peut généré un fichier (Cf. conditions dans la méthode redéfinie)
-		while (generator.hasNext() && (Integer.parseInt(generator.getNbState()) <= 100)) {
+		while (generator.hasNext()) {
 			// 1. On lance la génération des fichiers Alloy
 			IAlloyGenerated generated = generator.next();
 			if (generated == null) {
@@ -99,8 +99,6 @@ public class AlloyExecutor implements IAlloyExecutor {
 
 						// Si la solution est satisfiable
 						if (ans.satisfiable()) {
-							//On passe au generateur la solution.
-							generator.setSolution(ans);
 							activityResult.setSatisfiable(true);
 							String filenameXML = filenameAlloy.substring(0, (filenameAlloy.length() -3)) + "xml";
 							activityResult.setPathXMLResult(filenameXML);
@@ -109,11 +107,11 @@ public class AlloyExecutor implements IAlloyExecutor {
 							this.writeXML(ans, filenameXML);
 						}
 						else {
-							//On passe au generateur la solution.
-							generator.setSolution(ans);
 							activityResult.setSatisfiable(false);
 							activityResult.setPathXMLResult(null);
 						}
+						//On passe au generateur la solution.
+						generator.setSolution(ans);
 						// on spécifie au résultat le nombre de state utilisé
 						activityResult.setNbState(generator.getNbState());
 					}
@@ -123,9 +121,9 @@ public class AlloyExecutor implements IAlloyExecutor {
 				log.error("Impossible de récupérer le chemin du fichier : " + e.toString(), e);
 			}
 		}
-		System.out.println(activityResult.getLogResult());
 		// et enfin on ajoute le résultat de l'activityResult
 		if (activityResult != null) {
+			log.info(activityResult.getLogResult());
 			activityResults.add(activityResult);
 		}
 

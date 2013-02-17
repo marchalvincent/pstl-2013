@@ -19,7 +19,7 @@ public interface IStrategyExecution extends Cloneable {
 	boolean continueExecution();
 	
 	/**
-	 * Descend à la stratégie la solution.
+	 * Spécifie à la stratégie la solution générée par Alloy.
 	 */
 	void setSolution(A4Solution solution);
 	

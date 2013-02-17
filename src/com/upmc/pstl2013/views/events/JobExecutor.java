@@ -12,6 +12,8 @@ import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.impl.EnoughState;
+import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.SwtView;
 
 public class JobExecutor extends Job {
@@ -39,11 +41,13 @@ public class JobExecutor extends Job {
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 
+		StringBuilder nomFichier = new StringBuilder(UMLFile.getName());
+		nomFichier.append(" : propriété ");
+		nomFichier.append(property.getClass().getSimpleName());
+		
 		StringBuilder sbInfo = new StringBuilder();
 		sbInfo.append("Génération et exécution du fichier ");
-		sbInfo.append(UMLFile.getName());
-		sbInfo.append(" : propriété ");
-		sbInfo.append(property.getClass().getSimpleName());
+		sbInfo.append(nomFichier);
 		sbInfo.append(".\n");
 		log.info(sbInfo.toString());
 		showToView(sbInfo.toString());
@@ -56,8 +60,19 @@ public class JobExecutor extends Job {
 				log.error("Impossible d'attendre le thread, il a été interrompu...");
 			}
 
-			// Puis on spécifie la nouvelle variable nbState du job qui vient de finir (EnoughState).
-			property.put("nbState", jobToWait.getNbState());
+			// Puis on spécifie la nouvelle variable nbState du job qui vient de finir (EnoughState normalement).
+			if (jobToWait.getNbState().equals("")) {
+				// si le enoughState n'a rien trouvé ou que l'enoughState a dépassé la limite...
+				log.warn("Abort du fichier " + nomFichier + ".\n");
+				showToView("Abort du fichier " + nomFichier + ".\n");
+				return Status.CANCEL_STATUS;
+			} else if (Integer.parseInt(jobToWait.getNbState()) >= EnoughState.MAX_STATES) {
+				log.warn("Abort du fichier " + nomFichier + ". Dépassement du nombre maximum de state pour la recherche Enough.\n");
+				showToView("Abort du fichier " + nomFichier + ". Dépassement du nombre maximum de state pour la recherche Enough.\n");
+				return Status.CANCEL_STATUS;
+			} else {
+				property.put("nbState", jobToWait.getNbState());
+			}
 		}
 		
 		StringBuilder result = new StringBuilder();
@@ -68,14 +83,23 @@ public class JobExecutor extends Job {
 		try {
 			// On lance l'exécution
 			IFileResult iFileResult = alloyExecutor.executeFiles();
-			
-			// On récupère le nombre de state (utile quand on exécute EnoughState)
-			// pour l'instant, on ne traite qu'une activité à la fois
-			// TODO modifier ici si on traite plusieurs activité à la fois...
-			nbState = iFileResult.getListActivityResult().get(0).getNbState();
-			
-			// Puis on affiche les résultats sur l'interface graphique
-			showToDetails(iFileResult);
+			if (iFileResult.getListActivityResult() == null || iFileResult.getListActivityResult().size() == 0) {
+				// dans le cas où aucune activité n'a été trouvée, on ne fait rien, ni affichage graphique, ni récupération du nombre de state
+				result.append("Aucune activité n'a été trouvée dans la limite spécifiée dans les options pour le fichier ");
+				result.append(nomFichier);
+				result.append(" (");
+				result.append(ConfPropertiesManager.getInstance().getNbNodes());
+				result.append(" noeuds max.)\n");
+			}
+			else {
+				// On récupère le nombre de state (utile quand on exécute EnoughState)
+				// pour l'instant, on ne traite qu'une activité à la fois
+				// TODO modifier ici si on traite plusieurs activité à la fois...
+				nbState = iFileResult.getListActivityResult().get(0).getNbState();
+				
+				// Puis on affiche les résultats sur l'interface graphique
+				showToDetails(iFileResult);
+			}
 			
 			result.append("Fin d'exécution du fichier ");
 			result.append(UMLFile.getName());

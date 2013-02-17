@@ -16,7 +16,6 @@ public class RunnableUpdateDetails implements Runnable {
 	@Override
 	public void run() {
 		swtView.updateTreeExecResult(fileResult);
-
 	}
 
 }

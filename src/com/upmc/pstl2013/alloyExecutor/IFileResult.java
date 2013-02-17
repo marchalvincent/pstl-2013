@@ -14,7 +14,7 @@ public interface IFileResult {
 	String getNom();
 	
 	/**
-	 * Renvoie une liste de résultat. Un résultat pour une activité.
+	 * Renvoie une liste de résultat. Un résultat correspond à une activité UML.
 	 * @return une liste d'{@link IActivityResult}.
 	 */
 	List <IActivityResult> getListActivityResult();

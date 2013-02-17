@@ -75,6 +75,10 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 		// 2. On récupère l'activité parsée
 		Activity activity = parser.getActivities();
+		// Si le parser n'a rien renvoyé, on quitte la génération
+		if (activity == null) {
+			return null;
+		}
 
 		String filename = UMLFile.getName().substring(0, UMLFile.getName().length() - 4);
 		String pathFile = dirDestination + "gen_" + filename + "_" + property.getClass().getSimpleName() + ".als";
@@ -130,7 +134,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 	@Override
 	public void setSolution(A4Solution solution) {
-		this.property.getStrategyExecution().setSolution(solution);
+		this.property.setSolution(solution);
 	}
 
 	/**

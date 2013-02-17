@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.views.events;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
@@ -62,7 +63,11 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		}
 		// 4. On enregistre dans les préférences les propriétés
 		this.saveProperties(properties);
+		// 5. On enregistre dans les préférences les options
+		this.saveOption(swtView);
+		
 	}
+
 
 	/**
 	 * Exécute un fichier als pour une propriété donnée.
@@ -117,6 +122,28 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 			} catch (Exception e) {
 				showToView(e.getMessage());
 			}
+		}
+	}
+	
+	/**
+	 * Met à jour les préférences des options.
+	 * @param swtView
+	 */
+	private void saveOption(SwtView swtView) {
+		
+		// 1. On spécifie les préférence à la ConfPropertiesManager
+		try {
+			ConfPropertiesManager.getInstance().setTimeOut(String.valueOf(swtView.getTimeout()));
+			ConfPropertiesManager.getInstance().setNbNodes(String.valueOf(swtView.getNbNodesEnough()));
+		} catch (Exception e) {
+			showToView(e.getMessage());
+		}
+		
+		// 2. On enregistre dans le fichier les conf
+		try {
+			ConfPropertiesManager.getInstance().store();
+		} catch (IOException e) {
+			showToView(e.getMessage());
 		}
 	}
 

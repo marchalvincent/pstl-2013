@@ -10,6 +10,7 @@ import org.eclipse.emf.ecore.resource.ResourceSet;
 import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.umlParser.IUMLParser;
+import com.upmc.pstl2013.util.ConfPropertiesManager;
 
 /**
  * Cette classe se charge de parser un fichier UML.
@@ -46,6 +47,13 @@ public class UMLParser implements IUMLParser {
 				if (eo instanceof Activity) {
 					log.debug("Une activité est trouvée.");
 					activities = (Activity) eo;
+					
+					// On vérifie que notre fichier n'est pas trop grand...
+					Integer maxNb = Integer.parseInt(ConfPropertiesManager.getInstance().getNbNodes());
+					if (activities.getNodes().size() > maxNb) {
+						log.warn("Attention le fichier contient plus de noeud que le maximum spécifié.");
+						return null;
+					}
 					break;
 				}
 			}

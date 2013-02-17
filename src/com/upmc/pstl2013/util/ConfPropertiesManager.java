@@ -40,18 +40,25 @@ public class ConfPropertiesManager {
 			
 			// on créé par défaut les propriété si elles n'y sont pas
 			if (prop.getProperty("pathFolder") == null) {
-				try {
-					this.setPathFolder("");
-				} catch (Exception e) {}
+				try {this.setPathFolder("");} catch (Exception e) {}
 			}
-			if (prop.getProperty("poperties") == null) {
-				try {
-					this.setProperties("");
-				} catch (Exception e) {}
+			if (prop.getProperty("properties") == null) {
+				try {this.setProperties("");} catch (Exception e) {}
+			}
+			if (prop.getProperty("timeOut") == null) {
+				try {this.setTimeOut("180");} catch (Exception e) {}
+			}
+			if (prop.getProperty("nbNodes") == null) {
+				try {this.setNbNodes("100");} catch (Exception e) {}
+			}
+			if (prop.getProperty("nbThreads") == null) {
+				try {this.setNbThreads("4");} catch (Exception e) {}
 			}
 			
-		} catch (IOException ex) {
-			ex.printStackTrace();
+			
+			this.store();
+		} catch (IOException e) {
+			log.error(e.getMessage());
 		}
 	}
 
@@ -61,30 +68,49 @@ public class ConfPropertiesManager {
 
 	public void setPathFolder(String pathFolder) throws Exception {
 		prop.setProperty("pathFolder",pathFolder);
-		try {
-			OutputStream out = new FileOutputStream(file);
-			prop.store(out, null);
-			out.close();
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			throw e;
-		}
 	}
 	
 	public String getProperties() {
-		return prop.getProperty("poperties");
+		return prop.getProperty("properties");
 	}
 	
 	public void setProperties(String properties) throws Exception {
-		prop.setProperty("poperties", properties);
+		prop.setProperty("properties", properties);
+	}
+
+	
+	public String getTimeOut() {
+		return prop.getProperty("timeOut");
+	}
+	
+	public void setTimeOut(String timeout) throws Exception {
+		prop.setProperty("timeOut", timeout);
+	}
+
+	public String getNbNodes() {
+		return prop.getProperty("nbNodes");
+	}
+
+	public void setNbNodes(String nbNodes) throws Exception {
+		prop.setProperty("nbNodes", nbNodes);
+	}
+
+	public String getNbThreads() {
+		return prop.getProperty("nbThreads");
+	}
+	
+	public void setNbThreads(String nbThreads) {
+		prop.setProperty("nbThreads", nbThreads);
+	}
+	
+	public void store() throws IOException {
 		try {
 			OutputStream out = new FileOutputStream(file);
 			prop.store(out, null);
 			out.close();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			log.error(e.getMessage());
 			throw e;
 		}
 	}
-
 }

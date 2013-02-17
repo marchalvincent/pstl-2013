@@ -8,11 +8,12 @@ import com.upmc.pstl2013.factory.Factory;
 public class EnoughState extends AbstractProperties {
 
 	private boolean firstIncrement;
+	public static int MAX_STATES = 100;
 	
 	public EnoughState() {
 		super(Boolean.TRUE, Factory.getInstance().newIncrementalExecutionStrategy(), Factory.getInstance().newVoidStrategy());
 		super.put("nbState", "1");
-		super.put("incrementation", "1");
+		super.put("incrementation", "10");
 		firstIncrement = true;
 	}
 
@@ -25,7 +26,7 @@ public class EnoughState extends AbstractProperties {
 	@Override
 	public boolean continueExecution() {
 		// si notre stratégie nous demande de continuer, on incrémente notre nbState au passage.
-		if (super.getStrategyExecution().continueExecution()) {
+		if (super.getStrategyExecution().continueExecution() && Integer.parseInt(super.getString("nbState")) <= MAX_STATES) {
 			this.incrementation();
 			return true;
 		}
