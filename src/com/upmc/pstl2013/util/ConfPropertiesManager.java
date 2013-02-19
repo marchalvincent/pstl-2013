@@ -11,6 +11,9 @@ import org.apache.log4j.Logger;
 
 public class ConfPropertiesManager {
 
+	private static int DEFAUT_TIMEOUT = 180;
+	private static int DEFAUT_NB_NODES = 100;
+	private static int DEFAUT_NB_THREAD = 4;
 	private Properties prop;
 	private File file;
 	private Logger log = Logger.getLogger(ConfPropertiesManager.class);
@@ -46,13 +49,13 @@ public class ConfPropertiesManager {
 				try {this.setProperties("");} catch (Exception e) {}
 			}
 			if (prop.getProperty("timeOut") == null) {
-				try {this.setTimeOut("180");} catch (Exception e) {}
+				try {this.setTimeOut(String.valueOf(ConfPropertiesManager.DEFAUT_TIMEOUT));} catch (Exception e) {}
 			}
 			if (prop.getProperty("nbNodes") == null) {
-				try {this.setNbNodes("100");} catch (Exception e) {}
+				try {this.setNbNodes(String.valueOf(ConfPropertiesManager.DEFAUT_NB_NODES));} catch (Exception e) {}
 			}
 			if (prop.getProperty("nbThreads") == null) {
-				try {this.setNbThreads("4");} catch (Exception e) {}
+				try {this.setNbThreads(String.valueOf(ConfPropertiesManager.DEFAUT_NB_THREAD));} catch (Exception e) {}
 			}
 			
 			this.store();
@@ -76,26 +79,46 @@ public class ConfPropertiesManager {
 	public void setProperties(String properties) throws Exception {
 		prop.setProperty("properties", properties);
 	}
-
 	
-	public String getTimeOut() {
-		return prop.getProperty("timeOut");
+	public int getTimeOut() {
+		try {
+			int nb = Integer.parseInt(prop.getProperty("timeOut"));
+			if (nb < 1)
+				nb = ConfPropertiesManager.DEFAUT_TIMEOUT;
+			return nb;
+		} catch (NumberFormatException e) {
+			return ConfPropertiesManager.DEFAUT_TIMEOUT;
+		}
 	}
 	
 	public void setTimeOut(String timeout) throws Exception {
 		prop.setProperty("timeOut", timeout);
 	}
 
-	public String getNbNodes() {
-		return prop.getProperty("nbNodes");
+	public int getNbNodes() {
+		try {
+			int nb = Integer.parseInt(prop.getProperty("nbNodes"));
+			if (nb < 1)
+				nb = ConfPropertiesManager.DEFAUT_NB_NODES;
+			return nb;
+		} catch (NumberFormatException e) {
+			return ConfPropertiesManager.DEFAUT_NB_NODES;
+		}
 	}
 
 	public void setNbNodes(String nbNodes) throws Exception {
 		prop.setProperty("nbNodes", nbNodes);
 	}
 
-	public String getNbThreads() {
-		return prop.getProperty("nbThreads");
+	public int getNbThreads() {
+		try {
+			int nb = Integer.parseInt(prop.getProperty("nbThreads"));
+			if (nb < 1)
+				nb = ConfPropertiesManager.DEFAUT_NB_THREAD;
+			return nb;
+		} catch (NumberFormatException e) {
+			return ConfPropertiesManager.DEFAUT_NB_THREAD;
+		}
 	}
 	
 	public void setNbThreads(String nbThreads) {

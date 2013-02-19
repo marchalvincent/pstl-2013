@@ -281,7 +281,7 @@ public class SwtView extends Composite {
 		lblTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		lblTimeout.setText("Time Out (sec.)");
 		txtTimeout = new Text(cpItemOptions, SWT.BORDER);
-		txtTimeout.setText(ConfPropertiesManager.getInstance().getTimeOut());
+		txtTimeout.setText(String.valueOf(ConfPropertiesManager.getInstance().getTimeOut()));
 		txtTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		
 		lblNbNodeMax = new Label(cpItemOptions, SWT.NONE);
@@ -290,7 +290,7 @@ public class SwtView extends Composite {
 		lblNbNodeMax.setText("Max number of nodes");
 		
 		txtNbNodesMax = new Text(cpItemOptions, SWT.BORDER);
-		txtNbNodesMax.setText(ConfPropertiesManager.getInstance().getNbNodes());
+		txtNbNodesMax.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbNodes()));
 		txtNbNodesMax.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		lblNbThreads = new Label(cpItemOptions, SWT.NONE);
@@ -299,7 +299,7 @@ public class SwtView extends Composite {
 		lblNbThreads.setText("Max number of threads");
 		
 		txtNbThreads = new Text(cpItemOptions, SWT.BORDER);
-		txtNbThreads.setText(ConfPropertiesManager.getInstance().getNbThreads());
+		txtNbThreads.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbThreads()));
 		txtNbThreads.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 
@@ -390,7 +390,8 @@ public class SwtView extends Composite {
 	private void startPoolExecutor() {
 		BlockingQueue<Runnable> worksQueue = new ArrayBlockingQueue<Runnable>(2);
 		RejectedExecutionHandler executionHandler = new MyRejectedExecutionHandelerImpl();
-		threadPoolExecutor = new ThreadPoolExecutor(4, 3, 10, TimeUnit.SECONDS, worksQueue, executionHandler);
+		int poolSize = ConfPropertiesManager.getInstance().getNbThreads();
+		threadPoolExecutor = new ThreadPoolExecutor(1, poolSize, 10, TimeUnit.SECONDS, worksQueue, executionHandler);
 		threadPoolExecutor.allowCoreThreadTimeOut(true);
 		
 		// Starting the monitor thread as a daemon
