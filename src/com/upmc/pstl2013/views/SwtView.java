@@ -4,6 +4,11 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.RejectedExecutionHandler;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
@@ -39,45 +44,38 @@ import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
 import com.upmc.pstl2013.views.events.EventSelectProperty;
 import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
+import com.upmc.pstl2013.views.events.MyRejectedExecutionHandelerImpl;
+
 import org.eclipse.swt.widgets.Label;
 
 public class SwtView extends Composite {
 
 
-	private Button btnChooseDir;
-	private Text txtDirectory;
-	private Text txtLogs;
-	private Button btnChooserFile;
-	private Button btnExcuterAlloy;
-	private Button btnLogsInfos;
+	private Button btnChooseDir, btnExcuterAlloy, btnLogsInfos, btnChooserFile;
+	private Text txtDirectory, txtLogs, txtDetailsLogs, txtPersonalPropertie;
 	private TabFolder tabFolder;
 	private TabItem itemAlloyUse, itemAlloyProperty, itemDetails, itemOptions;
 	private Composite cpItemAlloyUse, cpItemAlloyProp, cpItemDetails, cpItemOptions;
-	private Table tabProperties;
-	private Table tabValuePropertiesString,tabValuePropertiesBool;
+	private Table tabProperties, tabValuePropertiesString,tabValuePropertiesBool;
 	private final TableEditor editorString, editorBool;
-	private Text txtPersonalPropertie;
 	private Button btnPersonalPropertie;
 	private Tree treeFilesExecuted;
-	private Text txtDetailsLogs;
-	private Button btnAlloyVisualisation;
-	private Button btnChooseFolderExec;
-	private Button btnLogsErrors;
-	private Text txtTimeout;
-	private Label lblTimeout;
-	private Label lblNbNodeMax;
-	private Text txtNbNodesMax;
-	private Label lblNbThreads;
-	private Text txtNbThreads;
+	private Button btnAlloyVisualisation, btnLogsErrors, btnChooseFolderExec;
+	private Text txtTimeout, txtNbMaxNodes;
+	private Label lblTimeout, lblNbMaxNode;
 
 	private IActivityResult currentActivityeResult;
 	private String separator = File.separator;
 	private String userDir;
 	private List<IFile> UMLFilesSelected;
+	private ThreadPoolExecutor threadPoolExecutor;
 	private Logger log = Logger.getLogger(SwtView.class);
+
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
+
+
 
 	/**
 	 * Create the composite.
@@ -109,7 +107,7 @@ public class SwtView extends Composite {
 		//Items et composite pour la partie utilisation du tabeFolder
 		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
 		itemAlloyUse.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "start_cheatsheet.gif"));
-		itemAlloyUse.setText("Use");
+		itemAlloyUse.setText("Utilisation");
 		cpItemAlloyUse = new Composite(tabFolder, SWT.BORDER);
 		cpItemAlloyUse.setLayout(new GridLayout(3, false));
 		itemAlloyUse.setControl(cpItemAlloyUse);
@@ -269,32 +267,29 @@ public class SwtView extends Composite {
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualiser");
 		
+		
+		/*
+		 *Debut de la partie Options
+		 */
 		lblTimeout = new Label(cpItemOptions, SWT.NONE);
 		lblTimeout.setAlignment(SWT.CENTER);
 		lblTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		lblTimeout.setText("Time Out (sec.)");
+		lblTimeout.setText("Time Out (en seconde)");
 		txtTimeout = new Text(cpItemOptions, SWT.BORDER);
-		txtTimeout.setText(ConfPropertiesManager.getInstance().getTimeOut());
-		txtTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		txtTimeout.setText("180");
+		GridData gd_txtTimeout = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
+		gd_txtTimeout.widthHint = 80;
+		txtTimeout.setLayoutData(gd_txtTimeout);
 		
-		lblNbNodeMax = new Label(cpItemOptions, SWT.NONE);
-		lblNbNodeMax.setAlignment(SWT.CENTER);
-		lblNbNodeMax.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
-		lblNbNodeMax.setText("Max number of nodes");
+		lblNbMaxNode = new Label(cpItemOptions, SWT.NONE);
+		lblNbMaxNode.setAlignment(SWT.CENTER);
+		lblNbMaxNode.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
+		lblNbMaxNode.setText("Nombre de nodes Max");
 		
-		txtNbNodesMax = new Text(cpItemOptions, SWT.BORDER);
-		txtNbNodesMax.setText(ConfPropertiesManager.getInstance().getNbNodes());
-		txtNbNodesMax.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-
-		lblNbThreads = new Label(cpItemOptions, SWT.NONE);
-		lblNbThreads.setAlignment(SWT.CENTER);
-		lblNbThreads.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
-		lblNbThreads.setText("Max number of threads");
+		txtNbMaxNodes = new Text(cpItemOptions, SWT.BORDER);
+		txtNbMaxNodes.setText("100");
+		txtNbMaxNodes.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 		
-		txtNbThreads = new Text(cpItemOptions, SWT.BORDER);
-		txtNbThreads.setText(ConfPropertiesManager.getInstance().getNbThreads());
-		txtNbThreads.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-
 
 		// ajout des events listener
 		btnChooserFile.addMouseListener(new EventChooseFile(this));
@@ -302,11 +297,13 @@ public class SwtView extends Composite {
 		btnLogsErrors.addMouseListener(new EventReadLogs(this, nameLogError));
 		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
 		btnChooseFolderExec.addMouseListener(new EventChooseFolderExec(this));
-		btnAlloyVisualisation.addMouseListener(new EventClickVisualisationAlloy(this));
-		btnChooseDir.addMouseListener(new EventChooseDir(this));
 
 		//Suppression des anciens logs
 		deleteOldLogs();
+		btnAlloyVisualisation.addMouseListener(new EventClickVisualisationAlloy(this));
+		btnChooseDir.addMouseListener(new EventChooseDir(this));
+		
+		startPoolExecutor();
 	}
 
 	/**
@@ -333,7 +330,8 @@ public class SwtView extends Composite {
 	/**
 	 * Supprime tous les logs générés à la derniere utilisation du plugin.
 	 */
-	private void deleteOldLogs() {
+	private void deleteOldLogs()
+	{
 		log.debug("Suppression des anciens logs");
 		File logInfo = new File(userDir + "logInfo.html");
 		File logDebug = new File(userDir + "logDebug.html");
@@ -352,7 +350,8 @@ public class SwtView extends Composite {
 	 * sous la forme d'un treeView.
 	 * @param {@link IFileResult} resultat de l'execution des fichiers.
 	 */
-	public void updateTreeExecResult(IFileResult fileResult) {
+	public void updateTreeExecResult(IFileResult fileResult)
+	{
 		treeFilesExecuted.addListener(SWT.Selection, new EventSelectTreeItemDetail(this));
 
 		TreeItem item0 = null;
@@ -376,6 +375,21 @@ public class SwtView extends Composite {
 			item1.setText(actResult.getNom());
 			item1.setData(actResult);	
 		}
+
+
+	}
+	
+	private void startPoolExecutor()
+	{
+		BlockingQueue<Runnable> worksQueue = new ArrayBlockingQueue<Runnable>(2);
+		RejectedExecutionHandler executionHandler = new MyRejectedExecutionHandelerImpl();
+		threadPoolExecutor = new ThreadPoolExecutor(4, 3, 10, TimeUnit.SECONDS, worksQueue, executionHandler);
+		threadPoolExecutor.allowCoreThreadTimeOut(true);
+		
+		// Starting the monitor thread as a daemon
+		/*Thread monitor = new Thread(new MyMonitorThread(threadPoolExecutor));
+		monitor.setDaemon(true);
+		monitor.start();*/
 	}
 
 	public Text getTxtDirectory() {
@@ -422,15 +436,18 @@ public class SwtView extends Composite {
 		this.userDir = userDir;
 	}
 
-	public IActivityResult getCurrentActivityResult() {
+	public IActivityResult getCurrentActivityResult()
+	{
 		return currentActivityeResult;
 	}
 
-	public void setCurrentActivityeResult(IActivityResult currentActivityeResult) {
+	public void setCurrentActivityeResult(IActivityResult currentActivityeResult)
+	{
 		this.currentActivityeResult= currentActivityeResult ;
 	}
 
-	public Text getTxtDetailsLogs() {
+	public Text getTxtDetailsLogs()
+	{
 		return txtDetailsLogs;
 	}
 
@@ -439,16 +456,31 @@ public class SwtView extends Composite {
 	}
 
 	public int getTimeout() {
-		try {
+		try
+		{
 			int resultat = Integer.parseInt(txtTimeout.getText());
 			return resultat;
-		} catch (NumberFormatException e) {
+		} catch (NumberFormatException e){
 			log.error(e.getMessage());
 			return 3 * 60;
 		}
 	}
 	
-	public String getNbNodesEnough() {
-		return txtNbNodesMax.getText();
+	public int getNbMaxNodes() {
+		try
+		{
+			int resultat = Integer.parseInt(txtNbMaxNodes.getText());
+			return resultat;
+		} catch (NumberFormatException e){
+			log.error(e.getMessage());
+			return 100;
+		}
+	}
+	
+
+	
+	public ThreadPoolExecutor getThreadPoolExecutor()
+	{
+		return this.threadPoolExecutor;
 	}
 }
