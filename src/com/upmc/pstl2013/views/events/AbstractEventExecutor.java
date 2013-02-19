@@ -140,7 +140,8 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		// 1. On spécifie les préférence à la ConfPropertiesManager
 		try {
 			ConfPropertiesManager.getInstance().setTimeOut(String.valueOf(swtView.getTimeout()));
-			ConfPropertiesManager.getInstance().setNbNodes(String.valueOf(swtView.getNbNodesEnough()));
+			ConfPropertiesManager.getInstance().setNbNodes(String.valueOf(swtView.getNbNodesMax()));
+			ConfPropertiesManager.getInstance().setNbThreads(String.valueOf(swtView.getNbThread()));
 		} catch (Exception e) {
 			showToView(e.getMessage());
 		}

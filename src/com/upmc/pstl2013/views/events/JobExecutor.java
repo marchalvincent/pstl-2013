@@ -38,7 +38,7 @@ public class JobExecutor extends Job implements Runnable{
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-System.out.println("************HELP Running");
+
 		StringBuilder sbInfo = new StringBuilder();
 		sbInfo.append("Génération et exécution du fichier ");
 		sbInfo.append(UMLFile.getName());
@@ -90,7 +90,7 @@ System.out.println("************HELP Running");
 			showToView(e.getMessage());
 			return Status.CANCEL_STATUS;
 		}
-		System.out.println("************HELP DONE");
+
 		return Status.OK_STATUS;
 	}
 
@@ -117,7 +117,5 @@ System.out.println("************HELP Running");
 	@Override
 	public void run() {
 		this.schedule();
-		
 	}
-
 }

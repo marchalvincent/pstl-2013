@@ -55,7 +55,6 @@ public class ConfPropertiesManager {
 				try {this.setNbThreads("4");} catch (Exception e) {}
 			}
 			
-			
 			this.store();
 		} catch (IOException e) {
 			log.error(e.getMessage());

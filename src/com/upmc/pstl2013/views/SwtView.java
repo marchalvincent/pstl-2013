@@ -45,24 +45,36 @@ import com.upmc.pstl2013.views.events.EventReadLogs;
 import com.upmc.pstl2013.views.events.EventSelectProperty;
 import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
 import com.upmc.pstl2013.views.events.MyRejectedExecutionHandelerImpl;
-
 import org.eclipse.swt.widgets.Label;
 
 public class SwtView extends Composite {
 
 
-	private Button btnChooseDir, btnExcuterAlloy, btnLogsInfos, btnChooserFile;
-	private Text txtDirectory, txtLogs, txtDetailsLogs, txtPersonalPropertie;
+	private Button btnChooseDir;
+	private Text txtDirectory;
+	private Text txtLogs;
+	private Button btnChooserFile;
+	private Button btnExcuterAlloy;
+	private Button btnLogsInfos;
 	private TabFolder tabFolder;
 	private TabItem itemAlloyUse, itemAlloyProperty, itemDetails, itemOptions;
 	private Composite cpItemAlloyUse, cpItemAlloyProp, cpItemDetails, cpItemOptions;
-	private Table tabProperties, tabValuePropertiesString,tabValuePropertiesBool;
+	private Table tabProperties;
+	private Table tabValuePropertiesString,tabValuePropertiesBool;
 	private final TableEditor editorString, editorBool;
+	private Text txtPersonalPropertie;
 	private Button btnPersonalPropertie;
 	private Tree treeFilesExecuted;
-	private Button btnAlloyVisualisation, btnLogsErrors, btnChooseFolderExec;
-	private Text txtTimeout, txtNbMaxNodes;
-	private Label lblTimeout, lblNbMaxNode;
+	private Text txtDetailsLogs;
+	private Button btnAlloyVisualisation;
+	private Button btnChooseFolderExec;
+	private Button btnLogsErrors;
+	private Text txtTimeout;
+	private Label lblTimeout;
+	private Label lblNbNodeMax;
+	private Text txtNbNodesMax;
+	private Label lblNbThreads;
+	private Text txtNbThreads;
 
 	private IActivityResult currentActivityeResult;
 	private String separator = File.separator;
@@ -71,11 +83,8 @@ public class SwtView extends Composite {
 	private ThreadPoolExecutor threadPoolExecutor;
 	private Logger log = Logger.getLogger(SwtView.class);
 
-
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
-
-
 
 	/**
 	 * Create the composite.
@@ -107,7 +116,7 @@ public class SwtView extends Composite {
 		//Items et composite pour la partie utilisation du tabeFolder
 		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
 		itemAlloyUse.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "start_cheatsheet.gif"));
-		itemAlloyUse.setText("Utilisation");
+		itemAlloyUse.setText("Use");
 		cpItemAlloyUse = new Composite(tabFolder, SWT.BORDER);
 		cpItemAlloyUse.setLayout(new GridLayout(3, false));
 		itemAlloyUse.setControl(cpItemAlloyUse);
@@ -267,29 +276,32 @@ public class SwtView extends Composite {
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualiser");
 		
-		
-		/*
-		 *Debut de la partie Options
-		 */
 		lblTimeout = new Label(cpItemOptions, SWT.NONE);
 		lblTimeout.setAlignment(SWT.CENTER);
 		lblTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		lblTimeout.setText("Time Out (en seconde)");
+		lblTimeout.setText("Time Out (sec.)");
 		txtTimeout = new Text(cpItemOptions, SWT.BORDER);
-		txtTimeout.setText("180");
-		GridData gd_txtTimeout = new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1);
-		gd_txtTimeout.widthHint = 80;
-		txtTimeout.setLayoutData(gd_txtTimeout);
+		txtTimeout.setText(ConfPropertiesManager.getInstance().getTimeOut());
+		txtTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		
-		lblNbMaxNode = new Label(cpItemOptions, SWT.NONE);
-		lblNbMaxNode.setAlignment(SWT.CENTER);
-		lblNbMaxNode.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
-		lblNbMaxNode.setText("Nombre de nodes Max");
+		lblNbNodeMax = new Label(cpItemOptions, SWT.NONE);
+		lblNbNodeMax.setAlignment(SWT.CENTER);
+		lblNbNodeMax.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
+		lblNbNodeMax.setText("Max number of nodes");
 		
-		txtNbMaxNodes = new Text(cpItemOptions, SWT.BORDER);
-		txtNbMaxNodes.setText("100");
-		txtNbMaxNodes.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		txtNbNodesMax = new Text(cpItemOptions, SWT.BORDER);
+		txtNbNodesMax.setText(ConfPropertiesManager.getInstance().getNbNodes());
+		txtNbNodesMax.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
+		lblNbThreads = new Label(cpItemOptions, SWT.NONE);
+		lblNbThreads.setAlignment(SWT.CENTER);
+		lblNbThreads.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
+		lblNbThreads.setText("Max number of threads");
 		
+		txtNbThreads = new Text(cpItemOptions, SWT.BORDER);
+		txtNbThreads.setText(ConfPropertiesManager.getInstance().getNbThreads());
+		txtNbThreads.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+
 
 		// ajout des events listener
 		btnChooserFile.addMouseListener(new EventChooseFile(this));
@@ -297,11 +309,11 @@ public class SwtView extends Composite {
 		btnLogsErrors.addMouseListener(new EventReadLogs(this, nameLogError));
 		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
 		btnChooseFolderExec.addMouseListener(new EventChooseFolderExec(this));
+		btnAlloyVisualisation.addMouseListener(new EventClickVisualisationAlloy(this));
+		btnChooseDir.addMouseListener(new EventChooseDir(this));
 
 		//Suppression des anciens logs
 		deleteOldLogs();
-		btnAlloyVisualisation.addMouseListener(new EventClickVisualisationAlloy(this));
-		btnChooseDir.addMouseListener(new EventChooseDir(this));
 		
 		startPoolExecutor();
 	}
@@ -330,8 +342,7 @@ public class SwtView extends Composite {
 	/**
 	 * Supprime tous les logs générés à la derniere utilisation du plugin.
 	 */
-	private void deleteOldLogs()
-	{
+	private void deleteOldLogs() {
 		log.debug("Suppression des anciens logs");
 		File logInfo = new File(userDir + "logInfo.html");
 		File logDebug = new File(userDir + "logDebug.html");
@@ -350,8 +361,7 @@ public class SwtView extends Composite {
 	 * sous la forme d'un treeView.
 	 * @param {@link IFileResult} resultat de l'execution des fichiers.
 	 */
-	public void updateTreeExecResult(IFileResult fileResult)
-	{
+	public void updateTreeExecResult(IFileResult fileResult) {
 		treeFilesExecuted.addListener(SWT.Selection, new EventSelectTreeItemDetail(this));
 
 		TreeItem item0 = null;
@@ -375,12 +385,9 @@ public class SwtView extends Composite {
 			item1.setText(actResult.getNom());
 			item1.setData(actResult);	
 		}
-
-
 	}
 	
-	private void startPoolExecutor()
-	{
+	private void startPoolExecutor() {
 		BlockingQueue<Runnable> worksQueue = new ArrayBlockingQueue<Runnable>(2);
 		RejectedExecutionHandler executionHandler = new MyRejectedExecutionHandelerImpl();
 		threadPoolExecutor = new ThreadPoolExecutor(4, 3, 10, TimeUnit.SECONDS, worksQueue, executionHandler);
@@ -436,18 +443,15 @@ public class SwtView extends Composite {
 		this.userDir = userDir;
 	}
 
-	public IActivityResult getCurrentActivityResult()
-	{
+	public IActivityResult getCurrentActivityResult() {
 		return currentActivityeResult;
 	}
 
-	public void setCurrentActivityeResult(IActivityResult currentActivityeResult)
-	{
+	public void setCurrentActivityeResult(IActivityResult currentActivityeResult) {
 		this.currentActivityeResult= currentActivityeResult ;
 	}
 
-	public Text getTxtDetailsLogs()
-	{
+	public Text getTxtDetailsLogs() {
 		return txtDetailsLogs;
 	}
 
@@ -456,31 +460,24 @@ public class SwtView extends Composite {
 	}
 
 	public int getTimeout() {
-		try
-		{
+		try {
 			int resultat = Integer.parseInt(txtTimeout.getText());
 			return resultat;
-		} catch (NumberFormatException e){
+		} catch (NumberFormatException e) {
 			log.error(e.getMessage());
 			return 3 * 60;
 		}
 	}
 	
-	public int getNbMaxNodes() {
-		try
-		{
-			int resultat = Integer.parseInt(txtNbMaxNodes.getText());
-			return resultat;
-		} catch (NumberFormatException e){
-			log.error(e.getMessage());
-			return 100;
-		}
+	public String getNbNodesMax() {
+		return txtNbNodesMax.getText();
 	}
 	
-
+	public String getNbThread() {
+		return txtNbThreads.getText();
+	}
 	
-	public ThreadPoolExecutor getThreadPoolExecutor()
-	{
-		return this.threadPoolExecutor;
+	public ThreadPoolExecutor getThreadPoolExecutor() {
+		return threadPoolExecutor;
 	}
 }
