@@ -14,7 +14,7 @@ import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.views.SwtView;
 
-public class JobExecutor extends Job {
+public class JobExecutor extends Job implements Runnable{
 
 	private Logger log = Logger.getLogger(JobExecutor.class);
 	private SwtView swtView;
@@ -38,7 +38,7 @@ public class JobExecutor extends Job {
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
-
+System.out.println("************HELP Running");
 		StringBuilder sbInfo = new StringBuilder();
 		sbInfo.append("Génération et exécution du fichier ");
 		sbInfo.append(UMLFile.getName());
@@ -90,7 +90,7 @@ public class JobExecutor extends Job {
 			showToView(e.getMessage());
 			return Status.CANCEL_STATUS;
 		}
-		
+		System.out.println("************HELP DONE");
 		return Status.OK_STATUS;
 	}
 
@@ -112,6 +112,12 @@ public class JobExecutor extends Job {
 	
 	public String getNbState() {
 		return nbState;
+	}
+
+	@Override
+	public void run() {
+		this.schedule();
+		
 	}
 
 }

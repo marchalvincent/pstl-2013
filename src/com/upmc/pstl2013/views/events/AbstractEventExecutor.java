@@ -2,11 +2,13 @@ package com.upmc.pstl2013.views.events;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
+
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.EnoughState;
@@ -50,7 +52,8 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 					// Dans un premier temps, on exécute la propriété EnoughState pour avoir le nombre de state 
 					// à utiliser avec les autres propriétés
 					JobExecutor jobEnough = this.execute(listJobsExec, iFile, properties, true, null);
-
+					
+					
 					// Puis ensuite on lance l'exécution pour les autres propriétés avec la référence du premier job
 					this.execute(listJobsExec, iFile, properties, false, jobEnough);
 				}
@@ -88,7 +91,10 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 				String nomJob = "Execution Alloy de " + iFile.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
 				jobExec = Factory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty, jobToWait, counterExecution);
 				jobExec.setUser(true);
-				jobExec.schedule();
+				
+				swtView.getThreadPoolExecutor().execute(jobExec);
+				//jobExec.schedule();
+				
 				listJobsExec.add(jobExec);
 			}
 		}
