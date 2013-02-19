@@ -49,7 +49,7 @@ public class UMLParser implements IUMLParser {
 					activities = (Activity) eo;
 					
 					// On vérifie que notre fichier n'est pas trop grand...
-					Integer maxNb = Integer.parseInt(ConfPropertiesManager.getInstance().getNbNodes());
+					int maxNb = ConfPropertiesManager.getInstance().getNbNodes();
 					if (activities.getNodes().size() > maxNb) {
 						log.warn("Attention le fichier contient plus de noeud que le maximum spécifié.");
 						return null;
