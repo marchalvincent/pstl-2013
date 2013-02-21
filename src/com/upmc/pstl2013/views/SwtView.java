@@ -334,6 +334,9 @@ public class SwtView extends Composite {
 			if (prefs.contains(prop)) {
 				item.setChecked(true);
 			}
+			if (prop.equals("EnoughState")) {
+				// TODO michel
+			}
 		}
 		tabProperties.getColumn(0).pack();
 		tabProperties.addListener(SWT.Selection, new EventSelectProperty(this));
