@@ -98,9 +98,9 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 				jobExec.setUser(true);
 				
 				swtView.getThreadPoolExecutor().execute(jobExec);
-				//jobExec.schedule();
+				jobExec.schedule();
 				
-				listJobsExec.add(jobExec);
+				//listJobsExec.add(jobExec);
 			}
 		}
 

@@ -35,9 +35,14 @@ public class EventSelectProperty implements Listener {
 	@Override
 	public void handleEvent(Event event) {
 
-		TableItem[] selection = tabProperties.getSelection();
-		if (selection.length > 0) 
-			showValueProperties(selection[0].getText());
+		TableItem currentItem =(TableItem) event.item;
+		if (currentItem != null) {
+			tabProperties.setSelection(currentItem);
+			if (currentItem.getText().equals("EnoughState"))
+				currentItem.setChecked(true);
+			showValueProperties(currentItem.getText());
+		}
+		
 	}
 
 	/***
