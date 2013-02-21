@@ -326,20 +326,22 @@ public class SwtView extends Composite {
 		TableColumn column = new TableColumn(tabProperties, SWT.NONE);
 		column.setText("Properties");
 		for (String prop : AbstractProperties.getProperties()) {
-			TableItem item = new TableItem(tabProperties, SWT.NONE);
+			TableItem item = new TableItem(tabProperties, SWT.NONE );
 			item.setText(0, prop);
 
 			// si la propriété est dans les préférences, on coche par défaut
 			String prefs = ConfPropertiesManager.getInstance().getProperties();
 			if (prefs.contains(prop)) {
 				item.setChecked(true);
+				
 			}
 			if (prop.equals("EnoughState")) {
-				// TODO michel
+				item.setChecked(true);
 			}
 		}
 		tabProperties.getColumn(0).pack();
 		tabProperties.addListener(SWT.Selection, new EventSelectProperty(this));
+		tabProperties.addListener(SWT.CHECK, new EventSelectProperty(this));
 	}
 
 	/**
