@@ -105,4 +105,10 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	 * Clone la propriété.
 	 */
 	IProperties clone();
+	
+	/**
+	 * Renvoie la famille a laquelle appartient la propriété.
+	 * @return {@link Behavior}.
+	 */
+	Behavior getBehavior();
 }

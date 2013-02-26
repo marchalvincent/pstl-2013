@@ -32,6 +32,7 @@ import org.eclipse.wb.swt.SWTResourceManager;
 
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
+import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.util.Utils;
@@ -274,11 +275,11 @@ public class SwtView extends Composite {
 		});
 		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		btnAlloyVisualisation.setText("Visualiser");
+		btnAlloyVisualisation.setText("Visualise");
 		
 		lblTimeout = new Label(cpItemOptions, SWT.NONE);
 		lblTimeout.setAlignment(SWT.CENTER);
-		lblTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		lblTimeout.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
 		lblTimeout.setText("Time Out (sec.)");
 		txtTimeout = new Text(cpItemOptions, SWT.BORDER);
 		txtTimeout.setText(String.valueOf(ConfPropertiesManager.getInstance().getTimeOut()));
@@ -287,7 +288,7 @@ public class SwtView extends Composite {
 		lblNbNodeMax = new Label(cpItemOptions, SWT.NONE);
 		lblNbNodeMax.setAlignment(SWT.CENTER);
 		lblNbNodeMax.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
-		lblNbNodeMax.setText("Max number of nodes");
+		lblNbNodeMax.setText("Max number of nodes to parse (UML file)");
 		
 		txtNbNodesMax = new Text(cpItemOptions, SWT.BORDER);
 		txtNbNodesMax.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbNodes()));
@@ -325,7 +326,9 @@ public class SwtView extends Composite {
 
 		TableColumn column = new TableColumn(tabProperties, SWT.NONE);
 		column.setText("Properties");
-		for (String prop : AbstractProperties.getProperties()) {
+		for (IProperties property : AbstractProperties.getProperties()) {
+			String prop = property.getClass().getSimpleName();
+			
 			TableItem item = new TableItem(tabProperties, SWT.NONE );
 			item.setText(0, prop);
 
@@ -333,7 +336,6 @@ public class SwtView extends Composite {
 			String prefs = ConfPropertiesManager.getInstance().getProperties();
 			if (prefs.contains(prop)) {
 				item.setChecked(true);
-				
 			}
 			if (prop.equals("EnoughState")) {
 				item.setChecked(true);

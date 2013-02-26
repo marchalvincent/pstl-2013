@@ -101,8 +101,8 @@ public class Factory implements IFactory {
 
 	//-------------------------PROPERTIES-------------------------
 	@Override
-	public IProperties getPropertie(String name) throws PropertiesException {
-		return PropertiesFactory.getInstance().createPropertie(name);
+	public IProperties getProperty(String name) throws PropertiesException {
+		return PropertiesFactory.getInstance().createProperty(name);
 	}
 
 	@Override

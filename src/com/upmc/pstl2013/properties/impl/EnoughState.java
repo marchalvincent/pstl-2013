@@ -1,19 +1,26 @@
 package com.upmc.pstl2013.properties.impl;
 
+import org.apache.log4j.Logger;
+import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.alloyGenerator.jet.impl.EnoughStateTemplate;
 import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.properties.Behavior;
 
 
 public class EnoughState extends AbstractProperties {
 
+	private Logger log = Logger.getLogger(AlloyGenerator.class);
 	private boolean firstIncrement;
-	public static int MAX_STATES = 100;
-	
+	private int maxStep = -1;
+	private int incrementation = -1;
+	public static Behavior family = Behavior.ORGANIZATIONAL;
+
 	public EnoughState() {
 		super(Boolean.TRUE, Factory.getInstance().newIncrementalExecutionStrategy(), Factory.getInstance().newVoidStrategy());
-		super.put("nbState", "1");
+		super.putPrivate("nbState", "1");
 		super.put("incrementation", "10");
+		super.put("maxStep", "100");
 		firstIncrement = true;
 	}
 
@@ -26,7 +33,16 @@ public class EnoughState extends AbstractProperties {
 	@Override
 	public boolean continueExecution() {
 		// si notre stratégie nous demande de continuer, on incrémente notre nbState au passage.
-		if (super.getStrategyExecution().continueExecution() && Integer.parseInt(super.getString("nbState")) <= MAX_STATES) {
+		int nbState = Integer.parseInt(super.getString("nbState"));
+		if (maxStep == -1) {
+			try {
+				maxStep = Integer.parseInt(super.getString("maxStep"));
+			} catch(Exception e) {
+				log.error("Impossible de parser l'attribut 'maxStep'.");
+				maxStep = 100;
+			}
+		}
+		if (super.getStrategyExecution().continueExecution() && nbState <= maxStep) {
 			this.incrementation();
 			return true;
 		}
@@ -43,12 +59,21 @@ public class EnoughState extends AbstractProperties {
 			return;
 		}
 		int nbState = Integer.parseInt(super.getString("nbState"));
-		String sIncr = super.getString("incrementation");
-		if (sIncr != null) {
-			nbState = nbState + Integer.parseInt(sIncr);
-		} else {
-			nbState += 10;
+		
+		if (incrementation == -1) {
+			try {
+				incrementation = Integer.parseInt(super.getString("incrementation"));
+			} catch (Exception e) {
+				log.error("Impossible de parser l'attribut 'incrementation'.");
+				incrementation = 10;
+			}
 		}
+		nbState += incrementation;
 		super.put("nbState", String.valueOf(nbState));
+	}
+
+	@Override
+	public Behavior getBehavior() {
+		return Behavior.SOUDNESS;
 	}
 }
