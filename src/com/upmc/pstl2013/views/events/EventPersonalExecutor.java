@@ -25,7 +25,7 @@ public class EventPersonalExecutor extends AbstractEventExecutor {
 
 	@Override
 	protected List<IProperties> getProperties() throws PropertiesException {
-		IProperties prop = Factory.getInstance().getPropertie(PersonalPropertie.class.getSimpleName());
+		IProperties prop = Factory.getInstance().getProperty(PersonalPropertie.class.getSimpleName());
 		prop.putPrivate("alloyCode", txtPersonalPropertie.getText());
 		List<IProperties> liste = new ArrayList<IProperties>();
 		liste.add(prop);

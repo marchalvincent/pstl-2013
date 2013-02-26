@@ -3,6 +3,7 @@ package com.upmc.pstl2013.properties.impl;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.alloyGenerator.jet.impl.DeadLockTemplate;
 import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.properties.Behavior;
 
 /**
  * Représente une propriété de vérification alloy.
@@ -13,10 +14,6 @@ public class DeadLock extends AbstractProperties {
 	public DeadLock() {
 		// le DeadLock est un check avec la strategie PathStrategy
 		super(Boolean.TRUE, Factory.getInstance().newSimpleExecutionStrategy(), Factory.getInstance().newPathStrategy());
-		super.put("nbState", "20");
-		super.put("attribut2deadlock", "tata");
-		super.put("attribut3deadlock", "tutu");
-		super.put("attribut4deadlock", "toto");
 	}
 
 	@Override
@@ -27,5 +24,10 @@ public class DeadLock extends AbstractProperties {
 	@Override
 	public boolean continueExecution() {
 		return super.getStrategyExecution().continueExecution();
+	}
+
+	@Override
+	public Behavior getBehavior() {
+		return Behavior.BUISINESS;
 	}
 }

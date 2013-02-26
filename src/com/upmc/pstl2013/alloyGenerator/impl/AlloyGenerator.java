@@ -162,7 +162,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 		iPropertie.putPrivate("initialNode", initialNode.getName());
 		iPropertie.putPrivate("finalNode", finalNode.getName());
-		iPropertie.putPrivate("predicatName", this.generateNamePredicat("predicatPropertie", nodes, edges));
+		iPropertie.putPrivate("predicatName", this.generateNamePredicat("predicatName", nodes, edges));
 
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges et la propriété au template Jet.
 		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, edges, iPropertie);

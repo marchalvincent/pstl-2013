@@ -110,7 +110,7 @@ public interface IFactory {
 	 * @param name le nom de la propriété.
 	 * @throws PropertiesException si le nom de la propertie est incorrect.
 	 */
-	IProperties getPropertie(String name) throws PropertiesException;
+	IProperties getProperty(String name) throws PropertiesException;
 	
 	/**
 	 * Créé un {@link Attribute}

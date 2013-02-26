@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.properties.impl;
 
 import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.properties.Behavior;
 
 /**
  * Représente le code alloy écrit à la main par l'utilisateur dans le champ associé.
@@ -21,5 +22,11 @@ public class PersonalPropertie extends AbstractProperties {
 	@Override
 	public boolean continueExecution() {
 		return super.getStrategyExecution().continueExecution();
+	}
+
+	@Override
+	public Behavior getBehavior() {
+		// cette méthode ne doit pas être appelée pour la PersonalPropertie
+		return null;
 	}
 }

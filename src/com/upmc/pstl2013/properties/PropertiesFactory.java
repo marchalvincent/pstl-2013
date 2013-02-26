@@ -32,7 +32,7 @@ public class PropertiesFactory {
 	 * @return une {@link IProperties}.
 	 * @throws PropertiesException si le nom de la propriété est introuvable.
 	 */
-	public IProperties createPropertie(String name) throws PropertiesException {
+	public IProperties createProperty(String name) throws PropertiesException {
 
 		// si l'objet est déjà créé, on le renvoie
 		IProperties prop = properties.get(name);

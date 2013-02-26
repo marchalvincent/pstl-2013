@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import com.upmc.pstl2013.factory.Factory;
+import com.upmc.pstl2013.properties.Behavior;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
@@ -24,18 +25,22 @@ public abstract class AbstractProperties implements IProperties {
 	private Boolean isCheck;
 	private IStrategyExecution strategyExecution;
 	private IStrategyParcours strategyParcours;
-	private Logger log = Logger.getLogger(AbstractProperties.class);
+	private static Logger log = Logger.getLogger(AbstractProperties.class);
 
 	/**
 	 * Renvoie la liste des propriétés de vérification alloy possible.
 	 * @return une liste de String.
 	 */
-	public static List<String> getProperties() {
-		List<String> liste = new ArrayList<String>();
-		liste.add(DeadLock.class.getSimpleName());
-		liste.add(EnoughState.class.getSimpleName());
-		liste.add(Orga.class.getSimpleName());
-		liste.add(Wf.class.getSimpleName());
+	public static List<IProperties> getProperties() {
+		List<IProperties> liste = new ArrayList<IProperties>();
+		try {
+			liste.add(Factory.getInstance().getProperty(DeadLock.class.getSimpleName()));
+			liste.add(Factory.getInstance().getProperty(EnoughState.class.getSimpleName()));
+			liste.add(Factory.getInstance().getProperty(Orga.class.getSimpleName()));
+			liste.add(Factory.getInstance().getProperty(Wf.class.getSimpleName()));
+		} catch (PropertiesException e) {
+			log.error("Erreur, impossible de récupérer les singletons des propriétés : " + e.getMessage());
+		}
 		return liste;
 	}
 
@@ -157,6 +162,9 @@ public abstract class AbstractProperties implements IProperties {
 		}
 		return object;
 	}
+	
+	@Override
+	public abstract Behavior getBehavior();
 	
 	/**
 	 * Supprime la clé si elle existe. Ne fait rien sinon.

@@ -33,7 +33,7 @@ public class EventCurrentExecutor extends AbstractEventExecutor {
 		for (TableItem item : tabProperties.getItems()) {
 			if (item.getChecked()) {
 				try {
-					properties.add(Factory.getInstance().getPropertie(item.getText()));
+					properties.add(Factory.getInstance().getProperty(item.getText()));
 				} catch (PropertiesException e) {
 					log.error(e.getMessage());
 				}

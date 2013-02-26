@@ -26,7 +26,7 @@ public class EventCheckAttributes implements Listener {
 			if (event.detail == SWT.CHECK){
 				
 				TableItem tabItem = (TableItem)event.item;
-				IProperties propertie = Factory.getInstance().getPropertie((String)event.item.getData());
+				IProperties propertie = Factory.getInstance().getProperty((String)event.item.getData());
 				//Boolean value = propertie.getBoolean(tabItem.getText());
 				propertie.put(tabItem.getText(), tabItem.getChecked());
 
