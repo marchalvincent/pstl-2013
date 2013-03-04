@@ -36,18 +36,14 @@ public class EventSelectTreeProperty implements Listener {
 
 		TreeItem currentItem =(TreeItem) event.item;
 		//Permet de ne rien faire si l'on clique sur une famille
-		if((currentItem.getData()!=null && currentItem.getData().equals("FamilyItem"))){
+		if((currentItem.getData()!=null && currentItem.getData().equals("FamilyItem"))) {
 			
-			for (TreeItem item : currentItem.getItems()) 
-			{
-				//TODO : Vincent Enlever commentaire
-				//item.setChecked(currentItem.getChecked() || ((Boolean)item.getData()));
+			for (TreeItem item : currentItem.getItems()) {
+				item.setChecked(currentItem.getChecked() || (!(Boolean)item.getData()));
 			}
 		}
-		else
-		{
+		else {
 			if (currentItem != null) {
-				//tabProperties.setSelection(currentItem); 
 				if (currentItem.getText().equals("EnoughState"))
 					currentItem.setChecked(true);
 				showValueProperties(currentItem.getText());
