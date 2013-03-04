@@ -402,10 +402,10 @@ public class SwtView extends Composite {
 	}
 
 	private void startPoolExecutor() {
-		BlockingQueue<Runnable> worksQueue = new ArrayBlockingQueue<Runnable>(2);
+		BlockingQueue<Runnable> worksQueue = new ArrayBlockingQueue<Runnable>(30);
 		RejectedExecutionHandler executionHandler = new MyRejectedExecutionHandelerImpl();
 		int poolSize = ConfPropertiesManager.getInstance().getNbThreads();
-		threadPoolExecutor = new ThreadPoolExecutor(1, poolSize, 10, TimeUnit.SECONDS, worksQueue, executionHandler);
+		threadPoolExecutor = new ThreadPoolExecutor(poolSize, poolSize, 10, TimeUnit.SECONDS, worksQueue, executionHandler);
 		threadPoolExecutor.allowCoreThreadTimeOut(true);
 
 		// Starting the monitor thread as a daemon
