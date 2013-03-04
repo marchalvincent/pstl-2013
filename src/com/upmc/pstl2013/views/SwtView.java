@@ -336,6 +336,7 @@ public class SwtView extends Composite {
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
 				lItem1.setText(elem.getClass().getSimpleName());
 				//TODO : Vincent Enlever commentaire
+				//lItem1.setData(elem.isModifiable());
 				//if (!elem.isModifiable())
 				//	lItem1.setChecked(true);
 			}
