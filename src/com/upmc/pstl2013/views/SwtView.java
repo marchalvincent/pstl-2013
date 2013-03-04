@@ -15,8 +15,6 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -26,7 +24,6 @@ import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
-import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
@@ -45,7 +42,6 @@ import com.upmc.pstl2013.views.events.EventClickVisualisationAlloy;
 import com.upmc.pstl2013.views.events.EventCurrentExecutor;
 import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
-import com.upmc.pstl2013.views.events.EventSelectProperty;
 import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
 import com.upmc.pstl2013.views.events.EventSelectTreeProperty;
 import com.upmc.pstl2013.views.events.MyRejectedExecutionHandelerImpl;
@@ -62,7 +58,6 @@ public class SwtView extends Composite {
 	private TabFolder tabFolder;
 	private TabItem itemAlloyUse, itemAlloyProperty, itemDetails, itemOptions;
 	private Composite cpItemAlloyUse, cpItemAlloyProp, cpItemDetails, cpItemOptions;
-	private Table tabProperties;
 	private Table tabValuePropertiesString,tabValuePropertiesBool;
 	private final TableEditor editorString, editorBool;
 	private Text txtPersonalPropertie;
@@ -131,7 +126,7 @@ public class SwtView extends Composite {
 		itemAlloyProperty.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "properties.gif"));
 		itemAlloyProperty.setText("Properties");
 		cpItemAlloyProp = new Composite(tabFolder, SWT.BORDER);
-		cpItemAlloyProp.setLayout(new GridLayout(4, false));
+		cpItemAlloyProp.setLayout(new GridLayout(3, false));
 		itemAlloyProperty.setControl(cpItemAlloyProp);
 		//Items et composite pour la partie Details du tabeFolder
 		itemDetails = new TabItem(tabFolder, SWT.NONE);
@@ -147,15 +142,9 @@ public class SwtView extends Composite {
 		cpItemOptions= new Composite(tabFolder, SWT.BORDER);
 		cpItemOptions.setLayout(new GridLayout(2, false));
 		itemOptions.setControl(cpItemOptions);
-
-		/*
-		 * Debut contenu de la parite property 
-		 */
-		//Table des proprietes 
-		tabProperties = new Table(cpItemAlloyProp, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
-		tabProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		tabProperties.setLinesVisible(true);
-		tabProperties.setHeaderVisible(true);
+		
+				treeProperties = new Tree(cpItemAlloyProp, SWT.CHECK | SWT.BORDER);
+				treeProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		//Table des attributs de la partie proprieteString
 		tabValuePropertiesString = new Table(cpItemAlloyProp, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
@@ -181,8 +170,6 @@ public class SwtView extends Composite {
 		TableColumn column = new TableColumn(tabValuePropertiesBool, SWT.NONE);
 		column.setText("Key");
 
-
-		addProperties();
 		GridLayout gridLayout = new GridLayout(1, false);
 		setLayout(gridLayout);
 		/*
@@ -191,11 +178,7 @@ public class SwtView extends Composite {
 		btnChooseDir = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooseDir.setToolTipText("Choose the directory path for the generated alloy files");
 		btnChooseDir.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "choose_folder.gif"));
-		btnChooseDir.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
+
 		btnChooseDir.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		btnChooseDir.setText("Choose dest.");
 
@@ -212,11 +195,7 @@ public class SwtView extends Composite {
 		btnChooseFolderExec = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooseFolderExec.setToolTipText("Choose all files of one folder for the execution");
 		btnChooseFolderExec.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "select_folder.gif"));
-		btnChooseFolderExec.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
+
 		btnChooseFolderExec.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnChooseFolderExec.setText("Folder");
 
@@ -246,11 +225,7 @@ public class SwtView extends Composite {
 
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
 		btnPersonalPropertie.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run_perso.gif"));
-		btnPersonalPropertie.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
+
 		btnPersonalPropertie.setToolTipText("Execute the user alloy text");
 		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
 		btnPersonalPropertie.setText("Exec Perso");
@@ -260,9 +235,6 @@ public class SwtView extends Composite {
 		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
-
-		treeProperties = new Tree(cpItemAlloyProp, SWT.CHECK | SWT.BORDER);
-		treeProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		/*
 		 *Debut de la partie Details
@@ -277,11 +249,7 @@ public class SwtView extends Composite {
 
 		btnAlloyVisualisation = new Button(cpItemDetails, SWT.NONE);
 		btnAlloyVisualisation.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "insp_sbook.gif"));
-		btnAlloyVisualisation.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-			}
-		});
+
 		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualise");
@@ -319,6 +287,8 @@ public class SwtView extends Composite {
 		chkDetails = new Button(cpItemOptions, SWT.CHECK);
 		chkDetails.setText("Details");
 
+		addPropertiesToTree();
+		
 
 		// ajout des events listener
 		btnChooserFile.addMouseListener(new EventChooseFile(this));
@@ -330,39 +300,10 @@ public class SwtView extends Composite {
 		btnChooseDir.addMouseListener(new EventChooseDir(this));
 
 
-		addPropertiesToTree();
-
 		//Suppression des anciens logs
 		deleteOldLogs();
 
 		startPoolExecutor();
-	}
-
-	/**
-	 * Affiche toutes les proprietes dans la view.
-	 */
-	private void addProperties() {
-
-		TableColumn column = new TableColumn(tabProperties, SWT.NONE);
-		column.setText("Properties");
-		for (IProperties property : AbstractProperties.getProperties()) {
-			String prop = property.getClass().getSimpleName();
-
-			TableItem item = new TableItem(tabProperties, SWT.NONE );
-			item.setText(0, prop);
-
-			// si la propriété est dans les préférences, on coche par défaut
-			String prefs = ConfPropertiesManager.getInstance().getProperties();
-			if (prefs.contains(prop)) {
-				item.setChecked(true);
-			}
-			if (prop.equals("EnoughState")) {
-				item.setChecked(true);
-			}
-		}
-		tabProperties.getColumn(0).pack();
-		tabProperties.addListener(SWT.Selection, new EventSelectProperty(this));
-		tabProperties.addListener(SWT.CHECK, new EventSelectProperty(this));
 	}
 
 
@@ -371,39 +312,32 @@ public class SwtView extends Composite {
 	 */
 	private void addPropertiesToTree() {
 
-		/*
-		TreeItem lItem1 = new TreeItem(treeProperties, SWT.READ_ONLY);
-		lItem1.setText("Item 1");
-		//lItem1.setGrayed(true);
-		lItem1.setChecked(true);
-		 */
-		HashMap<String, List<String>> families = new HashMap<String, List<String>>();
+		HashMap<String, List<IProperties>> families = new HashMap<String, List<IProperties>>();
 		treeProperties.addListener(SWT.Selection, new EventSelectTreeProperty(this));
 		
 		TreeItem lItem0 = null;
 		TreeItem lItem1 = null;
 		for (IProperties property : AbstractProperties.getProperties()) {
-			String prop = property.getClass().getSimpleName();
-
+			
 			//Ajout des familles dans la treeview si elle n'existe pas 
 			if(!families.containsKey(property.getBehavior().toString()))
-				families.put(property.getBehavior().toString(),new ArrayList<String>());
+				families.put(property.getBehavior().toString(),new ArrayList<IProperties>());
 
-			families.get(property.getBehavior().toString()).add(prop);
-
-
+			families.get(property.getBehavior().toString()).add(property);
 		}
 
 		for (String family : families.keySet()) {
 			lItem0 = new TreeItem(treeProperties, SWT.READ_ONLY);
 			lItem0.setText(family);
 			lItem0.setData("FamilyItem");
-			//lItem0.setChecked(true);
 			
-			for (String elem : families.get(family)) {
+			for (IProperties elem : families.get(family)) {
+				
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
-				lItem1.setText(elem);
-				//lItem0.setChecked(true);
+				lItem1.setText(elem.getClass().getSimpleName());
+				//TODO : Vincent Enlever commentaire
+				//if (!elem.isModifiable())
+				//	lItem1.setChecked(true);
 			}
 		}
 
@@ -479,11 +413,11 @@ public class SwtView extends Composite {
 	public Text getTxtLogs() {
 		return txtLogs;
 	}
-
-	public Table getTabProperties() {
-		return tabProperties;
+	
+	public Tree getTreeProperties() {
+		return treeProperties;
 	}
-
+	
 	public Table getTabValuePropertiesString() {
 		return tabValuePropertiesString;
 	}
