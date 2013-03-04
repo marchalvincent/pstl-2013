@@ -10,7 +10,7 @@ import com.upmc.pstl2013.properties.Behavior;
 public class PersonalPropertie extends AbstractProperties {
 	
 	public PersonalPropertie() {
-		//TODO voir comment on peut spécifier ni check, ni run... 
+		// TODO voir comment on peut spécifier ni check, ni run... 
 		super(Boolean.TRUE, Factory.getInstance().newSimpleExecutionStrategy(), Factory.getInstance().newVoidStrategy());
 	}
 

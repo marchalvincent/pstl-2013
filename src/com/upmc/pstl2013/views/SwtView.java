@@ -14,6 +14,8 @@ import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
+import org.eclipse.swt.events.SelectionAdapter;
+import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -325,7 +327,7 @@ public class SwtView extends Composite {
 			
 			//Ajout des familles dans la treeview si elle n'existe pas 
 			if(!families.containsKey(property.getBehavior().toString()))
-				families.put(property.getBehavior().toString(),new ArrayList<IProperties>());
+				families.put(property.getBehavior().toString(), new ArrayList<IProperties>());
 
 			families.get(property.getBehavior().toString()).add(property);
 		}
@@ -339,14 +341,15 @@ public class SwtView extends Composite {
 				
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
 				lItem1.setText(elem.getClass().getSimpleName());
-				//TODO : Vincent Enlever commentaire
-				//lItem1.setData(elem.isModifiable());
-				//if (!elem.isModifiable())
-				//	lItem1.setChecked(true);
+				boolean isModif = elem.isModifiable();
+				lItem1.setData(isModif);
+				if (!isModif) {
+					lItem1.setChecked(true);
+				} else if (ConfPropertiesManager.getInstance().getProperties().contains(elem.getClass().getSimpleName())) {
+					lItem1.setChecked(true);
+				}
 			}
 		}
-
-
 	}
 
 
