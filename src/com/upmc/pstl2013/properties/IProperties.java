@@ -111,4 +111,10 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	 * @return {@link Behavior}.
 	 */
 	Behavior getBehavior();
+	
+	/**
+	 * Renvoie un booléen qui spécifie si cette propriété est modifiable par l'utilisateur ou non.
+	 * @return
+	 */
+	boolean isModifiable();
 }

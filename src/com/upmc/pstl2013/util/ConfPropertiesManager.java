@@ -57,6 +57,9 @@ public class ConfPropertiesManager {
 			if (prop.getProperty("nbThreads") == null) {
 				try {this.setNbThreads(String.valueOf(ConfPropertiesManager.DEFAUT_NB_THREAD));} catch (Exception e) {}
 			}
+			if (prop.getProperty("details") == null) {
+				try {this.setDetails(false);} catch (Exception e) {}
+			}
 			
 			this.store();
 		} catch (IOException e) {
@@ -123,6 +126,19 @@ public class ConfPropertiesManager {
 	
 	public void setNbThreads(String nbThreads) {
 		prop.setProperty("nbThreads", nbThreads);
+	}
+	
+	public boolean isDetails() {
+		try {
+			boolean bool = Boolean.parseBoolean(prop.getProperty("details"));
+			return bool;
+		} catch (Exception e) {
+			return false;
+		}
+	}
+
+	public void setDetails(boolean details) {
+		prop.setProperty("details", String.valueOf(details));
 	}
 	
 	public void store() throws IOException {
