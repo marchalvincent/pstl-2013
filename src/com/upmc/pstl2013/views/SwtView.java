@@ -3,6 +3,7 @@ package com.upmc.pstl2013.views;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -20,6 +21,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
 import org.eclipse.swt.widgets.Table;
@@ -45,8 +47,8 @@ import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
 import com.upmc.pstl2013.views.events.EventSelectProperty;
 import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
+import com.upmc.pstl2013.views.events.EventSelectTreeProperty;
 import com.upmc.pstl2013.views.events.MyRejectedExecutionHandelerImpl;
-import org.eclipse.swt.widgets.Label;
 
 public class SwtView extends Composite {
 
@@ -86,6 +88,9 @@ public class SwtView extends Composite {
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
+	private Tree treeProperties;
+	private Label label;
+	private Button chkDetails;
 
 	/**
 	 * Create the composite.
@@ -126,7 +131,7 @@ public class SwtView extends Composite {
 		itemAlloyProperty.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "properties.gif"));
 		itemAlloyProperty.setText("Properties");
 		cpItemAlloyProp = new Composite(tabFolder, SWT.BORDER);
-		cpItemAlloyProp.setLayout(new GridLayout(3, false));
+		cpItemAlloyProp.setLayout(new GridLayout(4, false));
 		itemAlloyProperty.setControl(cpItemAlloyProp);
 		//Items et composite pour la partie Details du tabeFolder
 		itemDetails = new TabItem(tabFolder, SWT.NONE);
@@ -151,6 +156,7 @@ public class SwtView extends Composite {
 		tabProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 		tabProperties.setLinesVisible(true);
 		tabProperties.setHeaderVisible(true);
+
 		//Table des attributs de la partie proprieteString
 		tabValuePropertiesString = new Table(cpItemAlloyProp, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tabValuePropertiesString.setTouchEnabled(true);
@@ -255,6 +261,9 @@ public class SwtView extends Composite {
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
 
+		treeProperties = new Tree(cpItemAlloyProp, SWT.CHECK | SWT.BORDER);
+		treeProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
 		/*
 		 *Debut de la partie Details
 		 */
@@ -276,7 +285,7 @@ public class SwtView extends Composite {
 		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualise");
-		
+
 		lblTimeout = new Label(cpItemOptions, SWT.NONE);
 		lblTimeout.setAlignment(SWT.CENTER);
 		lblTimeout.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
@@ -284,12 +293,12 @@ public class SwtView extends Composite {
 		txtTimeout = new Text(cpItemOptions, SWT.BORDER);
 		txtTimeout.setText(String.valueOf(ConfPropertiesManager.getInstance().getTimeOut()));
 		txtTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
-		
+
 		lblNbNodeMax = new Label(cpItemOptions, SWT.NONE);
 		lblNbNodeMax.setAlignment(SWT.CENTER);
 		lblNbNodeMax.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
 		lblNbNodeMax.setText("Max number of nodes to parse (UML file)");
-		
+
 		txtNbNodesMax = new Text(cpItemOptions, SWT.BORDER);
 		txtNbNodesMax.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbNodes()));
 		txtNbNodesMax.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
@@ -298,10 +307,17 @@ public class SwtView extends Composite {
 		lblNbThreads.setAlignment(SWT.CENTER);
 		lblNbThreads.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
 		lblNbThreads.setText("Max number of threads");
-		
+
 		txtNbThreads = new Text(cpItemOptions, SWT.BORDER);
 		txtNbThreads.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbThreads()));
 		txtNbThreads.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+		
+		label = new Label(cpItemOptions, SWT.SEPARATOR | SWT.HORIZONTAL);
+		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
+		new Label(cpItemOptions, SWT.NONE);
+		
+		chkDetails = new Button(cpItemOptions, SWT.CHECK);
+		chkDetails.setText("Details");
 
 
 		// ajout des events listener
@@ -313,9 +329,12 @@ public class SwtView extends Composite {
 		btnAlloyVisualisation.addMouseListener(new EventClickVisualisationAlloy(this));
 		btnChooseDir.addMouseListener(new EventChooseDir(this));
 
+
+		addPropertiesToTree();
+
 		//Suppression des anciens logs
 		deleteOldLogs();
-		
+
 		startPoolExecutor();
 	}
 
@@ -328,7 +347,7 @@ public class SwtView extends Composite {
 		column.setText("Properties");
 		for (IProperties property : AbstractProperties.getProperties()) {
 			String prop = property.getClass().getSimpleName();
-			
+
 			TableItem item = new TableItem(tabProperties, SWT.NONE );
 			item.setText(0, prop);
 
@@ -345,6 +364,52 @@ public class SwtView extends Composite {
 		tabProperties.addListener(SWT.Selection, new EventSelectProperty(this));
 		tabProperties.addListener(SWT.CHECK, new EventSelectProperty(this));
 	}
+
+
+	/**
+	 * Affiche toutes les proprietes dans la view.
+	 */
+	private void addPropertiesToTree() {
+
+		/*
+		TreeItem lItem1 = new TreeItem(treeProperties, SWT.READ_ONLY);
+		lItem1.setText("Item 1");
+		//lItem1.setGrayed(true);
+		lItem1.setChecked(true);
+		 */
+		HashMap<String, List<String>> families = new HashMap<String, List<String>>();
+		treeProperties.addListener(SWT.Selection, new EventSelectTreeProperty(this));
+		
+		TreeItem lItem0 = null;
+		TreeItem lItem1 = null;
+		for (IProperties property : AbstractProperties.getProperties()) {
+			String prop = property.getClass().getSimpleName();
+
+			//Ajout des familles dans la treeview si elle n'existe pas 
+			if(!families.containsKey(property.getBehavior().toString()))
+				families.put(property.getBehavior().toString(),new ArrayList<String>());
+
+			families.get(property.getBehavior().toString()).add(prop);
+
+
+		}
+
+		for (String family : families.keySet()) {
+			lItem0 = new TreeItem(treeProperties, SWT.READ_ONLY);
+			lItem0.setText(family);
+			lItem0.setData("FamilyItem");
+			//lItem0.setChecked(true);
+			
+			for (String elem : families.get(family)) {
+				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
+				lItem1.setText(elem);
+				//lItem0.setChecked(true);
+			}
+		}
+
+
+	}
+
 
 	/**
 	 * Supprime tous les logs générés à la derniere utilisation du plugin.
@@ -393,14 +458,14 @@ public class SwtView extends Composite {
 			item1.setData(actResult);	
 		}
 	}
-	
+
 	private void startPoolExecutor() {
 		BlockingQueue<Runnable> worksQueue = new ArrayBlockingQueue<Runnable>(2);
 		RejectedExecutionHandler executionHandler = new MyRejectedExecutionHandelerImpl();
 		int poolSize = ConfPropertiesManager.getInstance().getNbThreads();
 		threadPoolExecutor = new ThreadPoolExecutor(1, poolSize, 10, TimeUnit.SECONDS, worksQueue, executionHandler);
 		threadPoolExecutor.allowCoreThreadTimeOut(true);
-		
+
 		// Starting the monitor thread as a daemon
 		/*Thread monitor = new Thread(new MyMonitorThread(threadPoolExecutor));
 		monitor.setDaemon(true);
@@ -476,15 +541,15 @@ public class SwtView extends Composite {
 			return 3 * 60;
 		}
 	}
-	
+
 	public String getNbNodesMax() {
 		return txtNbNodesMax.getText();
 	}
-	
+
 	public String getNbThread() {
 		return txtNbThreads.getText();
 	}
-	
+
 	public ThreadPoolExecutor getThreadPoolExecutor() {
 		return threadPoolExecutor;
 	}
