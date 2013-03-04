@@ -25,6 +25,7 @@ public abstract class AbstractProperties implements IProperties {
 	private Boolean isCheck;
 	private IStrategyExecution strategyExecution;
 	private IStrategyParcours strategyParcours;
+	private boolean isModifiable;
 	private static Logger log = Logger.getLogger(AbstractProperties.class);
 
 	/**
@@ -50,6 +51,7 @@ public abstract class AbstractProperties implements IProperties {
 		this.isCheck = isCheck;
 		this.strategyExecution = strategyExecution;
 		this.strategyParcours = strategy;
+		this.setModifiable(true);
 	}
 
 	@Override
@@ -165,6 +167,15 @@ public abstract class AbstractProperties implements IProperties {
 	
 	@Override
 	public abstract Behavior getBehavior();
+	
+	protected void setModifiable(boolean isModifiable) {
+		this.isModifiable = isModifiable;
+	}
+	
+	@Override 
+	public boolean isModifiable() {
+		return isModifiable;
+	}
 	
 	/**
 	 * Supprime la clé si elle existe. Ne fait rien sinon.
