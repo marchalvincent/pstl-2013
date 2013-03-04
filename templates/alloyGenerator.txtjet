@@ -1,0 +1,90 @@
+<%@ jet package="com.upmc.pstl2013.alloyGenerator.jet.impl" class="JetTemplate" 
+	imports="org.apache.log4j.Logger 
+			org.eclipse.emf.common.util.EList
+			org.eclipse.uml2.uml.*
+			com.upmc.pstl2013.alloyGenerator.jet.*
+			com.upmc.pstl2013.properties.*" 
+	skeleton="alloyGenerator.skeleton" %>
+<% 
+	final Logger log = Logger.getLogger(JetTemplate.class);
+	if (!(argument instanceof IJetHelper)) {
+		final String error = "L'argument passé au template Jet n'est pas un IJetHelper.";
+		log.error(error);
+		throw new JetException(error);
+	}
+	IJetHelper jetHelper = (IJetHelper) argument;
+	
+	// on récupère la propriété
+	IProperties propertie = jetHelper.getPropertie();
+	if (propertie == null) {
+		final String error = "La propriété est incorrecte.";
+		log.error(error);
+		throw new JetException(error);
+	}
+%>
+
+module process
+
+open syntax
+open semantic
+
+fact initTokens {
+	Init[  
+		<% //GENERATION DU NOEUD INITIAL EN DYNAMIQUE
+		// on gère les cas sans noeud initial...
+		String initialNode = propertie.getString("initialNode");
+		if (initialNode == null) {
+			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
+			log.error(error);
+			throw new JetException(error);
+		}
+		stringBuffer.append(initialNode); %> -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + 
+		ActivityEdge -> 0  // offers
+	]
+}
+
+// Timing
+one sig T extends Timing {} {
+	timing = (ActivityNode -> 0) 
+}
+
+// Role Performer
+one sig Yoann extends RolePerformer {}
+one sig P extends Performer {} {
+	performer = ActivityNode -> Yoann
+}
+
+<% 
+	// GENERATION DES NOEUDS ET EDGES EN DYNAMIQUE
+	EList<ActivityNode> nodes = jetHelper.getNodes();
+	EList<ActivityEdge> edges = jetHelper.getEdges();
+	
+	stringBuffer.append("------Generated Nodes------" + NL);
+	for (ActivityNode node : nodes) {
+		stringBuffer.append("one sig " + node.getName() + " extends " + node.eClass().getName() + " {}{}" + NL);
+	}
+	
+	stringBuffer.append(NL + NL + "------Generated Edges------" + NL);
+	for (ActivityEdge edge : edges) {
+		stringBuffer.append("one sig " + edge.getName() + " extends " + edge.eClass().getName() + " {}{" + NL);
+		stringBuffer.append("    source = " + edge.getSource().getName() + NL);
+		stringBuffer.append("    target = " + edge.getTarget().getName() + NL);
+		stringBuffer.append("}" + NL);
+	}
+
+	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. SubTemplate)
+	stringBuffer.append(propertie.getAlloyCode());
+%>
+
+/** *Visualization Variables */
+// http://alloy.mit.edu/community/node/548
+fun vNodeExecuting : State->ActivityNode {
+   {s:State, a:ActivityNode | s.getTokens[a] > 0}
+}
+fun vEdgeHaveOffers : State->ActivityEdge {
+   {s:State, e:ActivityEdge | s.getOffers[e] > 0}
+}
+
+fun pinInNode : State->Action->Pin->Int {
+	 {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}
+}
