@@ -18,6 +18,7 @@ public class EnoughState extends AbstractProperties {
 
 	public EnoughState() {
 		super(Boolean.TRUE, Factory.getInstance().newIncrementalExecutionStrategy(), Factory.getInstance().newVoidStrategy());
+		super.setModifiable(true);
 		super.putPrivate("nbState", "1");
 		super.put("incrementation", "10");
 		super.put("maxStep", "100");

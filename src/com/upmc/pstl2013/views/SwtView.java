@@ -10,7 +10,6 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
@@ -28,7 +27,6 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.wb.swt.SWTResourceManager;
-
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.IProperties;
@@ -285,11 +283,11 @@ public class SwtView extends Composite {
 		new Label(cpItemOptions, SWT.NONE);
 		
 		chkDetails = new Button(cpItemOptions, SWT.CHECK);
+		chkDetails.setSelection(ConfPropertiesManager.getInstance().isDetails());
 		chkDetails.setText("Details");
 
 		addPropertiesToTree();
 		
-
 		// ajout des events listener
 		btnChooserFile.addMouseListener(new EventChooseFile(this));
 		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
@@ -298,6 +296,12 @@ public class SwtView extends Composite {
 		btnChooseFolderExec.addMouseListener(new EventChooseFolderExec(this));
 		btnAlloyVisualisation.addMouseListener(new EventClickVisualisationAlloy(this));
 		btnChooseDir.addMouseListener(new EventChooseDir(this));
+		chkDetails.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				ConfPropertiesManager.getInstance().setDetails(chkDetails.getSelection());
+			}
+		});
 
 
 		//Suppression des anciens logs
