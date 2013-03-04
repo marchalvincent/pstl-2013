@@ -16,6 +16,7 @@ import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.util.ConfPropertiesManager;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
 import edu.mit.csail.sdg.alloy4.Err;
 import edu.mit.csail.sdg.alloy4compiler.ast.Command;
@@ -80,7 +81,9 @@ public class AlloyExecutor implements IAlloyExecutor {
 				if (filenameAlloy.substring(filenameAlloy.length() - 3, filenameAlloy.length()).equals("als")) {
 
 					// On parse le fichier pour le transformer en objet Alloy.
-					activityResult.appendLog("\n\n=========== Parsing+Typechecking " + filenameAlloy + " =============\n");
+					if (ConfPropertiesManager.getInstance().isDetails()) {
+						activityResult.appendLog("\n\n=========== Parsing+Typechecking " + filenameAlloy + " =============\n");
+					}
 					Module world = CompUtil.parseEverything_fromFile(rep, null, filenameAlloy);
 
 					// L'option d'exécution Alloy.
@@ -91,11 +94,19 @@ public class AlloyExecutor implements IAlloyExecutor {
 						// On exécute la génération de la solution Alloy.
 						A4Solution ans = TranslateAlloyToKodkod.execute_command(rep, world.getAllReachableSigs(), command, options);
 
-						// Affichage des info de l'execution
-						activityResult.appendLog(this.getInfosLogs(command, rep));
+						// Affichage des info de l'execution selon les préférences
+						if (ConfPropertiesManager.getInstance().isDetails()) {
+							activityResult.appendLog(this.getInfosLogs(command, rep));
+							
+							// On parcours la solution Alloy
+							activityResult.appendLog(this.executionTravel(generated, ans));
+						} else {
+							// si on veut pas de détails on supprime les anciennes infos
+							activityResult.resetLog();
+							activityResult.appendLog(this.executionTravel(generated, ans));
+							
+						}
 
-						// On parcours la solution Alloy
-						activityResult.appendLog(this.executionTravel(generated, ans));
 
 						// Si la solution est satisfiable
 						if (ans.satisfiable()) {

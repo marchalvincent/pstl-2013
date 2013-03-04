@@ -21,6 +21,12 @@ public interface IActivityResult {
 	 * @param s le String
 	 */
 	void appendLog(String s);
+	
+	/**
+	 * Remet a zéro les logs.
+	 */
+	void resetLog();
+	
 	/**
 	 * Renvoie le chemin absolut (ou null) vers le fichier XML de la solution Alloy.
 	 * @return String le chemin ou null si aucun résultat n'a été trouvé.

@@ -139,11 +139,6 @@ public class ConfPropertiesManager {
 
 	public void setDetails(boolean details) {
 		prop.setProperty("details", String.valueOf(details));
-		try {
-			this.store();
-		} catch (IOException e) {
-			log.error("Impossible d'enregistrer les préférences sur l'affichage du détails des exécutions.");
-		}
 	}
 	
 	public void store() throws IOException {

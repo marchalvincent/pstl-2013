@@ -44,6 +44,11 @@ public class ActivityResult implements IActivityResult {
 	}
 
 	@Override
+	public void resetLog() {
+		logs.delete(0, logs.length());
+	}
+
+	@Override
 	public void setPathXMLResult(String path) {
 		XMLFile = path;
 	}

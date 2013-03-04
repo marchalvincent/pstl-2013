@@ -133,7 +133,7 @@ public class PathStrategy implements IStrategyParcours {
 		Map<Integer, List<String>> heldTokens = mySolution.getHeldTokens();
 		int numStateFinished = mySolution.getNumStateFinished();
 		
-		StringBuilder sb = new StringBuilder("Path Strategie : ");
+		StringBuilder sb = new StringBuilder("");
 		// pour chaque étape de la solution
 		for (Integer key : heldTokens.keySet()) {
 			// si ce numéro de state est encore dans l'état "running"
