@@ -37,17 +37,28 @@ public class EventSelectTreeProperty implements Listener {
 		TreeItem currentItem =(TreeItem) event.item;
 		//Permet de ne rien faire si l'on clique sur une famille
 		if((currentItem.getData()!=null && currentItem.getData().equals("FamilyItem"))) {
-			
-			for (TreeItem item : currentItem.getItems()) {
-				item.setChecked(currentItem.getChecked() || (!(Boolean)item.getData()));
+			if (event.detail == SWT.CHECK){
+				for (TreeItem item : currentItem.getItems()) {
+					item.setChecked(currentItem.getChecked() || (!(Boolean)item.getData()));
+				}
 			}
 		}
+		//Selection d'une preperty
 		else {
 			if (currentItem != null) {
 				if (currentItem.getText().equals("EnoughState"))
 					currentItem.setChecked(true);
 				showValueProperties(currentItem.getText());
 			}
+			//Si tous les elements sont selectionnés alors on selectionne la famille.
+			boolean allChecked = true;
+			for (TreeItem item : currentItem.getParentItem().getItems()) {
+				if (!item.getChecked()){
+					allChecked = false;
+					break;
+				}
+			}
+			currentItem.getParentItem().setChecked(allChecked);
 		}
 	}
 

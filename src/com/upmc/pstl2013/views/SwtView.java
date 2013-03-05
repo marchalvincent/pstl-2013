@@ -336,19 +336,22 @@ public class SwtView extends Composite {
 			lItem0 = new TreeItem(treeProperties, SWT.READ_ONLY);
 			lItem0.setText(family);
 			lItem0.setData("FamilyItem");
-			
+			//permet de checker la famille si tous les property sont selectionnée
+			boolean allChecked = (families.get(family).size()>0);
 			for (IProperties elem : families.get(family)) {
 				
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
 				lItem1.setText(elem.getClass().getSimpleName());
 				boolean isModif = elem.isModifiable();
 				lItem1.setData(isModif);
-				if (!isModif) {
+				if (!isModif) 
 					lItem1.setChecked(true);
-				} else if (ConfPropertiesManager.getInstance().getProperties().contains(elem.getClass().getSimpleName())) {
+				else if (ConfPropertiesManager.getInstance().getProperties().contains(elem.getClass().getSimpleName()))
 					lItem1.setChecked(true);
-				}
+				else
+					allChecked = false;
 			}
+			lItem0.setChecked(allChecked);
 		}
 	}
 

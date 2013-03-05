@@ -28,11 +28,11 @@ public class ThreadTimeout extends Thread {
 				Thread.sleep(1000);
 				endTime = System.nanoTime();
 				timeSpend = (endTime - startTime) / 1000000000; // en sec
-				
+				isEnd = true;
 				for (JobExecutor job : listJobsExec) {
 					if((job.getResult() != null))
 					{
-						isEnd = true;
+						isEnd = false;
 						break;
 					}
 				}
@@ -51,5 +51,6 @@ public class ThreadTimeout extends Thread {
 				}
 			}
 		}
+		log.debug("/!\\ Fin du thread timeOut.");
 	}
 }
