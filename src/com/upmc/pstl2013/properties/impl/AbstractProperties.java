@@ -9,6 +9,7 @@ import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.Behavior;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
 import com.upmc.pstl2013.strategyParcours.IStrategyParcours;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
@@ -30,19 +31,10 @@ public abstract class AbstractProperties implements IProperties {
 
 	/**
 	 * Renvoie la liste des propriétés de vérification alloy possible.
-	 * @return une liste de String.
+	 * @return une liste de {@link IProperties}.
 	 */
 	public static List<IProperties> getProperties() {
-		List<IProperties> liste = new ArrayList<IProperties>();
-		try {
-			liste.add(Factory.getInstance().getProperty(DeadLock.class.getSimpleName()));
-			liste.add(Factory.getInstance().getProperty(EnoughState.class.getSimpleName()));
-			liste.add(Factory.getInstance().getProperty(Orga.class.getSimpleName()));
-			liste.add(Factory.getInstance().getProperty(Wf.class.getSimpleName()));
-		} catch (PropertiesException e) {
-			log.error("Erreur, impossible de récupérer les singletons des propriétés : " + e.getMessage());
-		}
-		return liste;
+		return PropertiesFactory.getInstance().getProperties();
 	}
 
 	public AbstractProperties(Boolean isCheck, IStrategyExecution strategyExecution, IStrategyParcours strategy) {
