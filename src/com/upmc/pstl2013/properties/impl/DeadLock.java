@@ -12,8 +12,10 @@ import com.upmc.pstl2013.properties.Behavior;
 public class DeadLock extends AbstractProperties {
 	
 	public DeadLock() {
-		// le DeadLock est un check avec la strategie PathStrategy
-		super(Boolean.TRUE, Factory.getInstance().newSimpleExecutionStrategy(), Factory.getInstance().newPathStrategy());
+		// le DeadLock est un check avec la strategie d'exécution simple, et de parcours PathStrategy
+		super(Boolean.TRUE, 
+				Factory.getInstance().newSimpleExecutionStrategy(), 
+				Factory.getInstance().newPathStrategy());
 	}
 
 	@Override
