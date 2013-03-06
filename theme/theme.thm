@@ -1,0 +1,168 @@
+<?xml version="1.0"?>
+<alloy>
+
+<view>
+
+<projection> <type name="semantic/State"/> </projection>
+
+<defaultnode/>
+
+<defaultedge/>
+
+<node>
+   <type name="ControlFlowGen"/>
+   <type name="DecisionCodeNeedsRefactoring"/>
+   <type name="DecisionTestPass"/>
+   <type name="DecisionTypicalChange"/>
+   <type name="DecisionWorkComplete"/>
+   <type name="DesignTheSolution"/>
+   <type name="EdgeDecisionCodeNeedsRefactoringToIntegrateAndCreateBuild"/>
+   <type name="EdgeDecisionCodeNeedsRefactoringToMergeDesignTheSolution"/>
+   <type name="EdgeDecisionTestPassToDecisionCodeNeedsRefactoring"/>
+   <type name="EdgeDecisionTestPassToImplementSolution"/>
+   <type name="EdgeDecisionTypicalChangeToMergeDesignTheSolution"/>
+   <type name="EdgeDecisionTypicalChangeToMergeTypicalChange"/>
+   <type name="EdgeDecisionWorkCompleteToFinal"/>
+   <type name="EdgeDecisionWorkCompleteToMergeMoreWorkToDo"/>
+   <type name="EdgeDesignTheSolutionToMergeTypicalChange"/>
+   <type name="EdgeImplementDeveloperTestsToMergeTestPass"/>
+   <type name="EdgeImplementSolutionToMergeTestPass"/>
+   <type name="EdgeInitialToMergeMoreWorkToDo"/>
+   <type name="EdgeIntegrateAndCreateBuildToDecisionWorkComplete"/>
+   <type name="EdgeMergeDesignTheSolutionToDesignTheSolution"/>
+   <type name="EdgeMergeMoreWorkToDoToDecisionTypicalChange"/>
+   <type name="EdgeMergeTestPassToRunDeveloperTests"/>
+   <type name="EdgeMergeTypicalChangeToImplementDeveloperTests"/>
+   <type name="EdgeRunDeveloperTestsToDecisionTestPass"/>
+   <type name="Final"/>
+   <type name="ImplementDeveloperTests"/>
+   <type name="ImplementSolution"/>
+   <type name="Initial"/>
+   <type name="Int"/>
+   <type name="IntegrateAndCreateBuild"/>
+   <type name="MergeDesignTheSolution"/>
+   <type name="MergeMoreWorkToDo"/>
+   <type name="MergeTestPass"/>
+   <type name="MergeTypicalChange"/>
+   <type name="NotifyManager"/>
+   <type name="P"/>
+   <type name="RunDeveloperTests"/>
+   <type name="String"/>
+   <type name="T"/>
+   <type name="univ"/>
+   <type name="Yoann"/>
+   <type name="semantic/Finished"/>
+   <type name="semantic/Performer"/>
+   <type name="semantic/RolePerformer"/>
+   <type name="semantic/Running"/>
+   <type name="semantic/S1"/>
+   <type name="semantic/S2"/>
+   <type name="semantic/S3"/>
+   <type name="semantic/S4"/>
+   <type name="semantic/State"/>
+   <type name="semantic/Status"/>
+   <type name="semantic/Timing"/>
+   <type name="seq/Int"/>
+   <type name="syntax/Action"/>
+   <type name="syntax/Activity"/>
+   <type name="syntax/ActivityFinalNode"/>
+   <type name="syntax/ActivityNode"/>
+   <type name="syntax/ActivityParameterNode"/>
+   <type name="syntax/Behavior"/>
+   <type name="syntax/BehavioredClassifier"/>
+   <type name="syntax/CallAction"/>
+   <type name="syntax/CallBehaviorAction"/>
+   <type name="syntax/CallOperationAction"/>
+   <type name="syntax/Class"/>
+   <type name="syntax/Classifier"/>
+   <type name="syntax/Clause"/>
+   <type name="syntax/ConditionalNode"/>
+   <type name="syntax/ControlFlow"/>
+   <type name="syntax/ControlNode"/>
+   <type name="syntax/DecisionNode"/>
+   <type name="syntax/EK_iterative"/>
+   <type name="syntax/EK_parallel"/>
+   <type name="syntax/EK_stream"/>
+   <type name="syntax/Element"/>
+   <type name="syntax/ExpansionKind"/>
+   <type name="syntax/ExpansionNode"/>
+   <type name="syntax/ExpansionRegion"/>
+   <type name="syntax/ForkNode"/>
+   <type name="syntax/InvocationAction"/>
+   <type name="syntax/JoinNode"/>
+   <type name="syntax/LoopNode"/>
+   <type name="syntax/MergeNode"/>
+   <type name="syntax/MultiOneOne"/>
+   <type name="syntax/MultiOneStar"/>
+   <type name="syntax/MultiStarStar"/>
+   <type name="syntax/MultiTwoStar"/>
+   <type name="syntax/MultiZeroOne"/>
+   <type name="syntax/MultiZeroStar"/>
+   <type name="syntax/NamedElement"/>
+   <type name="syntax/Namespace"/>
+   <type name="syntax/Object"/>
+   <type name="syntax/ObjectFlow"/>
+   <type name="syntax/ObjectNode"/>
+   <type name="syntax/PackageableElement"/>
+   <type name="syntax/Parameter"/>
+   <type name="syntax/Pin"/>
+   <type name="syntax/RedefinableElement"/>
+   <type name="syntax/SendSignalAction"/>
+   <type name="syntax/StructuredActivityNode"/>
+   <type name="syntax/Type"/>
+   <type name="syntax/TypedElement"/>
+   <type name="semantic/boolean/Bool"/>
+   <type name="semantic/boolean/False"/>
+   <type name="semantic/boolean/True"/>
+   <type name="semantic/ordering/Ord"/>
+   <set name="$checkFinal_s" type="semantic/State"/>
+   <set name="$isExecuted_s" type="semantic/State"/>
+   <set name="First" type="semantic/ordering/Ord"/>
+   <set name="Next" type="semantic/ordering/Ord"/>
+   <set name="running" type="semantic/Status"/>
+   <set name="status" type="semantic/Status"/>
+</node>
+
+<node color="Red">
+   <set name="$vEdgeHaveOffers" type="syntax/ActivityEdge"/>
+   <set name="$vNodeExecuting" type="syntax/ActivityNode"/>
+</node>
+
+<node shape="Circle" color="White">
+   <type name="syntax/FinalNode"/>
+</node>
+
+<node shape="Dbl Circle" color="White">
+   <type name="syntax/InitialNode"/>
+</node>
+
+<node shape="Hexagon" color="Green">
+   <type name="syntax/ActivityEdge"/>
+</node>
+
+<node shape="Inv House">
+   <type name="syntax/ExecutableNode"/>
+</node>
+
+<node style="Dashed">
+   <type name="syntax/InputPin"/>
+   <type name="syntax/OutputPin"/>
+</node>
+
+<node visible="no">
+   <type name="syntax/MultiplicityElement"/>
+</node>
+
+<edge visible="no">
+   <relation name="hasOffers"> <type name="syntax/ActivityEdge"/> <type name="semantic/boolean/Bool"/> </relation>
+   <relation name="multiplicityElement"> <type name="syntax/Pin"/> <type name="syntax/MultiplicityElement"/> </relation>
+</edge>
+
+<edge visible="no" attribute="yes">
+   <relation name="heldTokens"> <type name="syntax/ActivityNode"/> <type name="Int"/> </relation>
+   <relation name="offers"> <type name="syntax/ActivityEdge"/> <type name="Int"/> </relation>
+</edge>
+
+</view>
+
+</alloy>
