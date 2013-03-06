@@ -1,13 +1,11 @@
 package com.upmc.pstl2013.views.events;
 
 import java.io.File;
-
 import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import com.upmc.pstl2013.views.SwtView;
 import com.upmc.pstl2013.viewsDialog.DialogBuisiness;
 

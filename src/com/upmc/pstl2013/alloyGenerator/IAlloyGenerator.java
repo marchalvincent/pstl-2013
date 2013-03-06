@@ -2,7 +2,6 @@ package com.upmc.pstl2013.alloyGenerator;
 
 import java.util.Iterator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
-
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 /**
