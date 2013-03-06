@@ -18,19 +18,19 @@ import com.upmc.pstl2013.util.ConfPropertiesManager;
 public class UMLParser implements IUMLParser {
 
 	private IFile UMLFile;
-	private Activity activities;
+	private Activity activity;
 	private Logger log = Logger.getLogger(UMLParser.class);
 
 	public UMLParser(IFile file) {
 		super();
 		this.UMLFile = file;
-		this.activities = null;
+		this.activity = null;
 	}
 
 	@Override
 	public Activity getActivities() {
-		if (activities != null) {
-			return activities;
+		if (activity != null) {
+			return activity;
 		}
 		
 		log.info("Debut du parsing du fichier : " + UMLFile.getName() + ".");
@@ -46,11 +46,10 @@ public class UMLParser implements IUMLParser {
 				EObject eo = tree.next();
 				if (eo instanceof Activity) {
 					log.debug("Une activité est trouvée.");
-					activities = (Activity) eo;
+					activity = (Activity) eo;
 					
 					// On vérifie que notre fichier n'est pas trop grand...
-					int maxNb = ConfPropertiesManager.getInstance().getNbNodes();
-					if (activities.getNodes().size() > maxNb) {
+					if (activity.getNodes().size() > ConfPropertiesManager.getInstance().getNbNodesMax()) {
 						log.warn("Attention le fichier contient plus de noeud que le maximum spécifié.");
 						return null;
 					}
@@ -58,6 +57,6 @@ public class UMLParser implements IUMLParser {
 				}
 			}
 		}
-		return activities;
+		return activity;
 	}
 }

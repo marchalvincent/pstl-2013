@@ -282,7 +282,7 @@ public class SwtView extends Composite {
 		lblNbNodeMax.setText("Max number of nodes to parse (UML file)");
 
 		txtNbNodesMax = new Text(cpItemOptions, SWT.BORDER);
-		txtNbNodesMax.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbNodes()));
+		txtNbNodesMax.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbNodesMax()));
 		txtNbNodesMax.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		lblNbThreads = new Label(cpItemOptions, SWT.NONE);
