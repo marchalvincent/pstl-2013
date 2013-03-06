@@ -34,7 +34,14 @@ public class EnoughState extends AbstractProperties {
 	@Override
 	public boolean continueExecution() {
 		// si notre stratégie nous demande de continuer, on incrémente notre nbState au passage.
-		int nbState = Integer.parseInt(super.getString("nbState"));
+		int nbState;
+		try {
+			nbState = Integer.parseInt(super.getString("nbState"));
+		} catch(Exception e) {
+			log.error("Impossible de parser l'attribut 'maxStep'.");
+			nbState = 1;
+		}
+		
 		if (maxStep == -1) {
 			try {
 				maxStep = Integer.parseInt(super.getString("maxStep"));

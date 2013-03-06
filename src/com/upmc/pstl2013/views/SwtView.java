@@ -142,9 +142,9 @@ public class SwtView extends Composite {
 		cpItemOptions= new Composite(tabFolder, SWT.BORDER);
 		cpItemOptions.setLayout(new GridLayout(2, false));
 		itemOptions.setControl(cpItemOptions);
-		
-				treeProperties = new Tree(cpItemAlloyProp, SWT.CHECK | SWT.BORDER);
-				treeProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+
+		treeProperties = new Tree(cpItemAlloyProp, SWT.CHECK | SWT.BORDER);
+		treeProperties.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		//Table des attributs de la partie proprieteString
 		tabValuePropertiesString = new Table(cpItemAlloyProp, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
@@ -279,17 +279,17 @@ public class SwtView extends Composite {
 		txtNbThreads = new Text(cpItemOptions, SWT.BORDER);
 		txtNbThreads.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbThreads()));
 		txtNbThreads.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
-		
+
 		label = new Label(cpItemOptions, SWT.SEPARATOR | SWT.HORIZONTAL);
 		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		new Label(cpItemOptions, SWT.NONE);
-		
+
 		chkDetails = new Button(cpItemOptions, SWT.CHECK);
 		chkDetails.setSelection(ConfPropertiesManager.getInstance().isDetails());
 		chkDetails.setText("Details");
 
 		addPropertiesToTree();
-		
+
 		// ajout des events listener
 		btnChooserFile.addMouseListener(new EventChooseFile(this));
 		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
@@ -320,11 +320,11 @@ public class SwtView extends Composite {
 
 		HashMap<String, List<IProperties>> families = new HashMap<String, List<IProperties>>();
 		treeProperties.addListener(SWT.Selection, new EventSelectTreeProperty(this));
-		
+
 		TreeItem lItem0 = null;
 		TreeItem lItem1 = null;
 		for (IProperties property : AbstractProperties.getProperties()) {
-			
+
 			//Ajout des familles dans la treeview si elle n'existe pas 
 			if(!families.containsKey(property.getBehavior().toString()))
 				families.put(property.getBehavior().toString(), new ArrayList<IProperties>());
@@ -339,7 +339,7 @@ public class SwtView extends Composite {
 			//permet de checker la famille si tous les property sont selectionnée
 			boolean allChecked = (families.get(family).size()>0);
 			for (IProperties elem : families.get(family)) {
-				
+
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
 				lItem1.setText(elem.getClass().getSimpleName());
 				boolean isModif = elem.isModifiable();
@@ -397,11 +397,11 @@ public class SwtView extends Composite {
 		}
 
 		// et enfin, on ajoute les IActivityResult
-		for (IActivityResult actResult : fileResult.getListActivityResult()) {
-			TreeItem item1 = new TreeItem(item0, 0);
-			item1.setText(actResult.getNom());
-			item1.setData(actResult);	
-		}
+		IActivityResult actResult = fileResult.getActivityResult();
+		TreeItem item1 = new TreeItem(item0, 0);
+		item1.setText(actResult.getNom());
+		item1.setData(actResult);	
+
 	}
 
 	private void startPoolExecutor() {
@@ -424,11 +424,11 @@ public class SwtView extends Composite {
 	public Text getTxtLogs() {
 		return txtLogs;
 	}
-	
+
 	public Tree getTreeProperties() {
 		return treeProperties;
 	}
-	
+
 	public Table getTabValuePropertiesString() {
 		return tabValuePropertiesString;
 	}

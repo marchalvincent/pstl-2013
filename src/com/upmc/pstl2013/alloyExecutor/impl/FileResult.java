@@ -1,6 +1,5 @@
 package com.upmc.pstl2013.alloyExecutor.impl;
 
-import java.util.List;
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 
@@ -11,12 +10,12 @@ import com.upmc.pstl2013.alloyExecutor.IFileResult;
 public class FileResult implements IFileResult {
 
 	private String nom;
-	private List<IActivityResult> activityResults;
+	private IActivityResult activityResult;
 	
-	public FileResult(String nom, List<IActivityResult> activityResults) {
+	public FileResult(String nom, IActivityResult activityResults) {
 		super();
 		this.nom = nom;
-		this.activityResults = activityResults;
+		this.activityResult = activityResults;
 	}
 	
 	@Override
@@ -25,7 +24,7 @@ public class FileResult implements IFileResult {
 	}
 
 	@Override
-	public List<IActivityResult> getListActivityResult() {
-		return activityResults;
+	public IActivityResult getActivityResult() {
+		return activityResult;
 	}
 }

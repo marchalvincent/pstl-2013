@@ -1,7 +1,6 @@
 package com.upmc.pstl2013.factory;
 
 import java.io.File;
-import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
@@ -93,9 +92,9 @@ public interface IFactory {
 	/**
 	 * Créé un {@link IFileResult}.
 	 * @param nom le nom du fichier exécuté.
-	 * @param activityResults la liste des {@link IActivityResult} pour chaque activité du fichier.
+	 * @param activityResults le {@link IActivityResult} du fichier.
 	 */
-	IFileResult newFileResult(String nom, List<IActivityResult> activityResults);
+	IFileResult newFileResult(String nom, IActivityResult activityResults);
 	
 	/**
 	 * Créé un reporter Alloy, pour récupérer des infos sur la génération de la solution Alloy.

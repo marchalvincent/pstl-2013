@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
@@ -55,17 +53,16 @@ public class AlloyExecutor implements IAlloyExecutor {
 	public IFileResult executeFiles() throws Err, JetException {
 
 		// Déclaration des variables
-		List<IActivityResult> activityResults = new ArrayList<IActivityResult>();
 		IActivityResult activityResult = null;
-		
+
 		// tant qu'on peut généré un fichier (Cf. conditions dans la méthode redéfinie)
-		while (generator.hasNext()) {
+		do {
 			// 1. On lance la génération des fichiers Alloy
 			IAlloyGenerated generated = generator.next();
 			if (generated == null) {
 				break;
 			}
-			
+
 			// 2. On créé notre reporter sur la génération de la solution
 			A4Reporter rep = Factory.getInstance().newReporter();
 
@@ -97,16 +94,15 @@ public class AlloyExecutor implements IAlloyExecutor {
 						// Affichage des info de l'execution selon les préférences
 						if (ConfPropertiesManager.getInstance().isDetails()) {
 							activityResult.appendLog(this.getInfosLogs(command, rep));
-							
+
 							// On parcours la solution Alloy
 							activityResult.appendLog(this.executionTravel(generated, ans));
 						} else {
 							// si on veut pas de détails on supprime les anciennes infos
 							activityResult.resetLog();
 							activityResult.appendLog(this.executionTravel(generated, ans));
-							
-						}
 
+						}
 
 						// Si la solution est satisfiable
 						if (ans.satisfiable()) {
@@ -131,15 +127,14 @@ public class AlloyExecutor implements IAlloyExecutor {
 				activityResult.appendLog("Impossible de récupérer le chemin du fichier : " + e.toString() + "\n");
 				log.error("Impossible de récupérer le chemin du fichier : " + e.toString(), e);
 			}
-		}
+		} while (generator.hasNext());
+
 		// et enfin on ajoute le résultat de l'activityResult
-		if (activityResult != null) {
-			log.info(activityResult.getLogResult());
-			activityResults.add(activityResult);
-		}
+		log.info(activityResult.getLogResult());
 
 		// On peut enfin retourner l'objet IFileResult
-		return Factory.getInstance().newFileResult(counterExecution + ". " + UMLFile.getName(), activityResults);
+		return Factory.getInstance().newFileResult(counterExecution + ". " + UMLFile.getName(), activityResult);
+
 	}
 
 	/**
