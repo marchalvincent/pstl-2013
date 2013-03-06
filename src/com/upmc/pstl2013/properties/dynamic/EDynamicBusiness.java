@@ -6,9 +6,9 @@ package com.upmc.pstl2013.properties.dynamic;
  */
 public enum EDynamicBusiness {
 
-	TEST_DYNAMIC1(1, DynamicFactory.getInstance().newTestDynamics()),
-	TEST_DYNAMIC2(2, DynamicFactory.getInstance().newTestDynamics()),
-	TEST_DYNAMIC3(3, DynamicFactory.getInstance().newTestDynamics());
+	TEST_DYNAMIC1(1, DynamicFactory.getInstance().newTestDynamics1()),
+	TEST_DYNAMIC2(2, DynamicFactory.getInstance().newTestDynamics2()),
+	TEST_DYNAMIC3(3, DynamicFactory.getInstance().newTestDynamics3());
 
 	private final Integer nbNodes;
 	private final AbstractStrategyDynamicBusiness strategy;

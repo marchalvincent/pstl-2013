@@ -1,6 +1,8 @@
 package com.upmc.pstl2013.properties.dynamic;
 
-import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics;
+import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics1;
+import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics2;
+import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics3;
 
 /**
  * Représente la factory des stratégies de génération alloy pour les propriétés créées dynamiquement
@@ -22,7 +24,13 @@ public class DynamicFactory {
 		return instance;
 	}
 	
-	public AbstractStrategyDynamicBusiness newTestDynamics() {
-		return new TestDynamics();
+	public AbstractStrategyDynamicBusiness newTestDynamics1() {
+		return new TestDynamics1();
+	}
+	public AbstractStrategyDynamicBusiness newTestDynamics2() {
+		return new TestDynamics2();
+	}
+	public AbstractStrategyDynamicBusiness newTestDynamics3() {
+		return new TestDynamics3();
 	}
 }
