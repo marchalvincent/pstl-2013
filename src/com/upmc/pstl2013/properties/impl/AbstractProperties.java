@@ -122,7 +122,9 @@ public abstract class AbstractProperties implements IProperties {
 	}
 
 	@Override
-	public abstract boolean continueExecution();
+	public boolean continueExecution() {
+		return this.getStrategyExecution().continueExecution();
+	}
 	
 	@Override
 	public void setSolution(A4Solution solution) {

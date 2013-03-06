@@ -20,11 +20,6 @@ public class PersonalPropertie extends AbstractProperties {
 	}
 
 	@Override
-	public boolean continueExecution() {
-		return super.getStrategyExecution().continueExecution();
-	}
-
-	@Override
 	public Behavior getBehavior() {
 		// cette méthode ne doit pas être appelée pour la PersonalPropertie
 		return null;
