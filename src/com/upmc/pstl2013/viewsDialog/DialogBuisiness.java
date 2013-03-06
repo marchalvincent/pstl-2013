@@ -2,7 +2,6 @@ package com.upmc.pstl2013.viewsDialog;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -13,7 +12,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-
 import com.upmc.pstl2013.bouchon.Bouchon;
 import com.upmc.pstl2013.properties.dynamic.EDynamicBusiness;
 

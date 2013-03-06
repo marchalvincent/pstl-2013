@@ -1,9 +1,7 @@
 package com.upmc.pstl2013.views.events;
 
 import java.io.IOException;
-
 import org.eclipse.swt.widgets.Text;
-
 import com.upmc.pstl2013.util.LogCreator;
 import com.upmc.pstl2013.views.SwtView;
 

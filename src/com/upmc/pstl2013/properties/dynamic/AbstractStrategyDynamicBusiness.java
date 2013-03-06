@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.properties.dynamic;
 
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
+import com.upmc.pstl2013.properties.IProperties;
 
 /**
  * Représente la classe abstraite des stratégies de génération alloy pour les propriétés dynamiques.

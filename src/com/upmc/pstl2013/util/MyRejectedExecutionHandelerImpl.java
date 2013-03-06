@@ -2,7 +2,6 @@ package com.upmc.pstl2013.util;
 
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
-
 import org.apache.log4j.Logger;
 
 public class MyRejectedExecutionHandelerImpl implements RejectedExecutionHandler
