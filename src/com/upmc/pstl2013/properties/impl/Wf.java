@@ -27,6 +27,6 @@ public class Wf extends AbstractProperties {
 
 	@Override
 	public Behavior getBehavior() {
-		return Behavior.SOUDNESS;
+		return Behavior.SYNTAXICAL;
 	}
 }
