@@ -9,20 +9,13 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
  *
  */
 public class SimpleExecutionStrategy implements IStrategyExecution {
-
-	private boolean isFirst;
 	
 	public SimpleExecutionStrategy() {
 		super();
-		isFirst = true;
 	}
 	
 	@Override
 	public boolean continueExecution() {
-		if (isFirst) {
-			isFirst = false;
-			return true;
-		}
 		return false;
 	}
 

@@ -86,7 +86,6 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		IProperties TMPProperty = null;
 		JobExecutor jobExec = null;
 		for (IProperties property : properties) {
-			System.out.println("MICHOU *************************** NOM DE LA PROPERTY : ********** " + property.getClass().getSimpleName());
 			if ((isEnoughState && property.getClass().getSimpleName().equals("EnoughState")) 
 					|| (!isEnoughState && !property.getClass().getSimpleName().equals("EnoughState"))) {
 
@@ -98,8 +97,8 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 				jobExec = Factory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty, jobToWait, counterExecution);
 				jobExec.setUser(true);
 				
-				swtView.getThreadPoolExecutor().execute(jobExec);
-				//jobExec.schedule();
+//				swtView.getThreadPoolExecutor().execute(jobExec);
+				jobExec.schedule();
 				
 				listJobsExec.add(jobExec);
 			}

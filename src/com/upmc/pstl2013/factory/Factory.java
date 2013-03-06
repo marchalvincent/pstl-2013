@@ -1,7 +1,6 @@
 package com.upmc.pstl2013.factory;
 
 import java.io.File;
-import java.util.List;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
@@ -89,7 +88,7 @@ public class Factory implements IFactory {
 	}
 
 	@Override
-	public IFileResult newFileResult(String nom, List<IActivityResult> activityResults) {
+	public IFileResult newFileResult(String nom, IActivityResult activityResults) {
 		return ExecutorFactory.getInstance().newFileResult(nom, activityResults);
 	}
 

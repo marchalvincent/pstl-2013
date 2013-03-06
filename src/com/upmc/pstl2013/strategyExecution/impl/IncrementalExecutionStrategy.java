@@ -11,26 +11,18 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
  */
 public class IncrementalExecutionStrategy implements IStrategyExecution {
 
-	private boolean isFirst;
 	private A4Solution solution;
 
 	public IncrementalExecutionStrategy() {
 		super();
-		this.isFirst = true;
 	}
 		
 	@Override
 	public boolean continueExecution() {
-		// pour la première exécution on dit qu'on peut générer le fichier.
-		if (isFirst) {
-			isFirst = false;
-			return true;
-		}
 		// tant qu'on a un contre exemple, on continue la génération.
 		if (solution.satisfiable()) {
 			return true;
 		}
-
 		return false;
 	}
 
@@ -43,6 +35,4 @@ public class IncrementalExecutionStrategy implements IStrategyExecution {
 	public IStrategyExecution clone() throws CloneNotSupportedException {
 		return (IStrategyExecution) super.clone();
 	}
-
-
 }

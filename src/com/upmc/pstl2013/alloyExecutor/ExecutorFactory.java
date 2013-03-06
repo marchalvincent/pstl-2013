@@ -1,6 +1,5 @@
 package com.upmc.pstl2013.alloyExecutor;
 
-import java.util.List;
 import org.eclipse.core.resources.IFile;
 import com.upmc.pstl2013.alloyExecutor.impl.ActivityResult;
 import com.upmc.pstl2013.alloyExecutor.impl.AlloyExecutor;
@@ -31,7 +30,7 @@ public class ExecutorFactory {
 		return new ActivityResult(nom);
 	}
 
-	public IFileResult newFileResult(String nom, List<IActivityResult> activityResults) {
+	public IFileResult newFileResult(String nom, IActivityResult activityResults) {
 		return new FileResult(nom, activityResults);
 	}
 	

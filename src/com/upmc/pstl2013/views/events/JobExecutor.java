@@ -69,9 +69,7 @@ public class JobExecutor extends Job implements Runnable{
 			IFileResult iFileResult = alloyExecutor.executeFiles();
 			
 			// On récupère le nombre de state (utile quand on exécute EnoughState)
-			// pour l'instant, on ne traite qu'une activité à la fois
-			// TODO modifier ici si on traite plusieurs activité à la fois...
-			nbState = iFileResult.getListActivityResult().get(0).getNbState();
+			nbState = iFileResult.getActivityResult().getNbState();
 			
 			// Puis on affiche les résultats sur l'interface graphique
 			showToDetails(iFileResult);

@@ -11,7 +11,6 @@ import com.upmc.pstl2013.properties.impl.DeadLock;
 import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.properties.impl.Orga;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
-import com.upmc.pstl2013.properties.impl.TestPropertie;
 import com.upmc.pstl2013.properties.impl.Wf;
 
 /**
@@ -31,7 +30,6 @@ public class PropertiesFactory {
 		listeClass.add(EnoughState.class);
 		listeClass.add(Orga.class);
 		listeClass.add(Wf.class);
-		listeClass.add(TestPropertie.class);
 	}
 
 	public static PropertiesFactory getInstance() {
