@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.Behavior;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
@@ -49,19 +48,19 @@ public abstract class AbstractProperties implements IProperties {
 	@Override
 	public void putPrivate(String key, String value) {
 		this.remove(key);
-		attributes.add(Factory.getInstance().newAttribute(key, value, Boolean.TRUE));
+		attributes.add(PropertiesFactory.getInstance().newAttribute(key, value, Boolean.TRUE));
 	}
 
 	@Override
 	public void put(String key, String value) {
 		this.remove(key);
-		attributes.add(Factory.getInstance().newAttribute(key, value, Boolean.FALSE));
+		attributes.add(PropertiesFactory.getInstance().newAttribute(key, value, Boolean.FALSE));
 	}
 
 	@Override
 	public void put(String key, Boolean value) {
 		this.remove(key);
-		attributes.add(Factory.getInstance().newAttribute(key, value, Boolean.FALSE));
+		attributes.add(PropertiesFactory.getInstance().newAttribute(key, value, Boolean.FALSE));
 	}
 
 	@Override

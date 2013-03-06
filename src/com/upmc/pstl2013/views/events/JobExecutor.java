@@ -7,9 +7,9 @@ import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
+import com.upmc.pstl2013.alloyExecutor.ExecutorFactory;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.views.SwtView;
 
@@ -62,7 +62,7 @@ public class JobExecutor extends Job implements Runnable{
 		StringBuilder result = new StringBuilder();
 
 		// 1. On créé l'objet exécutor
-		IAlloyExecutor alloyExecutor = Factory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property, counterExecution);
+		IAlloyExecutor alloyExecutor = ExecutorFactory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property, counterExecution);
 		
 		try {
 			// On lance l'exécution

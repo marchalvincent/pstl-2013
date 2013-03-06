@@ -11,9 +11,8 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
-
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.views.SwtView;
 
@@ -55,7 +54,7 @@ public class EventClickValueAttributes extends SelectionAdapter {
 				Text text = (Text) editor.getEditor();
 				editor.getItem().setText(EDITABLECOLUMN, text.getText());
 				try {
-					IProperties propertie = Factory.getInstance().getProperty((String)(editor.getItem().getData()));
+					IProperties propertie = PropertiesFactory.getInstance().getProperty((String)(editor.getItem().getData()));
 					propertie.put(editor.getItem().getText(),  text.getText());
 					
 				} catch (PropertiesException e1) {

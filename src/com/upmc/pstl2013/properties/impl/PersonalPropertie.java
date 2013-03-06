@@ -1,7 +1,8 @@
 package com.upmc.pstl2013.properties.impl;
 
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.Behavior;
+import com.upmc.pstl2013.strategyExecution.ExecutionFactory;
+import com.upmc.pstl2013.strategyParcours.ParcoursFactory;
 
 /**
  * Représente le code alloy écrit à la main par l'utilisateur dans le champ associé.
@@ -11,7 +12,9 @@ public class PersonalPropertie extends AbstractProperties {
 	
 	public PersonalPropertie() {
 		// TODO voir comment on peut spécifier ni check, ni run... 
-		super(Boolean.TRUE, Factory.getInstance().newSimpleExecutionStrategy(), Factory.getInstance().newVoidStrategy());
+		super(Boolean.TRUE, 
+				ExecutionFactory.getInstance().newSimpleExecutionStrategy(), 
+				ParcoursFactory.getInstance().newVoidStrategy());
 	}
 
 	@Override

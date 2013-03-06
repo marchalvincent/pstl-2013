@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.impl.Attribute;
 import com.upmc.pstl2013.properties.impl.DeadLock;
 import com.upmc.pstl2013.properties.impl.EnoughState;
@@ -40,7 +39,7 @@ public class PropertiesFactory {
 		List<IProperties> listeP = new ArrayList<IProperties>();
 		for (Class<? extends IProperties> clazz : listeClass) {
 			try {
-				listeP.add(Factory.getInstance().getProperty(clazz.getSimpleName()));
+				listeP.add(this.getProperty(clazz.getSimpleName()));
 			} catch (PropertiesException e) {
 				log.error("Erreur, impossible de récupérer les singletons des propriétés : " + e.getMessage());
 			}
@@ -55,7 +54,7 @@ public class PropertiesFactory {
 	 * @return une {@link IProperties}.
 	 * @throws PropertiesException si le nom de la propriété est introuvable.
 	 */
-	public IProperties createProperty(String name) throws PropertiesException {
+	public IProperties getProperty(String name) throws PropertiesException {
 
 		// si l'objet est déjà créé, on le renvoie
 		IProperties prop = properties.get(name);
@@ -84,7 +83,7 @@ public class PropertiesFactory {
 	}
 
 	/**
-	 * Créé un attribut d'une {@link IProperties}.
+	 * Créé un {@link IAttribute} d'une {@link IProperties}.
 	 * @param key la clé.
 	 * @param value la valeur.
 	 * @param isPrivate spécifie si cet attribut doit être affiche dans l'IU.

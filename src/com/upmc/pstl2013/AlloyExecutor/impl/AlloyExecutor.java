@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
+import com.upmc.pstl2013.alloyExecutor.ExecutorFactory;
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
@@ -13,7 +14,6 @@ import com.upmc.pstl2013.alloyGenerator.GeneratorFactory;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import edu.mit.csail.sdg.alloy4.A4Reporter;
@@ -65,12 +65,12 @@ public class AlloyExecutor implements IAlloyExecutor {
 			}
 
 			// 2. On créé notre reporter sur la génération de la solution
-			A4Reporter rep = Factory.getInstance().newReporter();
+			A4Reporter rep = ExecutorFactory.getInstance().newReporter();
 
 			File generatedFile = generated.getFile();
 			// on créé un résultat pour cette activité si elle n'existe pas déjà
 			if (activityResult == null) {
-				activityResult = Factory.getInstance().newActivityResult(property.getClass().getSimpleName());
+				activityResult = ExecutorFactory.getInstance().newActivityResult(property.getClass().getSimpleName());
 			}
 
 			try {
@@ -134,7 +134,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 		log.info(activityResult.getLogResult());
 
 		// On peut enfin retourner l'objet IFileResult
-		return Factory.getInstance().newFileResult(counterExecution + ". " + UMLFile.getName(), activityResult);
+		return ExecutorFactory.getInstance().newFileResult(counterExecution + ". " + UMLFile.getName(), activityResult);
 
 	}
 

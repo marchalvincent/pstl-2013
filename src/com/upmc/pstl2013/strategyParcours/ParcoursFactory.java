@@ -16,11 +16,17 @@ public class ParcoursFactory {
 	}
 
 	private ParcoursFactory() {}
-
+	
+	/**
+	 * Créé un {@link PathStrategy}.
+	 */
 	public IStrategyParcours newPathStrategy() {
 		return new PathStrategy();
 	}
 
+	/**
+	 * Créé un {@link VoidStrategy}.
+	 */
 	public IStrategyParcours newVoidStrategy() {
 		return new VoidStrategy();
 	}

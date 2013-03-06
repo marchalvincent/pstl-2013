@@ -1,9 +1,10 @@
 package com.upmc.pstl2013.properties.dynamic;
 
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.Behavior;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
+import com.upmc.pstl2013.strategyExecution.ExecutionFactory;
+import com.upmc.pstl2013.strategyParcours.ParcoursFactory;
 
 /**
  * Représente une propriété "Business" créée dynamiquement par l'utilisateur.
@@ -22,8 +23,9 @@ public class DynamicBusiness extends AbstractProperties {
 	 */
 	public DynamicBusiness(String nom, EDynamicBusiness enumType) {
 		// par défaut une dynamique business est une simple exécution avec aucun parcours de solution.
-		super(Boolean.TRUE, Factory.getInstance().newSimpleExecutionStrategy(), 
-				Factory.getInstance().newVoidStrategy());
+		super(Boolean.TRUE, 
+				ExecutionFactory.getInstance().newSimpleExecutionStrategy(), 
+				ParcoursFactory.getInstance().newVoidStrategy());
 		this.nom = nom;
 		this.enumType = enumType;
 		nodes = new String[enumType.getNbNodes()];

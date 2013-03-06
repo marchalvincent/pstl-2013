@@ -22,18 +22,38 @@ public class ExecutorFactory {
 	
 	private ExecutorFactory() {}
 
+	/**
+	 * Créé un {@link IAlloyExecutor}.
+	 * 
+	 * @param UMLFile un {@link IFile} correspondant au fichier UML.
+	 * @param dirDestination un String pour le dossier de travail du plugin.
+	 * @param property la {@link IProperties} de génération Alloy.
+	 * @param counterExecution le numéro de l'exécution.
+	 */
 	public IAlloyExecutor newAlloyExecutor(IFile UMLFile, String dirDestination, IProperties property, int counterExecution) {
 		return new AlloyExecutor(UMLFile, dirDestination, property, counterExecution);
 	}
 	
+	/**
+	 * Créé un {@link IActivityResult}.
+	 * @param nom le nom de l'activité
+	 */
 	public IActivityResult newActivityResult(String nom) {
 		return new ActivityResult(nom);
 	}
 
+	/**
+	 * Créé un {@link IFileResult}.
+	 * @param nom le nom du fichier exécuté.
+	 * @param activityResults le {@link IActivityResult} du fichier.
+	 */
 	public IFileResult newFileResult(String nom, IActivityResult activityResults) {
 		return new FileResult(nom, activityResults);
 	}
 	
+	/**
+	 * Créé un {@link MyA4Reporter} Alloy, pour récupérer des infos sur la génération de la solution Alloy.
+	 */
 	public MyA4Reporter newReporter() {
 		return new MyA4Reporter();
 	}
