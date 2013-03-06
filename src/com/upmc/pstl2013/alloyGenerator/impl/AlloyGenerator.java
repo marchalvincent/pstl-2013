@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
@@ -160,8 +162,14 @@ public class AlloyGenerator implements IAlloyGenerator {
 		iPropertie.putPrivate("nbEdges", Integer.toString(edges.size()));
 		iPropertie.putPrivate("nbObjects", Integer.toString(edges.size() + nodes.size()));
 
-		iPropertie.putPrivate("initialNode", initialNode.getName());
-		iPropertie.putPrivate("finalNode", finalNode.getName());
+		if (initialNode.getName() == null)
+			iPropertie.putPrivate("initialNode", "initSansNom");
+		else
+			iPropertie.putPrivate("initialNode", initialNode.getName());
+		if (finalNode.getName() == null)
+			iPropertie.putPrivate("finalNode", "finalSansNom");
+		else
+			iPropertie.putPrivate("finalNode", finalNode.getName());
 		iPropertie.putPrivate("predicatName", this.generateNamePredicat("predicatName", nodes, edges));
 
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges et la propriété au template Jet.
@@ -196,23 +204,37 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 * @return une liste d'{@link ActivityNode}.
 	 */
 	private EList<ActivityNode> cleanNodes(EList<ActivityNode> nodes) {
+		List<ActivityNode> listeToRemove = new ArrayList<ActivityNode>();
 		for (ActivityNode activityNode : nodes) {
+			if (activityNode.getName() == null) {
+				log.warn("Un node a été trouvé sans nom. On le supprime.");
+				listeToRemove.add(activityNode);
+				continue;
+			}
 			activityNode.setName(activityNode.getName().replace("-", ""));
 		}
+		nodes.removeAll(listeToRemove);
 		return nodes;
 	}
 
 	/**
 	 * Nettoie les noms des arcs par rapport à la syntax d'Alloy.
 	 * 
-	 * @param egdes la liste des arcs à nettoyer.
+	 * @param edges la liste des arcs à nettoyer.
 	 * @return une liste d'{@link ActivityEdge}.
 	 */
-	private EList<ActivityEdge> cleanEdges(EList<ActivityEdge> egdes) {
-		for (ActivityEdge activityEdges : egdes) {
-			activityEdges.setName(activityEdges.getName().replace("-", ""));
+	private EList<ActivityEdge> cleanEdges(EList<ActivityEdge> edges) {
+		List<ActivityEdge> listeToRemove = new ArrayList<ActivityEdge>();
+		for (ActivityEdge activityEdge : edges) {
+			if (activityEdge.getName() == null) {
+				log.warn("Un edge a été trouvé sans nom. On le supprime.");
+				listeToRemove.add(activityEdge);
+				continue;
+			}
+			activityEdge.setName(activityEdge.getName().replace("-", ""));
 		}
-		return egdes;
+		edges.removeAll(listeToRemove);
+		return edges;
 	}
 
 	/**

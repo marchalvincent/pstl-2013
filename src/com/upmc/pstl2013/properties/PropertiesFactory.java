@@ -19,16 +19,16 @@ import com.upmc.pstl2013.properties.impl.Wf;
 public class PropertiesFactory {
 
 	private Logger log = Logger.getLogger(PropertiesFactory.class);
-	private List<Class<? extends IProperties>> listeClass;
+	private List<Class<? extends IProperties>> classList;
 	private static PropertiesFactory instance = new PropertiesFactory();
 	private Map<String, IProperties> properties = new HashMap<String, IProperties>();
 
 	private PropertiesFactory() {
-		listeClass = new ArrayList<Class<? extends IProperties>>();
-		listeClass.add(DeadLock.class);
-		listeClass.add(EnoughState.class);
-		listeClass.add(Orga.class);
-		listeClass.add(Wf.class);
+		classList = new ArrayList<Class<? extends IProperties>>();
+		classList.add(DeadLock.class);
+		classList.add(EnoughState.class);
+		classList.add(Orga.class);
+		classList.add(Wf.class);
 	}
 
 	public static PropertiesFactory getInstance() {
@@ -37,7 +37,7 @@ public class PropertiesFactory {
 
 	public List<IProperties> getProperties() {
 		List<IProperties> listeP = new ArrayList<IProperties>();
-		for (Class<? extends IProperties> clazz : listeClass) {
+		for (Class<? extends IProperties> clazz : classList) {
 			try {
 				listeP.add(this.getProperty(clazz.getSimpleName()));
 			} catch (PropertiesException e) {
@@ -63,7 +63,7 @@ public class PropertiesFactory {
 		}
 
 		// sinon, on créer l'objet, on l'ajoute dans la map et on le renvoie
-		for (Class<? extends IProperties> clazz : listeClass) {
+		for (Class<? extends IProperties> clazz : classList) {
 			if (clazz.getSimpleName().equals(name)) {
 				try {
 					properties.put(name, clazz.newInstance());
