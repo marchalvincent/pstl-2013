@@ -73,7 +73,7 @@ public class JetTemplate implements IJetTemplate {
 		stringBuffer.append("}" + NL);
 	}
 
-	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. SubTemplate)
+	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. subTemplates ou subTemplates/dynamics)
 	stringBuffer.append(propertie.getAlloyCode());
 
     stringBuffer.append(TEXT_3);

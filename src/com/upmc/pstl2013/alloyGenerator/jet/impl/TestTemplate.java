@@ -1,8 +1,6 @@
 package com.upmc.pstl2013.alloyGenerator.jet.impl;
 
-import org.apache.log4j.Logger;
 import com.upmc.pstl2013.alloyGenerator.jet.*;
-import com.upmc.pstl2013.properties.*;
 
 public class TestTemplate implements IJetTemplate {
 

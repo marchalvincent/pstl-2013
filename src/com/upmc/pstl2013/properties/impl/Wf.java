@@ -21,11 +21,6 @@ public class Wf extends AbstractProperties {
 	}
 
 	@Override
-	public boolean continueExecution() {
-		return super.getStrategyExecution().continueExecution();
-	}
-
-	@Override
 	public Behavior getBehavior() {
 		return Behavior.SYNTAXICAL;
 	}

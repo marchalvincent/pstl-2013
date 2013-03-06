@@ -72,7 +72,7 @@ one sig P extends Performer {} {
 		stringBuffer.append("}" + NL);
 	}
 
-	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. SubTemplate)
+	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. subTemplates ou subTemplates/dynamics)
 	stringBuffer.append(propertie.getAlloyCode());
 %>
 
