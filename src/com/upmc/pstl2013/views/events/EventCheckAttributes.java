@@ -5,9 +5,8 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableItem;
-
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 
 public class EventCheckAttributes implements Listener {
@@ -26,7 +25,7 @@ public class EventCheckAttributes implements Listener {
 			if (event.detail == SWT.CHECK){
 				
 				TableItem tabItem = (TableItem)event.item;
-				IProperties propertie = Factory.getInstance().getProperty((String)event.item.getData());
+				IProperties propertie = PropertiesFactory.getInstance().getProperty((String)event.item.getData());
 				//Boolean value = propertie.getBoolean(tabItem.getText());
 				propertie.put(tabItem.getText(), tabItem.getChecked());
 

@@ -18,10 +18,16 @@ public class ExecutionFactory {
 
 	private ExecutionFactory() {}
 	
+	/**
+	 * Créé un {@link SimpleExecutionStrategy}.
+	 */
 	public IStrategyExecution newSimpleExecutionStrategy() {
 		return new SimpleExecutionStrategy();
 	}
 	
+	/**
+	 * Créé un {@link IncrementalExecutionStrategy}.
+	 */
 	public IStrategyExecution newIncrementalExecutionStrategy() {
 		return new IncrementalExecutionStrategy();
 	}

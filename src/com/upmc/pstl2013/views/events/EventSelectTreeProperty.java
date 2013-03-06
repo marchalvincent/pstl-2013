@@ -1,7 +1,6 @@
 package com.upmc.pstl2013.views.events;
 
 import java.util.Map;
-
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
@@ -9,9 +8,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.TreeItem;
-
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.views.SwtView;
 
@@ -68,7 +66,7 @@ public class EventSelectTreeProperty implements Listener {
 	private void showValueProperties(String nameProperty) {
 
 		try {
-			IProperties property = Factory.getInstance().getProperty(nameProperty);
+			IProperties property = PropertiesFactory.getInstance().getProperty(nameProperty);
 			Map <String,String> stringAttributes = property.getStringAttributes();
 			if (tabValuePropertiesString != null) {
 				tabValuePropertiesString.removeAll();

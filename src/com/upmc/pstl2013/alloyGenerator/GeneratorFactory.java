@@ -5,6 +5,7 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
+import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetHelper;
@@ -48,10 +49,18 @@ public class GeneratorFactory {
 		return new JetHelper(nodes, edges, propertie);
 	}
 	
+	/**
+	 * Créé un {@link IJetTemplate}.
+	 */
 	public IJetTemplate newJetTemplate() {
 		return new JetTemplate();
 	}
 	
+	/**
+	 * Créé un {@link IAlloyGenerated} qui sera utilisé par le {@link IAlloyExecutor}.
+	 * @param file le {@link File} généré.
+	 * @param la {@link IProperties} qui a permis de générer ce fichier.
+	 */
 	public IAlloyGenerated newAlloyGenerated(File file, IProperties property) {
 		return new AlloyGenerated(file, property);
 	}

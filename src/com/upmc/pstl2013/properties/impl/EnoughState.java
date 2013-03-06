@@ -4,8 +4,9 @@ import org.apache.log4j.Logger;
 import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.alloyGenerator.jet.impl.EnoughStateTemplate;
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.Behavior;
+import com.upmc.pstl2013.strategyExecution.ExecutionFactory;
+import com.upmc.pstl2013.strategyParcours.ParcoursFactory;
 
 
 public class EnoughState extends AbstractProperties {
@@ -16,7 +17,9 @@ public class EnoughState extends AbstractProperties {
 	public static Behavior family = Behavior.ORGANIZATIONAL;
 
 	public EnoughState() {
-		super(Boolean.TRUE, Factory.getInstance().newIncrementalExecutionStrategy(), Factory.getInstance().newVoidStrategy());
+		super(Boolean.TRUE, 
+				ExecutionFactory.getInstance().newIncrementalExecutionStrategy(), 
+				ParcoursFactory.getInstance().newVoidStrategy());
 		super.setModifiable(false);
 		super.putPrivate("nbState", "1");
 		super.put("incrementation", "10");

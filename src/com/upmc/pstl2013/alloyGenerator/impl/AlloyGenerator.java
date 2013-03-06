@@ -16,11 +16,10 @@ import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetHelper;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.umlParser.IUMLParser;
+import com.upmc.pstl2013.umlParser.ParserFactory;
 import com.upmc.pstl2013.util.Utils;
-
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 /**
@@ -40,7 +39,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 */
 	public AlloyGenerator(IFile file, String dirDestination, IProperties property) {
 		super();
-		parser = Factory.getInstance().newParser(file);
+		parser = ParserFactory.getInstance().newParser(file);
 		this.UMLFile = file;
 		this.dirDestination = dirDestination;
 		this.property = property;
@@ -95,7 +94,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 			out = new FileOutputStream(fichier);
 			out.write(alloyTxt.getBytes());
 			out.close();
-			fileGenerated = Factory.getInstance().newAlloyGenerated(fichier, property);
+			fileGenerated = GeneratorFactory.getInstance().newAlloyGenerated(fichier, property);
 
 		} catch (FileNotFoundException e) {
 			log.error("Impossible de trouver le fichier : " + e.toString(), e);
@@ -167,7 +166,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges et la propriété au template Jet.
 		IJetHelper jetHelper = GeneratorFactory.getInstance().newJetHelper(nodes, edges, iPropertie);
-		IJetTemplate jetTemplate = Factory.getInstance().newJetTemplate();
+		IJetTemplate jetTemplate = GeneratorFactory.getInstance().newJetTemplate();
 		return jetTemplate.generate(jetHelper);
 	}
 

@@ -3,19 +3,17 @@ package com.upmc.pstl2013.views.events;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
-
-import com.upmc.pstl2013.factory.Factory;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.util.JobTimeout;
+import com.upmc.pstl2013.views.RunFactory;
 import com.upmc.pstl2013.views.SwtView;
 
 public abstract class AbstractEventExecutor extends MouseAdapter {
@@ -95,7 +93,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 				// On lance le job
 				String nomJob = "Execution Alloy de " + iFile.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
-				jobExec = Factory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty, jobToWait, counterExecution);
+				jobExec = RunFactory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty, jobToWait, counterExecution);
 				jobExec.setUser(true);
 				
 				swtView.getThreadPoolExecutor().execute(jobExec);
