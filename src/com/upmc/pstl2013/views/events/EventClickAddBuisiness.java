@@ -13,6 +13,7 @@ import com.upmc.pstl2013.viewsDialog.DialogBuisiness;
 
 public class EventClickAddBuisiness extends MouseAdapter {
 
+	//TODO : Michel Finir !!!!
 	private String separator = File.separator;
 	private Text txtChooseDirectory;
 	private Text txtLogs;
