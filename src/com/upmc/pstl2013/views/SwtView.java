@@ -34,17 +34,18 @@ import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
+import com.upmc.pstl2013.util.MyRejectedExecutionHandelerImpl;
 import com.upmc.pstl2013.util.Utils;
 import com.upmc.pstl2013.views.events.EventChooseDir;
 import com.upmc.pstl2013.views.events.EventChooseFile;
 import com.upmc.pstl2013.views.events.EventChooseFolderExec;
+import com.upmc.pstl2013.views.events.EventClickAddBuisiness;
 import com.upmc.pstl2013.views.events.EventClickVisualisationAlloy;
 import com.upmc.pstl2013.views.events.EventCurrentExecutor;
 import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
 import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
 import com.upmc.pstl2013.views.events.EventSelectTreeProperty;
-import com.upmc.pstl2013.views.events.MyRejectedExecutionHandelerImpl;
 
 public class SwtView extends Composite {
 
@@ -84,8 +85,9 @@ public class SwtView extends Composite {
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
 	private Tree treeProperties;
-	private Label label;
+	private Label lblSeparator;
 	private Button chkDetails;
+	private Button btnAddbuisiness;
 
 	/**
 	 * Create the composite.
@@ -149,7 +151,7 @@ public class SwtView extends Composite {
 		//Table des attributs de la partie proprieteString
 		tabValuePropertiesString = new Table(cpItemAlloyProp, SWT.MULTI | SWT.BORDER | SWT.FULL_SELECTION);
 		tabValuePropertiesString.setTouchEnabled(true);
-		tabValuePropertiesString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabValuePropertiesString.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2));
 		tabValuePropertiesString.setHeaderVisible(true);
 		tabValuePropertiesString.setLinesVisible(true);
 
@@ -163,7 +165,7 @@ public class SwtView extends Composite {
 		//Table des attributs de la partie proprieteBoolean
 		tabValuePropertiesBool = new Table(cpItemAlloyProp,  SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
 		tabValuePropertiesBool.setTouchEnabled(true);
-		tabValuePropertiesBool.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
+		tabValuePropertiesBool.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2));
 		tabValuePropertiesBool.setHeaderVisible(true);
 		tabValuePropertiesBool.setLinesVisible(true);
 		editorBool = new TableEditor(tabValuePropertiesBool);
@@ -236,23 +238,35 @@ public class SwtView extends Composite {
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
 
+		
 		/*
-		 *Debut de la partie Details
+		 *Debut de la partie Properties
 		 */
 		treeFilesExecuted = new Tree(cpItemDetails, SWT.BORDER);
 		GridData gd_treeFilesExecuted = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
 		gd_treeFilesExecuted.widthHint = 128;
 		treeFilesExecuted.setLayoutData(gd_treeFilesExecuted);
-
+		
+		btnAddbuisiness = new Button(cpItemAlloyProp, SWT.NONE);
+		btnAddbuisiness.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
+		btnAddbuisiness.setText("Add Buisiness");
+		
+		/*
+		 *Debut de la partie Details
+		 */
+		
 		txtDetailsLogs = new Text(cpItemDetails, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
 
 		btnAlloyVisualisation = new Button(cpItemDetails, SWT.NONE);
 		btnAlloyVisualisation.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "insp_sbook.gif"));
-
 		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualise");
+		
+		/*
+		 *Debut de la partie Options
+		 */
 
 		lblTimeout = new Label(cpItemOptions, SWT.NONE);
 		lblTimeout.setAlignment(SWT.CENTER);
@@ -280,8 +294,8 @@ public class SwtView extends Composite {
 		txtNbThreads.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbThreads()));
 		txtNbThreads.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
-		label = new Label(cpItemOptions, SWT.SEPARATOR | SWT.HORIZONTAL);
-		label.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
+		lblSeparator = new Label(cpItemOptions, SWT.SEPARATOR | SWT.HORIZONTAL);
+		lblSeparator.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 2, 1));
 		new Label(cpItemOptions, SWT.NONE);
 
 		chkDetails = new Button(cpItemOptions, SWT.CHECK);
@@ -304,6 +318,8 @@ public class SwtView extends Composite {
 				ConfPropertiesManager.getInstance().setDetails(chkDetails.getSelection());
 			}
 		});
+		btnAddbuisiness.addMouseListener(new EventClickAddBuisiness(this));
+	
 
 
 		//Suppression des anciens logs
