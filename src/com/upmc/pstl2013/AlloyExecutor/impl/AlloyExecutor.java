@@ -9,6 +9,7 @@ import org.eclipse.core.resources.IFile;
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
+import com.upmc.pstl2013.alloyGenerator.GeneratorFactory;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
@@ -43,7 +44,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 	public AlloyExecutor(IFile UMLFile, String dirDestination, IProperties property, int counterExecution) {
 
 		super();
-		this.generator = Factory.getInstance().newAlloyGenerator(UMLFile, dirDestination, property);
+		this.generator = GeneratorFactory.getInstance().newAlloyGenerator(UMLFile, dirDestination, property);
 		this.UMLFile = UMLFile;
 		this.property = property;
 		this.counterExecution = counterExecution;

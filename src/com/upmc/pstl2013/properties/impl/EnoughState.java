@@ -11,7 +11,6 @@ import com.upmc.pstl2013.properties.Behavior;
 public class EnoughState extends AbstractProperties {
 
 	private Logger log = Logger.getLogger(AlloyGenerator.class);
-	private boolean firstIncrement;
 	private int maxStep = -1;
 	private int incrementation = -1;
 	public static Behavior family = Behavior.ORGANIZATIONAL;
@@ -22,7 +21,6 @@ public class EnoughState extends AbstractProperties {
 		super.putPrivate("nbState", "1");
 		super.put("incrementation", "10");
 		super.put("maxStep", "100");
-		firstIncrement = true;
 	}
 
 	@Override
@@ -38,7 +36,7 @@ public class EnoughState extends AbstractProperties {
 		try {
 			nbState = Integer.parseInt(super.getString("nbState"));
 		} catch(Exception e) {
-			log.error("Impossible de parser l'attribut 'maxStep'.");
+			log.error("Impossible de parser l'attribut 'nbState'.");
 			nbState = 1;
 		}
 		
@@ -51,7 +49,7 @@ public class EnoughState extends AbstractProperties {
 			}
 		}
 		if (super.getStrategyExecution().continueExecution() && nbState <= maxStep) {
-			this.incrementation();
+			this.incrementation(nbState);
 			return true;
 		}
 		return false;
@@ -60,13 +58,7 @@ public class EnoughState extends AbstractProperties {
 	/**
 	 * Incrémente le nombre de State de la propriété.
 	 */
-	private void incrementation() {
-		// pour la première exécution, on n'incrémente pas
-		if (firstIncrement) {
-			firstIncrement = false;
-			return;
-		}
-		int nbState = Integer.parseInt(super.getString("nbState"));
+	private void incrementation(int nbState) {
 		
 		if (incrementation == -1) {
 			try {

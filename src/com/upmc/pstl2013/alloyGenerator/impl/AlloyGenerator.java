@@ -10,6 +10,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
+import com.upmc.pstl2013.alloyGenerator.GeneratorFactory;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerated;
 import com.upmc.pstl2013.alloyGenerator.IAlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetHelper;
@@ -165,7 +166,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 		iPropertie.putPrivate("predicatName", this.generateNamePredicat("predicatName", nodes, edges));
 
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges et la propriété au template Jet.
-		IJetHelper jetHelper = Factory.getInstance().newJetHelper(nodes, edges, iPropertie);
+		IJetHelper jetHelper = GeneratorFactory.getInstance().newJetHelper(nodes, edges, iPropertie);
 		IJetTemplate jetTemplate = Factory.getInstance().newJetTemplate();
 		return jetTemplate.generate(jetHelper);
 	}
