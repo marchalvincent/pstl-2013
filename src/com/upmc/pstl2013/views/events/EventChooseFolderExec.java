@@ -15,14 +15,18 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.uml2.uml.Activity;
 
+import com.upmc.pstl2013.umlParser.IUMLParser;
+import com.upmc.pstl2013.umlParser.ParserFactory;
+import com.upmc.pstl2013.umlParser.impl.ParserException;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventChooseFolderExec extends MouseAdapter{
 
 	private Logger log = Logger.getLogger(EventChooseFolderExec.class);
 	private SwtView swtView;
-	private List<IFile> UMLFilesSelected;
+	private List<Activity> activitiesSelected;
 	private StringBuilder sb;
 
 	/**
@@ -50,47 +54,63 @@ public class EventChooseFolderExec extends MouseAdapter{
 		});
 
 		IContainer[] container = WorkspaceResourceDialog.openFolderSelection(new Shell(), "Selectionnez le dossier ", null, true, null, filters);
+		sb = new StringBuilder();
 		try {
-			sb = new StringBuilder();
 			if (container.length > 0)
 				sb.append("Selection des fichiers suivant : ");
 			else
 				sb.append("Aucun fichier n'a été sélectionné.");
 
-			UMLFilesSelected = swtView.getUMLFilesSelected();
-			UMLFilesSelected.clear();
+			activitiesSelected = swtView.getActivitiesSelected();
+			activitiesSelected.clear();
+			
+			StringBuilder parsing = new StringBuilder();
 			for (IContainer iContainer : container) {	
-				addFolder(iContainer.members());
+				parsing.append(addFolder(iContainer.members()));
 			}
 
 			sb.append("\n");
+			sb.append(parsing.toString());
+			
 			log.info(sb.toString());
 			swtView.getTxtLogs().append(sb.toString());
 
 		} catch (CoreException e1) {
 			log.error(e1.getMessage());
+			swtView.getTxtLogs().append(sb.toString() + "\n" + e1.getMessage() + ".\n");
 		}
 	}
 
-	private void addFolder(IResource[] resources) throws CoreException
-	{
+	private String addFolder(IResource[] resources) throws CoreException {
+		StringBuilder parsing = new StringBuilder();
 		for (IResource resource : resources) {
+			if (resource.getType() == IResource.FILE) {
+				
+				IFile iFile = (IFile) resource;
+				if (!iFile.getFileExtension().contains("uml")) 
+					continue;
+				String name = iFile.getName();
+				IUMLParser parser = ParserFactory.getInstance().newParser(iFile);
+				try {
+					parsing.append("Parsing de " + name + ". ");
+					Activity activity = parser.getActivity();
+					activity.setName(name);
+					activitiesSelected.add(activity);
+				} catch (ParserException e1) {
+					parsing.append(e1.getMessage());
+				} finally {
+					parsing.append("\n");
+				}
 
-			if (resource.getType() == IResource.FILE)
-			{
-				IFile iFile = (IFile)resource;
-				UMLFilesSelected.add(iFile);
-				sb.append(iFile.getName());
+				sb.append(name);
 				sb.append(" ");
 			}
-			if (resource.getType() == IResource.FOLDER)
-			{
+			if (resource.getType() == IResource.FOLDER) {
 				IFolder iFolder = (IFolder)resource;
-				System.out.println("folder");
-				addFolder(iFolder.members());
+				parsing.append(addFolder(iFolder.members()));
 			}
 		}
-
+		return parsing.toString();
 	}
 
 }

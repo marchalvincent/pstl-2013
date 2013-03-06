@@ -1,8 +1,8 @@
 package com.upmc.pstl2013.alloyGenerator;
 
 import java.io.File;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
@@ -31,12 +31,12 @@ public class GeneratorFactory {
 	/**
 	 * Créé un {@link IAlloyGenerator}.
 	 * 
-	 * @param UMLFile un {@link IFile} correspondant au fichier UML.
+	 * @param activity un {@link Activity} correspondant à l'activité du process à vérifier.
 	 * @param dirDestination un String pour le dossier de travail du plugin.
 	 * @param property la {@link IProperties} de génération Alloy.
 	 */
-	public IAlloyGenerator newAlloyGenerator(IFile UMLFile, String dirDestination, IProperties property) {
-		return new AlloyGenerator(UMLFile, dirDestination, property);
+	public IAlloyGenerator newAlloyGenerator(Activity activity, String dirDestination, IProperties property) {
+		return new AlloyGenerator(activity, dirDestination, property);
 	}
 	
 	/**
