@@ -34,6 +34,7 @@ import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
+import com.upmc.pstl2013.util.MyRejectedExecutionHandelerImpl;
 import com.upmc.pstl2013.util.Utils;
 import com.upmc.pstl2013.views.events.EventChooseDir;
 import com.upmc.pstl2013.views.events.EventChooseFile;
@@ -44,7 +45,6 @@ import com.upmc.pstl2013.views.events.EventPersonalExecutor;
 import com.upmc.pstl2013.views.events.EventReadLogs;
 import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
 import com.upmc.pstl2013.views.events.EventSelectTreeProperty;
-import com.upmc.pstl2013.views.events.MyRejectedExecutionHandelerImpl;
 
 public class SwtView extends Composite {
 

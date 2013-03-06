@@ -15,6 +15,7 @@ import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
+import com.upmc.pstl2013.util.JobTimeout;
 import com.upmc.pstl2013.views.SwtView;
 
 public abstract class AbstractEventExecutor extends MouseAdapter {
@@ -59,8 +60,8 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 					this.execute(listJobsExec, iFile, properties, false, jobEnough);
 				}
 			}
-			ThreadTimeout threadTimeout = new ThreadTimeout(listJobsExec, swtView.getTimeout());
-			threadTimeout.start();
+			JobTimeout threadTimeout = new JobTimeout(listJobsExec, swtView.getTimeout(), swtView);
+			threadTimeout.schedule();
 		} catch (PropertiesException e) {
 			showToView(e.getMessage());
 		}
@@ -97,8 +98,8 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 				jobExec = Factory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty, jobToWait, counterExecution);
 				jobExec.setUser(true);
 				
-//				swtView.getThreadPoolExecutor().execute(jobExec);
-				jobExec.schedule();
+				swtView.getThreadPoolExecutor().execute(jobExec);
+				//jobExec.schedule();
 				
 				listJobsExec.add(jobExec);
 			}
