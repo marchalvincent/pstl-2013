@@ -10,6 +10,10 @@ import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Shell;
+import org.eclipse.uml2.uml.Activity;
+import com.upmc.pstl2013.umlParser.IUMLParser;
+import com.upmc.pstl2013.umlParser.ParserFactory;
+import com.upmc.pstl2013.umlParser.impl.ParserException;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventChooseFile extends MouseAdapter {
@@ -48,14 +52,31 @@ public class EventChooseFile extends MouseAdapter {
 		else
 			sb.append("Aucun fichier n'a été sélectionné.");
 		
-		List<IFile> UMLFilesSelected = swtView.getUMLFilesSelected();
-		UMLFilesSelected.clear();
+		List<Activity> activitiesSelected = swtView.getActivitiesSelected();
+		activitiesSelected.clear();
+		
+		// pour chaque process UML, on parse l'activité à la volée.
+		StringBuilder parsing = new StringBuilder();
 		for (IFile iFile : file) {
-			UMLFilesSelected.add(iFile);
-			sb.append(iFile.getName());
+			String name = iFile.getName();
+			IUMLParser parser = ParserFactory.getInstance().newParser(iFile);
+			
+			try {
+				parsing.append("Parsing de " + name + ". ");
+				Activity activity = parser.getActivity();
+				activity.setName(name);
+				activitiesSelected.add(activity);
+			} catch (ParserException e1) {
+				parsing.append(e1.getMessage());
+			} finally {
+				parsing.append("\n");
+			}
+			
+			sb.append(name);
 			sb.append(" ");
 		}
 		sb.append("\n");
+		sb.append(parsing.toString());
 		log.info(sb.toString());
 		swtView.getTxtLogs().append(sb.toString());
 	}

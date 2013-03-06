@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.umlParser;
 
 import org.eclipse.uml2.uml.Activity;
+import com.upmc.pstl2013.umlParser.impl.ParserException;
 
 /**
  * L'interface d'un parser de fichier UML.
@@ -12,5 +13,5 @@ public interface IUMLParser {
 	 * 
 	 * @return une {@link Activity}.
 	 */
-	Activity getActivities();
+	Activity getActivity() throws ParserException;
 }

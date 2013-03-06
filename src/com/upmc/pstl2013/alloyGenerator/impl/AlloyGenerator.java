@@ -7,7 +7,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityEdge;
@@ -19,8 +18,6 @@ import com.upmc.pstl2013.alloyGenerator.jet.IJetHelper;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.properties.IProperties;
-import com.upmc.pstl2013.umlParser.IUMLParser;
-import com.upmc.pstl2013.umlParser.ParserFactory;
 import com.upmc.pstl2013.util.Utils;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
@@ -30,8 +27,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
  */
 public class AlloyGenerator implements IAlloyGenerator {
 
-	private IUMLParser parser;
-	private IFile UMLFile;
+	private Activity activity;
 	private String dirDestination;
 	private IProperties property;
 	private Logger log = Logger.getLogger(AlloyGenerator.class);
@@ -39,10 +35,9 @@ public class AlloyGenerator implements IAlloyGenerator {
 	/**
 	 * Constructeur
 	 */
-	public AlloyGenerator(IFile file, String dirDestination, IProperties property) {
+	public AlloyGenerator(Activity activity, String dirDestination, IProperties property) {
 		super();
-		parser = ParserFactory.getInstance().newParser(file);
-		this.UMLFile = file;
+		this.activity = activity;
 		this.dirDestination = dirDestination;
 		this.property = property;
 	}
@@ -75,14 +70,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 		// 2. On y ajoute les fichiers requis
 		this.addNeddedFile();
 
-		// 2. On récupère l'activité parsée
-		Activity activity = parser.getActivities();
-		// Si le parser n'a rien renvoyé, on quitte la génération
-		if (activity == null) {
-			return null;
-		}
-
-		String filename = UMLFile.getName().substring(0, UMLFile.getName().length() - 4);
+		String filename = activity.getName().substring(0, activity.getName().length() - 4);
 		String pathFile = dirDestination + "gen_" + filename + "_" + property.getClass().getSimpleName() + ".als";
 		log.info("Génération du fichier : " + pathFile + ".");
 
