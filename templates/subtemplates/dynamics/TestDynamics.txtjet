@@ -1,11 +1,11 @@
-<%@ jet package="com.upmc.pstl2013.properties.dynamic.impl" class="TestDynamics" 
+<%@ jet package="com.upmc.pstl2013.properties.dynamic.impl" class="TestDynamicsTemplate" 
 	imports="org.apache.log4j.Logger
 			com.upmc.pstl2013.alloyGenerator.jet.*
 			com.upmc.pstl2013.properties.*
 			com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness"
 	skeleton="./dynamics.skeleton" %>
 <% 
-	final Logger log = Logger.getLogger(TestDynamics.class);
+	final Logger log = Logger.getLogger(TestDynamicsTemplate.class);
 	if (!(argument instanceof IProperties)) {
 		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
 		log.error(error);
