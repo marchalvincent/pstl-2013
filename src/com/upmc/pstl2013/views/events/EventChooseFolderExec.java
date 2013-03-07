@@ -81,6 +81,8 @@ public class EventChooseFolderExec extends MouseAdapter{
 		//Rend possible l'ajout de Property dynamiquement pour Buisiness
 		//Si le nombre d'activity == 1
 		swtView.setEnabledAddActivity(activitiesSelected.size()==1);
+		//Clear des noeuds dynamique apres le changement de fichier.
+		swtView.clearDynamicBuisiness();
 	}
 
 	private String addFolder(IResource[] resources) throws CoreException {

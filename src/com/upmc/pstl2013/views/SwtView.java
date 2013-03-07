@@ -465,6 +465,11 @@ public class SwtView extends Composite {
 		addPropertiesToTree();
 		
 	}
+	
+	public void clearDynamicBuisiness(){
+		listDynamicBuisiness.clear();
+		addPropertiesToTree();
+	}
 
 	public Text getTxtDirectory() {
 		return txtDirectory;
