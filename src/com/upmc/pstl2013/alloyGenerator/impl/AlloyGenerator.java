@@ -150,8 +150,8 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 */
 	private String getAlloyTxt(Activity activity, IProperties iPropertie) throws JetException {
 
-		EList<ActivityNode> nodes = this.cleanNodes(activity.getNodes());
-		EList<ActivityEdge> edges = this.cleanEdges(activity.getEdges());
+		EList<ActivityNode> nodes = activity.getNodes();
+		EList<ActivityEdge> edges = activity.getEdges();
 		ActivityNode initialNode = this.getNodeByType(nodes, "InitialNode");
 		ActivityNode finalNode = this.getNodeByType(nodes, "ActivityFinalNode");
 
@@ -187,32 +187,6 @@ public class AlloyGenerator implements IAlloyGenerator {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Nettoie les noms des noeuds par rapport à la syntax d'Alloy.
-	 * 
-	 * @param nodes la liste des noeuds à nettoyer.
-	 * @return une liste d'{@link ActivityNode}.
-	 */
-	private EList<ActivityNode> cleanNodes(EList<ActivityNode> nodes) {
-		for (ActivityNode activityNode : nodes) {
-			activityNode.setName(activityNode.getName().replace("-", ""));
-		}
-		return nodes;
-	}
-
-	/**
-	 * Nettoie les noms des arcs par rapport à la syntax d'Alloy.
-	 * 
-	 * @param egdes la liste des arcs à nettoyer.
-	 * @return une liste d'{@link ActivityEdge}.
-	 */
-	private EList<ActivityEdge> cleanEdges(EList<ActivityEdge> egdes) {
-		for (ActivityEdge activityEdges : egdes) {
-			activityEdges.setName(activityEdges.getName().replace("-", ""));
-		}
-		return egdes;
 	}
 
 	/**
