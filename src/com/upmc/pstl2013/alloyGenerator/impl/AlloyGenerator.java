@@ -4,8 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Activity;
@@ -140,8 +138,8 @@ public class AlloyGenerator implements IAlloyGenerator {
 	 */
 	private String getAlloyTxt(Activity activity, IProperties iPropertie) throws JetException {
 
-		EList<ActivityNode> nodes = this.cleanNodes(activity.getNodes());
-		EList<ActivityEdge> edges = this.cleanEdges(activity.getEdges());
+		EList<ActivityNode> nodes = activity.getNodes();
+		EList<ActivityEdge> edges = activity.getEdges();
 		ActivityNode initialNode = this.getNodeByType(nodes, "InitialNode");
 		ActivityNode finalNode = this.getNodeByType(nodes, "ActivityFinalNode");
 
@@ -150,14 +148,9 @@ public class AlloyGenerator implements IAlloyGenerator {
 		iPropertie.putPrivate("nbEdges", Integer.toString(edges.size()));
 		iPropertie.putPrivate("nbObjects", Integer.toString(edges.size() + nodes.size()));
 
-		if (initialNode.getName() == null)
-			iPropertie.putPrivate("initialNode", "initSansNom");
-		else
-			iPropertie.putPrivate("initialNode", initialNode.getName());
-		if (finalNode.getName() == null)
-			iPropertie.putPrivate("finalNode", "finalSansNom");
-		else
-			iPropertie.putPrivate("finalNode", finalNode.getName());
+		iPropertie.putPrivate("initialNode", initialNode.getName());
+		iPropertie.putPrivate("finalNode", finalNode.getName());
+		
 		iPropertie.putPrivate("predicatName", this.generateNamePredicat("predicatName", nodes, edges));
 
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges et la propriété au template Jet.
@@ -183,46 +176,6 @@ public class AlloyGenerator implements IAlloyGenerator {
 			}
 		}
 		return null;
-	}
-
-	/**
-	 * Nettoie les noms des noeuds par rapport à la syntax d'Alloy.
-	 * 
-	 * @param nodes la liste des noeuds à nettoyer.
-	 * @return une liste d'{@link ActivityNode}.
-	 */
-	private EList<ActivityNode> cleanNodes(EList<ActivityNode> nodes) {
-		List<ActivityNode> listeToRemove = new ArrayList<ActivityNode>();
-		for (ActivityNode activityNode : nodes) {
-			if (activityNode.getName() == null) {
-				log.warn("Un node a été trouvé sans nom. On le supprime.");
-				listeToRemove.add(activityNode);
-				continue;
-			}
-			activityNode.setName(activityNode.getName().replace("-", ""));
-		}
-		nodes.removeAll(listeToRemove);
-		return nodes;
-	}
-
-	/**
-	 * Nettoie les noms des arcs par rapport à la syntax d'Alloy.
-	 * 
-	 * @param edges la liste des arcs à nettoyer.
-	 * @return une liste d'{@link ActivityEdge}.
-	 */
-	private EList<ActivityEdge> cleanEdges(EList<ActivityEdge> edges) {
-		List<ActivityEdge> listeToRemove = new ArrayList<ActivityEdge>();
-		for (ActivityEdge activityEdge : edges) {
-			if (activityEdge.getName() == null) {
-				log.warn("Un edge a été trouvé sans nom. On le supprime.");
-				listeToRemove.add(activityEdge);
-				continue;
-			}
-			activityEdge.setName(activityEdge.getName().replace("-", ""));
-		}
-		edges.removeAll(listeToRemove);
-		return edges;
 	}
 
 	/**
