@@ -1,7 +1,6 @@
 package com.upmc.pstl2013.views.events;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
@@ -9,7 +8,6 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
 import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.properties.IProperties;
-import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.util.JobTimeout;
@@ -35,79 +33,65 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 	@Override
 	public void mouseDown(MouseEvent evt) {
 		counterExecution++;
-		List<JobExecutor> listJobsExec = new ArrayList<JobExecutor>();
+		
+		// 1. On enregistre dans les préférences les options
+		this.saveOption(swtView);
+		
+		// 2. On créé notre pool de job
+		int nbThreads = ConfPropertiesManager.getInstance().getNbThreads();
+		MyJobPoolExecutor jobPoolExecutor = EventFactory.getInstance().newJobPoolExecutor(nbThreads);
 
-		// 1. On récupère tous les fichiers UML
+		// 3. On récupère tous les process
 		List<Activity> activitiesSelected = swtView.getActivitiesSelected();
 
-		// 2. On récupère toutes les propriétés seléctionnées
+		// 4. On récupère toutes les propriétés seléctionnées
 		List<IProperties> properties = null;
+		IProperties TMPProperty = null;
+		JobExecutor job = null;
 		try {
 			properties = this.getProperties();
-			// 3a. Pour chaque fichier
+			// 5a. Pour chaque activité
 			for (Activity activity : activitiesSelected) {
-				// 3b. Pour chaque propriété
+				// 5b. Pour chaque propriété
 				if (properties != null) {
-
-					// Dans un premier temps, on exécute la propriété EnoughState pour avoir le nombre de state 
-					// à utiliser avec les autres propriétés
-					JobExecutor jobEnough = this.execute(listJobsExec, activity, properties, true, null);
 					
+					// On lance d'abord le enoughState
+					JobExecutor enoughState = null;
+					for (IProperties property : properties) {
+						if (property.getClass().getSimpleName().equals("EnoughState")) {
+							TMPProperty = property.clone();
+							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
+							enoughState = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, null, counterExecution);
+							jobPoolExecutor.addJob(enoughState, true);
+							break;
+						}
+					}
 					
-					// Puis ensuite on lance l'exécution pour les autres propriétés avec la référence du premier job
-					this.execute(listJobsExec, activity, properties, false, jobEnough);
+					// Puis ensuite les autres
+					for (IProperties property : properties) {
+						if (!property.getClass().getSimpleName().equals("EnoughState")) {
+							TMPProperty = property.clone();
+							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
+							job = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, enoughState, counterExecution);
+							jobPoolExecutor.addJob(job, false);
+						}
+					}
 				}
 			}
-			JobTimeout threadTimeout = new JobTimeout(listJobsExec, swtView.getTimeout(), swtView);
+			jobPoolExecutor.startWorkers();
+			
+			JobTimeout threadTimeout = new JobTimeout(jobPoolExecutor, swtView.getTimeout(), swtView);
 			threadTimeout.schedule();
 		} catch (PropertiesException e) {
 			showToView(e.getMessage());
 		}
+		
 		// 4. On enregistre dans les préférences les propriétés
 		this.saveProperties(properties);
-		// 5. On enregistre dans les préférences les options
-		this.saveOption(swtView);
-		
-	}
-
-
-	/**
-	 * Exécute un fichier als pour une propriété donnée.
-	 * @param listJobsExec La liste des {@link JobExecutor} en cours d'exécution.
-	 * @param {@link Activity} L'activité a éxécuter.
-	 * @param properties La {@link IProperties} d'exécution.
-	 * @param isEnoughState un booléen qui spécifie si on veut lancer la propriété {@link EnoughState} ou une autre.
-	 * @param jobToWait JobExecutor le job qui exécute (a exécuté) la propriété EnoughState ou null si c'est celui ci qui doit le faire.
-	 * @return JobExecutor Le {@link JobExecutor} qui vient d'être lancé.
-	 */
-	private JobExecutor execute(List<JobExecutor> listJobsExec, Activity activity, List<IProperties> properties, boolean isEnoughState, JobExecutor jobToWait) {
-
-		IProperties TMPProperty = null;
-		JobExecutor jobExec = null;
-		for (IProperties property : properties) {
-			if ((isEnoughState && property.getClass().getSimpleName().equals("EnoughState")) 
-					|| (!isEnoughState && !property.getClass().getSimpleName().equals("EnoughState"))) {
-
-				// On créé une copie de la propriété pour des raisons de concurrence (une propriété est sujette à modification pendant l'exécution)
-				TMPProperty = property.clone();
-
-				// On lance le job
-				String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
-				jobExec = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, jobToWait, counterExecution);
-				jobExec.setUser(true);
-				
-				swtView.getThreadPoolExecutor().execute(jobExec);
-				//jobExec.schedule();
-				
-				listJobsExec.add(jobExec);
-			}
-		}
-
-		return jobExec;
 	}
 
 	/**
-	 * Méthode qui récupère la liste de IProperties à exécuter sur le(s) fichier(s) UML.
+	 * Méthode qui récupère la liste de IProperties à exécuter sur le(s) process.
 	 */
 	protected abstract List<IProperties> getProperties() throws PropertiesException;
 
@@ -139,8 +123,8 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		// 1. On spécifie les préférence à la ConfPropertiesManager
 		try {
 			ConfPropertiesManager.getInstance().setTimeOut(String.valueOf(swtView.getTimeout()));
-			ConfPropertiesManager.getInstance().setNbNodes(String.valueOf(swtView.getNbNodesMax()));
-			ConfPropertiesManager.getInstance().setNbThreads(String.valueOf(swtView.getNbThread()));
+			ConfPropertiesManager.getInstance().setNbNodes(swtView.getNbNodesMax());
+			ConfPropertiesManager.getInstance().setNbThreads(swtView.getNbThread());
 		} catch (Exception e) {
 			showToView(e.getMessage());
 		}

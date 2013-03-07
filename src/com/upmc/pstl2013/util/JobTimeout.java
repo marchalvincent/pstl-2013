@@ -9,24 +9,25 @@ import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
 import com.upmc.pstl2013.views.SwtView;
 import com.upmc.pstl2013.views.events.JobExecutor;
+import com.upmc.pstl2013.views.events.MyJobPoolExecutor;
 import com.upmc.pstl2013.views.events.RunnableUpdateExecutor;
 
 public class JobTimeout extends Job {
 
-
-	private List<JobExecutor> listJobsExec;
+	private MyJobPoolExecutor jobPool;
+	private List<JobExecutor> jobs;
 	private long timeout;
-	private Logger log = Logger.getLogger(JobTimeout.class);
 	private SwtView swtView;
+	private Logger log = Logger.getLogger(JobTimeout.class);
 
 
-	public JobTimeout(List<JobExecutor> listJobsExec,int timeout, SwtView swtView) {
+	public JobTimeout(MyJobPoolExecutor jobPool, int timeout, SwtView swtView) {
 		super("TimeOut");
-		this.listJobsExec = listJobsExec;
+		this.jobPool = jobPool;
+		this.jobs = jobPool.jobs();
 		this.timeout = timeout;
 		this.swtView = swtView;
 	}
-
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
@@ -39,12 +40,10 @@ public class JobTimeout extends Job {
 				Thread.sleep(1000);
 				endTime = System.nanoTime();
 				timeSpend = (endTime - startTime) / 1000000000; // en sec
-				isEnd = true;
-				for (JobExecutor job : listJobsExec) {
-					if((job.getResult() != null))
-					{
-						isEnd = false;
-						break;
+
+				synchronized (jobs) {
+					if (jobs.size() == 0) {
+						isEnd = true;
 					}
 				}
 			} catch (InterruptedException e) {
@@ -52,22 +51,11 @@ public class JobTimeout extends Job {
 			}
 		}
 
-		if(!isEnd){
-			for (JobExecutor job : listJobsExec) {
-				if (job.getResult() == null) {
-					if (job.cancel() || !job.getThread().isInterrupted())
-					{
-						log.info("job " + job.getName() + " was stopped !");
-						showToView("/!\\The execution of " + job.getName() + " was stopped !");
-					}
-					else
-					{
-						log.info("job " + job.getName() + " couldn't be stopped !");
-						showToView("/!\\The execution of " + job.getName() + " was stopped !");
-					}
-				}
-			}
+		if(!isEnd) {
+			String returns = jobPool.killWorkers();
+			showToView(returns);
 		}
+		
 		log.debug("/!\\ Fin du thread timeOut.\n");
 		return Status.OK_STATUS;
 	}
