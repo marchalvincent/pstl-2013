@@ -10,6 +10,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -29,9 +30,12 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.wb.swt.SWTResourceManager;
+
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
+import com.upmc.pstl2013.properties.Behavior;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.util.MyRejectedExecutionHandelerImpl;
@@ -74,20 +78,22 @@ public class SwtView extends Composite {
 	private Text txtNbNodesMax;
 	private Label lblNbThreads;
 	private Text txtNbThreads;
+	private Tree treeProperties;
+	private Label lblSeparator;
+	private Button chkDetails;
+	private Button btnAddbuisiness;
 
 	private IActivityResult currentActivityeResult;
 	private String separator = File.separator;
 	private String userDir;
 	private List<Activity> activities;
 	private ThreadPoolExecutor threadPoolExecutor;
+	private List<DynamicBusiness> listDynamicBuisiness;
 	private Logger log = Logger.getLogger(SwtView.class);
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
-	private Tree treeProperties;
-	private Label lblSeparator;
-	private Button chkDetails;
-	private Button btnAddbuisiness;
+
 
 	/**
 	 * Create the composite.
@@ -100,6 +106,8 @@ public class SwtView extends Composite {
 		super(parent, style);
 
 		activities = new ArrayList<Activity>();
+		listDynamicBuisiness = new ArrayList<DynamicBusiness>();
+		
 		if (ConfPropertiesManager.getInstance().getPathFolder().equals("")) {
 			userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 			try {
@@ -250,6 +258,7 @@ public class SwtView extends Composite {
 		btnAddbuisiness = new Button(cpItemAlloyProp, SWT.NONE);
 		btnAddbuisiness.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnAddbuisiness.setText("Add Buisiness");
+		btnAddbuisiness.setEnabled(false);
 		
 		/*
 		 *Debut de la partie Details
@@ -334,6 +343,8 @@ public class SwtView extends Composite {
 	 */
 	private void addPropertiesToTree() {
 
+		treeProperties.removeAll();
+		
 		HashMap<String, List<IProperties>> families = new HashMap<String, List<IProperties>>();
 		treeProperties.addListener(SWT.Selection, new EventSelectTreeProperty(this));
 
@@ -351,7 +362,7 @@ public class SwtView extends Composite {
 		for (String family : families.keySet()) {
 			lItem0 = new TreeItem(treeProperties, SWT.READ_ONLY);
 			lItem0.setText(family);
-			lItem0.setData("FamilyItem");
+			lItem0.setData(ETreeType.FAMILY);
 			//permet de checker la famille si tous les property sont selectionnée
 			boolean allChecked = (families.get(family).size()>0);
 			for (IProperties elem : families.get(family)) {
@@ -366,9 +377,24 @@ public class SwtView extends Composite {
 					lItem1.setChecked(true);
 				else
 					allChecked = false;
+				
+				if (family.equals(Behavior.BUISINESS.toString()))
+				{
+					//Ajout des propeties dynamique :
+					for (DynamicBusiness dynaBuisiness : listDynamicBuisiness) {
+						lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
+						lItem1.setText(dynaBuisiness.getNom());
+						lItem1.setData(ETreeType.DYNAMIC_PROPERTY);
+						lItem1.setChecked(true);
+					}
+					
+				}
+				
 			}
 			lItem0.setChecked(allChecked);
 		}
+		
+
 	}
 
 
@@ -431,6 +457,18 @@ public class SwtView extends Composite {
 		/*Thread monitor = new Thread(new MyMonitorThread(threadPoolExecutor));
 		monitor.setDaemon(true);
 		monitor.start();*/
+	}
+	
+
+	public void updateTreePropety(DynamicBusiness buisiness) {
+		listDynamicBuisiness.add(buisiness);
+		addPropertiesToTree();
+		
+	}
+	
+	public void clearDynamicBuisiness(){
+		listDynamicBuisiness.clear();
+		addPropertiesToTree();
 	}
 
 	public Text getTxtDirectory() {
@@ -513,5 +551,11 @@ public class SwtView extends Composite {
 
 	public ThreadPoolExecutor getThreadPoolExecutor() {
 		return threadPoolExecutor;
+	}
+
+
+	public void setEnabledAddActivity(boolean isEnabled) {
+		btnAddbuisiness.setEnabled(isEnabled);
+		
 	}
 }
