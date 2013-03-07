@@ -13,7 +13,7 @@ import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.views.SwtView;
 
-public class JobExecutor extends Job implements Runnable{
+public class JobExecutor extends Job {
 
 	private Logger log = Logger.getLogger(JobExecutor.class);
 	private SwtView swtView;
@@ -99,20 +99,7 @@ public class JobExecutor extends Job implements Runnable{
 		Display.getDefault().asyncExec(new RunnableUpdateDetails(swtView, iFileResult));
 	}
 	
-	@SuppressWarnings("deprecation")
-	@Override
-	public void canceling() {
-		this.getThread().interrupt();
-		this.getThread().stop();
-		log.info("Interruption de : " + this.getName());
-	}
-	
 	public String getNbState() {
 		return nbState;
-	}
-
-	@Override
-	public void run() {
-		this.schedule();
 	}
 }
