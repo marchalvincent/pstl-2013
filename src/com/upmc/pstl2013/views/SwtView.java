@@ -11,7 +11,6 @@ import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
@@ -28,6 +27,7 @@ import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.uml2.uml.Activity;
 import org.eclipse.wb.swt.SWTResourceManager;
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
@@ -78,7 +78,7 @@ public class SwtView extends Composite {
 	private IActivityResult currentActivityeResult;
 	private String separator = File.separator;
 	private String userDir;
-	private List<IFile> UMLFilesSelected;
+	private List<Activity> activities;
 	private ThreadPoolExecutor threadPoolExecutor;
 	private Logger log = Logger.getLogger(SwtView.class);
 
@@ -99,7 +99,7 @@ public class SwtView extends Composite {
 
 		super(parent, style);
 
-		UMLFilesSelected = new ArrayList<IFile>();
+		activities = new ArrayList<Activity>();
 		if (ConfPropertiesManager.getInstance().getPathFolder().equals("")) {
 			userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 			try {
@@ -282,7 +282,7 @@ public class SwtView extends Composite {
 		lblNbNodeMax.setText("Max number of nodes to parse (UML file)");
 
 		txtNbNodesMax = new Text(cpItemOptions, SWT.BORDER);
-		txtNbNodesMax.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbNodes()));
+		txtNbNodesMax.setText(String.valueOf(ConfPropertiesManager.getInstance().getNbNodesMax()));
 		txtNbNodesMax.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
 
 		lblNbThreads = new Label(cpItemOptions, SWT.NONE);
@@ -464,9 +464,9 @@ public class SwtView extends Composite {
 	public TableEditor getEditorBool() {
 		return editorBool;
 	}
-
-	public List<IFile> getUMLFilesSelected() {
-		return UMLFilesSelected;
+	
+	public List<Activity> getActivitiesSelected() {
+		return activities;
 	}
 
 	public String getUserDir() {

@@ -3,12 +3,10 @@ package com.upmc.pstl2013.views.events;
 import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
-
 import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Text;
-
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventReadLogs extends MouseAdapter {

@@ -12,7 +12,7 @@ import org.apache.log4j.Logger;
 public class ConfPropertiesManager {
 
 	private static int DEFAUT_TIMEOUT = 180;
-	private static int DEFAUT_NB_NODES = 100;
+	private static int DEFAUT_NB_NODES_MAX = 100;
 	private static int DEFAUT_NB_THREAD = 4;
 	private Properties prop;
 	private File file;
@@ -51,8 +51,8 @@ public class ConfPropertiesManager {
 			if (prop.getProperty("timeOut") == null) {
 				try {this.setTimeOut(String.valueOf(ConfPropertiesManager.DEFAUT_TIMEOUT));} catch (Exception e) {}
 			}
-			if (prop.getProperty("nbNodes") == null) {
-				try {this.setNbNodes(String.valueOf(ConfPropertiesManager.DEFAUT_NB_NODES));} catch (Exception e) {}
+			if (prop.getProperty("nbNodesMax") == null) {
+				try {this.setNbNodes(String.valueOf(ConfPropertiesManager.DEFAUT_NB_NODES_MAX));} catch (Exception e) {}
 			}
 			if (prop.getProperty("nbThreads") == null) {
 				try {this.setNbThreads(String.valueOf(ConfPropertiesManager.DEFAUT_NB_THREAD));} catch (Exception e) {}
@@ -98,19 +98,19 @@ public class ConfPropertiesManager {
 		prop.setProperty("timeOut", timeout);
 	}
 
-	public int getNbNodes() {
+	public int getNbNodesMax() {
 		try {
-			int nb = Integer.parseInt(prop.getProperty("nbNodes"));
+			int nb = Integer.parseInt(prop.getProperty("nbNodesMax"));
 			if (nb < 1)
-				nb = ConfPropertiesManager.DEFAUT_NB_NODES;
+				nb = ConfPropertiesManager.DEFAUT_NB_NODES_MAX;
 			return nb;
 		} catch (NumberFormatException e) {
-			return ConfPropertiesManager.DEFAUT_NB_NODES;
+			return ConfPropertiesManager.DEFAUT_NB_NODES_MAX;
 		}
 	}
 
 	public void setNbNodes(String nbNodes) throws Exception {
-		prop.setProperty("nbNodes", nbNodes);
+		prop.setProperty("nbNodesMax", nbNodes);
 	}
 
 	public int getNbThreads() {

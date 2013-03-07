@@ -1,7 +1,6 @@
 package com.upmc.pstl2013.strategyExecution;
 
 import com.upmc.pstl2013.properties.IProperties;
-
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 /**

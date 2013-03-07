@@ -5,13 +5,13 @@ import com.upmc.pstl2013.alloyGenerator.jet.*;
 import com.upmc.pstl2013.properties.*;
 import com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness;
 
-public class TestDynamics extends AbstractStrategyDynamicBusiness implements IJetTemplate {
+public class TestDynamicsTemplate extends AbstractStrategyDynamicBusiness implements IJetTemplate {
 
   protected static String nl;
-  public static synchronized TestDynamics create(String lineSeparator)
+  public static synchronized TestDynamicsTemplate create(String lineSeparator)
   {
     nl = lineSeparator;
-    TestDynamics result = new TestDynamics();
+    TestDynamicsTemplate result = new TestDynamicsTemplate();
     nl = null;
     return result;
   }
@@ -32,7 +32,7 @@ public class TestDynamics extends AbstractStrategyDynamicBusiness implements IJe
   {
     final StringBuffer stringBuffer = new StringBuffer();
      
-	final Logger log = Logger.getLogger(TestDynamics.class);
+	final Logger log = Logger.getLogger(TestDynamicsTemplate.class);
 	if (!(argument instanceof IProperties)) {
 		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
 		log.error(error);

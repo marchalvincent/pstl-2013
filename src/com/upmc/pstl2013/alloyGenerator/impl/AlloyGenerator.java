@@ -4,8 +4,9 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityEdge;
@@ -17,8 +18,6 @@ import com.upmc.pstl2013.alloyGenerator.jet.IJetHelper;
 import com.upmc.pstl2013.alloyGenerator.jet.IJetTemplate;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.properties.IProperties;
-import com.upmc.pstl2013.umlParser.IUMLParser;
-import com.upmc.pstl2013.umlParser.ParserFactory;
 import com.upmc.pstl2013.util.Utils;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
@@ -28,8 +27,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
  */
 public class AlloyGenerator implements IAlloyGenerator {
 
-	private IUMLParser parser;
-	private IFile UMLFile;
+	private Activity activity;
 	private String dirDestination;
 	private IProperties property;
 	private Logger log = Logger.getLogger(AlloyGenerator.class);
@@ -37,10 +35,9 @@ public class AlloyGenerator implements IAlloyGenerator {
 	/**
 	 * Constructeur
 	 */
-	public AlloyGenerator(IFile file, String dirDestination, IProperties property) {
+	public AlloyGenerator(Activity activity, String dirDestination, IProperties property) {
 		super();
-		parser = ParserFactory.getInstance().newParser(file);
-		this.UMLFile = file;
+		this.activity = activity;
 		this.dirDestination = dirDestination;
 		this.property = property;
 	}
@@ -73,14 +70,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 		// 2. On y ajoute les fichiers requis
 		this.addNeddedFile();
 
-		// 2. On récupère l'activité parsée
-		Activity activity = parser.getActivities();
-		// Si le parser n'a rien renvoyé, on quitte la génération
-		if (activity == null) {
-			return null;
-		}
-
-		String filename = UMLFile.getName().substring(0, UMLFile.getName().length() - 4);
+		String filename = activity.getName().substring(0, activity.getName().length() - 4);
 		String pathFile = dirDestination + "gen_" + filename + "_" + property.getClass().getSimpleName() + ".als";
 		log.info("Génération du fichier : " + pathFile + ".");
 
@@ -160,8 +150,14 @@ public class AlloyGenerator implements IAlloyGenerator {
 		iPropertie.putPrivate("nbEdges", Integer.toString(edges.size()));
 		iPropertie.putPrivate("nbObjects", Integer.toString(edges.size() + nodes.size()));
 
-		iPropertie.putPrivate("initialNode", initialNode.getName());
-		iPropertie.putPrivate("finalNode", finalNode.getName());
+		if (initialNode.getName() == null)
+			iPropertie.putPrivate("initialNode", "initSansNom");
+		else
+			iPropertie.putPrivate("initialNode", initialNode.getName());
+		if (finalNode.getName() == null)
+			iPropertie.putPrivate("finalNode", "finalSansNom");
+		else
+			iPropertie.putPrivate("finalNode", finalNode.getName());
 		iPropertie.putPrivate("predicatName", this.generateNamePredicat("predicatName", nodes, edges));
 
 		// on utilise un objet helper qui va nous permettre de passer les nodes/edges et la propriété au template Jet.
@@ -187,6 +183,46 @@ public class AlloyGenerator implements IAlloyGenerator {
 			}
 		}
 		return null;
+	}
+
+	/**
+	 * Nettoie les noms des noeuds par rapport à la syntax d'Alloy.
+	 * 
+	 * @param nodes la liste des noeuds à nettoyer.
+	 * @return une liste d'{@link ActivityNode}.
+	 */
+	private EList<ActivityNode> cleanNodes(EList<ActivityNode> nodes) {
+		List<ActivityNode> listeToRemove = new ArrayList<ActivityNode>();
+		for (ActivityNode activityNode : nodes) {
+			if (activityNode.getName() == null) {
+				log.warn("Un node a été trouvé sans nom. On le supprime.");
+				listeToRemove.add(activityNode);
+				continue;
+			}
+			activityNode.setName(activityNode.getName().replace("-", ""));
+		}
+		nodes.removeAll(listeToRemove);
+		return nodes;
+	}
+
+	/**
+	 * Nettoie les noms des arcs par rapport à la syntax d'Alloy.
+	 * 
+	 * @param edges la liste des arcs à nettoyer.
+	 * @return une liste d'{@link ActivityEdge}.
+	 */
+	private EList<ActivityEdge> cleanEdges(EList<ActivityEdge> edges) {
+		List<ActivityEdge> listeToRemove = new ArrayList<ActivityEdge>();
+		for (ActivityEdge activityEdge : edges) {
+			if (activityEdge.getName() == null) {
+				log.warn("Un edge a été trouvé sans nom. On le supprime.");
+				listeToRemove.add(activityEdge);
+				continue;
+			}
+ 			activityEdge.setName(activityEdge.getName().replace("-", ""));
+		}
+		edges.removeAll(listeToRemove);
+		return edges;
 	}
 
 	/**

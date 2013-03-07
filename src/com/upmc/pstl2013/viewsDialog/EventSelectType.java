@@ -3,7 +3,6 @@ package com.upmc.pstl2013.viewsDialog;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.widgets.Combo;
-
 import com.upmc.pstl2013.properties.dynamic.EDynamicBusiness;
 
 public class EventSelectType extends SelectionAdapter {
