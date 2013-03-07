@@ -1,6 +1,6 @@
 package com.upmc.pstl2013.alloyExecutor;
 
-import org.eclipse.core.resources.IFile;
+import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.alloyExecutor.impl.ActivityResult;
 import com.upmc.pstl2013.alloyExecutor.impl.AlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.impl.FileResult;
@@ -25,13 +25,13 @@ public class ExecutorFactory {
 	/**
 	 * Créé un {@link IAlloyExecutor}.
 	 * 
-	 * @param UMLFile un {@link IFile} correspondant au fichier UML.
+	 * @param activity un {@link Activity} correspondant à l'activité parsé du process UML.
 	 * @param dirDestination un String pour le dossier de travail du plugin.
 	 * @param property la {@link IProperties} de génération Alloy.
 	 * @param counterExecution le numéro de l'exécution.
 	 */
-	public IAlloyExecutor newAlloyExecutor(IFile UMLFile, String dirDestination, IProperties property, int counterExecution) {
-		return new AlloyExecutor(UMLFile, dirDestination, property, counterExecution);
+	public IAlloyExecutor newAlloyExecutor(Activity activity, String dirDestination, IProperties property, int counterExecution) {
+		return new AlloyExecutor(activity, dirDestination, property, counterExecution);
 	}
 	
 	/**

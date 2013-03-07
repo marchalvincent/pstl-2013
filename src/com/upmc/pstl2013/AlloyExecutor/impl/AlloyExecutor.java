@@ -5,7 +5,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.IFile;
+import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.alloyExecutor.ExecutorFactory;
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
@@ -32,7 +32,7 @@ import edu.mit.csail.sdg.alloy4compiler.translator.TranslateAlloyToKodkod;
 public class AlloyExecutor implements IAlloyExecutor {
 
 	private IAlloyGenerator generator;
-	private IFile UMLFile;
+	private Activity activity;
 	private IProperties property;
 	private int counterExecution;
 	private static final Boolean XMLLock = Boolean.TRUE;
@@ -41,11 +41,11 @@ public class AlloyExecutor implements IAlloyExecutor {
 	/**
 	 * Constructeur
 	 */
-	public AlloyExecutor(IFile UMLFile, String dirDestination, IProperties property, int counterExecution) {
+	public AlloyExecutor(Activity activity, String dirDestination, IProperties property, int counterExecution) {
 
 		super();
-		this.generator = GeneratorFactory.getInstance().newAlloyGenerator(UMLFile, dirDestination, property);
-		this.UMLFile = UMLFile;
+		this.generator = GeneratorFactory.getInstance().newAlloyGenerator(activity, dirDestination, property);
+		this.activity = activity;
 		this.property = property;
 		this.counterExecution = counterExecution;
 	}
@@ -134,7 +134,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 		log.info(activityResult.getLogResult());
 
 		// On peut enfin retourner l'objet IFileResult
-		return ExecutorFactory.getInstance().newFileResult(counterExecution + ". " + UMLFile.getName(), activityResult);
+		return ExecutorFactory.getInstance().newFileResult(counterExecution + ". " + activity.getName(), activityResult);
 
 	}
 

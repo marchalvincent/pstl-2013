@@ -1,12 +1,12 @@
 package com.upmc.pstl2013.views.events;
 
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.alloyExecutor.ExecutorFactory;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
@@ -17,17 +17,17 @@ public class JobExecutor extends Job implements Runnable{
 
 	private Logger log = Logger.getLogger(JobExecutor.class);
 	private SwtView swtView;
-	private IFile UMLFile;
+	private Activity activity;
 	private IProperties property;
 	private String dirDestination;
 	private String nbState;
 	private JobExecutor jobToWait;
 	private int counterExecution;
 	
-	public JobExecutor(String name, SwtView swtView, IFile UMLFile, IProperties property, JobExecutor jobToWait, int counterExecution) {
+	public JobExecutor(String name, SwtView swtView, Activity activity, IProperties property, JobExecutor jobToWait, int counterExecution) {
 		super(name);
 		this.swtView = swtView;
-		this.UMLFile = UMLFile;
+		this.activity = activity;
 		this.property = property;
 		this.dirDestination = swtView.getUserDir();
 		this.nbState = "";
@@ -40,7 +40,7 @@ public class JobExecutor extends Job implements Runnable{
 
 		StringBuilder sbInfo = new StringBuilder();
 		sbInfo.append("Génération et exécution du fichier ");
-		sbInfo.append(UMLFile.getName());
+		sbInfo.append(activity.getName());
 		sbInfo.append(" : propriété ");
 		sbInfo.append(property.getClass().getSimpleName());
 		sbInfo.append(".\n");
@@ -62,7 +62,7 @@ public class JobExecutor extends Job implements Runnable{
 		StringBuilder result = new StringBuilder();
 
 		// 1. On créé l'objet exécutor
-		IAlloyExecutor alloyExecutor = ExecutorFactory.getInstance().newAlloyExecutor(UMLFile, dirDestination, property, counterExecution);
+		IAlloyExecutor alloyExecutor = ExecutorFactory.getInstance().newAlloyExecutor(activity, dirDestination, property, counterExecution);
 		
 		try {
 			// On lance l'exécution
@@ -75,7 +75,7 @@ public class JobExecutor extends Job implements Runnable{
 			showToDetails(iFileResult);
 			
 			result.append("Fin d'exécution du fichier ");
-			result.append(UMLFile.getName());
+			result.append(activity.getName());
 			result.append(" : propriété ");
 			result.append(property.getClass().getSimpleName());
 			result.append(".\n");

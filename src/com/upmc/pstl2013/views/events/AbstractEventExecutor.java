@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.widgets.Display;
+import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
@@ -38,24 +38,24 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		List<JobExecutor> listJobsExec = new ArrayList<JobExecutor>();
 
 		// 1. On récupère tous les fichiers UML
-		List<IFile> UMLFileSelected = swtView.getUMLFilesSelected();
+		List<Activity> activitiesSelected = swtView.getActivitiesSelected();
 
 		// 2. On récupère toutes les propriétés seléctionnées
 		List<IProperties> properties = null;
 		try {
 			properties = this.getProperties();
 			// 3a. Pour chaque fichier
-			for (IFile iFile : UMLFileSelected) {
+			for (Activity activity : activitiesSelected) {
 				// 3b. Pour chaque propriété
 				if (properties != null) {
 
 					// Dans un premier temps, on exécute la propriété EnoughState pour avoir le nombre de state 
 					// à utiliser avec les autres propriétés
-					JobExecutor jobEnough = this.execute(listJobsExec, iFile, properties, true, null);
+					JobExecutor jobEnough = this.execute(listJobsExec, activity, properties, true, null);
 					
 					
 					// Puis ensuite on lance l'exécution pour les autres propriétés avec la référence du premier job
-					this.execute(listJobsExec, iFile, properties, false, jobEnough);
+					this.execute(listJobsExec, activity, properties, false, jobEnough);
 				}
 			}
 			JobTimeout threadTimeout = new JobTimeout(listJobsExec, swtView.getTimeout(), swtView);
@@ -74,13 +74,13 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 	/**
 	 * Exécute un fichier als pour une propriété donnée.
 	 * @param listJobsExec La liste des {@link JobExecutor} en cours d'exécution.
-	 * @param iFile Le fichier als à exécuter.
+	 * @param {@link Activity} L'activité a éxécuter.
 	 * @param properties La {@link IProperties} d'exécution.
 	 * @param isEnoughState un booléen qui spécifie si on veut lancer la propriété {@link EnoughState} ou une autre.
 	 * @param jobToWait JobExecutor le job qui exécute (a exécuté) la propriété EnoughState ou null si c'est celui ci qui doit le faire.
 	 * @return JobExecutor Le {@link JobExecutor} qui vient d'être lancé.
 	 */
-	private JobExecutor execute(List<JobExecutor> listJobsExec, IFile iFile, List<IProperties> properties, boolean isEnoughState, JobExecutor jobToWait) {
+	private JobExecutor execute(List<JobExecutor> listJobsExec, Activity activity, List<IProperties> properties, boolean isEnoughState, JobExecutor jobToWait) {
 
 		IProperties TMPProperty = null;
 		JobExecutor jobExec = null;
@@ -92,8 +92,8 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 				TMPProperty = property.clone();
 
 				// On lance le job
-				String nomJob = "Execution Alloy de " + iFile.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
-				jobExec = RunFactory.getInstance().newJobExecutor(nomJob, swtView, iFile, TMPProperty, jobToWait, counterExecution);
+				String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
+				jobExec = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, jobToWait, counterExecution);
 				jobExec.setUser(true);
 				
 				swtView.getThreadPoolExecutor().execute(jobExec);
