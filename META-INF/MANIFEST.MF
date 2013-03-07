@@ -12,3 +12,5 @@ Bundle-RequiredExecutionEnvironment: JavaSE-1.6
 Bundle-ClassPath: jars/alloy4.2.jar,
  jars/log4j-1.2.14.jar,
  .
+Import-Package: org.eclipse.search.internal.ui,
+ org.eclipse.ui.ide
