@@ -11,6 +11,7 @@ import org.eclipse.swt.widgets.TreeItem;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
+import com.upmc.pstl2013.views.ETreeType;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventSelectTreeProperty implements Listener {
@@ -34,15 +35,15 @@ public class EventSelectTreeProperty implements Listener {
 
 		TreeItem currentItem =(TreeItem) event.item;
 		//Permet de ne rien faire si l'on clique sur une famille
-		if((currentItem.getData()!=null && currentItem.getData().equals("FamilyItem"))) {
+		if((currentItem.getData()!=null && currentItem.getData().equals(ETreeType.FAMILY))) {
 			if (event.detail == SWT.CHECK){
 				for (TreeItem item : currentItem.getItems()) {
 					item.setChecked(currentItem.getChecked() || (!(Boolean)item.getData()));
 				}
 			}
 		}
-		//Selection d'une preperty
-		else {
+		//Selection d'une property
+		else if (currentItem.getData()!=null && !currentItem.getData().equals(ETreeType.DYNAMIC_PROPERTY)){
 			if (currentItem != null) {
 				if (currentItem.getText().equals("EnoughState"))
 					currentItem.setChecked(true);

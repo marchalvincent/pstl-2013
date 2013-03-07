@@ -13,7 +13,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import com.upmc.pstl2013.bouchon.Bouchon;
+import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.EDynamicBusiness;
+import com.upmc.pstl2013.views.SwtView;
 
 /**
  * Popup permettant de saisir de nouvelles proprietes pour la famille BUISINESS
@@ -26,10 +28,12 @@ public class DialogBuisiness extends ApplicationWindow {
 	private Combo cboType;
 	private Composite composite;
 	private List<Combo> listCombo;
+	private SwtView swtView;
 
-	public DialogBuisiness(Shell parentShell) {
+	public DialogBuisiness(Shell parentShell, SwtView swtView) {
 		super(parentShell);
 		parentShell.setMinimumSize(300,300);
+		this.swtView = swtView;
 		
 	}
 
@@ -51,7 +55,9 @@ public class DialogBuisiness extends ApplicationWindow {
 		txtDescription.setEnabled(false);
 		txtDescription.setText("Description");
 		GridData gd_txtDescription = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 2);
-		gd_txtDescription.heightHint =40;
+		gd_txtDescription.minimumWidth = 400;
+		gd_txtDescription.minimumHeight = 40;
+		gd_txtDescription.heightHint =60;
 		txtDescription.setLayoutData(gd_txtDescription);
 		
 		EDynamicBusiness[] tabEnum = EDynamicBusiness.values();
@@ -82,7 +88,7 @@ public class DialogBuisiness extends ApplicationWindow {
 		btnSubmit = new Button(composite, SWT.NONE);
 		btnSubmit.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 2, 1));
 		btnSubmit.setText("Submit");
-		//TODO : Michel Add listener
+		btnSubmit.addMouseListener(new EventClickSubmit(swtView, this));
 		
 		
 		composite.pack();
@@ -102,6 +108,17 @@ public class DialogBuisiness extends ApplicationWindow {
 		}
 		if (btnSubmit != null)
 			btnSubmit.dispose();
+	}
+
+	public DynamicBusiness getSelectedBuisiness() {
+		DynamicBusiness dBuisiness = new DynamicBusiness(txtNom.getText(), EDynamicBusiness.valueOf(cboType.getText()));
+		int cpt = 0;
+		for (Combo cbo : listCombo) {
+			dBuisiness.addNode(cpt, cbo.getText());
+			cpt++;
+		}
+		return dBuisiness;
+		
 	}
 
 }
