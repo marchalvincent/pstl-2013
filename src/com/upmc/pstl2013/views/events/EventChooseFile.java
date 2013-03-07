@@ -74,6 +74,10 @@ public class EventChooseFile extends MouseAdapter {
 			
 			sb.append(name);
 			sb.append(" ");
+			
+			//Rend possible l'ajout de Property dynamiquement pour Buisiness
+			//Si le nombre d'activity == 1
+			swtView.setEnabledAddActivity(activitiesSelected.size()==1);
 		}
 		sb.append("\n");
 		sb.append(parsing.toString());
