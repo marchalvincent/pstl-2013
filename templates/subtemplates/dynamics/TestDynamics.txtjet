@@ -1,0 +1,29 @@
+<%@ jet package="com.upmc.pstl2013.properties.dynamic.impl" class="TestDynamicsTemplate" 
+	imports="org.apache.log4j.Logger
+			com.upmc.pstl2013.alloyGenerator.jet.*
+			com.upmc.pstl2013.properties.*
+			com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness"
+	skeleton="./dynamics.skeleton" %>
+<% 
+	final Logger log = Logger.getLogger(TestDynamicsTemplate.class);
+	if (!(argument instanceof IProperties)) {
+		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
+		log.error(error);
+		throw new JetException(error);
+	}
+
+	IProperties propertie = (IProperties) argument;
+	final String predicatName = propertie.getString("predicatName");
+%>
+
+pred <%=predicatName%> {
+	// TODO predicat en fonction de la propriété dynamique
+}
+
+<%
+	final String inc = propertie.getString("nbState");
+	final String nbObjects = propertie.getString("nbObjects");
+	final String nbNodes = propertie.getString("nbNodes");
+	final String nbEdges = propertie.getString("nbEdges");
+%>
+check {<%=predicatName%>} for <%=inc%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge expect 0
