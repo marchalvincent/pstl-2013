@@ -77,6 +77,10 @@ public class EventChooseFolderExec extends MouseAdapter{
 			log.error(e1.getMessage());
 			swtView.getTxtLogs().append(sb.toString() + "\n" + e1.getMessage() + ".\n");
 		}
+		
+		//Rend possible l'ajout de Property dynamiquement pour Buisiness
+		//Si le nombre d'activity == 1
+		swtView.setEnabledAddActivity(activitiesSelected.size()==1);
 	}
 
 	private String addFolder(IResource[] resources) throws CoreException {
