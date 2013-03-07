@@ -12,7 +12,6 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
-import com.upmc.pstl2013.properties.dynamic.EDynamicBusiness;
 import com.upmc.pstl2013.umlParser.IUMLParser;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 
@@ -65,19 +64,25 @@ public class UMLParser implements IUMLParser {
 		return this.cleanActivity(activity);
 	}
 	
+	/**
+	 * Nettoie l'activité de manière générale.
+	 * @param activity {@link Activity}
+	 * @return {@link Activity}.
+	 */
 	private Activity cleanActivity(Activity activity) {
 		
 		// on traite les "sans noms"
 		this.cleanNodesWithoutName(activity.getNodes());
 		this.cleanEdgesWithoutName(activity.getEdges());
 		
-		// on clean les noms incorrects
-		this.cleanNodes(activity.getNodes());
-		this.cleanEdges(activity.getEdges());
+		// on clean les noms incorrects syntaxiquement
+		this.cleanNodesName(activity.getNodes());
+		this.cleanEdgesName(activity.getEdges());
 		
 		return activity;
 	}
 	
+
 	/**
 	 * Ajoute un nom par défaut aux noeuds qui n'en n'ont pas.
 	 * @param nodes la liste des {@link ActivityNode}.
@@ -108,15 +113,15 @@ public class UMLParser implements IUMLParser {
 		}
 	}
 	
-
 	/**
 	 * Nettoie les noms des noeuds par rapport à la syntax d'Alloy.
 	 * 
 	 * @param nodes la liste des noeuds à nettoyer.
 	 */
-	private void cleanNodes(EList<ActivityNode> nodes) {
+	private void cleanNodesName(EList<ActivityNode> nodes) {
 		for (ActivityNode activityNode : nodes) {
 			activityNode.setName(activityNode.getName().replace("-", ""));
+			activityNode.setName("gen_" + activityNode.getName());
 		}
 	}
 
@@ -125,9 +130,11 @@ public class UMLParser implements IUMLParser {
 	 * 
 	 * @param egdes la liste des arcs à nettoyer.
 	 */
-	private void cleanEdges(EList<ActivityEdge> egdes) {
-		for (ActivityEdge activityEdges : egdes) {
-			activityEdges.setName(activityEdges.getName().replace("-", ""));
+	private void cleanEdgesName(EList<ActivityEdge> egdes) {
+		for (ActivityEdge activityEdge : egdes) {
+			activityEdge.setName(activityEdge.getName().replace("-", ""));
+			activityEdge.setName("gen_" + activityEdge.getName());
 		}
 	}
+
 }

@@ -66,9 +66,26 @@ one sig P extends Performer {} {
 	
 	stringBuffer.append(NL + NL + "------Generated Edges------" + NL);
 	for (ActivityEdge edge : edges) {
+	
+		// la source
+		String source = null;
+		if (edge.getSource() != null && edge.getSource().getName() != null) {
+			source = edge.getSource().getName();
+		} else {
+			source = "none";
+		}
+		
+		// la destination
+		String target = null;
+		if (edge.getTarget() != null && edge.getTarget().getName() != null) {
+			target = edge.getTarget().getName();
+		} else {
+			target = "none";
+		}
+	
 		stringBuffer.append("one sig " + edge.getName() + " extends " + edge.eClass().getName() + " {}{" + NL);
-		stringBuffer.append("    source = " + edge.getSource().getName() + NL);
-		stringBuffer.append("    target = " + edge.getTarget().getName() + NL);
+		stringBuffer.append("    source = " + source + NL);
+		stringBuffer.append("    target = " + target + NL);
 		stringBuffer.append("}" + NL);
 	}
 
