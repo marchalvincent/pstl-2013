@@ -23,16 +23,16 @@ public class JobExecutor extends Job {
 	private String nbState;
 	private JobExecutor jobToWait;
 	private int counterExecution;
-	
+
 	public JobExecutor(String name, SwtView swtView, Activity activity, IProperties property, JobExecutor jobToWait, int counterExecution) {
 		super(name);
 		this.swtView = swtView;
 		this.activity = activity;
 		this.property = property;
-		this.dirDestination = swtView.getUserDir();
-		this.nbState = "";
 		this.jobToWait = jobToWait;
 		this.counterExecution = counterExecution;
+		this.dirDestination = swtView.getUserDir();
+		this.nbState = null;
 	}
 
 	@Override
@@ -46,40 +46,39 @@ public class JobExecutor extends Job {
 		sbInfo.append(".\n");
 		log.info(sbInfo.toString());
 		showToView(sbInfo.toString());
-		
-		// Si on a un job à attendre, on se "join" sur lui
-		if (jobToWait != null) {
-			try {
-				jobToWait.join();
-			} catch (InterruptedException e) {
-				log.error("Impossible d'attendre le thread, il a été interrompu...");
-			}
 
-			// Puis on spécifie la nouvelle variable nbState du job qui vient de finir (EnoughState).
+		// Si on a un job à attendre, on récupère son nombre de state
+		if (jobToWait != null) {
+			// la méthode est bloquante tant que le jobToWait n'a pas fini
 			property.put("nbState", jobToWait.getNbState());
 		}
-		
+
 		StringBuilder result = new StringBuilder();
 
 		// 1. On créé l'objet exécutor
 		IAlloyExecutor alloyExecutor = ExecutorFactory.getInstance().newAlloyExecutor(activity, dirDestination, property, counterExecution);
-		
+
 		try {
 			// On lance l'exécution
 			IFileResult iFileResult = alloyExecutor.executeFiles();
-			
-			// On récupère le nombre de state (utile quand on exécute EnoughState)
-			nbState = iFileResult.getActivityResult().getNbState();
-			
+
+			synchronized (this) {
+				// On récupère le nombre de state (utile quand on exécute EnoughState)
+				nbState = iFileResult.getActivityResult().getNbState();
+				
+				//Une fois qu'on a le nbState, on notifie tout ceux qui se sont endormi sur nous.
+				this.notifyAll();
+			}
+
 			// Puis on affiche les résultats sur l'interface graphique
 			showToDetails(iFileResult);
-			
+
 			result.append("End of ");
 			result.append(activity.getName());
 			result.append(" : property ");
 			result.append(property.getClass().getSimpleName());
 			result.append(".\n");
-			
+
 			log.info(result.toString());
 			showToView(result.toString());
 		} catch (Exception e) {
@@ -94,12 +93,27 @@ public class JobExecutor extends Job {
 	private void showToView(String msg){
 		Display.getDefault().asyncExec(new RunnableUpdateExecutor(swtView, msg));
 	}
-	
+
 	private void showToDetails(IFileResult iFileResult){
 		Display.getDefault().asyncExec(new RunnableUpdateDetails(swtView, iFileResult));
 	}
-	
+
+	/**
+	 * Méthode qui renvoie le nombre de state qu'a pris le job pour satisfaire 
+	 * la vérification du process. 
+	 * La méthode est bloquante tant que le job n'a pas fini son exécution.
+	 */
 	public String getNbState() {
+		// si le nbState n'est pas encore initialisé, on wait
+		synchronized (this) {
+			if (nbState == null) {
+				try {
+					this.wait();
+				} catch (InterruptedException e) {
+					log.warn("Job interrompu pendant l'attente du nbState.");
+				}
+			}
+		}
 		return nbState;
 	}
 }
