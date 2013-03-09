@@ -54,7 +54,7 @@ public class MyJobPoolExecutor {
 		
 		MyThreadWorker t;
 		for (int i = 0; i < nbMaxThread; i++) {
-			t = new MyThreadWorker(this, i);
+			t = new MyThreadWorker(this, i+1);
 			workers.add(t);
 			t.start();
 		}
@@ -65,6 +65,7 @@ public class MyJobPoolExecutor {
 	 */
 	@SuppressWarnings("deprecation")
 	public String killWorkers() {
+		jobs.clear();
 		StringBuilder sb = new StringBuilder();
 		for (MyThreadWorker t : workers) {
 			if (t.isAlive()) {
