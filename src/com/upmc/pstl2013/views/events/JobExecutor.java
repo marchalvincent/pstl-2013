@@ -39,9 +39,9 @@ public class JobExecutor extends Job {
 	protected IStatus run(IProgressMonitor monitor) {
 
 		StringBuilder sbInfo = new StringBuilder();
-		sbInfo.append("Génération et exécution du fichier ");
+		sbInfo.append("Generation and execution of ");
 		sbInfo.append(activity.getName());
-		sbInfo.append(" : propriété ");
+		sbInfo.append(" : property ");
 		sbInfo.append(property.getClass().getSimpleName());
 		sbInfo.append(".\n");
 		log.info(sbInfo.toString());
@@ -74,9 +74,9 @@ public class JobExecutor extends Job {
 			// Puis on affiche les résultats sur l'interface graphique
 			showToDetails(iFileResult);
 			
-			result.append("Fin d'exécution du fichier ");
+			result.append("End of ");
 			result.append(activity.getName());
-			result.append(" : propriété ");
+			result.append(" : property ");
 			result.append(property.getClass().getSimpleName());
 			result.append(".\n");
 			
