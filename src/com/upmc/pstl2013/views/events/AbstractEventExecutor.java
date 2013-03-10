@@ -35,11 +35,11 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		counterExecution++;
 		
 		// 1. On enregistre dans les préférences les options
-		swtView.saveOption(swtView);
+		swtView.getDataView().saveOption(swtView);
 		
 		// 2. On créé notre pool de job
 		int nbThreads = ConfPropertiesManager.getInstance().getNbThreads();
-		MyJobPoolExecutor jobPoolExecutor = EventFactory.getInstance().newJobPoolExecutor(nbThreads);
+		MyJobPoolExecutor jobPoolExecutor = RunFactory.getInstance().newJobPoolExecutor(nbThreads);
 
 		// 3. On récupère tous les process
 		List<Activity> activitiesSelected = swtView.getActivitiesSelected();
@@ -84,11 +84,11 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 			threadTimeout.schedule();
 		} catch (PropertiesException e) {
 			log.error(e.getMessage());
-			swtView.showToView(e.getMessage());
+			swtView.getDataView().showToViewUse(e.getMessage());
 		}
 		
 		// 4. On enregistre dans les préférences les propriétés
-		swtView.saveProperties(properties);
+		swtView.getDataView().saveProperties(properties);
 	}
 
 	/**

@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ThreadPoolExecutor;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -15,7 +14,6 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -35,10 +33,8 @@ import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.util.Utils;
 import com.upmc.pstl2013.views.events.EventFactory;
-import com.upmc.pstl2013.views.events.RunnableUpdateExecutor;
 
 public class SwtView extends Composite {
-
 
 	private Button btnChooseDir;
 	private Text txtDirectory;
@@ -73,13 +69,12 @@ public class SwtView extends Composite {
 	private String separator = File.separator;
 	private String userDir;
 	private List<Activity> activities;
-	private ThreadPoolExecutor threadPoolExecutor;
 	private HashMap<String,DynamicBusiness> listDynamicBuisiness;
+	private DataView dataView;
 	private Logger log = Logger.getLogger(SwtView.class);
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
-
 
 	/**
 	 * Create the composite.
@@ -93,6 +88,7 @@ public class SwtView extends Composite {
 
 		activities = new ArrayList<Activity>();
 		listDynamicBuisiness = new HashMap<String, DynamicBusiness>();
+		dataView = RunFactory.getInstance().newDataView(this);
 		
 		if (ConfPropertiesManager.getInstance().getPathFolder().equals("")) {
 			userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
@@ -232,7 +228,6 @@ public class SwtView extends Composite {
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
 
-		
 		/*
 		 *Debut de la partie Properties
 		 */
@@ -249,7 +244,6 @@ public class SwtView extends Composite {
 		/*
 		 *Debut de la partie Details
 		 */
-		
 		txtDetailsLogs = new Text(cpItemDetails, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
 
@@ -262,7 +256,6 @@ public class SwtView extends Composite {
 		/*
 		 *Debut de la partie Options
 		 */
-
 		lblTimeout = new Label(cpItemOptions, SWT.NONE);
 		lblTimeout.setAlignment(SWT.CENTER);
 		lblTimeout.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
@@ -315,12 +308,9 @@ public class SwtView extends Composite {
 		});
 		btnAddbuisiness.addMouseListener(EventFactory.getInstance().newEventClickAddBuisiness(this));
 	
-
-
 		//Suppression des anciens logs
 		deleteOldLogs();
 	}
-
 
 	/**
 	 * Affiche toutes les proprietes dans la view.
@@ -362,8 +352,7 @@ public class SwtView extends Composite {
 				else
 					allChecked = false;
 				
-				if (family.equals(Behavior.BUISINESS.toString()))
-				{
+				if (family.equals(Behavior.BUISINESS.toString())) {
 					//Ajout des propeties dynamique :
 					for (DynamicBusiness dynaBuisiness : listDynamicBuisiness.values()) {
 						lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
@@ -371,16 +360,11 @@ public class SwtView extends Composite {
 						lItem1.setData(ETreeType.DYNAMIC_PROPERTY);
 						lItem1.setChecked(true);
 					}
-					
 				}
-				
 			}
 			lItem0.setChecked(allChecked);
 		}
-		
-
 	}
-
 
 	/**
 	 * Supprime tous les logs générés à la derniere utilisation du plugin.
@@ -426,12 +410,11 @@ public class SwtView extends Composite {
 		IActivityResult actResult = fileResult.getActivityResult();
 		TreeItem item1 = new TreeItem(item0, 0);
 		item1.setText(actResult.getNom());
-		item1.setData(actResult);	
-
+		item1.setData(actResult);
 	}
 
 	public void updateTreePropety(DynamicBusiness buisiness) {
-		listDynamicBuisiness.put(buisiness.getName(),buisiness);
+		listDynamicBuisiness.put(buisiness.getName(), buisiness);
 		addPropertiesToTree();
 		
 	}
@@ -439,56 +422,6 @@ public class SwtView extends Composite {
 	public void clearDynamicBuisiness(){
 		listDynamicBuisiness.clear();
 		addPropertiesToTree();
-	}
-	
-
-	/**
-	 * Met à jour les préférences des propriétés.
-	 * @param la liste des {@link IProperties}.
-	 */
-	public void saveProperties(List<IProperties> properties) {
-		if (properties != null) {
-			StringBuilder sb = new StringBuilder();
-			for (IProperties prop : properties) {
-				sb.append(prop.getName());
-				sb.append("|");
-			}
-			try {
-				ConfPropertiesManager.getInstance().setProperties(sb.toString());
-			} catch (Exception e) {
-				log.error(e.getMessage());
-				showToView(e.getMessage());
-			}
-		}
-	}
-	
-	/**
-	 * Met à jour les préférences des options.
-	 * @param swtView
-	 */
-	public void saveOption(SwtView swtView) {
-		
-		// 1. On spécifie les préférence à la ConfPropertiesManager
-		try {
-			ConfPropertiesManager.getInstance().setTimeOut(String.valueOf(swtView.getTimeout()));
-			ConfPropertiesManager.getInstance().setNbNodes(swtView.getNbNodesMax());
-			ConfPropertiesManager.getInstance().setNbThreads(swtView.getNbThread());
-		} catch (Exception e) {
-			log.error(e.getMessage());
-			showToView(e.getMessage());
-		}
-		
-		// 2. On enregistre dans le fichier les conf
-		try {
-			ConfPropertiesManager.getInstance().store();
-		} catch (IOException e) {
-			showToView(e.getMessage());
-			log.error(e.getMessage());
-		}
-	}
-	
-	public void showToView(String msg){
-		Display.getDefault().asyncExec(new RunnableUpdateExecutor(this, msg));
 	}
 
 	public Text getTxtDirectory() {
@@ -569,16 +502,15 @@ public class SwtView extends Composite {
 		return txtNbThreads.getText();
 	}
 
-	public ThreadPoolExecutor getThreadPoolExecutor() {
-		return threadPoolExecutor;
-	}
-
-
 	public void setEnabledAddActivity(boolean isEnabled) {
 		btnAddbuisiness.setEnabled(isEnabled);
 	}
 	
 	public DynamicBusiness getListDynamicBuisiness(String namePropBuisiness) {
 		return listDynamicBuisiness.get(namePropBuisiness);
+	}
+	
+	public DataView getDataView() {
+		return dataView;
 	}
 }

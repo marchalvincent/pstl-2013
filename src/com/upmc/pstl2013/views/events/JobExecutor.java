@@ -5,7 +5,6 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.alloyExecutor.ExecutorFactory;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
@@ -54,7 +53,7 @@ public class JobExecutor extends Job {
 		sbInfo.append(property.getName());
 		sbInfo.append(".\n");
 		log.info(sbInfo.toString());
-		showToView(sbInfo.toString());
+		swtView.getDataView().showToViewUse(sbInfo.toString());
 
 		// Si on a un job à attendre, on récupère son nombre de state
 		if (jobToWait != null) {
@@ -80,7 +79,7 @@ public class JobExecutor extends Job {
 			}
 
 			// Puis on affiche les résultats sur l'interface graphique
-			showToDetails(iFileResult);
+			swtView.getDataView().showToViewDetails(iFileResult);
 
 			result.append("End of ");
 			result.append(activity.getName());
@@ -89,7 +88,7 @@ public class JobExecutor extends Job {
 			result.append(".\n");
 
 			log.info(result.toString());
-			showToView(result.toString());
+			swtView.getDataView().showToViewUse(result.toString());
 		} catch (Exception e) {
 			final StringBuilder sb = new StringBuilder(activity.getName());
 			sb.append(" : property ");
@@ -98,19 +97,11 @@ public class JobExecutor extends Job {
 			sb.append(e.getMessage());
 			sb.append("\n");
 			log.error(sb.toString());
-			showToView(sb.toString());
+			swtView.getDataView().showToViewUse(sb.toString());
 			return Status.CANCEL_STATUS;
 		}
 
 		return Status.OK_STATUS;
-	}
-
-	private void showToView(String msg){
-		Display.getDefault().asyncExec(new RunnableUpdateExecutor(swtView, msg));
-	}
-
-	private void showToDetails(IFileResult iFileResult){
-		Display.getDefault().asyncExec(new RunnableUpdateDetails(swtView, iFileResult));
 	}
 
 	/**

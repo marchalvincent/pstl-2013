@@ -6,11 +6,9 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
 import org.eclipse.core.runtime.jobs.Job;
-import org.eclipse.swt.widgets.Display;
 import com.upmc.pstl2013.views.SwtView;
 import com.upmc.pstl2013.views.events.JobExecutor;
 import com.upmc.pstl2013.views.events.MyJobPoolExecutor;
-import com.upmc.pstl2013.views.events.RunnableUpdateExecutor;
 
 public class JobTimeout extends Job {
 
@@ -53,16 +51,10 @@ public class JobTimeout extends Job {
 
 		if(!isEnd) {
 			String returns = jobPool.killWorkers();
-			showToView(returns);
+			swtView.getDataView().showToViewUse(returns);
 		}
 		
 		log.debug("/!\\ Fin du thread timeOut.\n");
 		return Status.OK_STATUS;
 	}
-
-	private void showToView(String msg){
-		Display.getDefault().asyncExec(new RunnableUpdateExecutor(swtView, msg));
-	}
-
-
 }
