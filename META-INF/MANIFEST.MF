@@ -1,0 +1,16 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Pstl-2013
+Bundle-SymbolicName: pstl-2013; singleton:=true
+Bundle-Version: 1.0.0.qualifier
+Bundle-Activator: com.upmc.pstl2013.views.Activator
+Require-Bundle: org.eclipse.core.runtime,
+ org.eclipse.uml2.uml;bundle-version="4.0.1",
+ org.eclipse.emf.common.ui;bundle-version="2.7.0"
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.6
+Bundle-ClassPath: jars/alloy4.2.jar,
+ jars/log4j-1.2.14.jar,
+ .
+Import-Package: org.eclipse.search.internal.ui,
+ org.eclipse.ui.ide
