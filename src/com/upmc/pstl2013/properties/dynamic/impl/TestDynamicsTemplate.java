@@ -18,7 +18,7 @@ public class TestDynamicsTemplate extends AbstractStrategyDynamicBusiness implem
 
   public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl;
   protected final String TEXT_1 = NL + "pred ";
-  protected final String TEXT_2 = " {" + NL + "\t// TODO predicat en fonction de la propriété dynamique" + NL + "}" + NL;
+  protected final String TEXT_2 = " {" + NL + "\t// TODO predicat en fonction de la propriété dynamique" + NL + "\tpredicat de vincent en dynamique ici" + NL + "}" + NL;
   protected final String TEXT_3 = NL + "check {";
   protected final String TEXT_4 = "} for ";
   protected final String TEXT_5 = " State, ";

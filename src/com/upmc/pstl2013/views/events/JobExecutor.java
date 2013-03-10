@@ -91,8 +91,14 @@ public class JobExecutor extends Job {
 			log.info(result.toString());
 			showToView(result.toString());
 		} catch (Exception e) {
-			log.error(e.getMessage());
-			showToView(e.getMessage());
+			final StringBuilder sb = new StringBuilder(activity.getName());
+			sb.append(" : property ");
+			sb.append(property.getClass().getSimpleName());
+			sb.append(" -> ");
+			sb.append(e.getMessage());
+			sb.append("\n");
+			log.error(sb.toString());
+			showToView(sb.toString());
 			return Status.CANCEL_STATUS;
 		}
 
