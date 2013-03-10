@@ -19,8 +19,8 @@ public class EventChooseDir extends MouseAdapter {
 	private Logger log = Logger.getLogger(EventChooseDir.class);
 
 	/**
-	 * Constructor
-	 * @param {{@link SwtView}
+	 * Évènement permettant de sélectionner le répertoir ou sera stocker les fichier necessaire à  l'utilisation du plugIn.
+	 * @param {@link SwtView}
 	 */
 	public EventChooseDir(SwtView swtView) {
 		super();

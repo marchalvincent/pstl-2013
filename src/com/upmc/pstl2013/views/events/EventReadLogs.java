@@ -16,8 +16,8 @@ public class EventReadLogs extends MouseAdapter {
 	private String nameLog;
 
 	/**
-	 * Constructor
-	 * @param {{@link SwtView}
+	 * Évènement permettant d'afficher dans le navigateur les logs.
+	 * @param {@link SwtView}
 	 */
 	public EventReadLogs(SwtView swtView,String nameLog) {
 

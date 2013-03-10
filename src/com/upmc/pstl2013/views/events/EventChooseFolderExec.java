@@ -28,7 +28,7 @@ public class EventChooseFolderExec extends MouseAdapter{
 	private StringBuilder sb;
 
 	/**
-	 * Constructor
+	 * Évènement permettant de sélectionner un dossier (les fichiers contenu dedans) à exécuter.
 	 * @param {{@link SwtView}
 	 */
 	public EventChooseFolderExec(SwtView swtView) {

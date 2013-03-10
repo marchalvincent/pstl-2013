@@ -14,8 +14,8 @@ public class EventClickSubmit extends MouseAdapter {
 	private Logger log = Logger.getLogger(EventClickSubmit.class);
 
 	/**
-	 * Constructor
-	 * @param {{@link SwtView}
+	 * Event du click sur le bouton submit : Met à jour la vue, ajoute les nouvelles properties et ferme la fenetre.
+	 * @param {@link SwtView}
 	 */
 	public EventClickSubmit(SwtView swtView, DialogBuisiness dialog) {
 		super();

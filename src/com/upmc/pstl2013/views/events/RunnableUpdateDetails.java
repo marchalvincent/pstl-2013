@@ -8,6 +8,12 @@ public class RunnableUpdateDetails implements Runnable {
 	private SwtView swtView;
 	private IFileResult fileResult;
 
+	/**
+	 * Runnable permmettant de mettre a jours le plugin apres l'execution d'un plugin.
+	 * Mise à jour de la partie détails.
+	 * @param swtView
+	 * @param iFileResult
+	 */
 	public RunnableUpdateDetails(SwtView swtView, IFileResult iFileResult) {
 		this.swtView = swtView;
 		this.fileResult = iFileResult;

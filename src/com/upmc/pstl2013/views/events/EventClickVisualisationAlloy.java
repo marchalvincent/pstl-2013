@@ -14,16 +14,17 @@ public class EventClickVisualisationAlloy extends MouseAdapter{
 	private SwtView swtView;
 	private String dirDestination;
 
+	/**
+	 * Affiche la visualisation d'alloy du resultat de l'exécution obtenu avec le {@link IActivityResult}.
+	 * l'{@link IActivityResult} est passé via le setData lors de sa création.
+	 * @param {@link SwtView}
+	 */
 	public EventClickVisualisationAlloy(SwtView swtView)
 	{
 		this.dirDestination = swtView.getUserDir();
 		this.swtView = swtView;
 	}
 
-	/**
-	 * Affiche la visualisation d'alloy du resultat de l'exécution obtenu avec le {@link IActivityResult}.
-	 * l'{@link IActivityResult} est passé via le setData lors de sa création.
-	 */
 	public void mouseDown(MouseEvent e) {
 
 		IActivityResult activityResult =  swtView.getCurrentActivityResult();

@@ -26,8 +26,8 @@ public class EventChooseFile extends MouseAdapter {
 	private SwtView swtView;
 
 	/**
-	 * Constructor
-	 * @param {{@link SwtView}
+	 * Évènement permettant de sélectionner les fichiers à exécuter.
+	 * @param {@link SwtView}
 	 */
 	public EventChooseFile(SwtView swtView) {
 		super();
