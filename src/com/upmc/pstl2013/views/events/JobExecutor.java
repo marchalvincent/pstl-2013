@@ -51,7 +51,7 @@ public class JobExecutor extends Job {
 		sbInfo.append("Generation and execution of ");
 		sbInfo.append(activity.getName());
 		sbInfo.append(" : property ");
-		sbInfo.append(property.getClass().getSimpleName());
+		sbInfo.append(property.getName());
 		sbInfo.append(".\n");
 		log.info(sbInfo.toString());
 		showToView(sbInfo.toString());
@@ -85,7 +85,7 @@ public class JobExecutor extends Job {
 			result.append("End of ");
 			result.append(activity.getName());
 			result.append(" : property ");
-			result.append(property.getClass().getSimpleName());
+			result.append(property.getName());
 			result.append(".\n");
 
 			log.info(result.toString());
@@ -93,7 +93,7 @@ public class JobExecutor extends Job {
 		} catch (Exception e) {
 			final StringBuilder sb = new StringBuilder(activity.getName());
 			sb.append(" : property ");
-			sb.append(property.getClass().getSimpleName());
+			sb.append(property.getName());
 			sb.append(" -> ");
 			sb.append(e.getMessage());
 			sb.append("\n");

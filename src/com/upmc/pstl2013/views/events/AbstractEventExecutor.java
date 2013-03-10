@@ -35,7 +35,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		counterExecution++;
 		
 		// 1. On enregistre dans les préférences les options
-		this.swtView.saveOption(swtView);
+		swtView.saveOption(swtView);
 		
 		// 2. On créé notre pool de job
 		int nbThreads = ConfPropertiesManager.getInstance().getNbThreads();
@@ -58,9 +58,9 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 					// On lance d'abord le enoughState
 					JobExecutor enoughState = null;
 					for (IProperties property : properties) {
-						if (property.getClass().getSimpleName().equals("EnoughState")) {
+						if (property.getName().equals("EnoughState")) {
 							TMPProperty = property.clone();
-							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
+							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getName() + "...";
 							enoughState = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, null, counterExecution);
 							jobPoolExecutor.addJob(enoughState, true);
 							break;
@@ -69,9 +69,9 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 					
 					// Puis ensuite les autres
 					for (IProperties property : properties) {
-						if (!property.getClass().getSimpleName().equals("EnoughState")) {
+						if (!property.getName().equals("EnoughState")) {
 							TMPProperty = property.clone();
-							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getClass().getSimpleName() + "...";
+							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getName() + "...";
 							job = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, enoughState, counterExecution);
 							jobPoolExecutor.addJob(job, false);
 						}
@@ -83,8 +83,8 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 			JobTimeout threadTimeout = new JobTimeout(jobPoolExecutor, swtView.getTimeout(), swtView);
 			threadTimeout.schedule();
 		} catch (PropertiesException e) {
-			swtView.showToView(e.getMessage());
 			log.error(e.getMessage());
+			swtView.showToView(e.getMessage());
 		}
 		
 		// 4. On enregistre dans les préférences les propriétés

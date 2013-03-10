@@ -5,12 +5,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -31,7 +26,6 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.wb.swt.SWTResourceManager;
-
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.Behavior;
@@ -39,7 +33,6 @@ import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
-import com.upmc.pstl2013.util.MyRejectedExecutionHandelerImpl;
 import com.upmc.pstl2013.util.Utils;
 import com.upmc.pstl2013.views.events.EventFactory;
 import com.upmc.pstl2013.views.events.RunnableUpdateExecutor;
@@ -326,8 +319,6 @@ public class SwtView extends Composite {
 
 		//Suppression des anciens logs
 		deleteOldLogs();
-
-		startPoolExecutor();
 	}
 
 
@@ -361,12 +352,12 @@ public class SwtView extends Composite {
 			for (IProperties elem : families.get(family)) {
 
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
-				lItem1.setText(elem.getClass().getSimpleName());
+				lItem1.setText(elem.getName());
 				boolean isModif = elem.isModifiable();
 				lItem1.setData(isModif);
 				if (!isModif) 
 					lItem1.setChecked(true);
-				else if (ConfPropertiesManager.getInstance().getProperties().contains(elem.getClass().getSimpleName()))
+				else if (ConfPropertiesManager.getInstance().getProperties().contains(elem.getName()))
 					lItem1.setChecked(true);
 				else
 					allChecked = false;
@@ -376,7 +367,7 @@ public class SwtView extends Composite {
 					//Ajout des propeties dynamique :
 					for (DynamicBusiness dynaBuisiness : listDynamicBuisiness.values()) {
 						lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
-						lItem1.setText(dynaBuisiness.getNom());
+						lItem1.setText(dynaBuisiness.getName());
 						lItem1.setData(ETreeType.DYNAMIC_PROPERTY);
 						lItem1.setChecked(true);
 					}
@@ -439,22 +430,8 @@ public class SwtView extends Composite {
 
 	}
 
-	private void startPoolExecutor() {
-		BlockingQueue<Runnable> worksQueue = new ArrayBlockingQueue<Runnable>(30);
-		RejectedExecutionHandler executionHandler = new MyRejectedExecutionHandelerImpl();
-		int poolSize = ConfPropertiesManager.getInstance().getNbThreads();
-		threadPoolExecutor = new ThreadPoolExecutor(poolSize, poolSize, 10, TimeUnit.SECONDS, worksQueue, executionHandler);
-		threadPoolExecutor.allowCoreThreadTimeOut(true);
-
-		// Starting the monitor thread as a daemon
-		/*Thread monitor = new Thread(new MyMonitorThread(threadPoolExecutor));
-		monitor.setDaemon(true);
-		monitor.start();*/
-	}
-	
-
 	public void updateTreePropety(DynamicBusiness buisiness) {
-		listDynamicBuisiness.put(buisiness.getNom(),buisiness);
+		listDynamicBuisiness.put(buisiness.getName(),buisiness);
 		addPropertiesToTree();
 		
 	}
@@ -473,14 +450,14 @@ public class SwtView extends Composite {
 		if (properties != null) {
 			StringBuilder sb = new StringBuilder();
 			for (IProperties prop : properties) {
-				sb.append(prop.getClass().getSimpleName());
+				sb.append(prop.getName());
 				sb.append("|");
 			}
 			try {
 				ConfPropertiesManager.getInstance().setProperties(sb.toString());
 			} catch (Exception e) {
-				showToView(e.getMessage());
 				log.error(e.getMessage());
+				showToView(e.getMessage());
 			}
 		}
 	}
@@ -497,8 +474,8 @@ public class SwtView extends Composite {
 			ConfPropertiesManager.getInstance().setNbNodes(swtView.getNbNodesMax());
 			ConfPropertiesManager.getInstance().setNbThreads(swtView.getNbThread());
 		} catch (Exception e) {
-			showToView(e.getMessage());
 			log.error(e.getMessage());
+			showToView(e.getMessage());
 		}
 		
 		// 2. On enregistre dans le fichier les conf

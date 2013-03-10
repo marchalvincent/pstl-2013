@@ -117,4 +117,10 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	 * @return
 	 */
 	boolean isModifiable();
+	
+	/**
+	 * Renvoie le nom de la propriété.
+	 * @return String.
+	 */
+	String getName();
 }
