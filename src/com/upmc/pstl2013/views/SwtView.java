@@ -20,6 +20,7 @@ import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.TabFolder;
 import org.eclipse.swt.widgets.TabItem;
@@ -41,6 +42,7 @@ import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.util.MyRejectedExecutionHandelerImpl;
 import com.upmc.pstl2013.util.Utils;
 import com.upmc.pstl2013.views.events.EventFactory;
+import com.upmc.pstl2013.views.events.RunnableUpdateExecutor;
 
 public class SwtView extends Composite {
 
@@ -460,6 +462,56 @@ public class SwtView extends Composite {
 	public void clearDynamicBuisiness(){
 		listDynamicBuisiness.clear();
 		addPropertiesToTree();
+	}
+	
+
+	/**
+	 * Met à jour les préférences des propriétés.
+	 * @param la liste des {@link IProperties}.
+	 */
+	public void saveProperties(List<IProperties> properties) {
+		if (properties != null) {
+			StringBuilder sb = new StringBuilder();
+			for (IProperties prop : properties) {
+				sb.append(prop.getClass().getSimpleName());
+				sb.append("|");
+			}
+			try {
+				ConfPropertiesManager.getInstance().setProperties(sb.toString());
+			} catch (Exception e) {
+				showToView(e.getMessage());
+				log.error(e.getMessage());
+			}
+		}
+	}
+	
+	/**
+	 * Met à jour les préférences des options.
+	 * @param swtView
+	 */
+	public void saveOption(SwtView swtView) {
+		
+		// 1. On spécifie les préférence à la ConfPropertiesManager
+		try {
+			ConfPropertiesManager.getInstance().setTimeOut(String.valueOf(swtView.getTimeout()));
+			ConfPropertiesManager.getInstance().setNbNodes(swtView.getNbNodesMax());
+			ConfPropertiesManager.getInstance().setNbThreads(swtView.getNbThread());
+		} catch (Exception e) {
+			showToView(e.getMessage());
+			log.error(e.getMessage());
+		}
+		
+		// 2. On enregistre dans le fichier les conf
+		try {
+			ConfPropertiesManager.getInstance().store();
+		} catch (IOException e) {
+			showToView(e.getMessage());
+			log.error(e.getMessage());
+		}
+	}
+	
+	public void showToView(String msg){
+		Display.getDefault().asyncExec(new RunnableUpdateExecutor(this, msg));
 	}
 
 	public Text getTxtDirectory() {

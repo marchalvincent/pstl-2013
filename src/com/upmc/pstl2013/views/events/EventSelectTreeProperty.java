@@ -43,8 +43,8 @@ public class EventSelectTreeProperty implements Listener {
 			}
 		}
 		//Selection d'une property
-		else if (currentItem.getData()!=null && !currentItem.getData().equals(ETreeType.DYNAMIC_PROPERTY)){
-			if (currentItem != null) {
+		else if (currentItem.getData()!=null && currentItem != null ){
+			if (!currentItem.getData().equals(ETreeType.DYNAMIC_PROPERTY)) {
 				if (currentItem.getText().equals("EnoughState"))
 					currentItem.setChecked(true);
 				showValueProperties(currentItem.getText());
