@@ -29,15 +29,6 @@ public class EventFactory {
 		return instance;
 	}
 	
-	/**
-	 * Créé un {@link MyJobPoolExecutor}.
-	 * @param nbMaxThread le nombre maximum de thread à lancer en même temps.
-	 */
-	public MyJobPoolExecutor newJobPoolExecutor(int nbMaxThread) {
-		return new MyJobPoolExecutor(nbMaxThread);
-	}
-	
-	
 	public EventCheckAttributes newEventCheckAttributes(){
 		return new EventCheckAttributes();
 	}
@@ -94,8 +85,5 @@ public class EventFactory {
 			DialogBuisiness dialogBuisiness) {
 		return new EventClickSubmit(swtView, dialogBuisiness);
 	}
-	
-	
-	
 	
 }
