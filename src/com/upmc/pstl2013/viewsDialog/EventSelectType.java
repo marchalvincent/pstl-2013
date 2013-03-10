@@ -27,7 +27,6 @@ public class EventSelectType extends SelectionAdapter {
 				break;
 			}
 		}
-		
 	}
 
 
