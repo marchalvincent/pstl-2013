@@ -13,8 +13,8 @@ public class EventClickAddBuisiness extends MouseAdapter {
 	//private Logger log = Logger.getLogger(EventClickAddBuisiness.class);
 
 	/**
-	 * Constructor
-	 * @param {{@link SwtView}
+	 *Évènement permettant de d'ajouter dynamiquement une propriété à la famille BUISINESS
+	 * @param {@link SwtView}
 	 */
 	public EventClickAddBuisiness(SwtView swtView) {
 		super();

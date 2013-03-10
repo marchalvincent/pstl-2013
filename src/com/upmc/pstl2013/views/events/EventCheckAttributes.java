@@ -5,6 +5,7 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TableItem;
+
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
@@ -14,7 +15,7 @@ public class EventCheckAttributes implements Listener {
 	private Logger log = Logger.getLogger(EventCheckAttributes.class);
 
 	/**
-	 * Constructor
+	 * Évènement permettant de sélectionner (checker)les attributs d'une propriété.
 	 */
 	public EventCheckAttributes() {}
 

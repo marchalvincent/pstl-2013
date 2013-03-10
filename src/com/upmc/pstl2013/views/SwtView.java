@@ -88,7 +88,7 @@ public class SwtView extends Composite {
 	private String userDir;
 	private List<Activity> activities;
 	private ThreadPoolExecutor threadPoolExecutor;
-	private List<DynamicBusiness> listDynamicBuisiness;
+	private HashMap<String,DynamicBusiness> listDynamicBuisiness;
 	private Logger log = Logger.getLogger(SwtView.class);
 
 	private static final String nameLogInfo = "logInfo.html";
@@ -106,7 +106,7 @@ public class SwtView extends Composite {
 		super(parent, style);
 
 		activities = new ArrayList<Activity>();
-		listDynamicBuisiness = new ArrayList<DynamicBusiness>();
+		listDynamicBuisiness = new HashMap<String, DynamicBusiness>();
 		
 		if (ConfPropertiesManager.getInstance().getPathFolder().equals("")) {
 			userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
@@ -381,7 +381,7 @@ public class SwtView extends Composite {
 				if (family.equals(Behavior.BUISINESS.toString()))
 				{
 					//Ajout des propeties dynamique :
-					for (DynamicBusiness dynaBuisiness : listDynamicBuisiness) {
+					for (DynamicBusiness dynaBuisiness : listDynamicBuisiness.values()) {
 						lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
 						lItem1.setText(dynaBuisiness.getNom());
 						lItem1.setData(ETreeType.DYNAMIC_PROPERTY);
@@ -461,7 +461,7 @@ public class SwtView extends Composite {
 	
 
 	public void updateTreePropety(DynamicBusiness buisiness) {
-		listDynamicBuisiness.add(buisiness);
+		listDynamicBuisiness.put(buisiness.getNom(),buisiness);
 		addPropertiesToTree();
 		
 	}
@@ -556,6 +556,9 @@ public class SwtView extends Composite {
 
 	public void setEnabledAddActivity(boolean isEnabled) {
 		btnAddbuisiness.setEnabled(isEnabled);
-		
+	}
+	
+	public DynamicBusiness getListDynamicBuisiness(String namePropBuisiness) {
+		return listDynamicBuisiness.get(namePropBuisiness);
 	}
 }

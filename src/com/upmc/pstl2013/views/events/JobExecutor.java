@@ -24,6 +24,15 @@ public class JobExecutor extends Job {
 	private JobExecutor jobToWait;
 	private int counterExecution;
 
+	/**
+	 * 
+	 * @param name, nom du job
+	 * @param swtView
+	 * @param activity
+	 * @param property
+	 * @param jobToWait
+	 * @param counterExecution
+	 */
 	public JobExecutor(String name, SwtView swtView, Activity activity, IProperties property, JobExecutor jobToWait, int counterExecution) {
 		super(name);
 		this.swtView = swtView;

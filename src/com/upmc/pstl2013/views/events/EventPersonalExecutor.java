@@ -14,7 +14,7 @@ public class EventPersonalExecutor extends AbstractEventExecutor {
 	private Text txtPersonalPropertie;
 
 	/**
-	 * Constructor
+	 * Évènement permettant de lancer une exéxution personnalisé en ajoutant de l'onformation saisie dans le plugin.
 	 * @param {{@link SwtView}
 	 */
 	public EventPersonalExecutor(SwtView swtView) {

@@ -21,7 +21,7 @@ public class EventSelectTreeProperty implements Listener {
 	private Logger log = Logger.getLogger(EventSelectTreeProperty.class);
 
 	/**
-	 * Constructor
+	 * Sélectionne les properties et/ou affiche leurs attributs.
 	 * @param {@link SwtView}
 	 */
 	public EventSelectTreeProperty(SwtView swtView) {

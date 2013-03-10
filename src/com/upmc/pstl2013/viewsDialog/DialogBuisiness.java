@@ -2,6 +2,8 @@ package com.upmc.pstl2013.viewsDialog;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -12,7 +14,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
-import com.upmc.pstl2013.bouchon.Bouchon;
+import org.eclipse.uml2.uml.ActivityNode;
+
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.EDynamicBusiness;
 import com.upmc.pstl2013.views.SwtView;
@@ -30,6 +33,12 @@ public class DialogBuisiness extends ApplicationWindow {
 	private List<Combo> listCombo;
 	private SwtView swtView;
 
+	
+	/**
+	 * Dialogue (fenetre) permettant d'jouter dynamiquement des property dans la famille Buisiness.
+	 * @param parentShell
+	 * @param swtView
+	 */
 	public DialogBuisiness(Shell parentShell, SwtView swtView) {
 		super(parentShell);
 		parentShell.setMinimumSize(300,300);
@@ -71,6 +80,7 @@ public class DialogBuisiness extends ApplicationWindow {
 		return super.createContents(parent);
 	}
 
+	//ajoute dynamiquement le contenu de la fenetre en fonction du type choisie
 	public void changeDialog(EDynamicBusiness enumBuisiness) {
 		
 		clearUI ();
@@ -80,23 +90,26 @@ public class DialogBuisiness extends ApplicationWindow {
 
 		for (int i = 0; i < enumBuisiness.getNbNodes(); i++) {
 			Combo cbo = new Combo(composite, SWT.NONE);
-			addListToCombo(Bouchon.getListNodesBouchons(), cbo);
-			cbo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
-			listCombo.add(cbo);
+			if (swtView.getActivitiesSelected().size() == 1)
+			{
+				addListToCombo(swtView.getActivitiesSelected().get(0).getNodes(), cbo);
+				cbo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+				listCombo.add(cbo);
+			}
 		}
 
 		btnSubmit = new Button(composite, SWT.NONE);
 		btnSubmit.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 2, 1));
 		btnSubmit.setText("Submit");
 		btnSubmit.addMouseListener(new EventClickSubmit(swtView, this));
-		
-		
+
 		composite.pack();
 	}
 	
-	private void addListToCombo(List<String> listNode, Combo cbo) {
-		for (String node : listNode) {
-			cbo.add(node);
+	//Ajout les elements au combo.
+	private void addListToCombo(EList<ActivityNode> eList, Combo cbo) {
+		for (ActivityNode node : eList) {
+			cbo.add(node.getName());
 		}
 	}
 	
@@ -118,7 +131,6 @@ public class DialogBuisiness extends ApplicationWindow {
 			cpt++;
 		}
 		return dBuisiness;
-		
 	}
 
 }

@@ -14,6 +14,12 @@ public class RunnableUpdateExecutor implements Runnable {
 	private Text txtLogs,txtDirectory;
 	private String message;
 	
+	/**
+	 * Runnable permettant de mettre à jours le plugin.
+	 * Met a jours la partie exécution. 
+	 * @param swtView
+	 * @param message
+	 */
 	public RunnableUpdateExecutor(SwtView swtView, String message) {
 		this.txtLogs = swtView.getTxtLogs();
 		this.txtDirectory = swtView.getTxtDirectory();

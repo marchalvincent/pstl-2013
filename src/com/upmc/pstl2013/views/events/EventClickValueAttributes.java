@@ -24,8 +24,8 @@ public class EventClickValueAttributes extends SelectionAdapter {
 	private Logger log = Logger.getLogger(EventClickValueAttributes.class);
 
 	/**
-	 * Constructor
-	 * @param {{@link SwtView}
+	 * Évènement permettant de cocher les attributs d'une property.
+	 * @param {@link SwtView}
 	 */
 	public EventClickValueAttributes(SwtView swtView) {
 
