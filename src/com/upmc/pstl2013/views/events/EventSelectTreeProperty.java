@@ -73,7 +73,7 @@ public class EventSelectTreeProperty implements Listener {
 				tabValuePropertiesString.removeAll();
 				tabValuePropertiesString.getColumn(0).setText("Attributes : " + nameProperty);
 				if (stringAttributes.size()>0) {
-					tabValuePropertiesString.addSelectionListener(new EventClickValueAttributes(swtView));		
+					tabValuePropertiesString.addSelectionListener(EventFactory.getInstance().newEventClickValueAttributes(swtView));		
 					for (String key : stringAttributes.keySet()) {
 						TableItem item = new TableItem(tabValuePropertiesString, SWT.NONE);
 						item.setText(0, key);
@@ -91,7 +91,7 @@ public class EventSelectTreeProperty implements Listener {
 				tabValuePropertiesBool.removeAll();
 				tabValuePropertiesBool.getColumn(0).setText("Attributes Vrai/Faux : " + nameProperty);
 				if (boolAttributes.size()>0) {
-					tabValuePropertiesBool.addListener(SWT.Selection, new EventCheckAttributes());
+					tabValuePropertiesBool.addListener(SWT.Selection, EventFactory.getInstance().newEventCheckAttributes());
 					for (String key : boolAttributes.keySet()) {
 						TableItem item = new TableItem(tabValuePropertiesBool, SWT.BORDER | SWT.CHECK | SWT.FULL_SELECTION | SWT.MULTI);
 						item.setText(0, key);

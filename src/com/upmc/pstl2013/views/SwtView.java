@@ -40,16 +40,7 @@ import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.util.MyRejectedExecutionHandelerImpl;
 import com.upmc.pstl2013.util.Utils;
-import com.upmc.pstl2013.views.events.EventChooseDir;
-import com.upmc.pstl2013.views.events.EventChooseFile;
-import com.upmc.pstl2013.views.events.EventChooseFolderExec;
-import com.upmc.pstl2013.views.events.EventClickAddBuisiness;
-import com.upmc.pstl2013.views.events.EventClickVisualisationAlloy;
-import com.upmc.pstl2013.views.events.EventCurrentExecutor;
-import com.upmc.pstl2013.views.events.EventPersonalExecutor;
-import com.upmc.pstl2013.views.events.EventReadLogs;
-import com.upmc.pstl2013.views.events.EventSelectTreeItemDetail;
-import com.upmc.pstl2013.views.events.EventSelectTreeProperty;
+import com.upmc.pstl2013.views.events.EventFactory;
 
 public class SwtView extends Composite {
 
@@ -231,7 +222,7 @@ public class SwtView extends Composite {
 		btnLogsInfos.setToolTipText("Open the infos logs");
 		btnLogsInfos.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnLogsInfos.setText("Logs");
-		btnLogsInfos.addMouseListener(new EventReadLogs(this,nameLogInfo));
+		btnLogsInfos.addMouseListener(EventFactory.getInstance().newEventReadLogs(this,nameLogInfo));
 
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
 		btnPersonalPropertie.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run_perso.gif"));
@@ -314,20 +305,20 @@ public class SwtView extends Composite {
 		addPropertiesToTree();
 
 		// ajout des events listener
-		btnChooserFile.addMouseListener(new EventChooseFile(this));
-		btnExcuterAlloy.addMouseListener(new EventCurrentExecutor(this));
-		btnLogsErrors.addMouseListener(new EventReadLogs(this, nameLogError));
-		btnPersonalPropertie.addMouseListener(new EventPersonalExecutor(this));
-		btnChooseFolderExec.addMouseListener(new EventChooseFolderExec(this));
-		btnAlloyVisualisation.addMouseListener(new EventClickVisualisationAlloy(this));
-		btnChooseDir.addMouseListener(new EventChooseDir(this));
+		btnChooserFile.addMouseListener(EventFactory.getInstance().newEventChooseFile(this));
+		btnExcuterAlloy.addMouseListener(EventFactory.getInstance().newEventCurrentExecutor(this));
+		btnLogsErrors.addMouseListener(EventFactory.getInstance().newEventReadLogs(this, nameLogError));
+		btnPersonalPropertie.addMouseListener(EventFactory.getInstance().newEventPersonalExecutor(this));
+		btnChooseFolderExec.addMouseListener(EventFactory.getInstance().newEventChooseFolderExec(this));
+		btnAlloyVisualisation.addMouseListener(EventFactory.getInstance().newEventClickVisualisationAlloy(this));
+		btnChooseDir.addMouseListener(EventFactory.getInstance().newEventChooseDir(this));
 		chkDetails.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ConfPropertiesManager.getInstance().setDetails(chkDetails.getSelection());
 			}
 		});
-		btnAddbuisiness.addMouseListener(new EventClickAddBuisiness(this));
+		btnAddbuisiness.addMouseListener(EventFactory.getInstance().newEventClickAddBuisiness(this));
 	
 
 
@@ -346,7 +337,7 @@ public class SwtView extends Composite {
 		treeProperties.removeAll();
 		
 		HashMap<String, List<IProperties>> families = new HashMap<String, List<IProperties>>();
-		treeProperties.addListener(SWT.Selection, new EventSelectTreeProperty(this));
+		treeProperties.addListener(SWT.Selection, EventFactory.getInstance().newEventSelectTreeProperty(this));
 
 		TreeItem lItem0 = null;
 		TreeItem lItem1 = null;
@@ -421,7 +412,7 @@ public class SwtView extends Composite {
 	 * @param {@link IFileResult} resultat de l'execution des fichiers.
 	 */
 	public void updateTreeExecResult(IFileResult fileResult) {
-		treeFilesExecuted.addListener(SWT.Selection, new EventSelectTreeItemDetail(this));
+		treeFilesExecuted.addListener(SWT.Selection, EventFactory.getInstance().newEventSelectTreeItemDetail(this));
 
 		TreeItem item0 = null;
 		// on regarde s'il n'y a pas déjà un résultat pour ce fichier

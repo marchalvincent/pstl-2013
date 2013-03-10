@@ -19,6 +19,7 @@ import org.eclipse.uml2.uml.ActivityNode;
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.EDynamicBusiness;
 import com.upmc.pstl2013.views.SwtView;
+import com.upmc.pstl2013.views.events.EventFactory;
 
 /**
  * Popup permettant de saisir de nouvelles proprietes pour la famille BUISINESS
@@ -57,7 +58,7 @@ public class DialogBuisiness extends ApplicationWindow {
 		cboType = new Combo(composite, SWT.NONE);
 		cboType.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		cboType.setText("Type of Buisiness");
-		cboType.addSelectionListener(new EventSelectType(this));
+		cboType.addSelectionListener(EventFactory.getInstance().newEventSelectType(this));
 		
 		txtDescription = new Text(composite, SWT.BORDER);
 		txtDescription.setEditable(false);
@@ -101,7 +102,7 @@ public class DialogBuisiness extends ApplicationWindow {
 		btnSubmit = new Button(composite, SWT.NONE);
 		btnSubmit.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 2, 1));
 		btnSubmit.setText("Submit");
-		btnSubmit.addMouseListener(new EventClickSubmit(swtView, this));
+		btnSubmit.addMouseListener(EventFactory.getInstance().newEventClickSubmit(swtView, this));
 
 		composite.pack();
 	}
