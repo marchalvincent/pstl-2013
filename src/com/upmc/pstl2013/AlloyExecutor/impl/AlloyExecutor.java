@@ -70,7 +70,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 			File generatedFile = generated.getFile();
 			// on créé un résultat pour cette activité si elle n'existe pas déjà
 			if (activityResult == null) {
-				activityResult = ExecutorFactory.getInstance().newActivityResult(property.getClass().getSimpleName());
+				activityResult = ExecutorFactory.getInstance().newActivityResult(property.getName());
 			}
 
 			try {

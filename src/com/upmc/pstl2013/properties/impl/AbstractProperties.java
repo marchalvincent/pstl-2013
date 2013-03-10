@@ -170,6 +170,11 @@ public abstract class AbstractProperties implements IProperties {
 		return isModifiable;
 	}
 	
+	@Override
+	public String getName() {
+		return this.getClass().getSimpleName();
+	}
+	
 	/**
 	 * Supprime la clé si elle existe. Ne fait rien sinon.
 	 * @param key

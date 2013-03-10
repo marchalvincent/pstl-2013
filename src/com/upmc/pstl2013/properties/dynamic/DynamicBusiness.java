@@ -57,7 +57,8 @@ public class DynamicBusiness extends AbstractProperties {
 	 * Getter sur le nom de la propriété.
 	 * @return String.
 	 */
-	public String getNom() {
+	@Override
+	public String getName() {
 		return this.nom;
 	}
 }

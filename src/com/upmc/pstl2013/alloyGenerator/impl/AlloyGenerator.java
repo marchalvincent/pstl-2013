@@ -69,7 +69,7 @@ public class AlloyGenerator implements IAlloyGenerator {
 		this.addNeddedFile();
 
 		String filename = activity.getName().substring(0, activity.getName().length() - 4);
-		String pathFile = dirDestination + "gen_" + filename + "_" + property.getClass().getSimpleName() + ".als";
+		String pathFile = dirDestination + "gen_" + filename + "_" + property.getName() + ".als";
 		log.info("Génération du fichier : " + pathFile + ".");
 
 		// On génère le contenu Alloy
