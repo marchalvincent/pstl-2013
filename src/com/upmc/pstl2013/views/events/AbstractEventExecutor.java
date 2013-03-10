@@ -1,12 +1,12 @@
 package com.upmc.pstl2013.views.events;
 
-import java.io.IOException;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.widgets.Display;
 import org.eclipse.uml2.uml.Activity;
+
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
@@ -35,7 +35,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		counterExecution++;
 		
 		// 1. On enregistre dans les préférences les options
-		this.saveOption(swtView);
+		this.swtView.saveOption(swtView);
 		
 		// 2. On créé notre pool de job
 		int nbThreads = ConfPropertiesManager.getInstance().getNbThreads();
@@ -83,11 +83,12 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 			JobTimeout threadTimeout = new JobTimeout(jobPoolExecutor, swtView.getTimeout(), swtView);
 			threadTimeout.schedule();
 		} catch (PropertiesException e) {
-			showToView(e.getMessage());
+			swtView.showToView(e.getMessage());
+			log.error(e.getMessage());
 		}
 		
 		// 4. On enregistre dans les préférences les propriétés
-		this.saveProperties(properties);
+		swtView.saveProperties(properties);
 	}
 
 	/**
@@ -95,50 +96,4 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 	 */
 	protected abstract List<IProperties> getProperties() throws PropertiesException;
 
-	/**
-	 * Met à jour les préférences des propriétés.
-	 * @param la liste des {@link IProperties}.
-	 */
-	private void saveProperties(List<IProperties> properties) {
-		if (properties != null) {
-			StringBuilder sb = new StringBuilder();
-			for (IProperties prop : properties) {
-				sb.append(prop.getClass().getSimpleName());
-				sb.append("|");
-			}
-			try {
-				ConfPropertiesManager.getInstance().setProperties(sb.toString());
-			} catch (Exception e) {
-				showToView(e.getMessage());
-			}
-		}
-	}
-	
-	/**
-	 * Met à jour les préférences des options.
-	 * @param swtView
-	 */
-	private void saveOption(SwtView swtView) {
-		
-		// 1. On spécifie les préférence à la ConfPropertiesManager
-		try {
-			ConfPropertiesManager.getInstance().setTimeOut(String.valueOf(swtView.getTimeout()));
-			ConfPropertiesManager.getInstance().setNbNodes(swtView.getNbNodesMax());
-			ConfPropertiesManager.getInstance().setNbThreads(swtView.getNbThread());
-		} catch (Exception e) {
-			showToView(e.getMessage());
-		}
-		
-		// 2. On enregistre dans le fichier les conf
-		try {
-			ConfPropertiesManager.getInstance().store();
-		} catch (IOException e) {
-			showToView(e.getMessage());
-		}
-	}
-
-	private void showToView(String msg){
-		log.error(msg);
-		Display.getDefault().asyncExec(new RunnableUpdateExecutor(swtView, msg));
-	}
 }
