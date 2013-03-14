@@ -1,4 +1,4 @@
-<%@ jet package="com.upmc.pstl2013.properties.dynamic.impl" class="AbsenceTemplate" 
+<%@ jet package="com.upmc.pstl2013.properties.dynamic.impl" class="ExistenceBetweenTemplate" 
 	imports="org.apache.log4j.Logger
 			com.upmc.pstl2013.alloyGenerator.jet.*
 			com.upmc.pstl2013.properties.*
@@ -6,7 +6,7 @@
 			com.upmc.pstl2013.properties.dynamic.DynamicBusiness"
 	skeleton="./dynamics.skeleton" %>
 <% 
-	final Logger log = Logger.getLogger(AbsenceTemplate.class);
+	final Logger log = Logger.getLogger(ExistenceBetweenTemplate.class);
 	if (!(argument instanceof IProperties)) {
 		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
 		log.error(error);
@@ -18,6 +18,8 @@
 	
 	final String[] dataParams = propertie.getDataParams();
 	final String nom = dataParams[0];
+	final String number1 = dataParams[1];
+	final String number2 = dataParams[2];
 	
 	final String inc = propertie.getString("nbState");
 	final String nbObjects = propertie.getString("nbObjects");
@@ -26,7 +28,7 @@
 %>
 
 pred <%=predicatName%> {
-	no s:State | s.getTokens[<%=nom%>] = 1
+	exist[<%=nom%>, <%=number1%>, <%=number2%>]
 }
 
 check {<%=predicatName%>} for <%=inc%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge expect 0

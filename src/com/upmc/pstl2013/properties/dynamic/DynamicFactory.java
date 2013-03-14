@@ -1,9 +1,9 @@
 package com.upmc.pstl2013.properties.dynamic;
 
 import com.upmc.pstl2013.properties.dynamic.impl.Absence;
-import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics1;
-import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics2;
-import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics3;
+import com.upmc.pstl2013.properties.dynamic.impl.Existence;
+import com.upmc.pstl2013.properties.dynamic.impl.ExistenceBetween;
+import com.upmc.pstl2013.properties.dynamic.impl.Presence;
 
 /**
  * Représente la factory des stratégies de génération alloy pour les propriétés créées dynamiquement
@@ -24,18 +24,20 @@ public class DynamicFactory {
 	public static DynamicFactory getInstance() {
 		return instance;
 	}
-	
-	public AbstractStrategyDynamicBusiness newTestDynamics1() {
-		return new TestDynamics1();
-	}
-	public AbstractStrategyDynamicBusiness newTestDynamics2() {
-		return new TestDynamics2();
-	}
-	public AbstractStrategyDynamicBusiness newTestDynamics3() {
-		return new TestDynamics3();
-	}
 
 	public AbstractStrategyDynamicBusiness newAbsence() {
 		return new Absence();
+	}
+	
+	public AbstractStrategyDynamicBusiness newPresence() {
+		return new Presence();
+	}
+	
+	public AbstractStrategyDynamicBusiness newExistence() {
+		return new Existence();
+	}
+	
+	public AbstractStrategyDynamicBusiness newExistenceBetween() {
+		return new ExistenceBetween();
 	}
 }

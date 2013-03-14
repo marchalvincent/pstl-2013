@@ -6,34 +6,36 @@ import com.upmc.pstl2013.properties.*;
 import com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 
-public class AbsenceTemplate extends AbstractStrategyDynamicBusiness implements IJetTemplate {
+public class ExistenceBetweenTemplate extends AbstractStrategyDynamicBusiness implements IJetTemplate {
 
   protected static String nl;
-  public static synchronized AbsenceTemplate create(String lineSeparator)
+  public static synchronized ExistenceBetweenTemplate create(String lineSeparator)
   {
     nl = lineSeparator;
-    AbsenceTemplate result = new AbsenceTemplate();
+    ExistenceBetweenTemplate result = new ExistenceBetweenTemplate();
     nl = null;
     return result;
   }
 
   public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl;
   protected final String TEXT_1 = NL + "pred ";
-  protected final String TEXT_2 = " {" + NL + "\tno s:State | s.getTokens[";
-  protected final String TEXT_3 = "] = 1" + NL + "}" + NL + "" + NL + "check {";
-  protected final String TEXT_4 = "} for ";
-  protected final String TEXT_5 = " State, ";
-  protected final String TEXT_6 = " Object, ";
-  protected final String TEXT_7 = " ActivityNode, ";
-  protected final String TEXT_8 = " ActivityEdge expect 0";
-  protected final String TEXT_9 = NL;
+  protected final String TEXT_2 = " {" + NL + "\texist[";
+  protected final String TEXT_3 = ", ";
+  protected final String TEXT_4 = ", ";
+  protected final String TEXT_5 = "]" + NL + "}" + NL + "" + NL + "check {";
+  protected final String TEXT_6 = "} for ";
+  protected final String TEXT_7 = " State, ";
+  protected final String TEXT_8 = " Object, ";
+  protected final String TEXT_9 = " ActivityNode, ";
+  protected final String TEXT_10 = " ActivityEdge expect 0";
+  protected final String TEXT_11 = NL;
 
 	@Override
 	public String generate(Object argument) throws JetException
   {
     final StringBuffer stringBuffer = new StringBuffer();
      
-	final Logger log = Logger.getLogger(AbsenceTemplate.class);
+	final Logger log = Logger.getLogger(ExistenceBetweenTemplate.class);
 	if (!(argument instanceof IProperties)) {
 		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
 		log.error(error);
@@ -45,6 +47,8 @@ public class AbsenceTemplate extends AbstractStrategyDynamicBusiness implements 
 	
 	final String[] dataParams = propertie.getDataParams();
 	final String nom = dataParams[0];
+	final String number1 = dataParams[1];
+	final String number2 = dataParams[2];
 	
 	final String inc = propertie.getString("nbState");
 	final String nbObjects = propertie.getString("nbObjects");
@@ -56,17 +60,21 @@ public class AbsenceTemplate extends AbstractStrategyDynamicBusiness implements 
     stringBuffer.append(TEXT_2);
     stringBuffer.append(nom);
     stringBuffer.append(TEXT_3);
-    stringBuffer.append(predicatName);
+    stringBuffer.append(number1);
     stringBuffer.append(TEXT_4);
-    stringBuffer.append(inc);
+    stringBuffer.append(number2);
     stringBuffer.append(TEXT_5);
-    stringBuffer.append(nbObjects);
+    stringBuffer.append(predicatName);
     stringBuffer.append(TEXT_6);
-    stringBuffer.append(nbNodes);
+    stringBuffer.append(inc);
     stringBuffer.append(TEXT_7);
-    stringBuffer.append(nbEdges);
+    stringBuffer.append(nbObjects);
     stringBuffer.append(TEXT_8);
+    stringBuffer.append(nbNodes);
     stringBuffer.append(TEXT_9);
+    stringBuffer.append(nbEdges);
+    stringBuffer.append(TEXT_10);
+    stringBuffer.append(TEXT_11);
     return stringBuffer.toString();
   }
 }
