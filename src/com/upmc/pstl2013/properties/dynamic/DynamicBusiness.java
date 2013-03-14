@@ -14,7 +14,7 @@ public class DynamicBusiness extends AbstractProperties {
 
 	private String nom;
 	private EDynamicBusiness enumType;
-	private String[] params;
+	private String[] dataParams;
 	
 	/**
 	 * Constructor.
@@ -28,7 +28,7 @@ public class DynamicBusiness extends AbstractProperties {
 				ParcoursFactory.getInstance().newVoidStrategy());
 		this.nom = nom;
 		this.enumType = enumType;
-		params = new String[enumType.getNbParams()];
+		dataParams = new String[enumType.getNbParams()];
 	}
 
 	@Override
@@ -45,16 +45,16 @@ public class DynamicBusiness extends AbstractProperties {
 	/**
 	 * Spécifie le noeud qui est à l'emplacement {@code index}.
 	 * @param index l'indice du noeud.
-	 * @param name le nom du noeud.
+	 * @param dataParam le nom du noeud.
 	 */
-	public void addParam(int index, String name) {
+	public void addDataParam(int index, String dataParam) {
 		if (0 <= index && index < enumType.getNbParams()) {
-			params[index] = name;
+			dataParams[index] = dataParam;
 		}
 	}
 	
-	public String[] getParams() {
-		return params;
+	public String[] getDataParams() {
+		return dataParams;
 	}
 	
 	/**

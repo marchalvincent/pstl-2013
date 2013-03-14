@@ -5,20 +5,22 @@ import com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.EParamType;
 
 
-public class Absence extends AbstractStrategyDynamicBusiness {
+public class ExistenceBetween extends AbstractStrategyDynamicBusiness {
 
-	public Absence() {
+	public ExistenceBetween() {
 		super();
 		super.addInput(EParamType.NODE);
+		super.addInput(EParamType.NUMBER);
+		super.addInput(EParamType.NUMBER);
 	}
-	
+
 	@Override
 	public String generate(Object argument) throws JetException {
-		return new AbsenceTemplate().generate(argument);
+		return new ExistenceBetweenTemplate().generate(argument);
 	}
 	
 	@Override
 	public String getExample() {
-		return "A is never executed.";
+		return "A is executed between 3 and 4 time.";
 	}
 }

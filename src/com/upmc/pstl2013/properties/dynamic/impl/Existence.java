@@ -5,20 +5,25 @@ import com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.EParamType;
 
 
-public class Absence extends AbstractStrategyDynamicBusiness {
+public class Existence extends AbstractStrategyDynamicBusiness {
 
-	public Absence() {
+	public Existence() {
 		super();
 		super.addInput(EParamType.NODE);
+		super.addInput(EParamType.TEXT);
+		super.addInput(EParamType.NUMBER);
+		super.addTextList("executed exactly");
+		super.addTextList("executed more than");
+		super.addTextList("executed less than");
 	}
-	
+
 	@Override
 	public String generate(Object argument) throws JetException {
-		return new AbsenceTemplate().generate(argument);
+		return new ExistenceTemplate().generate(argument);
 	}
 	
 	@Override
 	public String getExample() {
-		return "A is never executed.";
+		return "A is executed more/less than (or exactly) 2 time.";
 	}
 }

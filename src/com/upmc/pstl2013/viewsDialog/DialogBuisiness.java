@@ -128,7 +128,7 @@ public class DialogBuisiness extends ApplicationWindow {
 		DynamicBusiness dBuisiness = new DynamicBusiness(txtNom.getText(), EDynamicBusiness.valueOf(cboType.getText()));
 		int cpt = 0;
 		for (Combo cbo : listCombo) {
-			dBuisiness.addParam(cpt, cbo.getText());
+			dBuisiness.addDataParam(cpt, cbo.getText());
 			cpt++;
 		}
 		return dBuisiness;

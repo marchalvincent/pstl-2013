@@ -6,8 +6,10 @@ package com.upmc.pstl2013.properties.dynamic;
  */
 public enum EDynamicBusiness {
 
-	TEST_DYNAMIC1(DynamicFactory.getInstance().newTestDynamics1()),
-	ABSENCE(DynamicFactory.getInstance().newAbsence());
+	PRESENCE(DynamicFactory.getInstance().newPresence()),
+	ABSENCE(DynamicFactory.getInstance().newAbsence()),
+	EXISTENCE(DynamicFactory.getInstance().newExistence()),
+	EXISTENCE_BETWEEN(DynamicFactory.getInstance().newExistenceBetween());
 
 	private final AbstractStrategyDynamicBusiness strategy;
  
