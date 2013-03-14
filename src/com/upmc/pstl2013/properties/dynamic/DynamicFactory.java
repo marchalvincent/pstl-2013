@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.properties.dynamic;
 
+import com.upmc.pstl2013.properties.dynamic.impl.Absence;
 import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics1;
 import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics2;
 import com.upmc.pstl2013.properties.dynamic.impl.TestDynamics3;
@@ -32,5 +33,9 @@ public class DynamicFactory {
 	}
 	public AbstractStrategyDynamicBusiness newTestDynamics3() {
 		return new TestDynamics3();
+	}
+
+	public AbstractStrategyDynamicBusiness newAbsence() {
+		return new Absence();
 	}
 }

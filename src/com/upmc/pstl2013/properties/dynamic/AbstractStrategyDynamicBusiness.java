@@ -1,5 +1,7 @@
 package com.upmc.pstl2013.properties.dynamic;
 
+import java.util.ArrayList;
+import java.util.List;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.properties.IProperties;
 
@@ -8,6 +10,33 @@ import com.upmc.pstl2013.properties.IProperties;
  *
  */
 public abstract class AbstractStrategyDynamicBusiness {
+	
+
+	private List<EParamType> inputs;
+	private List<String> textsList;
+	
+	public AbstractStrategyDynamicBusiness() {
+		super();
+		inputs = new ArrayList<EParamType>();
+	}
+	
+	protected void addInput(EParamType type) {
+		inputs.add(type);
+	}
+	
+	public List<EParamType> getParams() {
+		return inputs;
+	}
+	
+	protected void addTextList(String text) {
+		if (textsList == null)
+			textsList = new ArrayList<String>();
+		textsList.add(text);
+	}
+	
+	public List<String> getTextsList() {
+		return textsList;
+	}
 	
 	/**
 	 * Cette méthode renvoie le code Alloy généré par la stratégie de propriété dynamique.

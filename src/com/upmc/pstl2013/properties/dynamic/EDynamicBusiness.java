@@ -6,29 +6,25 @@ package com.upmc.pstl2013.properties.dynamic;
  */
 public enum EDynamicBusiness {
 
-	TEST_DYNAMIC1(1, DynamicFactory.getInstance().newTestDynamics1()),
-	TEST_DYNAMIC2(2, DynamicFactory.getInstance().newTestDynamics2()),
-	TEST_DYNAMIC3(3, DynamicFactory.getInstance().newTestDynamics3());
+	TEST_DYNAMIC1(DynamicFactory.getInstance().newTestDynamics1()),
+	ABSENCE(DynamicFactory.getInstance().newAbsence());
 
-	private final Integer nbNodes;
 	private final AbstractStrategyDynamicBusiness strategy;
  
 	/**
 	 * Constructeur privé.
-	 * @param nbNodes le nombre de noeuds nécessaire pour la génération Alloy.
 	 * @param strategy la {@link AbstractStrategyDynamicBusiness} qui va permettre de générer le code Alloy.
 	 */
-	private EDynamicBusiness(Integer nbNodes, AbstractStrategyDynamicBusiness strategy) {
-		this.nbNodes = nbNodes;
+	private EDynamicBusiness(AbstractStrategyDynamicBusiness strategy) {
 		this.strategy = strategy;
 	}
  
 	/**
-	 * Renvoie le nombre de noeuds associé à ce type dynamique.
+	 * Renvoie le nombre de {@link EParamType} associé à ce type dynamique.
 	 * @return
 	 */
-	public Integer getNbNodes() {
-		return this.nbNodes;
+	public Integer getNbParams() {
+		return this.strategy.getParams().size();
 	}
 	
 	/**
