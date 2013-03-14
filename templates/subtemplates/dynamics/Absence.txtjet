@@ -1,8 +1,9 @@
-<%@ jet package="com.upmc.pstl2013.properties.dynamic.impl" class="TestDynamicsTemplate" 
+<%@ jet package="com.upmc.pstl2013.properties.dynamic.impl" class="AbsenceTemplate" 
 	imports="org.apache.log4j.Logger
 			com.upmc.pstl2013.alloyGenerator.jet.*
 			com.upmc.pstl2013.properties.*
-			com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness"
+			com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness
+			com.upmc.pstl2013.properties.dynamic.DynamicBusiness"
 	skeleton="./dynamics.skeleton" %>
 <% 
 	final Logger log = Logger.getLogger(TestDynamicsTemplate.class);
@@ -14,17 +15,15 @@
 
 	IProperties propertie = (IProperties) argument;
 	final String predicatName = propertie.getString("predicatName");
+	
+	String[] nodes = ((DynamicBusiness) propertie).getParams();
+	String nom = nodes[0];
 %>
 
 pred <%=predicatName%> {
-	// TODO predicat en fonction de la propriété dynamique
-	//predicat de vincent en dynamique ici
-}
-pred predicatName2 {
-	some s:State | s.getTokens[gen_final] > 0
-}
-pred predicatName3 {
-	some s:State | s.getTokens[gen_final] > 0
+	no s:State | s.getTokens[<%=nom%>] = 1
+	// presence
+	//some s:State | s.getTokens[<%=nom%>] = 1
 }
 
 <%

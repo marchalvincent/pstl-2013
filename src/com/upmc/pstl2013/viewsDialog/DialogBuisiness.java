@@ -89,7 +89,7 @@ public class DialogBuisiness extends ApplicationWindow {
 		String desc = enumBuisiness.getStrategy().getExample();
 		txtDescription.setText(desc);
 
-		for (int i = 0; i < enumBuisiness.getNbNodes(); i++) {
+		for (int i = 0; i < enumBuisiness.getNbParams(); i++) {
 			Combo cbo = new Combo(composite, SWT.NONE);
 			if (swtView.getActivitiesSelected().size() == 1)
 			{
@@ -128,7 +128,7 @@ public class DialogBuisiness extends ApplicationWindow {
 		DynamicBusiness dBuisiness = new DynamicBusiness(txtNom.getText(), EDynamicBusiness.valueOf(cboType.getText()));
 		int cpt = 0;
 		for (Combo cbo : listCombo) {
-			dBuisiness.addNode(cpt, cbo.getText());
+			dBuisiness.addParam(cpt, cbo.getText());
 			cpt++;
 		}
 		return dBuisiness;
