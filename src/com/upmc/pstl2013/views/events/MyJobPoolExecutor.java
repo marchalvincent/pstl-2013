@@ -7,23 +7,23 @@ import org.apache.log4j.Logger;
 
 
 public class MyJobPoolExecutor {
-	
+
 	private final int nbMaxWorker;
 	private LinkedList<JobExecutor> jobs;
 	private List<MyThreadWorker> workers;
 	private final Logger log = Logger.getLogger(MyJobPoolExecutor.class);
-	
+
 	public MyJobPoolExecutor(int nbMaxWorker) {
 		super();
 		this.nbMaxWorker = nbMaxWorker;
 		jobs = new LinkedList<JobExecutor>();
 		workers = new ArrayList<MyThreadWorker>();
 	}
-	
+
 	public LinkedList<JobExecutor> jobs() {
 		return jobs;
 	}
-	
+
 	/**
 	 * Ajoute un job a exécuter par le pool.
 	 * @param job le {@link JobExecutor}.
@@ -39,19 +39,19 @@ public class MyJobPoolExecutor {
 			}
 		}
 	}
-	
+
 	/**
 	 * Démarre le pool de thread statique.
 	 */
 	public void startWorkers() {
-		
+
 		log.debug("Lancement du pool statique.");
 		// on définit le nombre minimum de Thread a lancer
 		int nbMaxThread = jobs.size();
 		if (nbMaxWorker < nbMaxThread) {
 			nbMaxThread = nbMaxWorker;
 		}
-		
+
 		MyThreadWorker t;
 		for (int i = 0; i < nbMaxThread; i++) {
 			t = new MyThreadWorker(this, i+1);
@@ -59,9 +59,9 @@ public class MyJobPoolExecutor {
 			t.start();
 		}
 	}
-	
+
 	/**
-	 * Arrête brutallement tous les workers encore en cours d'exécution.
+	 * Arrête tous les workers encore en cours d'exécution.
 	 */
 	@SuppressWarnings("deprecation")
 	public String killWorkers() {
@@ -70,9 +70,18 @@ public class MyJobPoolExecutor {
 		for (MyThreadWorker t : workers) {
 			if (t.isAlive()) {
 				sb.append("The worker n°" + t.getNum() + " was stopped !\n");
+				t.killJob();
 				t.stop();
 			}
 		}
 		return sb.toString();
+	}
+
+	public void removeWorker(MyThreadWorker myThreadWorker) {
+		workers.remove(myThreadWorker);
+	}
+	
+	public boolean isFinish() {
+		return workers.isEmpty();
 	}
 }

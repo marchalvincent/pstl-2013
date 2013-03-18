@@ -11,6 +11,7 @@ import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.views.SwtView;
+import edu.mit.csail.sdg.alloy4.Err;
 
 public class JobExecutor extends Job {
 
@@ -94,7 +95,10 @@ public class JobExecutor extends Job {
 			sb.append(" : property ");
 			sb.append(property.getName());
 			sb.append(" -> ");
-			sb.append(e.getMessage());
+			if (e instanceof Err && e.getMessage().contains("ThreadDeath"))
+				sb.append("The execution of the job is interrupted.");
+			else
+				sb.append(e.getMessage());
 			sb.append("\n");
 			log.error(sb.toString());
 			swtView.getDataView().showToViewUse(sb.toString());

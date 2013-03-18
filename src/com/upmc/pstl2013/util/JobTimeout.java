@@ -35,12 +35,17 @@ public class JobTimeout extends Job {
 		log.info("Durée timeout : " + timeout);
 		while ((timeSpend < timeout) && !isEnd) {
 			try {
-				Thread.sleep(1000);
+				synchronized (this) {
+					System.out.println("DEBUT WAIT");
+					this.wait(1000);
+					System.out.println("FIN WAIT");
+				}
 				endTime = System.nanoTime();
 				timeSpend = (endTime - startTime) / 1000000000; // en sec
 
 				synchronized (jobs) {
-					if (jobs.size() == 0) {
+					// attention isFinish() est synchronisée sur la liste "jobs" et non sur le pool
+					if (jobPool.isFinish()) {
 						isEnd = true;
 					}
 				}
@@ -49,11 +54,9 @@ public class JobTimeout extends Job {
 			}
 		}
 
-		if(!isEnd) {
-			String returns = jobPool.killWorkers();
-			swtView.getDataView().showToViewUse(returns);
-		}
-		
+		String returns = jobPool.killWorkers();
+		swtView.getDataView().showToViewUse(returns);
+
 		log.debug("/!\\ Fin du thread timeOut.\n");
 		return Status.OK_STATUS;
 	}

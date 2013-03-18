@@ -9,6 +9,7 @@ import com.upmc.pstl2013.properties.impl.Attribute;
 import com.upmc.pstl2013.properties.impl.DeadLock;
 import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.properties.impl.Orga;
+import com.upmc.pstl2013.properties.impl.PersonalPropertie;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.properties.impl.Wf;
 
@@ -75,9 +76,14 @@ public class PropertiesFactory {
 				}
 			}
 		}
+		
+		// on a une exception, c'est si on a une PersonalPropertie
+		if (name.equals("PersonalPropertie")) {
+			return new PersonalPropertie();
+		}
 
 		// si on est ici, c'est que la classe n'a pas été mise dans le constructeur
-		final String error = "Le nom de la propriété n'existe pas dans la factory : " + name;
+		final String error = "Le nom de la propriété n'existe pas dans la PropertiesFactory : " + name;
 		log.warn(error);
 		throw new PropertiesException(error);
 	}
