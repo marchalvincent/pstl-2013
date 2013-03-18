@@ -18,6 +18,8 @@ public class MyA4Reporter extends A4Reporter {
 	private int totalVars;
 	private int clauses;
 	private long solvingTime;
+	
+	private String resultCNF;
 
 	public MyA4Reporter() {
 		super();
@@ -31,6 +33,8 @@ public class MyA4Reporter extends A4Reporter {
 		totalVars = 0;
 		clauses = 0;
 		solvingTime = 0;
+		
+		resultCNF = "";
 	}
 
 	@Override
@@ -64,6 +68,12 @@ public class MyA4Reporter extends A4Reporter {
 		this.symmetry = symmetry;
 		super.translate(solver, bitwidth, maxseq, skolemDepth, symmetry);
 	}
+	
+	@Override
+	public void resultCNF(String filename) {
+		resultCNF = filename;
+		super.resultCNF(filename);
+	}
 
 	@Override
 	public String toString() {
@@ -88,6 +98,12 @@ public class MyA4Reporter extends A4Reporter {
 		sb.append(" clauses. ");
 		sb.append(solvingTime);
 		sb.append(" ms.");
+
+		if (!resultCNF.isEmpty()) {
+			sb.append("\n  Result CNF : ");
+			sb.append(resultCNF);
+		}
+		
 		return sb.toString();
 	}
 }

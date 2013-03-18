@@ -50,6 +50,9 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		JobExecutor job = null;
 		try {
 			properties = this.getProperties();
+			// On enregistre dans les préférences les propriétés
+			swtView.getDataView().saveProperties(properties);
+			
 			// 5a. Pour chaque activité
 			for (Activity activity : activitiesSelected) {
 				// 5b. Pour chaque propriété
@@ -86,9 +89,6 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 			log.error(e.getMessage());
 			swtView.getDataView().showToViewUse(e.getMessage());
 		}
-		
-		// 4. On enregistre dans les préférences les propriétés
-		swtView.getDataView().saveProperties(properties);
 	}
 
 	/**

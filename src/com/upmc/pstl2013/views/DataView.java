@@ -16,19 +16,21 @@ import com.upmc.pstl2013.views.events.RunnableUpdateExecutor;
 
 
 public class DataView {
-	
+
 	private Logger log = Logger.getLogger(DataView.class);
 	private SwtView swtView;
 
 	public DataView(SwtView swtView) {
 		this.swtView = swtView;
 	}
-	
+
 	/**
 	 * Met à jour les préférences des propriétés.
 	 * @param la liste des {@link IProperties}.
 	 */
 	public void saveProperties(List<IProperties> properties) {
+		
+		// 1. On créé le nouveau string
 		if (properties != null) {
 			StringBuilder sb = new StringBuilder();
 			for (IProperties prop : properties) {
@@ -42,14 +44,21 @@ public class DataView {
 				showToViewUse(e.getMessage());
 			}
 		}
+		// 2. On enregistre dans le fichier les conf
+		try {
+			ConfPropertiesManager.getInstance().store();
+		} catch (IOException e) {
+			showToViewUse(e.getMessage());
+			log.error(e.getMessage());
+		}
 	}
-	
+
 	/**
 	 * Met à jour les préférences des options.
 	 * @param swtView la {@link SwtView} de l'IHM.
 	 */
 	public void saveOption(SwtView swtView) {
-		
+
 		// 1. On spécifie les préférence à la ConfPropertiesManager
 		try {
 			ConfPropertiesManager.getInstance().setTimeOut(String.valueOf(swtView.getTimeout()));
@@ -59,7 +68,7 @@ public class DataView {
 			log.error(e.getMessage());
 			showToViewUse(e.getMessage());
 		}
-		
+
 		// 2. On enregistre dans le fichier les conf
 		try {
 			ConfPropertiesManager.getInstance().store();
@@ -68,7 +77,7 @@ public class DataView {
 			log.error(e.getMessage());
 		}
 	}
-	
+
 	/**
 	 * Renvoie la liste des propriétés de l'interface graphique sélectionnées par l'utilisateur.
 	 * @return une {@link List} de {@link IProperties}.
@@ -91,11 +100,11 @@ public class DataView {
 		}
 		return properties;
 	}
-	
+
 	public void showToViewUse(String msg) {
 		Display.getDefault().asyncExec(new RunnableUpdateExecutor(swtView, msg));
 	}
-	
+
 	public void showToViewDetails(IFileResult iFileResult){
 		Display.getDefault().asyncExec(new RunnableUpdateDetails(swtView, iFileResult));
 	}
