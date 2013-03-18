@@ -36,9 +36,7 @@ public class JobTimeout extends Job {
 		while ((timeSpend < timeout) && !isEnd) {
 			try {
 				synchronized (this) {
-					System.out.println("DEBUT WAIT");
 					this.wait(1000);
-					System.out.println("FIN WAIT");
 				}
 				endTime = System.nanoTime();
 				timeSpend = (endTime - startTime) / 1000000000; // en sec
