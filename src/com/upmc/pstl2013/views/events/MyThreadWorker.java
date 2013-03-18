@@ -5,41 +5,44 @@ import org.apache.log4j.Logger;
 
 
 public class MyThreadWorker extends Thread {
-	
+
 	private final Logger log = Logger.getLogger(MyThreadWorker.class);
-	private final LinkedList<JobExecutor> jobs;
 	private final int numWorker;
-	
+	private final LinkedList<JobExecutor> jobs;
+	private JobExecutor job;
+	private MyJobPoolExecutor pool;
+
 	public MyThreadWorker(MyJobPoolExecutor pool, int numWorker) {
 		super();
-		this.jobs = pool.jobs();
 		this.numWorker = numWorker;
+		this.jobs = pool.jobs();
+		this.pool = pool;
 	}
-	
+
 	public int getNum() {
 		return numWorker;
 	}
-	
+
 	@Override
 	public void run() {
-		JobExecutor job = null;
 		log.debug("Lancement du worker n°" + numWorker);
 		while (true) {
 			// on se synchronize sur la liste et on récupère le 1er élément.
 			synchronized (jobs) {
-				
+
 				if (!jobs.isEmpty()) {
 					// on prend un objet à la tête de la liste
 					job = jobs.removeFirst();
 					log.debug("Le worker n°" + numWorker + " prend un job.");
 				}
 				else {
-					// si la liste est vide, on break
+					// si la liste est vide, on se supprime de la liste des workers puis on break
+					pool.removeWorker(this);
 					break;
 				}
-				
+
 			}
-			
+
 			// à ce stade là du code, on a un job a exécuter
 			if (job != null) {
 				job.schedule();
@@ -49,7 +52,16 @@ public class MyThreadWorker extends Thread {
 					log.warn("Le worker n°" + numWorker + " a été interrompu.");
 				}
 			}
+			job = null;
 		}
 		log.debug("Fin du worker n°" + numWorker);
+	}
+
+	/**
+	 * Arrête le job en cours d'exécution ainsi que 
+	 */
+	@SuppressWarnings("deprecation")
+	public void killJob() {
+		job.getThread().stop();
 	}
 }
