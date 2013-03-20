@@ -5,12 +5,12 @@
    <extension
          point="org.eclipse.ui.views">
       <category
-            name="Sample Category"
+            name="Alloy"
             id="pstl-2013">
       </category>
       <view
             name="ProcessAnalyzer"
-            icon="icons/sample.gif"
+            icon="icons/process_analyzer.gif"
             category="pstl-2013"
             class="com.upmc.pstl2013.views.View"
             id="com.upmc.pstl2013.views.View">
