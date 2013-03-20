@@ -31,7 +31,7 @@ public class ConfPropertiesManager {
 	private ConfPropertiesManager() {
 		
 		try {
-			file = new File(Utils.pluginPath + "pstl2013.properties");
+			file = new File(Utils.pluginPath + ".alloyAnalyzer-pstl2013.properties");
 			if (!file.exists())
 				file.createNewFile();
 			
@@ -73,6 +73,7 @@ public class ConfPropertiesManager {
 
 	public void setPathFolder(String pathFolder) throws Exception {
 		prop.setProperty("pathFolder",pathFolder);
+		store();
 	}
 	
 	public String getProperties() {
