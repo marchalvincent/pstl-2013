@@ -54,7 +54,7 @@ public class UMLParser implements IUMLParser {
 					// On vérifie que notre fichier n'est pas trop grand...
 					if (activity.getNodes().size() > ConfPropertiesManager.getInstance().getNbNodesMax()) {
 						log.warn("Attention le fichier " + UMLFile.getName() + " contient plus de noeud que le maximum spécifié dans les options.");
-						throw new ParserException("Le fichier est ignoré car il contient plus de noeud que le maximum spécifié dans les options.");
+						throw new ParserException("The file is ignored because it contains too many nodes.");
 					}
 					break;
 				}

@@ -52,9 +52,9 @@ public class EventChooseFile extends MouseAdapter {
 
 		StringBuilder sb = new StringBuilder();
 		if (file.length > 0)
-			sb.append("Selection des fichiers suivant : ");
+			sb.append("Following files has been selected : ");
 		else
-			sb.append("Aucun fichier n'a été sélectionné.");
+			sb.append("No files has been selected.");
 
 		List<Activity> activitiesSelected = swtView.getActivitiesSelected();
 		activitiesSelected.clear();
@@ -66,7 +66,7 @@ public class EventChooseFile extends MouseAdapter {
 			IUMLParser parser = ParserFactory.getInstance().newParser(iFile);
 
 			try {
-				parsing.append("Parsing de " + name + ". ");
+				parsing.append("Parsing of " + name + ". ");
 				Activity activity = parser.getActivity();
 				activity.setName(name);
 				activitiesSelected.add(activity);
