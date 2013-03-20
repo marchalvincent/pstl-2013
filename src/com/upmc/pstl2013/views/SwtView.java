@@ -64,6 +64,7 @@ public class SwtView extends Composite {
 	private Label lblSeparator;
 	private Button chkDetails;
 	private Button btnAddbuisiness;
+	private Button btnBtncleardetails;
 
 	private IActivityResult currentActivityeResult;
 	private String separator = File.separator;
@@ -75,6 +76,7 @@ public class SwtView extends Composite {
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
+	
 
 	/**
 	 * Create the composite.
@@ -245,13 +247,23 @@ public class SwtView extends Composite {
 		 *Debut de la partie Details
 		 */
 		txtDetailsLogs = new Text(cpItemDetails, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
-		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 2));
+		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 3));
 
 		btnAlloyVisualisation = new Button(cpItemDetails, SWT.NONE);
 		btnAlloyVisualisation.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "insp_sbook.gif"));
 		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualise");
+		
+		btnBtncleardetails = new Button(cpItemDetails, SWT.NONE);
+		btnBtncleardetails.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
+		btnBtncleardetails.setText("Clear");
+		btnBtncleardetails.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+				treeFilesExecuted.removeAll();
+			}
+		});
 		
 		/*
 		 *Debut de la partie Options
