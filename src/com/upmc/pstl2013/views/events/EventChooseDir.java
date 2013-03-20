@@ -40,8 +40,8 @@ public class EventChooseDir extends MouseAdapter {
 			txtChooseDirectory.setText(chemin);
 			try {
 				ConfPropertiesManager.getInstance().setPathFolder(chemin);
-				log.info("Modification du répertoir : " + chemin);
-				txtLogs.append("Modification du répertoir : " + chemin + "\n");
+				log.info("Modification du répertoire : " + chemin);
+				txtLogs.append("The repertory has been modified : " + chemin + "\n");
 				swtView.setUserDir(chemin);
 			} catch (Exception e1) {
 				txtLogs.append(e1.getMessage());

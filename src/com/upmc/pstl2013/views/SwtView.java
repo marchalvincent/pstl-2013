@@ -5,11 +5,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.SelectionAdapter;
 import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.TraverseEvent;
+import org.eclipse.swt.events.TraverseListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -24,6 +27,7 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.wb.swt.SWTResourceManager;
+
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.Behavior;
@@ -76,7 +80,7 @@ public class SwtView extends Composite {
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
-	
+
 
 	/**
 	 * Create the composite.
@@ -91,7 +95,7 @@ public class SwtView extends Composite {
 		activities = new ArrayList<Activity>();
 		listDynamicBuisiness = new HashMap<String, DynamicBusiness>();
 		dataView = RunFactory.getInstance().newDataView(this);
-		
+
 		if (ConfPropertiesManager.getInstance().getPathFolder().equals("")) {
 			userDir = System.getProperty("user.home") + separator + ".pstl2013" + separator;
 			try {
@@ -226,9 +230,16 @@ public class SwtView extends Composite {
 
 
 		txtPersonalPropertie = new Text(cpItemAlloyUse, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
+		txtPersonalPropertie.setTouchEnabled(true);
 		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
+		//Empeche de faire perdre le focus dans la text box
+		txtPersonalPropertie.addTraverseListener(new TraverseListener () {
+			public void keyTraversed(TraverseEvent e) {
+				e.doit = false;
+			}
+		});
 
 		/*
 		 *Debut de la partie Properties
@@ -237,12 +248,12 @@ public class SwtView extends Composite {
 		GridData gd_treeFilesExecuted = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
 		gd_treeFilesExecuted.widthHint = 128;
 		treeFilesExecuted.setLayoutData(gd_treeFilesExecuted);
-		
+
 		btnAddbuisiness = new Button(cpItemAlloyProp, SWT.NONE);
 		btnAddbuisiness.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnAddbuisiness.setText("Add Buisiness");
 		btnAddbuisiness.setEnabled(false);
-		
+
 		/*
 		 *Debut de la partie Details
 		 */
@@ -254,7 +265,7 @@ public class SwtView extends Composite {
 		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualise");
-		
+
 		btnBtncleardetails = new Button(cpItemDetails, SWT.NONE);
 		btnBtncleardetails.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnBtncleardetails.setText("Clear");
@@ -264,7 +275,7 @@ public class SwtView extends Composite {
 				treeFilesExecuted.removeAll();
 			}
 		});
-		
+
 		/*
 		 *Debut de la partie Options
 		 */
@@ -319,7 +330,7 @@ public class SwtView extends Composite {
 			}
 		});
 		btnAddbuisiness.addMouseListener(EventFactory.getInstance().newEventClickAddBuisiness(this));
-	
+
 		//Suppression des anciens logs
 		deleteOldLogs();
 	}
@@ -330,7 +341,7 @@ public class SwtView extends Composite {
 	private void addPropertiesToTree() {
 
 		treeProperties.removeAll();
-		
+
 		HashMap<String, List<IProperties>> families = new HashMap<String, List<IProperties>>();
 		treeProperties.addListener(SWT.Selection, EventFactory.getInstance().newEventSelectTreeProperty(this));
 
@@ -363,7 +374,7 @@ public class SwtView extends Composite {
 					lItem1.setChecked(true);
 				else
 					allChecked = false;
-				
+
 				if (family.equals(Behavior.BUISINESS.toString())) {
 					//Ajout des propeties dynamique :
 					for (DynamicBusiness dynaBuisiness : listDynamicBuisiness.values()) {
@@ -428,9 +439,9 @@ public class SwtView extends Composite {
 	public void updateTreePropety(DynamicBusiness buisiness) {
 		listDynamicBuisiness.put(buisiness.getName(), buisiness);
 		addPropertiesToTree();
-		
+
 	}
-	
+
 	public void clearDynamicBuisiness(){
 		listDynamicBuisiness.clear();
 		addPropertiesToTree();
@@ -467,7 +478,7 @@ public class SwtView extends Composite {
 	public TableEditor getEditorBool() {
 		return editorBool;
 	}
-	
+
 	public List<Activity> getActivitiesSelected() {
 		return activities;
 	}
@@ -517,11 +528,11 @@ public class SwtView extends Composite {
 	public void setEnabledAddActivity(boolean isEnabled) {
 		btnAddbuisiness.setEnabled(isEnabled);
 	}
-	
+
 	public DynamicBusiness getListDynamicBuisiness(String namePropBuisiness) {
 		return listDynamicBuisiness.get(namePropBuisiness);
 	}
-	
+
 	public DataView getDataView() {
 		return dataView;
 	}
