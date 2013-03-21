@@ -199,6 +199,7 @@ public class SwtView extends Composite {
 
 		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4));
+		txtLogs.setText(Utils.pluginPath + "\n" + getClass().getResource("icons/run.gif"));
 
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
 		btnExcuterAlloy.setToolTipText("Run the execution Alloy");
