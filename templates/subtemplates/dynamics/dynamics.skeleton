@@ -1,0 +1,7 @@
+public class CLASS extends AbstractStrategyDynamicBusiness implements IJetTemplate {
+
+	@Override
+	public String generate(Object argument) throws JetException {
+		return "";
+	}
+}
