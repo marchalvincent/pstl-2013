@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -27,7 +26,6 @@ import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.uml2.uml.Activity;
 import org.eclipse.wb.swt.SWTResourceManager;
-
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.Behavior;
@@ -107,7 +105,7 @@ public class SwtView extends Composite {
 		else {
 			userDir = ConfPropertiesManager.getInstance().getPathFolder();
 		}
-
+		
 		// TabFolder
 		tabFolder = new TabFolder(this, SWT.NONE);
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
@@ -199,7 +197,7 @@ public class SwtView extends Composite {
 
 		txtLogs = new Text(cpItemAlloyUse, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 4));
-
+		
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
 		btnExcuterAlloy.setToolTipText("Run the execution Alloy");
 		btnExcuterAlloy.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run.gif"));
@@ -223,7 +221,6 @@ public class SwtView extends Composite {
 
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
 		btnPersonalPropertie.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run_perso.gif"));
-
 		btnPersonalPropertie.setToolTipText("Execute the user alloy text");
 		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
 		btnPersonalPropertie.setText("Exec Perso");
