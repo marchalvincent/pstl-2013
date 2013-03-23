@@ -46,7 +46,7 @@ public class ConfPropertiesManager {
 				try {this.setPathFolder("");} catch (Exception e) {}
 			}
 			if (prop.getProperty("properties") == null) {
-				try {this.setProperties("");} catch (Exception e) {}
+				try {this.setProperties("EnoughState");} catch (Exception e) {}
 			}
 			if (prop.getProperty("timeOut") == null) {
 				try {this.setTimeOut(String.valueOf(ConfPropertiesManager.DEFAUT_TIMEOUT));} catch (Exception e) {}
