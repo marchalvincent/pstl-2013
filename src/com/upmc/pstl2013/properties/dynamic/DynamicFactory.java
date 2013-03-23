@@ -4,6 +4,7 @@ import com.upmc.pstl2013.properties.dynamic.impl.Absence;
 import com.upmc.pstl2013.properties.dynamic.impl.Existence;
 import com.upmc.pstl2013.properties.dynamic.impl.ExistenceBetween;
 import com.upmc.pstl2013.properties.dynamic.impl.Presence;
+import com.upmc.pstl2013.properties.dynamic.impl.Relative;
 
 /**
  * Représente la factory des stratégies de génération alloy pour les propriétés créées dynamiquement
@@ -40,4 +41,10 @@ public class DynamicFactory {
 	public AbstractStrategyDynamicBusiness newExistenceBetween() {
 		return new ExistenceBetween();
 	}
+	
+	public AbstractStrategyDynamicBusiness newRelative() {
+		return new Relative();
+	}
+	
+	
 }

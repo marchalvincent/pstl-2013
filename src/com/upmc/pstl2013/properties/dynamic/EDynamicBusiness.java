@@ -9,7 +9,8 @@ public enum EDynamicBusiness {
 	PRESENCE(DynamicFactory.getInstance().newPresence()),
 	ABSENCE(DynamicFactory.getInstance().newAbsence()),
 	EXISTENCE(DynamicFactory.getInstance().newExistence()),
-	EXISTENCE_BETWEEN(DynamicFactory.getInstance().newExistenceBetween());
+	EXISTENCE_BETWEEN(DynamicFactory.getInstance().newExistenceBetween()),
+	RELATIVE(DynamicFactory.getInstance().newRelative());
 
 	private final AbstractStrategyDynamicBusiness strategy;
  
@@ -20,7 +21,7 @@ public enum EDynamicBusiness {
 	private EDynamicBusiness(AbstractStrategyDynamicBusiness strategy) {
 		this.strategy = strategy;
 	}
- 
+
 	/**
 	 * Renvoie le nombre de {@link EParamType} associé à ce type dynamique.
 	 * @return
