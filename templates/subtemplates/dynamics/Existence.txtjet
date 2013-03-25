@@ -1,0 +1,45 @@
+<%@ jet package="com.upmc.pstl2013.properties.dynamic.impl" class="ExistenceTemplate" 
+	imports="org.apache.log4j.Logger
+			com.upmc.pstl2013.alloyGenerator.jet.*
+			com.upmc.pstl2013.properties.*
+			com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness
+			com.upmc.pstl2013.properties.dynamic.DynamicBusiness"
+	skeleton="./dynamics.skeleton" %>
+<% 
+	final Logger log = Logger.getLogger(ExistenceTemplate.class);
+	if (!(argument instanceof IProperties)) {
+		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
+		log.error(error);
+		throw new JetException(error);
+	}
+
+	final DynamicBusiness propertie = (DynamicBusiness) argument;
+	final String predicatName = propertie.getString("predicatName");
+	
+	final String[] dataParams = propertie.getDataParams();
+	final String nom = dataParams[0];
+	final String text = dataParams[1];
+	final String number = dataParams[2];
+	
+	final String fonction;
+	if (text.contains("exactly")) {
+		fonction = "exist";
+	} else if (text.contains("more")) {
+		fonction = "more";
+	} else if (text.contains("less")) {
+		fonction = "less";
+	} else {
+		fonction = "error";
+	}
+	
+	final String inc = propertie.getString("nbState");
+	final String nbObjects = propertie.getString("nbObjects");
+	final String nbNodes = propertie.getString("nbNodes");
+	final String nbEdges = propertie.getString("nbEdges");
+%>
+
+pred <%=predicatName%> {
+	<%=fonction%>[<%=nom%>, <%=number%>]
+}
+
+check {<%=predicatName%>} for <%=inc%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge expect 0
