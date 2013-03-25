@@ -51,11 +51,11 @@ public class ExistenceTemplate extends AbstractStrategyDynamicBusiness implement
 	final String number = dataParams[2];
 	
 	final String fonction;
-	if (text.equals("executed exactly")) {
+	if (text.contains("exactly")) {
 		fonction = "exist";
-	} else if (text.equals("executed more than")) {
+	} else if (text.contains("more")) {
 		fonction = "more";
-	} else if (text.equals("executed less than")) {
+	} else if (text.contains("less")) {
 		fonction = "less";
 	} else {
 		fonction = "error";

@@ -21,6 +21,6 @@ public class ExistenceBetween extends AbstractStrategyDynamicBusiness {
 	
 	@Override
 	public String getExample() {
-		return "A is executed between 3 and 4 time.";
+		return "A is executed between 3 and 4 times.";
 	}
 }

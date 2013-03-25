@@ -53,6 +53,6 @@ public abstract class AbstractStrategyDynamicBusiness {
 	 * @return String un exemple d'utilisation.
 	 */
 	public String getExample() {
-		return "";
+		return "Example : ";
 	}
 }

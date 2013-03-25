@@ -17,7 +17,9 @@
 	final String predicatName = propertie.getString("predicatName");
 	
 	final String[] dataParams = propertie.getDataParams();
-	final String nom = dataParams[0];
+	final String noeud1 = dataParams[0];
+	final String relation = dataParams[1];
+	final String noeud2 = dataParams[2];
 	
 	final String inc = propertie.getString("nbState");
 	final String nbObjects = propertie.getString("nbObjects");
@@ -26,7 +28,7 @@
 %>
 
 pred <%=predicatName%> {
-	no s:State | s.getTokens[<%=nom%>] = 1
+	<%=relation%>[<%=noeud1%>,<%=noeud2%>]
 }
 
 check {<%=predicatName%>} for <%=inc%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge expect 0

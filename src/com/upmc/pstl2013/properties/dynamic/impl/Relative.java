@@ -13,8 +13,8 @@ public class Relative extends AbstractStrategyDynamicBusiness {
 		super.addInput(EParamType.TEXT);
 		super.addTextList("Before");
 		super.addTextList("After");
-		super.addTextList("With");
-		super.addTextList("Excluded");
+		super.addTextList("parallel");
+		super.addTextList("excluded");
 		super.addInput(EParamType.NODE);
 	}
 	
@@ -25,6 +25,6 @@ public class Relative extends AbstractStrategyDynamicBusiness {
 	
 	@Override
 	public String getExample() {
-		return "A relative a B : A avant B; A exluant B ...";
+		return super.getExample() + "A before B, A after B, A parallel to B, A excluded to B.";
 	}
 }

@@ -54,6 +54,10 @@ public class DynamicBusiness extends AbstractProperties {
 	}
 	
 	public String[] getDataParams() {
+		for (int i = 0; i < dataParams.length; i++) {
+			if (dataParams[i] == null)
+				dataParams[i] = "";
+		}
 		return dataParams;
 	}
 	
