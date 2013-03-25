@@ -33,7 +33,6 @@ public class DialogBuisiness extends ApplicationWindow {
 	private Composite composite;
 	private List<Combo> listCombo;
 	private List<Text> listText;
-	private List<Text> listNum;
 	private SwtView swtView;
 
 
@@ -77,7 +76,6 @@ public class DialogBuisiness extends ApplicationWindow {
 			cboType.add(type.toString());
 		}
 		listCombo = new ArrayList<Combo>();
-		listNum = new ArrayList<Text>();
 		listText = new ArrayList<Text>();
 
 		composite.setSize(300,300);
@@ -92,11 +90,12 @@ public class DialogBuisiness extends ApplicationWindow {
 		listCombo = new ArrayList<Combo>();
 		String desc = enumBuisiness.getStrategy().getExample();
 		txtDescription.setText(desc);
-
+		Integer indice = 0;
 		for (EParamType params : enumBuisiness.getStrategy().getParams()) {
 
 			if (params.name().equals(EParamType.NODE.toString())){
 				Combo cbo = new Combo(composite, SWT.NONE);
+				cbo.setData(indice);
 				List<String> listNode = new ArrayList<String>();
 				for (ActivityNode activity : swtView.getActivitiesSelected().get(0).getNodes()) {
 					listNode.add(activity.getName());
@@ -107,15 +106,18 @@ public class DialogBuisiness extends ApplicationWindow {
 			}
 			else if(params.name().equals(EParamType.TEXT.toString())){
 				Combo cboText = new Combo(composite, SWT.NONE);
+				cboText.setData(indice);
 				addListToCombo(enumBuisiness.getStrategy().getTextsList() , cboText);
 				cboText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 				listCombo.add(cboText);
 			}
 			else{
 				Text txt = new Text(composite, SWT.NONE);
+				txt.setData(indice);
 				txt.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 				listText.add(txt);
 			}
+			indice++;
 
 		}
 
@@ -134,7 +136,6 @@ public class DialogBuisiness extends ApplicationWindow {
 		}
 	}
 
-
 	private void clearUI ()
 	{
 		for (Combo cbo : listCombo) {
@@ -143,22 +144,21 @@ public class DialogBuisiness extends ApplicationWindow {
 		for (Text txt : listText) {
 			txt.dispose();
 		}
-		for (Text num : listNum) {
-			num.dispose();
-		}
+
 		if (btnSubmit != null)
 			btnSubmit.dispose();
 		listCombo.clear();
-		listNum.clear();
 		listText.clear();
 	}
 
 	public DynamicBusiness getSelectedBuisiness() {
 		DynamicBusiness dBuisiness = new DynamicBusiness(txtNom.getText(), EDynamicBusiness.valueOf(cboType.getText()));
-		int cpt = 0;
+
 		for (Combo cbo : listCombo) {
-			dBuisiness.addDataParam(cpt, cbo.getText());
-			cpt++;
+			dBuisiness.addDataParam((Integer)cbo.getData(), cbo.getText());
+		}
+		for (Text txt : listText) {
+			dBuisiness.addDataParam((Integer)txt.getData(), txt.getText());
 		}
 		return dBuisiness;
 	}
