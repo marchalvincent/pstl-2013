@@ -3,7 +3,6 @@ package com.upmc.pstl2013.viewsDialog;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.eclipse.emf.common.util.EList;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
@@ -18,6 +17,7 @@ import org.eclipse.uml2.uml.ActivityNode;
 
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.EDynamicBusiness;
+import com.upmc.pstl2013.properties.dynamic.EParamType;
 import com.upmc.pstl2013.views.SwtView;
 import com.upmc.pstl2013.views.events.EventFactory;
 
@@ -32,9 +32,11 @@ public class DialogBuisiness extends ApplicationWindow {
 	private Combo cboType;
 	private Composite composite;
 	private List<Combo> listCombo;
+	private List<Text> listText;
+	private List<Text> listNum;
 	private SwtView swtView;
 
-	
+
 	/**
 	 * Dialogue (fenetre) permettant d'jouter dynamiquement des property dans la famille Buisiness.
 	 * @param parentShell
@@ -44,13 +46,13 @@ public class DialogBuisiness extends ApplicationWindow {
 		super(parentShell);
 		parentShell.setMinimumSize(300,300);
 		this.swtView = swtView;
-		
+
 	}
 
 	protected Control createContents(Composite parent) {
 		composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout(2, false));
-		
+
 		txtNom = new Text(composite, SWT.BORDER);
 		txtNom.setText("Name");
 		txtNom.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
@@ -59,7 +61,7 @@ public class DialogBuisiness extends ApplicationWindow {
 		cboType.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		cboType.setText("Type of Buisiness");
 		cboType.addSelectionListener(EventFactory.getInstance().newEventSelectType(this));
-		
+
 		txtDescription = new Text(composite, SWT.BORDER);
 		txtDescription.setEditable(false);
 		txtDescription.setEnabled(false);
@@ -69,12 +71,14 @@ public class DialogBuisiness extends ApplicationWindow {
 		gd_txtDescription.minimumHeight = 40;
 		gd_txtDescription.heightHint =60;
 		txtDescription.setLayoutData(gd_txtDescription);
-		
+
 		EDynamicBusiness[] tabEnum = EDynamicBusiness.values();
 		for (EDynamicBusiness type : tabEnum) {
 			cboType.add(type.toString());
 		}
 		listCombo = new ArrayList<Combo>();
+		listNum = new ArrayList<Text>();
+		listText = new ArrayList<Text>();
 
 		composite.setSize(300,300);
 		composite.pack();
@@ -83,20 +87,36 @@ public class DialogBuisiness extends ApplicationWindow {
 
 	//ajoute dynamiquement le contenu de la fenetre en fonction du type choisie
 	public void changeDialog(EDynamicBusiness enumBuisiness) {
-		
+
 		clearUI ();
 		listCombo = new ArrayList<Combo>();
 		String desc = enumBuisiness.getStrategy().getExample();
 		txtDescription.setText(desc);
 
-		for (int i = 0; i < enumBuisiness.getNbParams(); i++) {
-			Combo cbo = new Combo(composite, SWT.NONE);
-			if (swtView.getActivitiesSelected().size() == 1)
-			{
-				addListToCombo(swtView.getActivitiesSelected().get(0).getNodes(), cbo);
+		for (EParamType params : enumBuisiness.getStrategy().getParams()) {
+
+			if (params.name().equals(EParamType.NODE.toString())){
+				Combo cbo = new Combo(composite, SWT.NONE);
+				List<String> listNode = new ArrayList<String>();
+				for (ActivityNode activity : swtView.getActivitiesSelected().get(0).getNodes()) {
+					listNode.add(activity.getName());
+				}
+				addListToCombo(listNode, cbo);
 				cbo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 				listCombo.add(cbo);
 			}
+			else if(params.name().equals(EParamType.TEXT.toString())){
+				Combo cboText = new Combo(composite, SWT.NONE);
+				addListToCombo(enumBuisiness.getStrategy().getTextsList() , cboText);
+				cboText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+				listCombo.add(cboText);
+			}
+			else{
+				Text txt = new Text(composite, SWT.NONE);
+				txt.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+				listText.add(txt);
+			}
+
 		}
 
 		btnSubmit = new Button(composite, SWT.NONE);
@@ -106,22 +126,31 @@ public class DialogBuisiness extends ApplicationWindow {
 
 		composite.pack();
 	}
-	
+
 	//Ajout les elements au combo.
-	private void addListToCombo(EList<ActivityNode> eList, Combo cbo) {
-		for (ActivityNode node : eList) {
-			cbo.add(node.getName());
+	private void addListToCombo(List<String> list, Combo cbo) {
+		for (String value : list) {
+			cbo.add(value);
 		}
 	}
-	
-	
+
+
 	private void clearUI ()
 	{
 		for (Combo cbo : listCombo) {
 			cbo.dispose();
 		}
+		for (Text txt : listText) {
+			txt.dispose();
+		}
+		for (Text num : listNum) {
+			num.dispose();
+		}
 		if (btnSubmit != null)
 			btnSubmit.dispose();
+		listCombo.clear();
+		listNum.clear();
+		listText.clear();
 	}
 
 	public DynamicBusiness getSelectedBuisiness() {
