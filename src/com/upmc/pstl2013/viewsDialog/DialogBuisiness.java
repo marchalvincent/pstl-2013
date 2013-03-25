@@ -20,6 +20,7 @@ import com.upmc.pstl2013.properties.dynamic.EDynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.EParamType;
 import com.upmc.pstl2013.views.SwtView;
 import com.upmc.pstl2013.views.events.EventFactory;
+import org.eclipse.swt.widgets.Label;
 
 /**
  * Popup permettant de saisir de nouvelles proprietes pour la famille BUISINESS
@@ -34,6 +35,8 @@ public class DialogBuisiness extends ApplicationWindow {
 	private List<Combo> listCombo;
 	private List<Text> listText;
 	private SwtView swtView;
+	private Label lblSizer;
+	private GridData currentLayout;
 
 
 	/**
@@ -79,7 +82,20 @@ public class DialogBuisiness extends ApplicationWindow {
 		listText = new ArrayList<Text>();
 
 		composite.setSize(300,300);
-		composite.pack();
+		
+		lblSizer = new Label(composite, SWT.NONE);
+		GridData gd_lblSizer = new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1);
+		gd_lblSizer.widthHint = 140;
+		gd_lblSizer.heightHint = 140;
+		lblSizer.setLayoutData(gd_lblSizer);
+		new Label(composite, SWT.NONE);
+		new Label(composite, SWT.NONE);
+		composite.redraw();
+		composite.pack(true);
+		
+		currentLayout = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
+		currentLayout.heightHint = 22;
+		
 		return super.createContents(parent);
 	}
 
@@ -101,20 +117,20 @@ public class DialogBuisiness extends ApplicationWindow {
 					listNode.add(activity.getName());
 				}
 				addListToCombo(listNode, cbo);
-				cbo.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+				cbo.setLayoutData(currentLayout);
 				listCombo.add(cbo);
 			}
 			else if(params.name().equals(EParamType.TEXT.toString())){
 				Combo cboText = new Combo(composite, SWT.NONE);
 				cboText.setData(indice);
 				addListToCombo(enumBuisiness.getStrategy().getTextsList() , cboText);
-				cboText.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+				cboText.setLayoutData(currentLayout);
 				listCombo.add(cboText);
 			}
 			else{
 				Text txt = new Text(composite, SWT.NONE);
 				txt.setData(indice);
-				txt.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
+				txt.setLayoutData(currentLayout);
 				listText.add(txt);
 			}
 			indice++;
@@ -138,6 +154,7 @@ public class DialogBuisiness extends ApplicationWindow {
 
 	private void clearUI ()
 	{
+		lblSizer.dispose();
 		for (Combo cbo : listCombo) {
 			cbo.dispose();
 		}
@@ -149,6 +166,10 @@ public class DialogBuisiness extends ApplicationWindow {
 			btnSubmit.dispose();
 		listCombo.clear();
 		listText.clear();
+		
+		composite.setSize(300,300);
+		composite.redraw();
+		composite.pack(true);
 	}
 
 	public DynamicBusiness getSelectedBuisiness() {
