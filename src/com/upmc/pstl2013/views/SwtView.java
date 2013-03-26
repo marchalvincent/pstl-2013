@@ -310,7 +310,7 @@ public class SwtView extends Composite {
 		chkDetails.setSelection(ConfPropertiesManager.getInstance().isDetails());
 		chkDetails.setText("Details");
 
-		addPropertiesToTree();
+		addPropertiesToTree(false);
 
 		// ajout des events listener
 		btnChooserFile.addMouseListener(EventFactory.getInstance().newEventChooseFile(this));
@@ -334,8 +334,9 @@ public class SwtView extends Composite {
 
 	/**
 	 * Affiche toutes les proprietes dans la view.
+	 * @param addBuisiness True si l'on veux que l'onglet BUISINESS soit ouvert par defaut. False sinon.
 	 */
-	private void addPropertiesToTree() {
+	private void addPropertiesToTree(boolean addBuisiness) {
 
 		treeProperties.removeAll();
 
@@ -357,7 +358,7 @@ public class SwtView extends Composite {
 			lItem0 = new TreeItem(treeProperties, SWT.READ_ONLY);
 			lItem0.setText(family);
 			lItem0.setData(ETreeType.FAMILY);
-			//permet de checker la famille si tous les property sont selectionnée
+			//permet de checker la famille si tous les property sont selectionnées
 			boolean allChecked = (families.get(family).size()>0);
 			for (IProperties elem : families.get(family)) {
 
@@ -373,11 +374,17 @@ public class SwtView extends Composite {
 					allChecked = false;
 
 				if (family.equals(Behavior.BUISINESS.toString())) {
+					//Ouverture de la famille
+					lItem0.setExpanded(addBuisiness);
 					//Ajout des propeties dynamique :
-					for (DynamicBusiness dynaBuisiness : listDynamicBuisiness.values()) {
-						lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
-						lItem1.setText(dynaBuisiness.getName());
-						lItem1.setData(ETreeType.DYNAMIC_PROPERTY);
+					if (listDynamicBuisiness.values().size() > 0){
+						for (DynamicBusiness dynaBuisiness : listDynamicBuisiness.values()) {
+							lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
+							lItem1.setText(dynaBuisiness.getName());
+							lItem1.setData(ETreeType.DYNAMIC_PROPERTY);
+							lItem1.setChecked(ConfPropertiesManager.getInstance().getProperties().contains(dynaBuisiness.getName()));
+						}
+						//On selectionne le dernier ajouté.
 						lItem1.setChecked(true);
 					}
 				}
@@ -435,13 +442,12 @@ public class SwtView extends Composite {
 
 	public void updateTreePropety(DynamicBusiness buisiness) {
 		listDynamicBuisiness.put(buisiness.getName(), buisiness);
-		addPropertiesToTree();
-
+		addPropertiesToTree(true);
 	}
 
 	public void clearDynamicBuisiness(){
 		listDynamicBuisiness.clear();
-		addPropertiesToTree();
+		addPropertiesToTree(false);
 	}
 
 	public Text getTxtDirectory() {

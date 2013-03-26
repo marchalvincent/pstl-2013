@@ -1,10 +1,13 @@
 package com.upmc.pstl2013.viewsDialog;
 
+import java.io.IOException;
+
 import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
+import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventClickSubmit extends MouseAdapter {
@@ -26,12 +29,18 @@ public class EventClickSubmit extends MouseAdapter {
 	@Override
 	public void mouseDown(MouseEvent e) {
 
-		DynamicBusiness buisiness;
-		buisiness = dialog.getSelectedBuisiness();
-		swtView.updateTreePropety(buisiness);
-		if (!dialog.close())
-			log.error("The dialog can't be closed.");
-		
+		try {
+			//On enregistre les selections faites avant d'update la treeView
+			ConfPropertiesManager.getInstance().store();
+
+			DynamicBusiness buisiness;
+			buisiness = dialog.getSelectedBuisiness();
+			swtView.updateTreePropety(buisiness);
+			if (!dialog.close())
+				log.error("The dialog can't be closed.");
+		} catch (IOException ex) {
+			log.error(ex.getMessage());
+		}
 	}
 
 
