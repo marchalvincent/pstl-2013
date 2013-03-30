@@ -3,7 +3,8 @@
 			org.eclipse.emf.common.util.EList
 			org.eclipse.uml2.uml.*
 			com.upmc.pstl2013.alloyGenerator.jet.*
-			com.upmc.pstl2013.properties.*" 
+			com.upmc.pstl2013.properties.*
+			com.upmc.pstl2013.properties.impl.EtatInitial" 
 	skeleton="alloyGenerator.skeleton" %>
 <% 
 	final Logger log = Logger.getLogger(JetTemplate.class);
@@ -15,11 +16,73 @@
 	IJetHelper jetHelper = (IJetHelper) argument;
 	
 	// on récupère la propriété
-	IProperties propertie = jetHelper.getPropertie();
-	if (propertie == null) {
+	IProperties property = jetHelper.getProperty();
+	if (property == null) {
 		final String error = "La propriété est incorrecte.";
 		log.error(error);
 		throw new JetException(error);
+	}
+	
+	// GENERATION DYNAMIQUE DE L'ETAT INITIAL
+	StringBuffer stringInit = new StringBuffer();
+	
+	// on regarde si l'objet property possède un EtatInitial
+	EtatInitial etatInit = property.getEtatInitial();
+	
+	// si on n'a pas d'état initial, on fait par défaut
+	if (etatInit == null) {
+		// on gère les cas sans noeud initial...
+		String initialNode = property.getString("initialNode");
+		if (initialNode == null) {
+			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
+			log.error(error);
+			throw new JetException(error);
+		}
+		stringInit.append(initialNode);
+		stringInit.append(" -> 1 ,  // tokens \n		ActivityEdge -> 0  // offers");
+	}
+	
+	// sinon on parse l'objet EtatInitial pour définir le process
+	else {
+		// on s'occupe d'abord des nodes
+		if (etatInit.hasNodeInit()) {
+			stringInit.append("ActivityNode -> 0 +");
+			for (String name : etatInit.keySetNode()) {
+				Integer number = etatInit.getNode(name);
+				if (number > 0) {
+					stringInit.append("+ ");
+					stringInit.append(name);
+					stringInit.append(" -> ");
+					stringInit.append(number);
+					stringInit.append(" ");
+				}
+			}
+			stringInit.append(", // tokens\n");
+		}
+		// si on n'a aucun noeud avec le init
+		else {
+			stringInit.append("ActivityNode -> 0, \n");
+		}
+		
+		// on s'occupe maintenant des edges
+		if (etatInit.hasEdgeInit()) {
+			stringInit.append("		ActivityEdge -> 0 +");
+			for (String name : etatInit.keySetEdge()) {
+				Integer number = etatInit.getEdge(name);
+				if (number > 0) {
+					stringInit.append("+ ");
+					stringInit.append(name);
+					stringInit.append(" -> ");
+					stringInit.append(number);
+					stringInit.append(" ");
+				}
+			}
+			stringInit.append("// offers");
+		}
+		// si on n'a aucun noeud avec le init
+		else {
+			stringInit.append("		ActivityEdge -> 0");
+		}
 	}
 %>
 
@@ -30,16 +93,7 @@ open semantic
 
 fact initTokens {
 	Init[  
-		<% //GENERATION DU NOEUD INITIAL EN DYNAMIQUE
-		// on gère les cas sans noeud initial...
-		String initialNode = propertie.getString("initialNode");
-		if (initialNode == null) {
-			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
-			log.error(error);
-			throw new JetException(error);
-		}
-		stringBuffer.append(initialNode); %> -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + 
-		ActivityEdge -> 0  // offers
+		<%=stringInit.toString()%>
 	]
 }
 
@@ -90,7 +144,7 @@ one sig P extends Performer {} {
 	}
 
 	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. subTemplates ou subTemplates/dynamics)
-	stringBuffer.append(propertie.getAlloyCode());
+	stringBuffer.append(property.getAlloyCode());
 %>
 
 /** *Visualization Variables */

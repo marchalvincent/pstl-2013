@@ -5,6 +5,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.*;
 import com.upmc.pstl2013.alloyGenerator.jet.*;
 import com.upmc.pstl2013.properties.*;
+import com.upmc.pstl2013.properties.impl.EtatInitial;
 
 public class JetTemplate implements IJetTemplate {
 
@@ -19,7 +20,7 @@ public class JetTemplate implements IJetTemplate {
 
   public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl;
   protected final String TEXT_1 = NL + "module process" + NL + "" + NL + "open syntax" + NL + "open semantic" + NL + "" + NL + "fact initTokens {" + NL + "\tInit[  " + NL + "\t\t";
-  protected final String TEXT_2 = " -> 1 ,  // tokens //TODO pour chaque noeud Initial, NOM1 -> 1 + NOM2 -> 1 + " + NL + "\t\tActivityEdge -> 0  // offers" + NL + "\t]" + NL + "}" + NL + "" + NL + "// Timing" + NL + "one sig T extends Timing {} {" + NL + "\ttiming = (ActivityNode -> 0) " + NL + "}" + NL + "" + NL + "// Role Performer" + NL + "one sig Yoann extends RolePerformer {}" + NL + "one sig P extends Performer {} {" + NL + "\tperformer = ActivityNode -> Yoann" + NL + "}" + NL;
+  protected final String TEXT_2 = NL + "\t]" + NL + "}" + NL + "" + NL + "// Timing" + NL + "one sig T extends Timing {} {" + NL + "\ttiming = (ActivityNode -> 0) " + NL + "}" + NL + "" + NL + "// Role Performer" + NL + "one sig Yoann extends RolePerformer {}" + NL + "one sig P extends Performer {} {" + NL + "\tperformer = ActivityNode -> Yoann" + NL + "}" + NL;
   protected final String TEXT_3 = NL + NL + "/** *Visualization Variables */" + NL + "// http://alloy.mit.edu/community/node/548" + NL + "fun vNodeExecuting : State->ActivityNode {" + NL + "   {s:State, a:ActivityNode | s.getTokens[a] > 0}" + NL + "}" + NL + "fun vEdgeHaveOffers : State->ActivityEdge {" + NL + "   {s:State, e:ActivityEdge | s.getOffers[e] > 0}" + NL + "}" + NL + "" + NL + "fun pinInNode : State->Action->Pin->Int {" + NL + "\t {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}" + NL + "}";
   protected final String TEXT_4 = NL;
 
@@ -37,23 +38,77 @@ public class JetTemplate implements IJetTemplate {
 	IJetHelper jetHelper = (IJetHelper) argument;
 	
 	// on récupère la propriété
-	IProperties propertie = jetHelper.getPropertie();
-	if (propertie == null) {
+	IProperties property = jetHelper.getProperty();
+	if (property == null) {
 		final String error = "La propriété est incorrecte.";
 		log.error(error);
 		throw new JetException(error);
 	}
-
-    stringBuffer.append(TEXT_1);
-     //GENERATION DU NOEUD INITIAL EN DYNAMIQUE
+	
+	// GENERATION DYNAMIQUE DE L'ETAT INITIAL
+	StringBuffer stringInit = new StringBuffer();
+	
+	// on regarde si l'objet property possède un EtatInitial
+	EtatInitial etatInit = property.getEtatInitial();
+	
+	// si on n'a pas d'état initial, on fait par défaut
+	if (etatInit == null) {
 		// on gère les cas sans noeud initial...
-		String initialNode = propertie.getString("initialNode");
+		String initialNode = property.getString("initialNode");
 		if (initialNode == null) {
 			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
 			log.error(error);
 			throw new JetException(error);
 		}
-		stringBuffer.append(initialNode); 
+		stringInit.append(initialNode);
+		stringInit.append(" -> 1 ,  // tokens \n		ActivityEdge -> 0  // offers");
+	}
+	
+	// sinon on parse l'objet EtatInitial pour définir le process
+	else {
+		// on s'occupe d'abord des nodes
+		if (etatInit.hasNodeInit()) {
+			stringInit.append("ActivityNode -> 0 +");
+			for (String name : etatInit.keySetNode()) {
+				Integer number = etatInit.getNode(name);
+				if (number > 0) {
+					stringInit.append("+ ");
+					stringInit.append(name);
+					stringInit.append(" -> ");
+					stringInit.append(number);
+					stringInit.append(" ");
+				}
+			}
+			stringInit.append(", // tokens\n");
+		}
+		// si on n'a aucun noeud avec le init
+		else {
+			stringInit.append("ActivityNode -> 0, \n");
+		}
+		
+		// on s'occupe maintenant des edges
+		if (etatInit.hasEdgeInit()) {
+			stringInit.append("		ActivityEdge -> 0 +");
+			for (String name : etatInit.keySetEdge()) {
+				Integer number = etatInit.getEdge(name);
+				if (number > 0) {
+					stringInit.append("+ ");
+					stringInit.append(name);
+					stringInit.append(" -> ");
+					stringInit.append(number);
+					stringInit.append(" ");
+				}
+			}
+			stringInit.append("// offers");
+		}
+		// si on n'a aucun noeud avec le init
+		else {
+			stringInit.append("		ActivityEdge -> 0");
+		}
+	}
+
+    stringBuffer.append(TEXT_1);
+    stringBuffer.append(stringInit.toString());
     stringBuffer.append(TEXT_2);
      
 	// GENERATION DES NOEUDS ET EDGES EN DYNAMIQUE
@@ -91,7 +146,7 @@ public class JetTemplate implements IJetTemplate {
 	}
 
 	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. subTemplates ou subTemplates/dynamics)
-	stringBuffer.append(propertie.getAlloyCode());
+	stringBuffer.append(property.getAlloyCode());
 
     stringBuffer.append(TEXT_3);
     stringBuffer.append(TEXT_4);

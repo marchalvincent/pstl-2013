@@ -1,12 +1,10 @@
 package com.upmc.pstl2013.views.events;
 
 import java.util.List;
-
 import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.uml2.uml.Activity;
-
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
@@ -43,7 +41,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 
 		// 3. On récupère tous les process
 		List<Activity> activitiesSelected = swtView.getActivitiesSelected();
-
+		
 		// 4. On récupère toutes les propriétés seléctionnées
 		List<IProperties> properties = null;
 		IProperties TMPProperty = null;
