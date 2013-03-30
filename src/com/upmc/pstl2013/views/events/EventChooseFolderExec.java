@@ -55,9 +55,9 @@ public class EventChooseFolderExec extends MouseAdapter{
 		sb = new StringBuilder();
 		try {
 			if (container.length > 0)
-				sb.append("Selection des fichiers suivant : ");
+				sb.append("Following files has been selected : ");
 			else
-				sb.append("Aucun fichier n'a été sélectionné.");
+				sb.append("No files has been selected.");
 
 			activitiesSelected = swtView.getActivitiesSelected();
 			activitiesSelected.clear();
