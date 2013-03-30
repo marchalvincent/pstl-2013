@@ -8,6 +8,7 @@ import org.apache.log4j.Logger;
 import com.upmc.pstl2013.properties.impl.Attribute;
 import com.upmc.pstl2013.properties.impl.DeadLock;
 import com.upmc.pstl2013.properties.impl.EnoughState;
+import com.upmc.pstl2013.properties.impl.EtatInitial;
 import com.upmc.pstl2013.properties.impl.Orga;
 import com.upmc.pstl2013.properties.impl.PersonalPropertie;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
@@ -96,5 +97,12 @@ public class PropertiesFactory {
 	 */
 	public IAttribute newAttribute(String key, Object value, Boolean isPrivate) {
 		return new Attribute(key, value, isPrivate);
+	}
+	
+	/**
+	 * Renvoie un {@link EtatInitial}.
+	 */
+	public EtatInitial newEtatInitial() {
+		return new EtatInitial();
 	}
 }
