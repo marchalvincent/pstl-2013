@@ -39,7 +39,7 @@ public class EnoughState extends AbstractProperties {
 		try {
 			nbState = Integer.parseInt(super.getString("nbState"));
 		} catch(Exception e) {
-			log.error("Impossible de parser l'attribut 'nbState'.");
+			log.error("Impossible to parse the attribute 'nbState'.");
 			nbState = 1;
 		}
 		
@@ -47,7 +47,7 @@ public class EnoughState extends AbstractProperties {
 			try {
 				maxStep = Integer.parseInt(super.getString("maxStep"));
 			} catch(Exception e) {
-				log.error("Impossible de parser l'attribut 'maxStep'.");
+				log.error("Impossible to parse the attribute 'maxStep'.");
 				maxStep = 100;
 			}
 		}

@@ -76,8 +76,8 @@ public class UMLParser implements IUMLParser {
 		this.cleanEdgesWithoutName(activity.getEdges());
 		
 		// on clean les noms incorrects syntaxiquement
-		this.cleanNodesName(activity.getNodes());
-		this.cleanEdgesName(activity.getEdges());
+		this.cleanNodeNames(activity.getNodes());
+		this.cleanEdgeNames(activity.getEdges());
 		
 		return activity;
 	}
@@ -118,7 +118,7 @@ public class UMLParser implements IUMLParser {
 	 * 
 	 * @param nodes la liste des noeuds à nettoyer.
 	 */
-	private void cleanNodesName(EList<ActivityNode> nodes) {
+	private void cleanNodeNames(EList<ActivityNode> nodes) {
 		for (ActivityNode activityNode : nodes) {
 			activityNode.setName(activityNode.getName().replace("-", ""));
 			activityNode.setName("gen_" + activityNode.getName());
@@ -130,7 +130,7 @@ public class UMLParser implements IUMLParser {
 	 * 
 	 * @param egdes la liste des arcs à nettoyer.
 	 */
-	private void cleanEdgesName(EList<ActivityEdge> egdes) {
+	private void cleanEdgeNames(EList<ActivityEdge> egdes) {
 		for (ActivityEdge activityEdge : egdes) {
 			activityEdge.setName(activityEdge.getName().replace("-", ""));
 			activityEdge.setName("gen_" + activityEdge.getName());
