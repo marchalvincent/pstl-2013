@@ -89,6 +89,9 @@ public class SwtView extends Composite {
 	public SwtView(Composite parent, int style) {
 
 		super(parent, style);
+		
+		//Suppression des anciens logs
+		deleteOldLogs();
 
 		activities = new ArrayList<Activity>();
 		listDynamicBuisiness = new HashMap<String, DynamicBusiness>();
@@ -239,7 +242,7 @@ public class SwtView extends Composite {
 		});
 
 		/*
-		 *Debut de la partie Properties
+		 * Debut de la partie Properties
 		 */
 		treeFilesExecuted = new Tree(cpItemDetails, SWT.BORDER);
 		GridData gd_treeFilesExecuted = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
@@ -252,7 +255,7 @@ public class SwtView extends Composite {
 		btnAddbuisiness.setEnabled(false);
 
 		/*
-		 *Debut de la partie Details
+		 * Debut de la partie Details
 		 */
 		txtDetailsLogs = new Text(cpItemDetails, SWT.BORDER | SWT.READ_ONLY | SWT.H_SCROLL | SWT.V_SCROLL | SWT.CANCEL | SWT.MULTI);
 		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 3));
@@ -274,7 +277,7 @@ public class SwtView extends Composite {
 		});
 
 		/*
-		 *Debut de la partie Options
+		 * Debut de la partie Options
 		 */
 		lblTimeout = new Label(cpItemOptions, SWT.NONE);
 		lblTimeout.setAlignment(SWT.CENTER);
@@ -328,8 +331,6 @@ public class SwtView extends Composite {
 		});
 		btnAddbuisiness.addMouseListener(EventFactory.getInstance().newEventClickAddBuisiness(this));
 
-		//Suppression des anciens logs
-		deleteOldLogs();
 	}
 
 	/**
