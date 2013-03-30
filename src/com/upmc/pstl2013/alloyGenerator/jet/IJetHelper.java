@@ -31,5 +31,5 @@ public interface IJetHelper {
 	 * 
 	 * @return une {@link IProperties}.
 	 */
-	IProperties getPropertie();
+	IProperties getProperty();
 }

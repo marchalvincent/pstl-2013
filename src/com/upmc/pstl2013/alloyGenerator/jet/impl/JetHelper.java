@@ -34,7 +34,7 @@ public class JetHelper implements IJetHelper {
 	}
 
 	@Override
-	public IProperties getPropertie() {
+	public IProperties getProperty() {
 		return propertie;
 	}
 }

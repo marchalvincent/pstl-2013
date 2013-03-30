@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.properties.impl;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
@@ -9,22 +10,64 @@ import java.util.Set;
  *
  */
 public class EtatInitial {
-	
-	private Map<String, Integer> jetons;
+
+	private Map<String, Integer> nodes;
+	private Map<String, Integer> edges;
 	
 	public EtatInitial() {
-		
+		nodes = new HashMap<String, Integer>();
+		edges = new HashMap<String, Integer>();
 	}
 	
-	public void put(String nodeOrEdges, Integer numberJeton) {
-		jetons.put(nodeOrEdges, numberJeton);
+	public void putNode(String node, Integer numberJeton) {
+		nodes.put(node, numberJeton);
 	}
 	
-	public Set<String> keySet() {
-		return jetons.keySet();
+	public Set<String> keySetNode() {
+		return nodes.keySet();
 	}
 	
-	public Integer get(String name) {
-		return jetons.get(name);
+	public Integer getNode(String name) {
+		return nodes.get(name);
+	}
+	
+	public void putEdge(String edge, Integer numberJeton) {
+		edges.put(edge, numberJeton);
+	}
+	
+	public Set<String> keySetEdge() {
+		return edges.keySet();
+	}
+	
+	public Integer getEdge(String name) {
+		return edges.get(name);
+	}
+	
+	/**
+	 * Renvoie true si au moins un noeud possède un jeton. Cette méthode est utilisée 
+	 * pour la génération Alloy.
+	 * @return
+	 */
+	public boolean hasNodeInit() {
+		for (String name : nodes.keySet()) {
+			if (nodes.get(name) > 0) {
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	/**
+	 * Renvoie true si au moins un edge possède un jeton. Cette méthode est utilisée 
+	 * pour la génération Alloy.
+	 * @return
+	 */
+	public boolean hasEdgeInit() {
+		for (String name : edges.keySet()) {
+			if (edges.get(name) > 0) {
+				return true;
+			}
+		}
+		return false;
 	}
 }
