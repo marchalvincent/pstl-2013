@@ -26,6 +26,7 @@ public abstract class AbstractProperties implements IProperties {
 	private IStrategyExecution strategyExecution;
 	private IStrategyParcours strategyParcours;
 	private boolean isModifiable;
+	private EtatInitial etatInitial;
 	private static Logger log = Logger.getLogger(AbstractProperties.class);
 
 	/**
@@ -43,6 +44,7 @@ public abstract class AbstractProperties implements IProperties {
 		this.strategyExecution = strategyExecution;
 		this.strategyParcours = strategy;
 		this.setModifiable(true);
+		this.etatInitial = null;
 	}
 
 	@Override
@@ -186,5 +188,15 @@ public abstract class AbstractProperties implements IProperties {
 				break;
 			}
 		}
+	}
+
+	@Override
+	public void setEtatInitial(EtatInitial etat) {
+		this.etatInitial = etat;
+	}
+
+	@Override
+	public EtatInitial getEtatInitial() {
+		return etatInitial;
 	}
 }
