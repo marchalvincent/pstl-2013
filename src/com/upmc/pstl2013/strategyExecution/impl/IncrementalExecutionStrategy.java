@@ -15,7 +15,7 @@ public class IncrementalExecutionStrategy implements IStrategyExecution {
 	public IncrementalExecutionStrategy() {
 		super();
 	}
-		
+	
 	@Override
 	public boolean continueExecution() {
 		// tant qu'on a un contre exemple, on continue la génération.

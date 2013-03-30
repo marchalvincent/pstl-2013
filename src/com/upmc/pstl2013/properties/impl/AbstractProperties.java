@@ -5,7 +5,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
-import com.upmc.pstl2013.properties.Behavior;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.PropertiesFactory;
@@ -159,9 +158,6 @@ public abstract class AbstractProperties implements IProperties {
 		}
 		return object;
 	}
-	
-	@Override
-	public abstract Behavior getBehavior();
 	
 	protected void setModifiable(boolean isModifiable) {
 		this.isModifiable = isModifiable;
