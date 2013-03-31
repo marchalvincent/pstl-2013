@@ -19,6 +19,6 @@ public class Absence extends AbstractStrategyDynamicBusiness {
 	
 	@Override
 	public String getExample() {
-		return "A is never executed.";
+		return super.getExample() + "A is never executed.";
 	}
 }

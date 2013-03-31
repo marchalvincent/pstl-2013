@@ -24,6 +24,6 @@ public class Existence extends AbstractStrategyDynamicBusiness {
 	
 	@Override
 	public String getExample() {
-		return "A is executed more/less than (or exactly) 2 time.";
+		return super.getExample() + "A is executed more/less than (or exactly) 2 time.";
 	}
 }
