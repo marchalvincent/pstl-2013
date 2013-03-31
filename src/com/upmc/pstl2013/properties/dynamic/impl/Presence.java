@@ -19,6 +19,6 @@ public class Presence extends AbstractStrategyDynamicBusiness {
 	
 	@Override
 	public String getExample() {
-		return "A is executed one or more time.";
+		return super.getExample() + "A is executed one or more time.";
 	}
 }

@@ -25,7 +25,7 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.Tree;
 import org.eclipse.swt.widgets.TreeItem;
 import org.eclipse.uml2.uml.Activity;
-import org.eclipse.wb.swt.SWTResourceManager;
+import org.eclipse.wb.swt.ResourceManager;
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.Behavior;
@@ -33,7 +33,6 @@ import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
-import com.upmc.pstl2013.util.Utils;
 import com.upmc.pstl2013.views.events.EventFactory;
 
 public class SwtView extends Composite {
@@ -114,32 +113,39 @@ public class SwtView extends Composite {
 		tabFolder.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
 
 		//Items et composite pour la partie utilisation du tabeFolder
-		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
-		itemAlloyUse.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "start_cheatsheet.gif"));
-		itemAlloyUse.setText("Use");
 		cpItemAlloyUse = new Composite(tabFolder, SWT.BORDER);
 		cpItemAlloyUse.setLayout(new GridLayout(3, false));
+		
+		itemAlloyUse = new TabItem(tabFolder, SWT.NONE);
+		itemAlloyUse.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/start_cheatsheet.gif"));
+		itemAlloyUse.setText("Use");
 		itemAlloyUse.setControl(cpItemAlloyUse);
+		
 		//Items et composite pour la partie propriete du tabeFolder
-		itemAlloyProperty = new TabItem(tabFolder, SWT.NONE);
-		itemAlloyProperty.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "properties.gif"));
-		itemAlloyProperty.setText("Properties");
 		cpItemAlloyProp = new Composite(tabFolder, SWT.BORDER);
 		cpItemAlloyProp.setLayout(new GridLayout(3, false));
+		
+		itemAlloyProperty = new TabItem(tabFolder, SWT.NONE);
+		itemAlloyProperty.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/properties.gif"));
+		itemAlloyProperty.setText("Properties");
 		itemAlloyProperty.setControl(cpItemAlloyProp);
+		
 		//Items et composite pour la partie Details du tabeFolder
-		itemDetails = new TabItem(tabFolder, SWT.NONE);
-		itemDetails.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "console_view.gif"));
-		itemDetails.setText("Details");
 		cpItemDetails = new Composite(tabFolder, SWT.BORDER);
 		cpItemDetails.setLayout(new GridLayout(2, false));
+		
+		itemDetails = new TabItem(tabFolder, SWT.NONE);
+		itemDetails.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/console_view.gif"));
+		itemDetails.setText("Details");
 		itemDetails.setControl(cpItemDetails);
+		
 		//Items et composite pour la partie Options du tabeFolder
-		itemOptions = new TabItem(tabFolder, SWT.NONE);
-		itemOptions.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "bkmrk_nav.gif"));
-		itemOptions.setText("Options");
 		cpItemOptions= new Composite(tabFolder, SWT.BORDER);
 		cpItemOptions.setLayout(new GridLayout(2, false));
+		
+		itemOptions = new TabItem(tabFolder, SWT.NONE);
+		itemOptions.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/bkmrk_nav.gif"));
+		itemOptions.setText("Options");
 		itemOptions.setControl(cpItemOptions);
 
 		treeProperties = new Tree(cpItemAlloyProp, SWT.CHECK | SWT.BORDER);
@@ -165,19 +171,20 @@ public class SwtView extends Composite {
 		tabValuePropertiesBool.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 2));
 		tabValuePropertiesBool.setHeaderVisible(true);
 		tabValuePropertiesBool.setLinesVisible(true);
+		
 		editorBool = new TableEditor(tabValuePropertiesBool);
 		TableColumn column = new TableColumn(tabValuePropertiesBool, SWT.NONE);
 		column.setText("Key");
 
 		GridLayout gridLayout = new GridLayout(1, false);
 		setLayout(gridLayout);
+		
 		/*
 		 * Debut contenu de la parite utilisation
 		 */
 		btnChooseDir = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooseDir.setToolTipText("Choose the directory path for the generated alloy files");
-		btnChooseDir.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "choose_folder.gif"));
-
+		btnChooseDir.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/choose_folder.gif"));
 		btnChooseDir.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		btnChooseDir.setText("Choose dest.");
 
@@ -187,13 +194,13 @@ public class SwtView extends Composite {
 
 		btnChooserFile = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooserFile.setToolTipText("Choose files for the execution");
-		btnChooserFile.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "select_file.gif"));
+		btnChooserFile.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/select_file.gif"));
 		btnChooserFile.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnChooserFile.setText("File");
 
 		btnChooseFolderExec = new Button(cpItemAlloyUse, SWT.NONE);
 		btnChooseFolderExec.setToolTipText("Choose all files of one folder for the execution");
-		btnChooseFolderExec.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "select_folder.gif"));
+		btnChooseFolderExec.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/select_folder.gif"));
 
 		btnChooseFolderExec.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, false, false, 1, 1));
 		btnChooseFolderExec.setText("Folder");
@@ -203,36 +210,36 @@ public class SwtView extends Composite {
 		
 		btnExcuterAlloy = new Button(cpItemAlloyUse, SWT.NONE);
 		btnExcuterAlloy.setToolTipText("Run the execution Alloy");
-		btnExcuterAlloy.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run.gif"));
+		btnExcuterAlloy.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/run.gif"));
 		btnExcuterAlloy.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		btnExcuterAlloy.setText("Execute Alloy");
+		
 		new Label(cpItemAlloyUse, SWT.NONE);
 		new Label(cpItemAlloyUse, SWT.NONE);
 
 		btnLogsErrors = new Button(cpItemAlloyUse, SWT.NONE);
-		btnLogsErrors.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "error_log.gif"));
+		btnLogsErrors.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/error_log.gif"));
 		btnLogsErrors.setToolTipText("Open the errors logs");
 		btnLogsErrors.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnLogsErrors.setText("Logs");
 
 		btnLogsInfos = new Button(cpItemAlloyUse, SWT.NONE);
-		btnLogsInfos.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "info_log.gif"));
+		btnLogsInfos.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/info_log.gif"));
 		btnLogsInfos.setToolTipText("Open the infos logs");
 		btnLogsInfos.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnLogsInfos.setText("Logs");
-		btnLogsInfos.addMouseListener(EventFactory.getInstance().newEventReadLogs(this,nameLogInfo));
 
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
-		btnPersonalPropertie.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "run_perso.gif"));
+		btnPersonalPropertie.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/run_perso.gif"));
 		btnPersonalPropertie.setToolTipText("Execute the user alloy text");
 		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
 		btnPersonalPropertie.setText("Exec Perso");
 
+		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
+		gd_txtPersonalPropertie.heightHint = 65;
 
 		txtPersonalPropertie = new Text(cpItemAlloyUse, SWT.BORDER | SWT.V_SCROLL | SWT.MULTI);
 		txtPersonalPropertie.setTouchEnabled(true);
-		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
-		gd_txtPersonalPropertie.heightHint = 65;
 		txtPersonalPropertie.setLayoutData(gd_txtPersonalPropertie);
 		//Empeche de faire perdre le focus dans la text box
 		txtPersonalPropertie.addTraverseListener(new TraverseListener () {
@@ -244,9 +251,10 @@ public class SwtView extends Composite {
 		/*
 		 * Debut de la partie Properties
 		 */
-		treeFilesExecuted = new Tree(cpItemDetails, SWT.BORDER);
 		GridData gd_treeFilesExecuted = new GridData(SWT.FILL, SWT.FILL, false, true, 1, 1);
 		gd_treeFilesExecuted.widthHint = 128;
+		
+		treeFilesExecuted = new Tree(cpItemDetails, SWT.BORDER);
 		treeFilesExecuted.setLayoutData(gd_treeFilesExecuted);
 
 		btnAddbuisiness = new Button(cpItemAlloyProp, SWT.NONE);
@@ -261,7 +269,12 @@ public class SwtView extends Composite {
 		txtDetailsLogs.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 3));
 
 		btnAlloyVisualisation = new Button(cpItemDetails, SWT.NONE);
-		btnAlloyVisualisation.setImage(SWTResourceManager.getImage(Utils.pluginPath + "icons" + File.separator + "insp_sbook.gif"));
+		btnAlloyVisualisation.addSelectionListener(new SelectionAdapter() {
+			@Override
+			public void widgetSelected(SelectionEvent e) {
+			}
+		});
+		btnAlloyVisualisation.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/insp_sbook.gif"));
 		btnAlloyVisualisation.setEnabled(false);
 		btnAlloyVisualisation.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnAlloyVisualisation.setText("Visualise");
@@ -283,6 +296,7 @@ public class SwtView extends Composite {
 		lblTimeout.setAlignment(SWT.CENTER);
 		lblTimeout.setLayoutData(new GridData(SWT.RIGHT, SWT.FILL, false, false, 1, 1));
 		lblTimeout.setText("Time Out (sec.)");
+		
 		txtTimeout = new Text(cpItemOptions, SWT.BORDER);
 		txtTimeout.setText(String.valueOf(ConfPropertiesManager.getInstance().getTimeOut()));
 		txtTimeout.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
@@ -319,17 +333,18 @@ public class SwtView extends Composite {
 		btnChooserFile.addMouseListener(EventFactory.getInstance().newEventChooseFile(this));
 		btnExcuterAlloy.addMouseListener(EventFactory.getInstance().newEventCurrentExecutor(this));
 		btnLogsErrors.addMouseListener(EventFactory.getInstance().newEventReadLogs(this, nameLogError));
+		btnLogsInfos.addMouseListener(EventFactory.getInstance().newEventReadLogs(this,nameLogInfo));
 		btnPersonalPropertie.addMouseListener(EventFactory.getInstance().newEventPersonalExecutor(this));
 		btnChooseFolderExec.addMouseListener(EventFactory.getInstance().newEventChooseFolderExec(this));
 		btnAlloyVisualisation.addMouseListener(EventFactory.getInstance().newEventClickVisualisationAlloy(this));
 		btnChooseDir.addMouseListener(EventFactory.getInstance().newEventChooseDir(this));
+		btnAddbuisiness.addMouseListener(EventFactory.getInstance().newEventClickAddBuisiness(this));
 		chkDetails.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				ConfPropertiesManager.getInstance().setDetails(chkDetails.getSelection());
 			}
 		});
-		btnAddbuisiness.addMouseListener(EventFactory.getInstance().newEventClickAddBuisiness(this));
 
 	}
 
