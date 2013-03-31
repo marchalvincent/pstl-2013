@@ -89,8 +89,6 @@ public class SwtView extends Composite {
 
 		super(parent, style);
 		
-		//Suppression des anciens logs
-		deleteOldLogs();
 
 		activities = new ArrayList<Activity>();
 		listDynamicBuisiness = new HashMap<String, DynamicBusiness>();
@@ -107,6 +105,9 @@ public class SwtView extends Composite {
 		else {
 			userDir = ConfPropertiesManager.getInstance().getPathFolder();
 		}
+
+		//Suppression des anciens logs
+		deleteOldLogs();
 		
 		// TabFolder
 		tabFolder = new TabFolder(this, SWT.NONE);
@@ -414,6 +415,7 @@ public class SwtView extends Composite {
 	 */
 	private void deleteOldLogs() {
 		log.debug("Suppression des anciens logs");
+		System.out.println("Suppression des anciens logs" + userDir + "logInfo.html");
 		File logInfo = new File(userDir + "logInfo.html");
 		File logDebug = new File(userDir + "logDebug.html");
 		logInfo.delete();
