@@ -2,7 +2,7 @@ package com.upmc.pstl2013.properties;
 
 import java.util.Map;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
-import com.upmc.pstl2013.properties.impl.EtatInitial;
+import com.upmc.pstl2013.properties.impl.InitialState;
 import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
 import com.upmc.pstl2013.strategyParcours.IStrategyParcours;
 
@@ -127,13 +127,13 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	
 	/**
 	 * Setter pour spécifier l'état initial du process.
-	 * @param etat {@link EtatInitial}.
+	 * @param etat {@link InitialState}.
 	 */
-	void setEtatInitial(EtatInitial etat);
+	void setEtatInitial(InitialState etat);
 	
 	/**
 	 * Getter sur l'état initial du process.
-	 * @return {@link EtatInitial}.
+	 * @return {@link InitialState}.
 	 */
-	EtatInitial getEtatInitial();
+	InitialState getEtatInitial();
 }

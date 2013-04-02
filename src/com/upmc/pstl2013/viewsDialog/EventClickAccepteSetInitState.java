@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 
-import com.upmc.pstl2013.properties.impl.EtatInitial;
+import com.upmc.pstl2013.properties.impl.InitialState;
 import com.upmc.pstl2013.views.SwtView;
 
 public class EventClickAccepteSetInitState extends MouseAdapter {
@@ -27,7 +27,7 @@ public class EventClickAccepteSetInitState extends MouseAdapter {
 	public void mouseDown(MouseEvent e) {
 
 
-		EtatInitial initState = dialog.getInitalStat();
+		InitialState initState = dialog.getInitalStat();
 		//Modification des property avec le nouvel EtatInitial
 		swtview.setInitState(initState);
 		if (!dialog.close())

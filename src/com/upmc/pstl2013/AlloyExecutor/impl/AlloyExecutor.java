@@ -51,7 +51,7 @@ public class AlloyExecutor implements IAlloyExecutor {
 	}
 
 	@Override
-	public IFileResult executeFiles() throws Err, JetException {
+	public IFileResult executeFiles(boolean executed) throws Err, JetException {
 
 		// Déclaration des variables
 		IActivityResult activityResult = null;
@@ -71,6 +71,11 @@ public class AlloyExecutor implements IAlloyExecutor {
 			// on créé un résultat pour cette activité si elle n'existe pas déjà
 			if (activityResult == null) {
 				activityResult = ExecutorFactory.getInstance().newActivityResult(property.getName());
+			}
+			// si on ne fait que la génération, on quitte le while
+			if (!executed) {
+				activityResult.setNbState(generator.getNbState());
+				break;
 			}
 
 			try {

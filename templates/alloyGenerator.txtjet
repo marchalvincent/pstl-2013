@@ -4,7 +4,7 @@
 			org.eclipse.uml2.uml.*
 			com.upmc.pstl2013.alloyGenerator.jet.*
 			com.upmc.pstl2013.properties.*
-			com.upmc.pstl2013.properties.impl.EtatInitial" 
+			com.upmc.pstl2013.properties.impl.InitialState" 
 	skeleton="alloyGenerator.skeleton" %>
 <% 
 	final Logger log = Logger.getLogger(JetTemplate.class);
@@ -27,7 +27,7 @@
 	StringBuffer stringInit = new StringBuffer();
 	
 	// on regarde si l'objet property possède un EtatInitial
-	EtatInitial etatInit = property.getEtatInitial();
+	InitialState etatInit = property.getEtatInitial();
 	
 	// si on n'a pas d'état initial, on fait par défaut
 	if (etatInit == null) {

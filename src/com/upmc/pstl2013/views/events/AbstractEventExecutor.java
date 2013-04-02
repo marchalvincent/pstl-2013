@@ -17,15 +17,17 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 	private Logger log = Logger.getLogger(AbstractEventExecutor.class);
 	private SwtView swtView;
 	private static int counterExecution;
+	private boolean executed;
 
 	/**
 	 * Constructor
 	 * @param {@link SwtView} 
 	 */
-	public AbstractEventExecutor(SwtView swtView) {
+	public AbstractEventExecutor(SwtView swtView, boolean executed) {
 		super();
 		this.swtView = swtView;
 		counterExecution = 0;
+		this.executed = executed;
 	}
 
 	@Override
@@ -63,7 +65,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 							TMPProperty = property.clone();
 							TMPProperty.setEtatInitial(swtView.getInitState());
 							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getName() + "...";
-							enoughState = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, null, counterExecution);
+							enoughState = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, null, counterExecution, executed);
 							jobPoolExecutor.addJob(enoughState, true);
 							break;
 						}
@@ -75,7 +77,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 							TMPProperty = property.clone();
 							TMPProperty.setEtatInitial(swtView.getInitState());
 							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getName() + "...";
-							job = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, enoughState, counterExecution);
+							job = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, enoughState, counterExecution, executed);
 							jobPoolExecutor.addJob(job, false);
 						}
 					}

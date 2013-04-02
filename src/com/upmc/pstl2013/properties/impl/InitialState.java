@@ -9,17 +9,17 @@ import java.util.Set;
  * à l'état initial du process.
  *
  */
-public class EtatInitial {
+public class InitialState {
 
 	private Map<String, Integer> nodes;
 	private Map<String, Integer> edges;
 	
-	public EtatInitial() {
+	public InitialState() {
 		nodes = new HashMap<String, Integer>();
 		edges = new HashMap<String, Integer>();
 	}
 	
-	public EtatInitial(HashMap<String, Integer> nodes, HashMap<String, Integer> edges) {
+	public InitialState(HashMap<String, Integer> nodes, HashMap<String, Integer> edges) {
 		this.nodes = nodes;
 		this.edges = edges;
 	}

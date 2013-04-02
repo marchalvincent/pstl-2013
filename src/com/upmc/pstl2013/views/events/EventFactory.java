@@ -45,16 +45,16 @@ public class EventFactory {
 		return new EventChooseFile(swtView);
 	}
 
-	public MouseListener newEventCurrentExecutor(SwtView swtView) {
-		return new EventCurrentExecutor(swtView);
+	public MouseListener newEventCurrentExecutor(SwtView swtView, boolean executed) {
+		return new EventCurrentExecutor(swtView, executed);
 	}
 
 	public MouseListener newEventReadLogs(SwtView swtView, String namelogerror) {
 		return new EventReadLogs(swtView, namelogerror) ;
 	}
 
-	public MouseListener newEventPersonalExecutor(SwtView swtView) {
-		return new EventPersonalExecutor(swtView);
+	public MouseListener newEventPersonalExecutor(SwtView swtView, boolean executed) {
+		return new EventPersonalExecutor(swtView, executed);
 	}
 
 	public MouseListener newEventChooseFolderExec(SwtView swtView) {

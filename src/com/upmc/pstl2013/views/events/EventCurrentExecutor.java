@@ -12,8 +12,8 @@ public class EventCurrentExecutor extends AbstractEventExecutor {
 	 * Évènement permettant l'exécution des fichiers selectionnées.
 	 * @param {@link SwtView}
 	 */
-	public EventCurrentExecutor(SwtView swtView) {
-		super(swtView);
+	public EventCurrentExecutor(SwtView swtView, boolean executed) {
+		super(swtView, executed);
 		this.swtView = swtView;
 	}
 
