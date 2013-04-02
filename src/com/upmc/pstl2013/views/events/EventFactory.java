@@ -1,11 +1,15 @@
 package com.upmc.pstl2013.views.events;
 
+import org.eclipse.swt.custom.TableEditor;
 import org.eclipse.swt.events.MouseListener;
 import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Listener;
+import org.eclipse.swt.widgets.Table;
 
 import com.upmc.pstl2013.views.SwtView;
 import com.upmc.pstl2013.viewsDialog.DialogBuisiness;
+import com.upmc.pstl2013.viewsDialog.DialogInitialState;
+import com.upmc.pstl2013.viewsDialog.EventClickAccepteSetInitState;
 import com.upmc.pstl2013.viewsDialog.EventClickSubmit;
 import com.upmc.pstl2013.viewsDialog.EventSelectType;
 
@@ -73,8 +77,8 @@ public class EventFactory {
 		return new EventClickAddBuisiness(swtView);
 	}
 
-	public SelectionListener newEventClickValueAttributes(SwtView swtView) {
-		return new EventClickValueAttributes(swtView);
+	public SelectionListener newEventClickValueAttributes(Table table, TableEditor editor, boolean isPropertyUse) {
+		return new EventClickValueAttributes(table, editor, isPropertyUse);
 	}
 
 	public SelectionListener newEventSelectType(DialogBuisiness dialogBuisiness) {
@@ -84,6 +88,14 @@ public class EventFactory {
 	public MouseListener newEventClickSubmit(SwtView swtView,
 			DialogBuisiness dialogBuisiness) {
 		return new EventClickSubmit(swtView, dialogBuisiness);
+	}
+
+	public MouseListener newEventCliclSetInitialState(SwtView swtView) {
+		return new EventClickSetInitialState(swtView);
+	}
+
+	public MouseListener newEventClickAccepteSetInitState(SwtView swtView, DialogInitialState dialogInitialState) {
+		return new EventClickAccepteSetInitState(swtView, dialogInitialState);
 	}
 	
 }

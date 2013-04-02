@@ -102,7 +102,7 @@ public class PropertiesFactory {
 	/**
 	 * Renvoie un {@link EtatInitial}.
 	 */
-	public EtatInitial newEtatInitial() {
-		return new EtatInitial();
+	public EtatInitial newEtatInitial(HashMap<String, Integer> nodes, HashMap<String, Integer> edges) {
+		return new EtatInitial(nodes, edges);
 	}
 }

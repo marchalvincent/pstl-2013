@@ -19,6 +19,11 @@ public class EtatInitial {
 		edges = new HashMap<String, Integer>();
 	}
 	
+	public EtatInitial(HashMap<String, Integer> nodes, HashMap<String, Integer> edges) {
+		this.nodes = nodes;
+		this.edges = edges;
+	}
+	
 	public void putNode(String node, Integer numberJeton) {
 		nodes.put(node, numberJeton);
 	}

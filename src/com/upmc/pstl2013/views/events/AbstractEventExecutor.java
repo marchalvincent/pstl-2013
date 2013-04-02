@@ -61,6 +61,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 					for (IProperties property : properties) {
 						if (property.getName().equals("EnoughState")) {
 							TMPProperty = property.clone();
+							TMPProperty.setEtatInitial(swtView.getInitState());
 							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getName() + "...";
 							enoughState = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, null, counterExecution);
 							jobPoolExecutor.addJob(enoughState, true);
@@ -72,6 +73,7 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 					for (IProperties property : properties) {
 						if (!property.getName().equals("EnoughState")) {
 							TMPProperty = property.clone();
+							TMPProperty.setEtatInitial(swtView.getInitState());
 							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getName() + "...";
 							job = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, enoughState, counterExecution);
 							jobPoolExecutor.addJob(job, false);
