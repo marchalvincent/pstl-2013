@@ -17,9 +17,9 @@ public class EventPersonalExecutor extends AbstractEventExecutor {
 	 * Évènement permettant de lancer une exéxution personnalisé en ajoutant de l'onformation saisie dans le plugin.
 	 * @param {{@link SwtView}
 	 */
-	public EventPersonalExecutor(SwtView swtView) {
+	public EventPersonalExecutor(SwtView swtView, boolean executed) {
 
-		super(swtView);
+		super(swtView, executed);
 		this.txtPersonalPropertie = swtView.getTxtPersonalPropertie();
 	}
 

@@ -5,7 +5,7 @@ import org.eclipse.emf.common.util.EList;
 import org.eclipse.uml2.uml.*;
 import com.upmc.pstl2013.alloyGenerator.jet.*;
 import com.upmc.pstl2013.properties.*;
-import com.upmc.pstl2013.properties.impl.EtatInitial;
+import com.upmc.pstl2013.properties.impl.InitialState;
 
 public class JetTemplate implements IJetTemplate {
 
@@ -49,7 +49,7 @@ public class JetTemplate implements IJetTemplate {
 	StringBuffer stringInit = new StringBuffer();
 	
 	// on regarde si l'objet property possède un EtatInitial
-	EtatInitial etatInit = property.getEtatInitial();
+	InitialState etatInit = property.getEtatInitial();
 	
 	// si on n'a pas d'état initial, on fait par défaut
 	if (etatInit == null) {

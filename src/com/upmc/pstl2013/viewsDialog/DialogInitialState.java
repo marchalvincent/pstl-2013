@@ -19,7 +19,7 @@ import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
 
 import com.upmc.pstl2013.properties.PropertiesFactory;
-import com.upmc.pstl2013.properties.impl.EtatInitial;
+import com.upmc.pstl2013.properties.impl.InitialState;
 import com.upmc.pstl2013.views.SwtView;
 import com.upmc.pstl2013.views.events.EventFactory;
 
@@ -124,7 +124,7 @@ public class DialogInitialState  extends ApplicationWindow {
 
 		return super.createContents(parent);
 	}
-	public EtatInitial getInitalStat() {
+	public InitialState getInitalStat() {
 		HashMap<String, Integer> nodes = new HashMap<String, Integer>();
 		for (TableItem item : tableSetInitState.getItems()) {
 			//TODO : vérifier bien integer

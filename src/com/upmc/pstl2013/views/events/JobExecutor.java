@@ -23,6 +23,7 @@ public class JobExecutor extends Job {
 	private String nbState;
 	private JobExecutor jobToWait;
 	private int counterExecution;
+	private boolean executed;
 
 	/**
 	 * 
@@ -33,7 +34,7 @@ public class JobExecutor extends Job {
 	 * @param jobToWait
 	 * @param counterExecution
 	 */
-	public JobExecutor(String name, SwtView swtView, Activity activity, IProperties property, JobExecutor jobToWait, int counterExecution) {
+	public JobExecutor(String name, SwtView swtView, Activity activity, IProperties property, JobExecutor jobToWait, int counterExecution, boolean executed) {
 		super(name);
 		this.swtView = swtView;
 		this.activity = activity;
@@ -42,13 +43,17 @@ public class JobExecutor extends Job {
 		this.counterExecution = counterExecution;
 		this.dirDestination = swtView.getUserDir();
 		this.nbState = null;
+		this.executed = executed;
 	}
 
 	@Override
 	protected IStatus run(IProgressMonitor monitor) {
 
 		StringBuilder sbInfo = new StringBuilder();
-		sbInfo.append("Generation and execution of ");
+		sbInfo.append("Generation");
+		if (executed)
+			sbInfo.append(" and execution");
+		sbInfo.append(" of ");
 		sbInfo.append(activity.getName());
 		sbInfo.append(" : property ");
 		sbInfo.append(property.getName());
@@ -69,7 +74,7 @@ public class JobExecutor extends Job {
 
 		try {
 			// On lance l'exécution
-			IFileResult iFileResult = alloyExecutor.executeFiles();
+			IFileResult iFileResult = alloyExecutor.executeFiles(executed);
 
 			synchronized (this) {
 				// On récupère le nombre de state (utile quand on exécute EnoughState)
@@ -80,7 +85,8 @@ public class JobExecutor extends Job {
 			}
 
 			// Puis on affiche les résultats sur l'interface graphique
-			swtView.getDataView().showToViewDetails(iFileResult);
+			if (executed)
+				swtView.getDataView().showToViewDetails(iFileResult);
 
 			result.append("End of ");
 			result.append(activity.getName());

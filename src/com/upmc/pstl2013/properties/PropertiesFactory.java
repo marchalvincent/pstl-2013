@@ -8,7 +8,7 @@ import org.apache.log4j.Logger;
 import com.upmc.pstl2013.properties.impl.Attribute;
 import com.upmc.pstl2013.properties.impl.DeadLock;
 import com.upmc.pstl2013.properties.impl.EnoughState;
-import com.upmc.pstl2013.properties.impl.EtatInitial;
+import com.upmc.pstl2013.properties.impl.InitialState;
 import com.upmc.pstl2013.properties.impl.Orga;
 import com.upmc.pstl2013.properties.impl.PersonalPropertie;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
@@ -100,9 +100,9 @@ public class PropertiesFactory {
 	}
 	
 	/**
-	 * Renvoie un {@link EtatInitial}.
+	 * Renvoie un {@link InitialState}.
 	 */
-	public EtatInitial newEtatInitial(HashMap<String, Integer> nodes, HashMap<String, Integer> edges) {
-		return new EtatInitial(nodes, edges);
+	public InitialState newEtatInitial(HashMap<String, Integer> nodes, HashMap<String, Integer> edges) {
+		return new InitialState(nodes, edges);
 	}
 }

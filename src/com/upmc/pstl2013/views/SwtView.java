@@ -34,7 +34,7 @@ import com.upmc.pstl2013.properties.Behavior;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
-import com.upmc.pstl2013.properties.impl.EtatInitial;
+import com.upmc.pstl2013.properties.impl.InitialState;
 import com.upmc.pstl2013.util.ConfPropertiesManager;
 import com.upmc.pstl2013.views.events.EventFactory;
 
@@ -78,7 +78,7 @@ public class SwtView extends Composite {
 	private List<Activity> activities;
 	private HashMap<String,DynamicBusiness> listDynamicBuisiness;
 	private DataView dataView;
-	private EtatInitial initState;
+	private InitialState initState;
 	private Logger log = Logger.getLogger(SwtView.class);
 
 	private static final String nameLogInfo = "logInfo.html";
@@ -229,28 +229,24 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/run.gif"));
 		btnExcuterAlloy.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));
 		btnExcuterAlloy.setText("Execute Alloy");
-		btnExcuterAlloy.addMouseListener(EventFactory.getInstance().newEventCurrentExecutor(this));
 
 		btnLogsErrors = new Button(cpItemAlloyUse, SWT.NONE);
 		btnLogsErrors.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/error_log.gif"));
 		btnLogsErrors.setToolTipText("Open the errors logs");
 		btnLogsErrors.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnLogsErrors.setText("Logs");
-		btnLogsErrors.addMouseListener(EventFactory.getInstance().newEventReadLogs(this, nameLogError));
 
 		btnLogsInfos = new Button(cpItemAlloyUse, SWT.NONE);
 		btnLogsInfos.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/info_log.gif"));
 		btnLogsInfos.setToolTipText("Open the infos logs");
 		btnLogsInfos.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnLogsInfos.setText("Logs");
-		btnLogsInfos.addMouseListener(EventFactory.getInstance().newEventReadLogs(this,nameLogInfo));
 
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
 		btnPersonalPropertie.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/run_perso.gif"));
 		btnPersonalPropertie.setToolTipText("Execute the user alloy text");
 		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
 		btnPersonalPropertie.setText("Exec Perso");
-		btnPersonalPropertie.addMouseListener(EventFactory.getInstance().newEventPersonalExecutor(this));
 
 		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtPersonalPropertie.heightHint = 65;
@@ -353,6 +349,12 @@ public class SwtView extends Composite {
 		btnAlloyVisualisation.addMouseListener(EventFactory.getInstance().newEventClickVisualisationAlloy(this));
 		btnChooseDir.addMouseListener(EventFactory.getInstance().newEventChooseDir(this));
 		btnAddbuisiness.addMouseListener(EventFactory.getInstance().newEventClickAddBuisiness(this));
+		btnExcuterAlloy.addMouseListener(EventFactory.getInstance().newEventCurrentExecutor(this, true));
+		btnGenerate.addMouseListener(EventFactory.getInstance().newEventCurrentExecutor(this, false));
+		btnPersonalPropertie.addMouseListener(EventFactory.getInstance().newEventPersonalExecutor(this, true));
+		//TODO generate perso
+		btnLogsInfos.addMouseListener(EventFactory.getInstance().newEventReadLogs(this,nameLogInfo));
+		btnLogsErrors.addMouseListener(EventFactory.getInstance().newEventReadLogs(this, nameLogError));
 		chkDetails.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
@@ -572,11 +574,11 @@ public class SwtView extends Composite {
 		return dataView;
 	}
 
-	public EtatInitial getInitState() {
+	public InitialState getInitState() {
 		return initState;
 	}
 
-	public void setInitState(EtatInitial initState) {
+	public void setInitState(InitialState initState) {
 		this.initState = initState;
 	}
 	

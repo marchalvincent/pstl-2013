@@ -29,9 +29,10 @@ public class RunFactory {
 	 * @param property la propriété d'exécution.
 	 * @param jobToWait le job qu'il faut attendre avant de s'exécuter ou null s'il n'y a pas besoin.
 	 * @param counterExecution le numéro de l'exécution.
+	 * @param executed un booléen qui dit si on doit exécuter la propriété Alloy, ou false si on ne fait que la génération.
 	 */
-	public JobExecutor newJobExecutor(String name, SwtView swtView, Activity activity, IProperties property, JobExecutor jobToWait, int counterExecution) {
-		return new JobExecutor(name, swtView, activity, property, jobToWait, counterExecution);
+	public JobExecutor newJobExecutor(String name, SwtView swtView, Activity activity, IProperties property, JobExecutor jobToWait, int counterExecution, boolean executed) {
+		return new JobExecutor(name, swtView, activity, property, jobToWait, counterExecution, executed);
 	}
 	
 	/**
