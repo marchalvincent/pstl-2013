@@ -20,17 +20,19 @@ public class EventClickValueAttributes extends SelectionAdapter {
 
 	private final int EDITABLECOLUMN = 1;
 	private TableEditor editor;
-	private Table tabValueProperties;
+	private Table table;
 	private Logger log = Logger.getLogger(EventClickValueAttributes.class);
+	private boolean isPropertyUse;
 
 	/**
 	 * Évènement permettant de cocher les attributs d'une property.
 	 * @param {@link SwtView}
 	 */
-	public EventClickValueAttributes(SwtView swtView) {
+	public EventClickValueAttributes(Table table, TableEditor editor, boolean isPropertyUse) {
 
-		this.editor = swtView.getEditorString();
-		this.tabValueProperties = swtView.getTabValuePropertiesString();
+		this.editor = editor;
+		this.table = table;
+		this.isPropertyUse = isPropertyUse;
 	}
 
 	@Override
@@ -44,7 +46,7 @@ public class EventClickValueAttributes extends SelectionAdapter {
 		if (item == null) return;
 		// The control that will be the editor must be a child of the
 		// Table
-		Text newEditor = new Text(tabValueProperties, SWT.NONE);
+		Text newEditor = new Text(table, SWT.NONE);
 		newEditor.setText(item.getText(EDITABLECOLUMN));
 		newEditor.addModifyListener(new ModifyListener() {
 
@@ -53,15 +55,16 @@ public class EventClickValueAttributes extends SelectionAdapter {
 
 				Text text = (Text) editor.getEditor();
 				editor.getItem().setText(EDITABLECOLUMN, text.getText());
-				try {
-					IProperties propertie = PropertiesFactory.getInstance().getProperty((String)(editor.getItem().getData()));
-					propertie.put(editor.getItem().getText(),  text.getText());
-					
-				} catch (PropertiesException e1) {
-					log.error(e1.getMessage());
+				if (isPropertyUse){
+					try {
+						IProperties propertie = PropertiesFactory.getInstance().getProperty((String)(editor.getItem().getData()));
+						propertie.put(editor.getItem().getText(),  text.getText());
+
+					} catch (PropertiesException e1) {
+						log.error(e1.getMessage());
+					}
 				}
-				
-			
+
 			}
 		});
 		newEditor.selectAll();
