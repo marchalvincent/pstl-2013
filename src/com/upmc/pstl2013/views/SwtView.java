@@ -219,6 +219,7 @@ public class SwtView extends Composite {
 		btnSetInitialState = new Button(cpItemAlloyUse, SWT.NONE);
 		btnSetInitialState.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 2, 1));
 		btnSetInitialState.setText("Set Initial State");
+		btnSetInitialState.setEnabled(false);
 
 		btnGenerate = new Button(cpItemAlloyUse, SWT.NONE);
 		btnGenerate.setLayoutData(new GridData(SWT.FILL, SWT.FILL, false, false, 1, 1));

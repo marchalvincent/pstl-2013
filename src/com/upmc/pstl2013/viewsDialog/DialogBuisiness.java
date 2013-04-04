@@ -11,16 +11,17 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Combo;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
+import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.uml2.uml.ActivityNode;
+import org.eclipse.wb.swt.ResourceManager;
 
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.EDynamicBusiness;
 import com.upmc.pstl2013.properties.dynamic.EParamType;
 import com.upmc.pstl2013.views.SwtView;
 import com.upmc.pstl2013.views.events.EventFactory;
-import org.eclipse.swt.widgets.Label;
 
 /**
  * Popup permettant de saisir de nouvelles proprietes pour la famille BUISINESS
@@ -52,6 +53,8 @@ public class DialogBuisiness extends ApplicationWindow {
 	}
 
 	protected Control createContents(Composite parent) {
+		
+		setDefaultImage(ResourceManager.getPluginImage("pstl-2013", "icons/properties.gif"));
 		composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout(2, false));
 

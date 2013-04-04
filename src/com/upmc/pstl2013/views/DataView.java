@@ -64,6 +64,7 @@ public class DataView {
 			ConfPropertiesManager.getInstance().setTimeOut(String.valueOf(swtView.getTimeout()));
 			ConfPropertiesManager.getInstance().setNbNodes(swtView.getNbNodesMax());
 			ConfPropertiesManager.getInstance().setNbThreads(swtView.getNbThread());
+			
 		} catch (Exception e) {
 			log.error(e.getMessage());
 			showToViewUse(e.getMessage());
