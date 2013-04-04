@@ -4,7 +4,7 @@ import org.apache.log4j.Logger;
 import com.upmc.pstl2013.alloyGenerator.impl.AlloyGenerator;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.alloyGenerator.jet.impl.EnoughStateTemplate;
-import com.upmc.pstl2013.properties.Behavior;
+import com.upmc.pstl2013.properties.Family;
 import com.upmc.pstl2013.strategyExecution.ExecutionFactory;
 import com.upmc.pstl2013.strategyParcours.ParcoursFactory;
 
@@ -14,7 +14,6 @@ public class EnoughState extends AbstractProperties {
 	private Logger log = Logger.getLogger(AlloyGenerator.class);
 	private int maxStep = -1;
 	private int incrementation = -1;
-	public static Behavior family = Behavior.ORGANIZATIONAL;
 
 	public EnoughState() {
 		super(Boolean.TRUE, 
@@ -76,7 +75,7 @@ public class EnoughState extends AbstractProperties {
 	}
 
 	@Override
-	public Behavior getBehavior() {
-		return Behavior.SOUDNESS;
+	public Family getBehavior() {
+		return Family.SOUDNESS;
 	}
 }

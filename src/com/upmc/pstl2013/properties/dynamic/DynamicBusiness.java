@@ -1,7 +1,7 @@
 package com.upmc.pstl2013.properties.dynamic;
 
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
-import com.upmc.pstl2013.properties.Behavior;
+import com.upmc.pstl2013.properties.Family;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
 import com.upmc.pstl2013.strategyExecution.ExecutionFactory;
 import com.upmc.pstl2013.strategyParcours.ParcoursFactory;
@@ -38,8 +38,8 @@ public class DynamicBusiness extends AbstractProperties {
 	}
 
 	@Override
-	public Behavior getBehavior() {
-		return Behavior.BUISINESS;
+	public Family getBehavior() {
+		return Family.BUISINESS;
 	}
 	
 	/**

@@ -2,7 +2,7 @@ package com.upmc.pstl2013.properties.impl;
 
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.alloyGenerator.jet.impl.WfTemplate;
-import com.upmc.pstl2013.properties.Behavior;
+import com.upmc.pstl2013.properties.Family;
 import com.upmc.pstl2013.strategyExecution.ExecutionFactory;
 import com.upmc.pstl2013.strategyParcours.ParcoursFactory;
 
@@ -24,7 +24,7 @@ public class Wf extends AbstractProperties {
 	}
 
 	@Override
-	public Behavior getBehavior() {
-		return Behavior.SYNTAXICAL;
+	public Family getBehavior() {
+		return Family.SYNTACTICAL;
 	}
 }

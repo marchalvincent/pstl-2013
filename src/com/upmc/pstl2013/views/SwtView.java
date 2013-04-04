@@ -30,7 +30,7 @@ import org.eclipse.wb.swt.ResourceManager;
 
 import com.upmc.pstl2013.alloyExecutor.IActivityResult;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
-import com.upmc.pstl2013.properties.Behavior;
+import com.upmc.pstl2013.properties.Family;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.dynamic.DynamicBusiness;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
@@ -406,7 +406,7 @@ public class SwtView extends Composite {
 				else
 					allChecked = false;
 
-				if (family.equals(Behavior.BUISINESS.toString())) {
+				if (family.equals(Family.BUISINESS.toString())) {
 					//Ouverture de la famille
 					lItem0.setExpanded(addBuisiness);
 					//Ajout des propeties dynamique :
