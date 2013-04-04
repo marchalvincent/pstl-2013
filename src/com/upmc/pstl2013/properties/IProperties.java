@@ -109,9 +109,9 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	
 	/**
 	 * Renvoie la famille a laquelle appartient la propriété.
-	 * @return {@link Behavior}.
+	 * @return {@link Family}.
 	 */
-	Behavior getBehavior();
+	Family getBehavior();
 	
 	/**
 	 * Renvoie un booléen qui spécifie si cette propriété est modifiable par l'utilisateur ou non.

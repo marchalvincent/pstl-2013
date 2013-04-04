@@ -1,6 +1,6 @@
 package com.upmc.pstl2013.properties.impl;
 
-import com.upmc.pstl2013.properties.Behavior;
+import com.upmc.pstl2013.properties.Family;
 import com.upmc.pstl2013.strategyExecution.ExecutionFactory;
 import com.upmc.pstl2013.strategyParcours.ParcoursFactory;
 
@@ -23,7 +23,7 @@ public class PersonalPropertie extends AbstractProperties {
 	}
 
 	@Override
-	public Behavior getBehavior() {
+	public Family getBehavior() {
 		// cette méthode ne doit pas être appelée pour la PersonalPropertie
 		return null;
 	}
