@@ -14,7 +14,7 @@
 	</appender>
 	
 	<appender name="htmlfileInfo" class="org.apache.log4j.FileAppender">
-		<param name="File" value="logInfo.html" />
+		<param name="File" value="AlloyAnalyzer/logInfo.html" />
 		<layout class="org.apache.log4j.HTMLLayout"/>
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMin" value="info" />
@@ -23,7 +23,7 @@
 	</appender>
 	
 	<appender name="htmlfileDebug" class="org.apache.log4j.FileAppender">
-		<param name="File" value="logDebug.html" />
+		<param name="File" value="AlloyAnalyzer/logDebug.html" />
 		<layout class="org.apache.log4j.HTMLLayout"/>
 		<filter class="org.apache.log4j.varia.LevelRangeFilter">
 			<param name="LevelMin" value="info" />

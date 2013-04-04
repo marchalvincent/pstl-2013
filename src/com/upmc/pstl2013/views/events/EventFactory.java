@@ -49,8 +49,8 @@ public class EventFactory {
 		return new EventCurrentExecutor(swtView, executed);
 	}
 
-	public MouseListener newEventReadLogs(SwtView swtView, String namelogerror) {
-		return new EventReadLogs(swtView, namelogerror) ;
+	public MouseListener newEventReadLogs(String namelogerror) {
+		return new EventReadLogs(namelogerror) ;
 	}
 
 	public MouseListener newEventPersonalExecutor(SwtView swtView, boolean executed) {
