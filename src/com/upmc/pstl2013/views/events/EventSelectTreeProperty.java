@@ -85,12 +85,18 @@ public class EventSelectTreeProperty implements Listener {
 					tabValuePropertiesString.getColumn(1).setText("");
 					TableItem item = new TableItem(tabValuePropertiesString, SWT.NONE);
 					StringBuilder sb = new StringBuilder();
+					sb.append(dynBusiness.getEnumType() + " ");
 					for (String param : dynBusiness.getDataParams()) {
 						sb.append(param + " ");
 					}
 					item.setText(0,sb.toString());
 					item.setText(1, "");
 					//item.setData(nameProperty);
+					
+					for (int i = 0; i < 2; i++) {
+						tabValuePropertiesString.getColumn(i).pack();
+					}
+					tabValuePropertiesBool.removeAll();
 				}
 
 
