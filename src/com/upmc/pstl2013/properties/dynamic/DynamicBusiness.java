@@ -69,4 +69,12 @@ public class DynamicBusiness extends AbstractProperties {
 	public String getName() {
 		return this.nom;
 	}
+	
+	/**
+	 * Getter sur le type de business.
+	 * @return String.
+	 */
+	public String getEnumType() {
+		return this.enumType.toString();
+	}
 }
