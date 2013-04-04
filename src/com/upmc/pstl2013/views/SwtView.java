@@ -354,8 +354,8 @@ public class SwtView extends Composite {
 		btnGenerate.addMouseListener(EventFactory.getInstance().newEventCurrentExecutor(this, false));
 		btnPersonalPropertie.addMouseListener(EventFactory.getInstance().newEventPersonalExecutor(this, true));
 		//TODO generate perso
-		btnLogsInfos.addMouseListener(EventFactory.getInstance().newEventReadLogs(this,nameLogInfo));
-		btnLogsErrors.addMouseListener(EventFactory.getInstance().newEventReadLogs(this, nameLogError));
+		btnLogsInfos.addMouseListener(EventFactory.getInstance().newEventReadLogs(nameLogInfo));
+		btnLogsErrors.addMouseListener(EventFactory.getInstance().newEventReadLogs(nameLogError));
 		chkDetails.addSelectionListener(new SelectionAdapter() {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
