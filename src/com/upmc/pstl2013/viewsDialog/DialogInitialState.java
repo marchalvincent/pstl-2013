@@ -39,13 +39,16 @@ public class DialogInitialState  extends ApplicationWindow {
 		this.swtView = swtView;
 	}
 	protected Control createContents(Composite parent) {
+
+		//TODO : setDefaultImage(ResourceManager.getPluginImage("pstl-2013", "icons/properties.gif"));
 		composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout(2, false));
 
+		
 		txtDescription = new Text(composite, SWT.BORDER);
 		txtDescription.setEditable(false);
 		txtDescription.setEnabled(false);
-		txtDescription.setText("Description");
+		txtDescription.setText("Change the initial state of the process with the number of tokens (nodes) and offers (edges).");
 		GridData gd_txtDescription = new GridData(SWT.FILL, SWT.FILL, true, false, 2, 2);
 		gd_txtDescription.minimumWidth = 400;
 		gd_txtDescription.minimumHeight = 40;
@@ -95,7 +98,7 @@ public class DialogInitialState  extends ApplicationWindow {
 		
 		btnAccepte = new Button(composite, SWT.NONE);
 		btnAccepte.setLayoutData(new GridData(SWT.CENTER, SWT.FILL, false, false, 2, 1));
-		btnAccepte.setText("Accepte");
+		btnAccepte.setText("Submit");
 		btnAccepte.addMouseListener(EventFactory.getInstance().newEventClickAccepteSetInitState(swtView, this));
 
 		String[] titlesVPEdges = { "Edges :", "Value" };
