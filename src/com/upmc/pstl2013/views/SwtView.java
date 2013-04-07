@@ -376,8 +376,8 @@ public class SwtView extends Composite {
 		HashMap<String, List<IProperties>> families = new HashMap<String, List<IProperties>>();
 		treeProperties.addListener(SWT.Selection, EventFactory.getInstance().newEventSelectTreeProperty(this));
 
-		TreeItem lItem0 = null;
-		TreeItem lItem1 = null;
+		
+		
 		for (IProperties property : AbstractProperties.getProperties()) {
 
 			//Ajout des familles dans la treeview si elle n'existe pas 
@@ -387,13 +387,44 @@ public class SwtView extends Composite {
 			families.get(property.getBehavior().toString()).add(property);
 		}
 
-		for (String family : families.keySet()) {
+		HashMap<String,TreeItem> alreadyAdded = new HashMap<String,TreeItem>();
+		for (Family family : Family.values()) {
+			
+			addPropertyOfFamily(family, families, addBuisiness,alreadyAdded);
+			
+		}
+
+		System.out.println("FIN");
+	}
+	
+	private TreeItem addPropertyOfFamily (Family family, HashMap<String, List<IProperties>> families, boolean addBuisiness,HashMap<String,TreeItem> alreadyAdded){
+		
+		TreeItem lItem0 = null;
+		TreeItem itemParent = null;
+		
+		String nameFamily = family.toString();
+		//Partie recursive
+		
+		if (family.hasParent() && !alreadyAdded.containsKey(family.getParent().toString())){
+			itemParent = addPropertyOfFamily(family.getParent(), families, addBuisiness, alreadyAdded);
+			lItem0 = new TreeItem(itemParent, SWT.READ_ONLY);
+		}
+		else if(family.hasParent() && alreadyAdded.containsKey(family.getParent().toString())){
+			itemParent = alreadyAdded.get(family.getParent().toString());
+			lItem0 = new TreeItem(itemParent, SWT.READ_ONLY);
+		}
+		else // si family.hasParent() == false
 			lItem0 = new TreeItem(treeProperties, SWT.READ_ONLY);
-			lItem0.setText(family);
-			lItem0.setData(ETreeType.FAMILY);
+		
+		alreadyAdded.put(nameFamily,lItem0);
+		lItem0.setText(nameFamily);
+		lItem0.setData(ETreeType.FAMILY);
+		
+		TreeItem lItem1 = null;
+		if (families.containsKey(nameFamily)){
 			//permet de checker la famille si tous les property sont selectionnées
-			boolean allChecked = (families.get(family).size()>0);
-			for (IProperties elem : families.get(family)) {
+			boolean allChecked = (families.get(nameFamily).size()>0);
+			for (IProperties elem : families.get(nameFamily)) {
 
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
 				lItem1.setText(elem.getName());
@@ -406,7 +437,7 @@ public class SwtView extends Composite {
 				else
 					allChecked = false;
 
-				if (family.equals(Family.BUISINESS.toString())) {
+				if (nameFamily.equals(Family.BUISINESS.toString())) {
 					//Ouverture de la famille
 					lItem0.setExpanded(addBuisiness);
 					//Ajout des propeties dynamique :
@@ -424,7 +455,9 @@ public class SwtView extends Composite {
 			}
 			lItem0.setChecked(allChecked);
 		}
+		return lItem0;
 	}
+
 
 	/**
 	 * Supprime tous les logs générés à la derniere utilisation du plugin.
@@ -582,6 +615,6 @@ public class SwtView extends Composite {
 	public void setInitState(InitialState initState) {
 		this.initState = initState;
 	}
-	
+
 
 }
