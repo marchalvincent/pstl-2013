@@ -85,21 +85,32 @@ public class DataView {
 	 */
 	public List<IProperties> getCurrentProperties() {
 		List<IProperties> properties = new ArrayList<IProperties>();
-		for (TreeItem item : swtView.getTreeProperties().getItems()) {
-			for (TreeItem prop : item.getItems()) {
-				if (prop.getChecked()) {
-					try {
-						if (prop.getData() != null && prop.getData() == ETreeType.DYNAMIC_PROPERTY)
-							properties.add(swtView.getListDynamicBuisiness(prop.getText()));
-						else		
-							properties.add(PropertiesFactory.getInstance().getProperty(prop.getText()));
-					} catch (PropertiesException ex) {
-						log.error(ex.getMessage());
-					}
+		
+		for (TreeItem item : swtView.getTreeProperties().getItems()) 
+			recurentGetPropSelected(item, properties);
+		
+		return properties;
+	}
+	
+	public void recurentGetPropSelected(TreeItem item, List<IProperties> properties) {
+		
+		if (item.getItems().length > 0){
+			for (TreeItem itemp : item.getItems()) {
+				recurentGetPropSelected(itemp, properties);
+			}
+		}
+		else{
+			if (item.getChecked()) {
+				try {
+					if (item.getData() != null && item.getData() == ETreeType.DYNAMIC_PROPERTY)
+						properties.add(swtView.getListDynamicBuisiness(item.getText()));
+					else		
+						properties.add(PropertiesFactory.getInstance().getProperty(item.getText()));
+				} catch (PropertiesException ex) {
+					log.error(ex.getMessage());
 				}
 			}
 		}
-		return properties;
 	}
 
 	public void showToViewUse(String msg) {
