@@ -300,6 +300,7 @@ public class SwtView extends Composite {
 			@Override
 			public void widgetSelected(SelectionEvent e) {
 				treeFilesExecuted.removeAll();
+				txtDetailsLogs.setText("");
 			}
 		});
 
@@ -393,8 +394,6 @@ public class SwtView extends Composite {
 			addPropertyOfFamily(family, families, addBuisiness,alreadyAdded);
 			
 		}
-
-		System.out.println("FIN");
 	}
 	
 	private TreeItem addPropertyOfFamily (Family family, HashMap<String, List<IProperties>> families, boolean addBuisiness,HashMap<String,TreeItem> alreadyAdded){
