@@ -140,16 +140,16 @@ public class AlloyGenerator implements IAlloyGenerator {
 
 		EList<ActivityNode> nodes = activity.getNodes();
 		EList<ActivityEdge> edges = activity.getEdges();
-		ActivityNode initialNode = this.getNodeByType(nodes, "InitialNode");
-		ActivityNode finalNode = this.getNodeByType(nodes, "ActivityFinalNode");
+		String initialNodes = this.getNodeByType(nodes, "InitialNode");
+		String finalNodes = this.getNodeByType(nodes, "ActivityFinalNode");
 
 		// on ajoute à la propriété les infos de base...
 		iPropertie.putPrivate("nbNodes", Integer.toString(nodes.size()));
 		iPropertie.putPrivate("nbEdges", Integer.toString(edges.size()));
 		iPropertie.putPrivate("nbObjects", Integer.toString(edges.size() + nodes.size()));
-
-		iPropertie.putPrivate("initialNode", initialNode.getName());
-		iPropertie.putPrivate("finalNode", finalNode.getName());
+		
+		iPropertie.putPrivate("initialNode", initialNodes);
+		iPropertie.putPrivate("finalNode", finalNodes);
 		
 		iPropertie.putPrivate("predicatName", this.generateNamePredicat("predicatName", nodes, edges));
 
@@ -160,22 +160,24 @@ public class AlloyGenerator implements IAlloyGenerator {
 	}
 
 	/**
-	 * Renvoie le premier noeud rencontré dont le type est en paramètre. Null, si aucun noeud n'est
+	 * Renvoie les noeuds rencontré dont le type est en paramètre. Null, si aucun noeud n'est
 	 * trouvé.
 	 * 
 	 * @param nodes la liste des noeuds à parcourir.
 	 * @param type le type de noeud qu'on cherche.
-	 * @return {@link ActivityNode} le premier noeud rencontré du type spécifié ou null si aucun noeud n'est trouvé.
+	 * @return une String contenant le nom des noeuds rencontrés du type spécifié.
 	 */
-	private ActivityNode getNodeByType(EList<ActivityNode> nodes, String type) {
+	private String getNodeByType(EList<ActivityNode> nodes, String type) {
 
+		StringBuilder sb = new StringBuilder();
 		// on cherche le noeud selon son type
 		for (ActivityNode activityNode : nodes) {
 			if (activityNode.eClass().getName().equals(type)) {
-				return activityNode;
+				sb.append(activityNode.getName());
+				sb.append("---");
 			}
 		}
-		return null;
+		return sb.toString();
 	}
 
 	/**

@@ -31,15 +31,22 @@
 	
 	// si on n'a pas d'état initial, on fait par défaut
 	if (etatInit == null) {
+		stringInit.append("ActivityNode -> 0 +");
 		// on gère les cas sans noeud initial...
-		String initialNode = property.getString("initialNode");
-		if (initialNode == null) {
+		String allInitialName = property.getString("initialNode");
+		if (allInitialName.equals("")) {
 			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
 			log.error(error);
 			throw new JetException(error);
+		} else {
+			String[] initialNodes = allInitialName.split("---");
+			for (String initialName : initialNodes) {
+				stringInit.append("+ ");
+				stringInit.append(initialName);
+				stringInit.append(" -> 1 ");
+			}
 		}
-		stringInit.append(initialNode);
-		stringInit.append(" -> 1 ,  // tokens \n		ActivityEdge -> 0  // offers");
+		stringInit.append(", // tokens \n		ActivityEdge -> 0  // offers");
 	}
 	
 	// sinon on parse l'objet EtatInitial pour définir le process
@@ -97,17 +104,6 @@ fact initTokens {
 	]
 }
 
-// Timing
-one sig T extends Timing {} {
-	timing = (ActivityNode -> 0) 
-}
-
-// Role Performer
-one sig Yoann extends RolePerformer {}
-one sig P extends Performer {} {
-	performer = ActivityNode -> Yoann
-}
-
 <% 
 	// GENERATION DES NOEUDS ET EDGES EN DYNAMIQUE
 	EList<ActivityNode> nodes = jetHelper.getNodes();
@@ -142,6 +138,31 @@ one sig P extends Performer {} {
 		stringBuffer.append("    target = " + target + NL);
 		stringBuffer.append("}" + NL);
 	}
+	
+	// GENERATION DE LA PROPRIETE FAIRNESS
+	Boolean isFairness = property.getBoolean("fairness");
+	if (isFairness) {%>
+	
+fact fairness {
+	all decision:DecisionNode | fairDecision[decision]
+}
+
+pred fairDecision[node:DecisionNode] {
+	all edge:node.outgoing | 
+		#{getNumberOfEdgeActivation[edge]} <= 2
+}
+
+fun getNumberOfEdgeActivation[edge:ActivityEdge] : State->State {
+	{ s1,s2 : State | s1.next = s2 and s1.getOffers[edge] < s2.getOffers[edge]  }
+}
+
+<%	} else {%>
+
+fact enoughState {
+	some s:State | s.running = Finished
+}
+
+<%	}
 
 	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. subTemplates ou subTemplates/dynamics)
 	stringBuffer.append(property.getAlloyCode());

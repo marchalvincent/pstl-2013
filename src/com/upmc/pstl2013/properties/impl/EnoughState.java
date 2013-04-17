@@ -23,6 +23,7 @@ public class EnoughState extends AbstractProperties {
 		super.putPrivate("nbState", "1");
 		super.put("incrementation", "10");
 		super.put("maxStep", "100");
+		super.setFairness(true);
 	}
 
 	@Override

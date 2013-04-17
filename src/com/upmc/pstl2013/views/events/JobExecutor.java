@@ -108,6 +108,13 @@ public class JobExecutor extends Job {
 			sb.append("\n");
 			log.error(sb.toString());
 			swtView.getDataView().showToViewUse(sb.toString());
+			
+			synchronized (this) {
+				// On met le nombre de state à 0 au cas ou le enoughState aurait bugé
+				nbState = "0";
+				//Une fois qu'on a le nbState, on notifie tout ceux qui se sont endormi sur nous.
+				this.notifyAll();
+			}
 			return Status.CANCEL_STATUS;
 		}
 
