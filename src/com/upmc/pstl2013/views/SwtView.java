@@ -84,6 +84,7 @@ public class SwtView extends Composite {
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
+	private Button btnGeneratePerso;
 
 
 
@@ -244,12 +245,16 @@ public class SwtView extends Composite {
 		btnLogsInfos.setLayoutData(new GridData(SWT.FILL, SWT.BOTTOM, false, false, 1, 1));
 		btnLogsInfos.setText("Logs");
 
+		btnGeneratePerso = new Button(cpItemAlloyUse, SWT.NONE);
+		btnGeneratePerso.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
+		btnGeneratePerso.setText("Generate Perso");
+
 		btnPersonalPropertie = new Button(cpItemAlloyUse, SWT.NONE);
 		btnPersonalPropertie.setImage(ResourceManager.getPluginImage("pstl-2013", "icons/run_perso.gif"));
 		btnPersonalPropertie.setToolTipText("Execute the user alloy text");
-		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 2, 1));
+		btnPersonalPropertie.setLayoutData(new GridData(SWT.FILL, SWT.TOP, false, false, 1, 1));
 		btnPersonalPropertie.setText("Exec Perso");
-
+		
 		GridData gd_txtPersonalPropertie = new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1);
 		gd_txtPersonalPropertie.heightHint = 65;
 
@@ -355,7 +360,7 @@ public class SwtView extends Composite {
 		btnExcuterAlloy.addMouseListener(EventFactory.getInstance().newEventCurrentExecutor(this, true));
 		btnGenerate.addMouseListener(EventFactory.getInstance().newEventCurrentExecutor(this, false));
 		btnPersonalPropertie.addMouseListener(EventFactory.getInstance().newEventPersonalExecutor(this, true));
-		//TODO generate perso
+		btnGeneratePerso.addMouseListener(EventFactory.getInstance().newEventPersonalExecutor(this, false));
 		btnLogsInfos.addMouseListener(EventFactory.getInstance().newEventReadLogs(nameLogInfo));
 		btnLogsErrors.addMouseListener(EventFactory.getInstance().newEventReadLogs(nameLogError));
 		chkDetails.addSelectionListener(new SelectionAdapter() {
@@ -377,8 +382,8 @@ public class SwtView extends Composite {
 		HashMap<String, List<IProperties>> families = new HashMap<String, List<IProperties>>();
 		treeProperties.addListener(SWT.Selection, EventFactory.getInstance().newEventSelectTreeProperty(this));
 
-		
-		
+
+
 		for (IProperties property : AbstractProperties.getProperties()) {
 
 			//Ajout des familles dans la treeview si elle n'existe pas 
@@ -387,7 +392,7 @@ public class SwtView extends Composite {
 
 			families.get(property.getBehavior().toString()).add(property);
 		}
-		
+
 		//Ajoute la famille DYNAMICBUSINESS si des property dynamique ont été crées
 		for (IProperties property : listDynamicBuisiness.values()) {
 
@@ -397,23 +402,23 @@ public class SwtView extends Composite {
 
 			families.get(property.getBehavior().toString()).add(property);
 		}
-			
+
 		HashMap<String,TreeItem> alreadyAdded = new HashMap<String,TreeItem>();
 		for (Family family : Family.values()) {
-			
+
 			addPropertyOfFamily(family, families, addBuisiness,alreadyAdded);
-			
+
 		}
 	}
-	
+
 	private TreeItem addPropertyOfFamily (Family family, HashMap<String, List<IProperties>> families, boolean addBuisiness,HashMap<String,TreeItem> alreadyAdded){
-		
+
 		TreeItem lItem0 = null;
 		TreeItem itemParent = null;
-		
+
 		String nameFamily = family.toString();
 		boolean isDynamicBusiness = nameFamily.equals(Family.BUISINESS.toString());
-		
+
 		//Partie recursive
 		if (family.hasParent() && !alreadyAdded.containsKey(family.getParent().toString())){
 			itemParent = addPropertyOfFamily(family.getParent(), families, addBuisiness, alreadyAdded);
@@ -425,11 +430,11 @@ public class SwtView extends Composite {
 		}
 		else // si family.hasParent() == false
 			lItem0 = new TreeItem(treeProperties, SWT.READ_ONLY);
-		
+
 		alreadyAdded.put(nameFamily,lItem0);
 		lItem0.setText(nameFamily);
 		lItem0.setData(ETreeType.FAMILY);
-		
+
 		TreeItem lItem1 = null;
 		if (families.containsKey(nameFamily)){
 			//permet de checker la famille si tous les property sont selectionnées
@@ -439,14 +444,14 @@ public class SwtView extends Composite {
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
 				lItem1.setText(elem.getName());
 				boolean isModif = elem.isModifiable();
-				
+
 				if (isDynamicBusiness)
 					lItem1.setData(ETreeType.DYNAMIC_PROPERTY);		
-					if(lastBusiness == elem)
-						lItem1.setChecked(true);
+				if(lastBusiness == elem)
+					lItem1.setChecked(true);
 				else
 					lItem1.setData(isModif);
-				
+
 				if (!isModif) 
 					lItem1.setChecked(true);
 				else if (ConfPropertiesManager.getInstance().getProperties().contains(elem.getName()))
