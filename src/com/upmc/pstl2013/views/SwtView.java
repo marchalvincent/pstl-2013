@@ -80,6 +80,7 @@ public class SwtView extends Composite {
 	private DataView dataView;
 	private InitialState initState;
 	private Logger log = Logger.getLogger(SwtView.class);
+	private DynamicBusiness lastBusiness = null;
 
 	private static final String nameLogInfo = "logInfo.html";
 	private static final String nameLogError = "logDebug.html";
@@ -365,7 +366,6 @@ public class SwtView extends Composite {
 		});
 
 	}
-
 	/**
 	 * Affiche toutes les proprietes dans la view.
 	 * @param addBuisiness True si l'on veux que l'onglet BUISINESS soit ouvert par defaut. False sinon.
@@ -387,7 +387,17 @@ public class SwtView extends Composite {
 
 			families.get(property.getBehavior().toString()).add(property);
 		}
+		
+		//Ajoute la famille DYNAMICBUSINESS si des property dynamique ont été crées
+		for (IProperties property : listDynamicBuisiness.values()) {
 
+			//Ajout des familles dans la treeview si elle n'existe pas 
+			if(!families.containsKey(property.getBehavior().toString()))
+				families.put(property.getBehavior().toString(), new ArrayList<IProperties>());
+
+			families.get(property.getBehavior().toString()).add(property);
+		}
+			
 		HashMap<String,TreeItem> alreadyAdded = new HashMap<String,TreeItem>();
 		for (Family family : Family.values()) {
 			
@@ -402,8 +412,9 @@ public class SwtView extends Composite {
 		TreeItem itemParent = null;
 		
 		String nameFamily = family.toString();
-		//Partie recursive
+		boolean isDynamicBusiness = nameFamily.equals(Family.BUISINESS.toString());
 		
+		//Partie recursive
 		if (family.hasParent() && !alreadyAdded.containsKey(family.getParent().toString())){
 			itemParent = addPropertyOfFamily(family.getParent(), families, addBuisiness, alreadyAdded);
 			lItem0 = new TreeItem(itemParent, SWT.READ_ONLY);
@@ -428,29 +439,21 @@ public class SwtView extends Composite {
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
 				lItem1.setText(elem.getName());
 				boolean isModif = elem.isModifiable();
-				lItem1.setData(isModif);
+				
+				if (isDynamicBusiness)
+					lItem1.setData(ETreeType.DYNAMIC_PROPERTY);		
+					if(lastBusiness == elem)
+						lItem1.setChecked(true);
+				else
+					lItem1.setData(isModif);
+				
 				if (!isModif) 
 					lItem1.setChecked(true);
 				else if (ConfPropertiesManager.getInstance().getProperties().contains(elem.getName()))
 					lItem1.setChecked(true);
-				else
-					allChecked = false;
 
-				if (nameFamily.equals(Family.BUISINESS.toString())) {
-					//Ouverture de la famille
-					lItem0.setExpanded(addBuisiness);
-					//Ajout des propeties dynamique :
-					if (listDynamicBuisiness.values().size() > 0){
-						for (DynamicBusiness dynaBuisiness : listDynamicBuisiness.values()) {
-							lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
-							lItem1.setText(dynaBuisiness.getName());
-							lItem1.setData(ETreeType.DYNAMIC_PROPERTY);
-							lItem1.setChecked(ConfPropertiesManager.getInstance().getProperties().contains(dynaBuisiness.getName()));
-						}
-						//On selectionne le dernier ajouté.
-						lItem1.setChecked(true);
-					}
-				}
+				if (lItem1.getChecked() != true)
+					allChecked = false;
 			}
 			lItem0.setChecked(allChecked);
 		}
@@ -507,7 +510,9 @@ public class SwtView extends Composite {
 
 	public void updateTreePropety(DynamicBusiness buisiness) {
 		listDynamicBuisiness.put(buisiness.getName(), buisiness);
+		lastBusiness = buisiness;
 		addPropertiesToTree(true);
+		lastBusiness = null;
 	}
 
 	public void clearDynamicBuisiness(){
