@@ -1,7 +1,6 @@
 package com.upmc.pstl2013.viewsDialog;
 
 import java.util.HashMap;
-
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -17,7 +16,7 @@ import org.eclipse.swt.widgets.TableItem;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.uml2.uml.ActivityEdge;
 import org.eclipse.uml2.uml.ActivityNode;
-
+import org.eclipse.uml2.uml.InitialNode;
 import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.properties.impl.InitialState;
 import com.upmc.pstl2013.views.SwtView;
@@ -44,7 +43,6 @@ public class DialogInitialState  extends ApplicationWindow {
 		composite = new Composite(parent, SWT.NULL);
 		composite.setLayout(new GridLayout(2, false));
 
-		
 		txtDescription = new Text(composite, SWT.BORDER);
 		txtDescription.setEditable(false);
 		txtDescription.setEnabled(false);
@@ -80,7 +78,10 @@ public class DialogInitialState  extends ApplicationWindow {
 			for (ActivityNode activity : swtView.getActivitiesSelected().get(0).getNodes()) {
 				TableItem item = new TableItem(tableSetInitState, SWT.NONE);
 				item.setText(0, activity.getName());
-				item.setText(1, "0");
+				if (activity instanceof InitialNode)
+					item.setText(1, "1");
+				else 
+					item.setText(1, "0");
 			}
 			for (int i = 0; i < 2; i++) {
 				tableSetInitState.getColumn(i).pack();
