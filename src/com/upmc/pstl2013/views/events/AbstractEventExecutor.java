@@ -58,6 +58,13 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 				// 5b. Pour chaque propriété
 				if (properties != null) {
 					
+					// TODO vincent faire une méthode générique qui construit les job dynamiquement
+					// on lance d'abord Wf
+					
+					// puis enoughState
+					
+					// et enfin les autres 
+					
 					// On lance d'abord le enoughState
 					JobExecutor enoughState = null;
 					for (IProperties property : properties) {
