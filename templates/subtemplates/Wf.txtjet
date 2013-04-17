@@ -4,17 +4,17 @@
 			com.upmc.pstl2013.properties.*"
 	skeleton="../alloyGenerator.skeleton" %>
 <% 
-	final Logger log = Logger.getLogger(DeadLockTemplate.class);
+	final Logger log = Logger.getLogger(WfTemplate.class);
 	if (!(argument instanceof IProperties)) {
 		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
 		log.error(error);
 		throw new JetException(error);
 	}
 
-	IProperties propertie = (IProperties) argument;
-	final Boolean isInitial = propertie.getBoolean("initial");
-	final Boolean isFinal = propertie.getBoolean("final");
-	final Boolean isMerge = propertie.getBoolean("merge");
+	IProperties property = (IProperties) argument;
+	final Boolean isInitial = property.getBoolean("initial");
+	final Boolean isFinal = property.getBoolean("final");
+	final Boolean isMerge = property.getBoolean("merge");
 
 	// CAS INITIAL
 	if (isInitial) {
@@ -59,8 +59,9 @@ fact mergeNode {
 	}
 
 	// et le petit run a la fin...
-	final String nbObjects = propertie.getString("nbObjects");
-	final String nbNodes = propertie.getString("nbNodes");
-	final String nbEdges = propertie.getString("nbEdges");
+	final String nbObjects = property.getString("nbObjects");
+	final String nbNodes = property.getString("nbNodes");
+	final String nbEdges = property.getString("nbEdges");
+	final String bitwidth = property.getString("bitwidth");
 %>
-run {} for 0 but 0 State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge
+run {} for 0 but 0 State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge, <%=bitwidth%> Int

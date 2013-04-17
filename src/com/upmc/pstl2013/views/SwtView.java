@@ -463,9 +463,8 @@ public class SwtView extends Composite {
 	 */
 	private void deleteOldLogs() {
 		log.debug("Suppression des anciens logs");
-		System.out.println("Suppression des anciens logs" + userDir + "logInfo.html");
-		File logInfo = new File(userDir + "logInfo.html");
-		File logDebug = new File(userDir + "logDebug.html");
+		File logInfo = new File("AlloyAnalyzer" + File.separator + "logInfo.html");
+		File logDebug = new File("AlloyAnalyzer" + File.separator + "logDebug.html");
 		logInfo.delete();
 		logDebug.delete();
 		try {

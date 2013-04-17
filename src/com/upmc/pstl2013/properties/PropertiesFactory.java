@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
 import com.upmc.pstl2013.properties.impl.Attribute;
-import com.upmc.pstl2013.properties.impl.DeadLock;
+import com.upmc.pstl2013.properties.impl.OptionToCompleteStrong;
 import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.properties.impl.InitialState;
+import com.upmc.pstl2013.properties.impl.OptionToCompleteWeak;
 import com.upmc.pstl2013.properties.impl.Orga;
 import com.upmc.pstl2013.properties.impl.PersonalPropertie;
+import com.upmc.pstl2013.properties.impl.ProperCompletionStrong;
+import com.upmc.pstl2013.properties.impl.ProperCompletionWeak;
 import com.upmc.pstl2013.properties.impl.PropertiesException;
 import com.upmc.pstl2013.properties.impl.Wf;
 
@@ -27,10 +30,13 @@ public class PropertiesFactory {
 
 	private PropertiesFactory() {
 		classList = new ArrayList<Class<? extends IProperties>>();
-		classList.add(DeadLock.class);
+		classList.add(OptionToCompleteStrong.class);
+		classList.add(OptionToCompleteWeak.class);
 		classList.add(EnoughState.class);
 		classList.add(Orga.class);
 		classList.add(Wf.class);
+		classList.add(ProperCompletionStrong.class);
+		classList.add(ProperCompletionWeak.class);
 	}
 
 	public static PropertiesFactory getInstance() {

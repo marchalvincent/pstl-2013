@@ -38,12 +38,19 @@ public abstract class AbstractProperties implements IProperties {
 
 	public AbstractProperties(Boolean isCheck, IStrategyExecution strategyExecution, IStrategyParcours strategy) {
 		super();
-		attributes = new ArrayList<IAttribute>();
+		this.attributes = new ArrayList<IAttribute>();
 		this.isCheck = isCheck;
 		this.strategyExecution = strategyExecution;
 		this.strategyParcours = strategy;
 		this.setModifiable(true);
 		this.etatInitial = null;
+		// certains attributs par défaut
+		this.putPrivate("fairness", false);
+		this.putPrivate("bitwidth", "3");
+	}
+	
+	public void setFairness(boolean bool) {
+		this.putPrivate("fairness", bool);
 	}
 
 	@Override
@@ -56,6 +63,12 @@ public abstract class AbstractProperties implements IProperties {
 	public void put(String key, String value) {
 		this.remove(key);
 		attributes.add(PropertiesFactory.getInstance().newAttribute(key, value, Boolean.FALSE));
+	}
+
+	@Override
+	public void putPrivate(String key, Boolean value) {
+		this.remove(key);
+		attributes.add(PropertiesFactory.getInstance().newAttribute(key, value, Boolean.TRUE));
 	}
 
 	@Override

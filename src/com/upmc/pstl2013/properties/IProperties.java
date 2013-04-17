@@ -33,6 +33,7 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	
 	/**
 	 * Ajoute ou modifie un attribut caché à l'interface utilisateur.
+	 * 
 	 * @param key le nom de l'attribut.
 	 * @param value sa valeur.
 	 */
@@ -45,6 +46,14 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	 * @param value sa valeur.
 	 */
 	void put(String key, String value);
+	
+	/**
+	 * Ajoute ou modifie un attribut caché à l'interface utilisateur.
+	 * 
+	 * @param key
+	 * @param value
+	 */
+	public void putPrivate(String key, Boolean value);
 	
 	/**
 	 * Ajoute ou modifie un attribut de la propriété.

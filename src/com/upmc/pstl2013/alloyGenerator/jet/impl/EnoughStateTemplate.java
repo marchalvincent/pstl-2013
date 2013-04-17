@@ -19,36 +19,38 @@ public class EnoughStateTemplate implements IJetTemplate {
   protected final String TEXT_1 = NL + "pred ";
   protected final String TEXT_2 = " {" + NL + "\tsome s:State | s.running = Finished" + NL + "}" + NL;
   protected final String TEXT_3 = NL + "check {";
-  protected final String TEXT_4 = "} for ";
+  protected final String TEXT_4 = "} for 0 but ";
   protected final String TEXT_5 = " State, ";
   protected final String TEXT_6 = " Object, ";
   protected final String TEXT_7 = " ActivityNode, ";
-  protected final String TEXT_8 = " ActivityEdge";
-  protected final String TEXT_9 = NL;
+  protected final String TEXT_8 = " ActivityEdge, ";
+  protected final String TEXT_9 = " Int";
+  protected final String TEXT_10 = NL;
 
 	@Override
 	public String generate(Object argument) throws JetException
   {
     final StringBuffer stringBuffer = new StringBuffer();
      
-	final Logger log = Logger.getLogger(DeadLockTemplate.class);
+	final Logger log = Logger.getLogger(EnoughStateTemplate.class);
 	if (!(argument instanceof IProperties)) {
-		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
+		final String error = "L'argument passé au template Jet n'est pas une Ipropertys.";
 		log.error(error);
 		throw new JetException(error);
 	}
 
-	IProperties propertie = (IProperties) argument;
-	final String predicatName = propertie.getString("predicatName");
+	IProperties property = (IProperties) argument;
+	final String predicatName = property.getString("predicatName");
 
     stringBuffer.append(TEXT_1);
     stringBuffer.append(predicatName);
     stringBuffer.append(TEXT_2);
     
-	final String nbState = propertie.getString("nbState");
-	final String nbObjects = propertie.getString("nbObjects");
-	final String nbNodes = propertie.getString("nbNodes");
-	final String nbEdges = propertie.getString("nbEdges");
+	final String nbState = property.getString("nbState");
+	final String nbObjects = property.getString("nbObjects");
+	final String nbNodes = property.getString("nbNodes");
+	final String nbEdges = property.getString("nbEdges");
+	final String bitwidth = property.getString("bitwidth");
 
     stringBuffer.append(TEXT_3);
     stringBuffer.append(predicatName);
@@ -61,7 +63,9 @@ public class EnoughStateTemplate implements IJetTemplate {
     stringBuffer.append(TEXT_7);
     stringBuffer.append(nbEdges);
     stringBuffer.append(TEXT_8);
+    stringBuffer.append(bitwidth);
     stringBuffer.append(TEXT_9);
+    stringBuffer.append(TEXT_10);
     return stringBuffer.toString();
   }
 }

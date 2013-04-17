@@ -4,15 +4,15 @@
 			com.upmc.pstl2013.properties.*"
 	skeleton="../alloyGenerator.skeleton" %>
 <% 
-	final Logger log = Logger.getLogger(DeadLockTemplate.class);
+	final Logger log = Logger.getLogger(EnoughStateTemplate.class);
 	if (!(argument instanceof IProperties)) {
-		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
+		final String error = "L'argument passé au template Jet n'est pas une Ipropertys.";
 		log.error(error);
 		throw new JetException(error);
 	}
 
-	IProperties propertie = (IProperties) argument;
-	final String predicatName = propertie.getString("predicatName");
+	IProperties property = (IProperties) argument;
+	final String predicatName = property.getString("predicatName");
 %>
 
 pred <%=predicatName%> {
@@ -20,9 +20,10 @@ pred <%=predicatName%> {
 }
 
 <%
-	final String nbState = propertie.getString("nbState");
-	final String nbObjects = propertie.getString("nbObjects");
-	final String nbNodes = propertie.getString("nbNodes");
-	final String nbEdges = propertie.getString("nbEdges");
+	final String nbState = property.getString("nbState");
+	final String nbObjects = property.getString("nbObjects");
+	final String nbNodes = property.getString("nbNodes");
+	final String nbEdges = property.getString("nbEdges");
+	final String bitwidth = property.getString("bitwidth");
 %>
-check {<%=predicatName%>} for <%=nbState%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge
+check {<%=predicatName%>} for 0 but <%=nbState%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge, <%=bitwidth%> Int

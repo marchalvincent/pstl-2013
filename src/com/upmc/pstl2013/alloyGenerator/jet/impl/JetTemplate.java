@@ -20,9 +20,11 @@ public class JetTemplate implements IJetTemplate {
 
   public final String NL = nl == null ? (System.getProperties().getProperty("line.separator")) : nl;
   protected final String TEXT_1 = NL + "module process" + NL + "" + NL + "open syntax" + NL + "open semantic" + NL + "" + NL + "fact initTokens {" + NL + "\tInit[  " + NL + "\t\t";
-  protected final String TEXT_2 = NL + "\t]" + NL + "}" + NL + "" + NL + "// Timing" + NL + "one sig T extends Timing {} {" + NL + "\ttiming = (ActivityNode -> 0) " + NL + "}" + NL + "" + NL + "// Role Performer" + NL + "one sig Yoann extends RolePerformer {}" + NL + "one sig P extends Performer {} {" + NL + "\tperformer = ActivityNode -> Yoann" + NL + "}" + NL;
-  protected final String TEXT_3 = NL + NL + "/** *Visualization Variables */" + NL + "// http://alloy.mit.edu/community/node/548" + NL + "fun vNodeExecuting : State->ActivityNode {" + NL + "   {s:State, a:ActivityNode | s.getTokens[a] > 0}" + NL + "}" + NL + "fun vEdgeHaveOffers : State->ActivityEdge {" + NL + "   {s:State, e:ActivityEdge | s.getOffers[e] > 0}" + NL + "}" + NL + "" + NL + "fun pinInNode : State->Action->Pin->Int {" + NL + "\t {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}" + NL + "}";
-  protected final String TEXT_4 = NL;
+  protected final String TEXT_2 = NL + "\t]" + NL + "}" + NL;
+  protected final String TEXT_3 = NL + "\t" + NL + "fact fairness {" + NL + "\tall decision:DecisionNode | fairDecision[decision]" + NL + "}" + NL + "" + NL + "pred fairDecision[node:DecisionNode] {" + NL + "\tall edge:node.outgoing | " + NL + "\t\t#{getNumberOfEdgeActivation[edge]} <= 2" + NL + "}" + NL + "" + NL + "fun getNumberOfEdgeActivation[edge:ActivityEdge] : State->State {" + NL + "\t{ s1,s2 : State | s1.next = s2 and s1.getOffers[edge] < s2.getOffers[edge]  }" + NL + "}" + NL;
+  protected final String TEXT_4 = NL + NL + "fact enoughState {" + NL + "\tsome s:State | s.running = Finished" + NL + "}" + NL;
+  protected final String TEXT_5 = NL + NL + "/** *Visualization Variables */" + NL + "// http://alloy.mit.edu/community/node/548" + NL + "fun vNodeExecuting : State->ActivityNode {" + NL + "   {s:State, a:ActivityNode | s.getTokens[a] > 0}" + NL + "}" + NL + "fun vEdgeHaveOffers : State->ActivityEdge {" + NL + "   {s:State, e:ActivityEdge | s.getOffers[e] > 0}" + NL + "}" + NL + "" + NL + "fun pinInNode : State->Action->Pin->Int {" + NL + "\t {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}" + NL + "}";
+  protected final String TEXT_6 = NL;
 
 	@Override
 	public String generate(Object argument) throws JetException
@@ -53,15 +55,22 @@ public class JetTemplate implements IJetTemplate {
 	
 	// si on n'a pas d'état initial, on fait par défaut
 	if (etatInit == null) {
+		stringInit.append("ActivityNode -> 0 +");
 		// on gère les cas sans noeud initial...
-		String initialNode = property.getString("initialNode");
-		if (initialNode == null) {
+		String allInitialName = property.getString("initialNode");
+		if (allInitialName.equals("")) {
 			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
 			log.error(error);
 			throw new JetException(error);
+		} else {
+			String[] initialNodes = allInitialName.split("---");
+			for (String initialName : initialNodes) {
+				stringInit.append("+ ");
+				stringInit.append(initialName);
+				stringInit.append(" -> 1 ");
+			}
 		}
-		stringInit.append(initialNode);
-		stringInit.append(" -> 1 ,  // tokens \n		ActivityEdge -> 0  // offers");
+		stringInit.append(", // tokens \n		ActivityEdge -> 0  // offers");
 	}
 	
 	// sinon on parse l'objet EtatInitial pour définir le process
@@ -144,12 +153,20 @@ public class JetTemplate implements IJetTemplate {
 		stringBuffer.append("    target = " + target + NL);
 		stringBuffer.append("}" + NL);
 	}
+	
+	// GENERATION DE LA PROPRIETE FAIRNESS
+	Boolean isFairness = property.getBoolean("fairness");
+	if (isFairness) {
+    stringBuffer.append(TEXT_3);
+    	} else {
+    stringBuffer.append(TEXT_4);
+    	}
 
 	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. subTemplates ou subTemplates/dynamics)
 	stringBuffer.append(property.getAlloyCode());
 
-    stringBuffer.append(TEXT_3);
-    stringBuffer.append(TEXT_4);
+    stringBuffer.append(TEXT_5);
+    stringBuffer.append(TEXT_6);
     return stringBuffer.toString();
   }
 }
