@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.viewsDialog;
 
 import java.util.HashMap;
+import org.apache.log4j.Logger;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.custom.TableEditor;
@@ -31,6 +32,7 @@ public class DialogInitialState  extends ApplicationWindow {
 	private Table tableSetInitState,tableSetInitEdge;
 	private TableEditor editorStringEdge,editorStringState;
 	private Button btnAccepte;
+	private Logger log = Logger.getLogger(DialogInitialState.class);
 
 	public DialogInitialState(Shell parentShell, SwtView swtView) {
 		super(parentShell);
@@ -118,27 +120,35 @@ public class DialogInitialState  extends ApplicationWindow {
 				tableSetInitEdge.getColumn(i).pack();
 			}
 		}
-
-
 		composite.redraw();
 		composite.pack(true);
-
 		currentLayout = new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1);
 		currentLayout.heightHint = 22;
-
 		return super.createContents(parent);
 	}
 	public InitialState getInitalStat() {
 		HashMap<String, Integer> nodes = new HashMap<String, Integer>();
 		for (TableItem item : tableSetInitState.getItems()) {
-			//TODO : vérifier bien integer
-			nodes.put(item.getText(0), Integer.valueOf(item.getText(1)));
+			try {
+				nodes.put(item.getText(0), Integer.valueOf(item.getText(1)));
+			} catch (NumberFormatException e) {
+				final String message = "Warning, the integer for the token is not correct (" + item.getText(1) + "). Default value set is 0.\n";
+				log.warn(message);
+				swtView.getDataView().showToViewUse(message);
+				nodes.put(item.getText(0), 0);
+			}
 		}
 		
 		HashMap<String, Integer> edges = new HashMap<String, Integer>();
 		for (TableItem item : tableSetInitEdge.getItems()) {
-			//TODO : vérifier bien integer
-			edges.put(item.getText(0), Integer.valueOf(item.getText(1)));
+			try {
+				edges.put(item.getText(0), Integer.valueOf(item.getText(1)));
+			} catch (NumberFormatException e) {
+				final String message = "Warning, the integer for the offer is not correct (" + item.getText(1) + "). Default value set is 0.\n";
+				log.warn(message);
+				swtView.getDataView().showToViewUse(message);
+				edges.put(item.getText(0), 0);
+			}
 		}
 		
 		return PropertiesFactory.getInstance().newEtatInitial(nodes, edges);
