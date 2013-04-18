@@ -1,42 +1,57 @@
 package com.upmc.pstl2013.views.events;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.Queue;
 import org.apache.log4j.Logger;
 
 
 public class MyJobPoolExecutor {
 
 	private final int nbMaxWorker;
-	private LinkedList<JobExecutor> jobs;
+	private Queue<MyPriorityArrayList> jobs;
 	private List<MyThreadWorker> workers;
 	private final Logger log = Logger.getLogger(MyJobPoolExecutor.class);
 
 	public MyJobPoolExecutor(int nbMaxWorker) {
 		super();
 		this.nbMaxWorker = nbMaxWorker;
-		jobs = new LinkedList<JobExecutor>();
+		jobs = new PriorityQueue<MyPriorityArrayList>();
 		workers = new ArrayList<MyThreadWorker>();
 	}
+	
+	public boolean hasJob() {
+		return (!jobs.isEmpty());
+	}
 
-	public LinkedList<JobExecutor> jobs() {
-		return jobs;
+	public JobExecutor getJob() {
+		MyPriorityArrayList listePrioritaire = jobs.peek();
+		if (listePrioritaire == null)
+			return null;
+		JobExecutor job = listePrioritaire.remove(0);
+		// si la liste prioritaire est maintenant vide, on la supprime de la queue
+		if (listePrioritaire.isEmpty())
+			jobs.poll();
+		return job;
 	}
 
 	/**
 	 * Ajoute un job a exécuter par le pool.
 	 * @param job le {@link JobExecutor}.
-	 * @param isPriority un boolean qui spécifie si le job est prioritaire ou non.
+	 * @param priority un int qui représente la priorité du job. 0 est plus prioritaire que 1.
 	 */
-	public void addJob(JobExecutor job, boolean isPriority) {
-		synchronized (jobs) {
-			if (isPriority) {
-				jobs.addFirst(job);
+	public void addJob(JobExecutor job, int priority) {
+		synchronized (this) {
+			for(MyPriorityArrayList priorListe : jobs) {
+				if(priority == priorListe.getPriority()) {
+					priorListe.add(job);
+					return;
+				}
 			}
-			else {
-				jobs.addLast(job);
-			}
+			MyPriorityArrayList myPriorityArrayList = new MyPriorityArrayList(priority);
+			myPriorityArrayList.add(job);
+			jobs.add(myPriorityArrayList);
 		}
 	}
 
@@ -55,7 +70,9 @@ public class MyJobPoolExecutor {
 		MyThreadWorker t;
 		for (int i = 0; i < nbMaxThread; i++) {
 			t = new MyThreadWorker(this, i+1);
-			workers.add(t);
+			synchronized (workers) {
+				workers.add(t);
+			}
 			t.start();
 		}
 	}
@@ -67,21 +84,29 @@ public class MyJobPoolExecutor {
 	public String killWorkers() {
 		jobs.clear();
 		StringBuilder sb = new StringBuilder();
-		for (MyThreadWorker t : workers) {
-			if (t.isAlive()) {
-				sb.append("The worker n°" + t.getNum() + " was stopped !\n");
-				t.killJob();
-				t.stop();
+		synchronized (workers) {
+			for (MyThreadWorker t : workers) {
+				if (t.isAlive()) {
+					sb.append("The worker n°" + t.getNum() + " was stopped !\n");
+					t.killJob();
+					t.stop();
+				}
 			}
 		}
 		return sb.toString();
 	}
 
 	public void removeWorker(MyThreadWorker myThreadWorker) {
-		workers.remove(myThreadWorker);
+		synchronized (workers) {
+			workers.remove(myThreadWorker);
+		}
 	}
 	
 	public boolean isFinish() {
-		return workers.isEmpty();
+		boolean bool = false;
+		synchronized (workers) {
+			bool = workers.isEmpty();
+		}
+		return bool;
 	}
 }
