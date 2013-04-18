@@ -73,7 +73,7 @@ public class JobExecutor extends Job {
 				sbInfo.append(activity.getName());
 				sbInfo.append(" : the previous ");
 				sbInfo.append(jobToWait.property.getName());
-				sbInfo.append(" has returned -1 code so the property ");
+				sbInfo.append(" find a counter exemple so the property ");
 				sbInfo.append(this.property.getName());
 				sbInfo.append(" is stopped.\n");
 				log.info(sbInfo.toString());
@@ -94,12 +94,17 @@ public class JobExecutor extends Job {
 			IFileResult iFileResult = alloyExecutor.executeFiles(executed);
 
 			synchronized (this) {
-				// On récupère le nombre de state (utile quand on exécute EnoughState)
-				if (property instanceof EnoughState)
-					nbState = iFileResult.getActivityResult().getNbState();
+				// On enregistre le résultat pour les job suivants qui dépendent de nous
+				if (property instanceof EnoughState) {
+					// si on a trouvé un contre exemple, on ne continue pas avec les suivants
+					if (iFileResult.getActivityResult().isSatisfiable())
+						nbState = "-1";
+					else
+						nbState = iFileResult.getActivityResult().getNbState();
+				}
 				else if (property instanceof Wf) {
-					System.out.println("WF : satisfaisable? " + iFileResult.getActivityResult().isSatisfiable());
-					nbState = iFileResult.getActivityResult().isSatisfiable()? "1" : "-1";
+					// si on a trouvé un contre exemple, on ne continue pas avec les autres propriétés
+					nbState = iFileResult.getActivityResult().isSatisfiable()? "-1" : "1";
 				}
 				
 				//Une fois qu'on a le nbState, on notifie tout ceux qui se sont endormi sur nous.
