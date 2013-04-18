@@ -107,7 +107,6 @@ public class AlloyExecutor implements IAlloyExecutor {
 							// si on veut pas de détails on supprime les anciennes infos
 							activityResult.resetLog();
 							activityResult.appendLog(this.executionTravel(generated, ans));
-
 						}
 
 						// Si la solution est satisfiable
