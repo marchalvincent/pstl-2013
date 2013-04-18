@@ -375,14 +375,17 @@ public class SwtView extends Composite {
 	 * Affiche toutes les proprietes dans la view.
 	 * @param addBuisiness True si l'on veux que l'onglet BUISINESS soit ouvert par defaut. False sinon.
 	 */
+
 	private void addPropertiesToTree(boolean addBuisiness) {
 
 		treeProperties.removeAll();
 
 		HashMap<String, List<IProperties>> families = new HashMap<String, List<IProperties>>();
 		treeProperties.addListener(SWT.Selection, EventFactory.getInstance().newEventSelectTreeProperty(this));
-
-
+		
+		//Liste regroupant tous les sous groupe de la treeView
+		//permet de selectioner ou deselectionner tous les groupes.
+		List <Boolean> listAllchecked = new ArrayList<Boolean>();
 
 		for (IProperties property : AbstractProperties.getProperties()) {
 
@@ -404,14 +407,21 @@ public class SwtView extends Composite {
 		}
 
 		HashMap<String,TreeItem> alreadyAdded = new HashMap<String,TreeItem>();
-		for (Family family : Family.values()) {
+		for (Family family : Family.values())
+			addPropertyOfFamily(family, families, addBuisiness,alreadyAdded,listAllchecked);
 
-			addPropertyOfFamily(family, families, addBuisiness,alreadyAdded);
-
+		//Coche le 1er treeView si tt le monde est coché
+		treeProperties.getItem(0).setChecked(true);
+		for (Boolean value : listAllchecked) {
+			if (!value){
+				treeProperties.getItem(0).setChecked(value);
+				break;
+			}
 		}
+	
 	}
 
-	private TreeItem addPropertyOfFamily (Family family, HashMap<String, List<IProperties>> families, boolean addBuisiness,HashMap<String,TreeItem> alreadyAdded){
+	private TreeItem addPropertyOfFamily (Family family, HashMap<String, List<IProperties>> families, boolean addBuisiness,HashMap<String,TreeItem> alreadyAdded, List<Boolean> listAllchecked){
 
 		TreeItem lItem0 = null;
 		TreeItem itemParent = null;
@@ -421,7 +431,7 @@ public class SwtView extends Composite {
 
 		//Partie recursive
 		if (family.hasParent() && !alreadyAdded.containsKey(family.getParent().toString())){
-			itemParent = addPropertyOfFamily(family.getParent(), families, addBuisiness, alreadyAdded);
+			itemParent = addPropertyOfFamily(family.getParent(), families, addBuisiness, alreadyAdded, listAllchecked);
 			lItem0 = new TreeItem(itemParent, SWT.READ_ONLY);
 		}
 		else if(family.hasParent() && alreadyAdded.containsKey(family.getParent().toString())){
@@ -443,7 +453,7 @@ public class SwtView extends Composite {
 
 				lItem1 = new TreeItem(lItem0, SWT.READ_ONLY);
 				lItem1.setText(elem.getName());
-				boolean isModif = elem.isModifiable();
+				Boolean isModif = elem.isModifiable();
 
 				if (isDynamicBusiness)
 					lItem1.setData(ETreeType.DYNAMIC_PROPERTY);		
@@ -460,6 +470,7 @@ public class SwtView extends Composite {
 				if (lItem1.getChecked() != true)
 					allChecked = false;
 			}
+			listAllchecked.add(allChecked);
 			lItem0.setChecked(allChecked);
 		}
 		return lItem0;

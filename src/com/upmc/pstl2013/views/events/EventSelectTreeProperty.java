@@ -40,9 +40,7 @@ public class EventSelectTreeProperty implements Listener {
 		//Permet de ne rien faire si l'on clique sur une famille
 		if((currentItem.getData()!=null && currentItem.getData().equals(ETreeType.FAMILY))) {
 			if (event.detail == SWT.CHECK){
-				for (TreeItem item : currentItem.getItems()) {
-					item.setChecked(currentItem.getChecked() || (!(Boolean)item.getData()));
-				}
+				checkerCheckBox(currentItem);
 			}
 		}
 		//Selection d'une property
@@ -69,6 +67,21 @@ public class EventSelectTreeProperty implements Listener {
 		}
 	}
 
+	private void checkerCheckBox(TreeItem currentItem){
+
+		for (TreeItem item : currentItem.getItems())
+		{
+			if (item.getText().equals("EnoughState"))
+				item.setChecked(true);
+			else if(currentItem.getData() instanceof Boolean)
+				item.setChecked(currentItem.getChecked() || (!(Boolean)currentItem.getData()));
+			else
+				item.setChecked(currentItem.getChecked());
+			
+			checkerCheckBox(item);
+		}
+	}
+
 	/***
 	 * Affiche toutes les attributs de la propriété séléctionné.
 	 */
@@ -92,7 +105,7 @@ public class EventSelectTreeProperty implements Listener {
 					item.setText(0,sb.toString());
 					item.setText(1, "");
 					//item.setData(nameProperty);
-					
+
 					for (int i = 0; i < 2; i++) {
 						tabValuePropertiesString.getColumn(i).pack();
 					}
