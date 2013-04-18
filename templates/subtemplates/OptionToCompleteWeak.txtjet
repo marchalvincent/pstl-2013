@@ -1,0 +1,44 @@
+<%@ jet package="com.upmc.pstl2013.alloyGenerator.jet.impl" class="OptionToCompleteWeakTemplate" 
+	imports="org.apache.log4j.Logger
+			com.upmc.pstl2013.alloyGenerator.jet.*
+			com.upmc.pstl2013.properties.*"
+	skeleton="../alloyGenerator.skeleton" %>
+<% 
+	final Logger log = Logger.getLogger(OptionToCompleteWeakTemplate.class);
+	if (!(argument instanceof IProperties)) {
+		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
+		log.error(error);
+		throw new JetException(error);
+	}
+
+	IProperties property = (IProperties) argument;
+	final String predicatName = property.getString("predicatName");
+%>
+
+pred <%=predicatName%> {<%
+	String allFinalNodes = property.getString("finalNode");
+	String[] finalNodes = allFinalNodes.split("---");
+	StringBuilder sb = new StringBuilder();
+	boolean first = true;
+	for(String finalN : finalNodes) {
+		if (!first) {
+			sb.append(" or ");
+		}
+		sb.append("s.hasTokens[");
+		sb.append(finalN);
+		sb.append("]");
+		first = false;
+	}
+	%>
+	some s:State | (<%=sb.toString()%>)
+	
+}
+
+<%
+	final String inc = property.getString("nbState");
+	final String nbObjects = property.getString("nbObjects");
+	final String nbNodes = property.getString("nbNodes");
+	final String nbEdges = property.getString("nbEdges");
+	final String bitwidth = property.getString("bitwidth");
+%>
+run {<%=predicatName%>} for 0 but <%=inc%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge, <%=bitwidth%> Int

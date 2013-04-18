@@ -1,0 +1,7 @@
+public class CLASS implements IJetTemplate {
+
+	@Override
+	public String generate(Object argument) throws JetException {
+		return "";
+	}
+}

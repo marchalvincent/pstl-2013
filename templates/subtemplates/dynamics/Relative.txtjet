@@ -1,0 +1,34 @@
+<%@ jet package="com.upmc.pstl2013.properties.dynamic.impl" class="RelativeTemplate" 
+	imports="org.apache.log4j.Logger
+			com.upmc.pstl2013.alloyGenerator.jet.*
+			com.upmc.pstl2013.properties.*
+			com.upmc.pstl2013.properties.dynamic.AbstractStrategyDynamicBusiness
+			com.upmc.pstl2013.properties.dynamic.DynamicBusiness"
+	skeleton="./dynamics.skeleton" %>
+<% 
+	final Logger log = Logger.getLogger(RelativeTemplate.class);
+	if (!(argument instanceof IProperties)) {
+		final String error = "L'argument passé au template Jet n'est pas une IProperties.";
+		log.error(error);
+		throw new JetException(error);
+	}
+
+	final DynamicBusiness propertie = (DynamicBusiness) argument;
+	final String predicatName = propertie.getString("predicatName");
+	
+	final String[] dataParams = propertie.getDataParams();
+	final String noeud1 = dataParams[0];
+	final String relation = dataParams[1];
+	final String noeud2 = dataParams[2];
+	
+	final String inc = propertie.getString("nbState");
+	final String nbObjects = propertie.getString("nbObjects");
+	final String nbNodes = propertie.getString("nbNodes");
+	final String nbEdges = propertie.getString("nbEdges");
+%>
+
+pred <%=predicatName%> {
+	<%=relation%>[<%=noeud1%>,<%=noeud2%>]
+}
+
+check {<%=predicatName%>} for <%=inc%> State, <%=nbObjects%> Object, <%=nbNodes%> ActivityNode, <%=nbEdges%> ActivityEdge expect 0

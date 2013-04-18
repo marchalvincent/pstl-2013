@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd" >
+<log4j:configuration>
+
+	<appender name="stdout" class="org.apache.log4j.ConsoleAppender">
+		<layout class="org.apache.log4j.PatternLayout">
+			<param name="ConversionPattern"
+				value="%d{ABSOLUTE} - %5p - %F:%L - %m%n" />
+		</layout>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="debug" />
+			<param name="LevelMax" value="error" />
+		</filter>
+	</appender>
+	
+	<appender name="htmlfileInfo" class="org.apache.log4j.FileAppender">
+		<param name="File" value="AlloyAnalyzer/logInfo.html" />
+		<layout class="org.apache.log4j.HTMLLayout"/>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="info" />
+			<param name="LevelMax" value="info" />
+		</filter>
+	</appender>
+	
+	<appender name="htmlfileDebug" class="org.apache.log4j.FileAppender">
+		<param name="File" value="AlloyAnalyzer/logDebug.html" />
+		<layout class="org.apache.log4j.HTMLLayout"/>
+		<filter class="org.apache.log4j.varia.LevelRangeFilter">
+			<param name="LevelMin" value="info" />
+			<param name="LevelMax" value="error" />
+		</filter>
+	</appender>
+	
+	<root>
+		<priority value="all"></priority>
+		<appender-ref ref="stdout" />
+		<appender-ref ref="htmlfileInfo" />
+		<appender-ref ref="htmlfileDebug" />
+	</root>
+
+</log4j:configuration>
