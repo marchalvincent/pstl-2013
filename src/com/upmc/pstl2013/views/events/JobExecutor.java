@@ -10,6 +10,8 @@ import com.upmc.pstl2013.alloyExecutor.ExecutorFactory;
 import com.upmc.pstl2013.alloyExecutor.IAlloyExecutor;
 import com.upmc.pstl2013.alloyExecutor.IFileResult;
 import com.upmc.pstl2013.properties.IProperties;
+import com.upmc.pstl2013.properties.impl.EnoughState;
+import com.upmc.pstl2013.properties.impl.Wf;
 import com.upmc.pstl2013.views.SwtView;
 import edu.mit.csail.sdg.alloy4.Err;
 
@@ -64,7 +66,22 @@ public class JobExecutor extends Job {
 		// Si on a un job à attendre, on récupère son nombre de state
 		if (jobToWait != null) {
 			// la méthode est bloquante tant que le jobToWait n'a pas fini
-			property.put("nbState", jobToWait.getNbState());
+			String nbStateToWait = jobToWait.getNbState();
+			
+			if (nbStateToWait.equals("-1")) {
+				sbInfo = new StringBuilder();
+				sbInfo.append(activity.getName());
+				sbInfo.append(" : the previous ");
+				sbInfo.append(jobToWait.property.getName());
+				sbInfo.append(" has returned -1 code so the property ");
+				sbInfo.append(this.property.getName());
+				sbInfo.append(" is stopped.\n");
+				log.info(sbInfo.toString());
+				swtView.getDataView().showToViewUse(sbInfo.toString());
+				nbState = "-1";
+				return Status.CANCEL_STATUS;
+			}
+			property.put("nbState", nbStateToWait);
 		}
 
 		StringBuilder result = new StringBuilder();
@@ -78,7 +95,12 @@ public class JobExecutor extends Job {
 
 			synchronized (this) {
 				// On récupère le nombre de state (utile quand on exécute EnoughState)
-				nbState = iFileResult.getActivityResult().getNbState();
+				if (property instanceof EnoughState)
+					nbState = iFileResult.getActivityResult().getNbState();
+				else if (property instanceof Wf) {
+					System.out.println("WF : satisfaisable? " + iFileResult.getActivityResult().isSatisfiable());
+					nbState = iFileResult.getActivityResult().isSatisfiable()? "1" : "-1";
+				}
 				
 				//Une fois qu'on a le nbState, on notifie tout ceux qui se sont endormi sur nous.
 				this.notifyAll();

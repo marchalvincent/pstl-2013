@@ -1,5 +1,6 @@
 package com.upmc.pstl2013.views.events;
 
+import java.util.ArrayList;
 import java.util.List;
 import org.apache.log4j.Logger;
 import org.eclipse.swt.events.MouseAdapter;
@@ -46,10 +47,16 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 		
 		// 4. On récupère toutes les propriétés seléctionnées
 		List<IProperties> properties = null;
-		IProperties TMPProperty = null;
-		JobExecutor job = null;
+		JobExecutor wf = null, enoughState = null;
+		StringBuilder nomJob = new StringBuilder();
 		try {
 			properties = this.getProperties();
+			
+			List<String> propertiesNames = new ArrayList<String>();
+			for (IProperties iProperties : properties) {
+				propertiesNames.add(iProperties.getName());
+			}
+			
 			// On enregistre dans les préférences les propriétés
 			swtView.getDataView().saveProperties(properties);
 			
@@ -58,36 +65,23 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 				// 5b. Pour chaque propriété
 				if (properties != null) {
 					
-					// TODO vincent faire une méthode générique qui construit les job dynamiquement
+					nomJob.delete(0, nomJob.length());
+					nomJob.append("Execution Alloy de ");
+					nomJob.append(activity.getName());
+					nomJob.append(" : ");
+					
+					// Le 2e paramètre de makeJob représente la priorité du job dans la file d'éxecution
 					// on lance d'abord Wf
+					wf = this.makeJob("Wf", 0, properties, nomJob, activity, jobPoolExecutor, null);
+					propertiesNames.remove("Wf");
 					
 					// puis enoughState
+					enoughState = this.makeJob("EnoughState", 1, properties, nomJob, activity, jobPoolExecutor, wf);
+					propertiesNames.remove("EnoughState");
 					
 					// et enfin les autres 
+					this.makeJob(propertiesNames, 2, properties, nomJob, activity, jobPoolExecutor, enoughState);
 					
-					// On lance d'abord le enoughState
-					JobExecutor enoughState = null;
-					for (IProperties property : properties) {
-						if (property.getName().equals("EnoughState")) {
-							TMPProperty = property.clone();
-							TMPProperty.setEtatInitial(swtView.getInitState());
-							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getName() + "...";
-							enoughState = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, null, counterExecution, executed);
-							jobPoolExecutor.addJob(enoughState, true);
-							break;
-						}
-					}
-					
-					// Puis ensuite les autres
-					for (IProperties property : properties) {
-						if (!property.getName().equals("EnoughState")) {
-							TMPProperty = property.clone();
-							TMPProperty.setEtatInitial(swtView.getInitState());
-							String nomJob = "Execution Alloy de " + activity.getName() + " : " + TMPProperty.getName() + "...";
-							job = RunFactory.getInstance().newJobExecutor(nomJob, swtView, activity, TMPProperty, enoughState, counterExecution, executed);
-							jobPoolExecutor.addJob(job, false);
-						}
-					}
 				}
 			}
 			jobPoolExecutor.startWorkers();
@@ -98,6 +92,54 @@ public abstract class AbstractEventExecutor extends MouseAdapter {
 			log.error(e.getMessage());
 			swtView.getDataView().showToViewUse(e.getMessage());
 		}
+	}
+	
+	/**
+	 * Créé un job pour chaque nom de propriété qui est en premier paramètre dans la liste
+	 * @param propertiesNames la {@link List} des nom des propriétés qui doivent être exécutée
+	 * @param priority un entier qui représente les priorités
+	 * @param properties la liste des {@link IProperties} qui sont toutes générées
+	 * @param nomJob le nom du job
+	 * @param activity l'{@link Activity} qui est exécutée
+	 * @param jobPoolExecutor le {@link MyJobPoolExecutor} qui gère les workers
+	 * @param dependance le {@link JobExecutor} dont dépend l'exécution de ce job
+	 */
+	private void makeJob(List<String> propertiesNames, int priority, List<IProperties> properties,
+			StringBuilder nomJob, Activity activity, MyJobPoolExecutor jobPoolExecutor,
+			JobExecutor dependance) {
+		for (String propertyName : propertiesNames) {
+			this.makeJob(propertyName, priority, properties, nomJob, activity, jobPoolExecutor, dependance);
+		}
+	}
+
+	/**
+	 * Créé un job pour la propriété donnée en paramètre.
+	 * @param propertyName le nom de la propriété qui doit être passée en paramètre
+	 * @param priority un entier qui représente les priorités
+	 * @param properties la liste des {@link IProperties} qui sont toutes générées
+	 * @param nomJob le nom du job
+	 * @param activity l'{@link Activity} qui est exécutée
+	 * @param jobPoolExecutor le {@link MyJobPoolExecutor} qui gère les workers
+	 * @param dependance le {@link JobExecutor} dont dépend l'exécution de ce job
+	 * @return
+	 */
+	private JobExecutor makeJob(String propertyName, int priority, List<IProperties> properties, StringBuilder nomJob,
+			Activity activity, MyJobPoolExecutor jobPoolExecutor, JobExecutor dependance) {
+
+		IProperties TMPProperty = null;
+		JobExecutor job = null;
+		String name = null;
+		for (IProperties property : properties) {
+			if (property.getName().equals(propertyName)) {
+				TMPProperty = property.clone();
+				TMPProperty.setEtatInitial(swtView.getInitState());
+				name = nomJob.toString() + propertyName + "...";
+				job = RunFactory.getInstance().newJobExecutor(name, swtView, activity, TMPProperty, dependance, counterExecution, executed);
+				jobPoolExecutor.addJob(job, priority);
+				break;
+			}
+		}
+		return job;
 	}
 
 	/**

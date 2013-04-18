@@ -1,6 +1,5 @@
 package com.upmc.pstl2013.views.events;
 
-import java.util.LinkedList;
 import org.apache.log4j.Logger;
 
 
@@ -8,14 +7,12 @@ public class MyThreadWorker extends Thread {
 
 	private final Logger log = Logger.getLogger(MyThreadWorker.class);
 	private final int numWorker;
-	private final LinkedList<JobExecutor> jobs;
 	private JobExecutor job;
 	private MyJobPoolExecutor pool;
 
 	public MyThreadWorker(MyJobPoolExecutor pool, int numWorker) {
 		super();
 		this.numWorker = numWorker;
-		this.jobs = pool.jobs();
 		this.pool = pool;
 	}
 
@@ -28,11 +25,11 @@ public class MyThreadWorker extends Thread {
 		log.debug("Lancement du worker n°" + numWorker);
 		while (true) {
 			// on se synchronize sur la liste et on récupère le 1er élément.
-			synchronized (jobs) {
+			synchronized (pool) {
 
-				if (!jobs.isEmpty()) {
+				if (pool.hasJob()) {
 					// on prend un objet à la tête de la liste
-					job = jobs.removeFirst();
+					job = pool.getJob();
 					log.debug("Le worker n°" + numWorker + " prend un job.");
 				}
 				else {
