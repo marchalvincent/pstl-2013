@@ -218,9 +218,15 @@ public abstract class AbstractProperties implements IProperties {
 	}
 	
 	@Override
-	public void reduceActivityDiagram(Activity activity) {
+	public Activity reduceActivityDiagram(Activity activity) {
+		
+		if (reductions.size() == 0)
+			return activity;
+		
+		// puis on réduit
 		for (IReduction reduction : reductions) {
 			reduction.reduce(activity);
-		}
+			}
+		return activity;
 	}
 }

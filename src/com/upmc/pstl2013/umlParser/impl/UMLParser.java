@@ -93,7 +93,6 @@ public class UMLParser implements IUMLParser {
 			if (activityNode.getName() == null) {
 				activityNode.setName(activityNode.getClass().getSimpleName() + i);
 				i++;
-				System.out.println(activityNode.getName());
 			}
 		}
 	}
@@ -108,7 +107,6 @@ public class UMLParser implements IUMLParser {
 			if (activityEdge.getName() == null) {
 				activityEdge.setName(activityEdge.getClass().getSimpleName() + i);
 				i++;
-				System.out.println(activityEdge.getName());
 			}
 		}
 	}

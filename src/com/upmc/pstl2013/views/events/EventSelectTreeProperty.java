@@ -51,7 +51,7 @@ public class EventSelectTreeProperty implements Listener {
 				showValueProperties(currentItem.getText());
 			}
 			else {
-				if (currentItem.getText().equals("EnoughState"))
+				if (currentItem.getText().equals("EnoughState") || currentItem.getText().equals("Wf"))
 					currentItem.setChecked(true);
 				showValueProperties(currentItem.getText());
 			}
@@ -137,7 +137,7 @@ public class EventSelectTreeProperty implements Listener {
 				Map <String,Boolean> boolAttributes = property.getBooleanAttributes();
 				if (tabValuePropertiesBool != null) {
 					tabValuePropertiesBool.removeAll();
-					tabValuePropertiesBool.getColumn(0).setText("Attributes Vrai/Faux : " + nameProperty);
+					tabValuePropertiesBool.getColumn(0).setText("Attributes true/false : " + nameProperty);
 					if (boolAttributes.size()>0) {
 						tabValuePropertiesBool.addListener(SWT.Selection, EventFactory.getInstance().newEventCheckAttributes());
 						for (String key : boolAttributes.keySet()) {
@@ -150,7 +150,6 @@ public class EventSelectTreeProperty implements Listener {
 					}
 				}
 			}
-
 
 		} catch (PropertiesException e) {
 			log.error(e.getMessage());
