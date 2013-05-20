@@ -1,6 +1,7 @@
 package com.upmc.pstl2013.properties;
 
 import java.util.Map;
+import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.properties.impl.InitialState;
 import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
@@ -145,4 +146,9 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	 * @return {@link InitialState}.
 	 */
 	InitialState getEtatInitial();
+	
+	/**
+	 * Permet de faire la réduction d'un diagramme d'activités si la propriété possède une ou plusieurs réductions.
+	 */
+	void reduceActivityDiagram(Activity activity);
 }

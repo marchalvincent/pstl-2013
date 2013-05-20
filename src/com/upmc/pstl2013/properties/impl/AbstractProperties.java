@@ -5,11 +5,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.apache.log4j.Logger;
+import org.eclipse.uml2.uml.Activity;
 import com.upmc.pstl2013.properties.IAttribute;
 import com.upmc.pstl2013.properties.IProperties;
 import com.upmc.pstl2013.properties.PropertiesFactory;
 import com.upmc.pstl2013.strategyExecution.IStrategyExecution;
 import com.upmc.pstl2013.strategyParcours.IStrategyParcours;
+import com.upmc.pstl2013.strategyReduction.IReduction;
 import edu.mit.csail.sdg.alloy4compiler.translator.A4Solution;
 
 /**
@@ -26,6 +28,7 @@ public abstract class AbstractProperties implements IProperties {
 	private IStrategyParcours strategyParcours;
 	private boolean isModifiable;
 	private InitialState etatInitial;
+	private List<IReduction> reductions;
 	private static Logger log = Logger.getLogger(AbstractProperties.class);
 
 	/**
@@ -44,6 +47,7 @@ public abstract class AbstractProperties implements IProperties {
 		this.strategyParcours = strategy;
 		this.setModifiable(true);
 		this.etatInitial = null;
+		this.reductions = new ArrayList<IReduction>();
 		// certains attributs par défaut
 		this.putPrivate("fairness", false);
 		this.putPrivate("bitwidth", "3");
@@ -207,5 +211,16 @@ public abstract class AbstractProperties implements IProperties {
 	@Override
 	public InitialState getEtatInitial() {
 		return etatInitial;
+	}
+	
+	protected void addReduction(IReduction reduc) {
+		reductions.add(reduc);
+	}
+	
+	@Override
+	public void reduceActivityDiagram(Activity activity) {
+		for (IReduction reduction : reductions) {
+			reduction.reduce(activity);
+		}
 	}
 }

@@ -72,6 +72,9 @@ public class AlloyGenerator implements IAlloyGenerator {
 		String pathFile = dirDestination + "gen_" + filename + "_" + property.getName() + ".als";
 		log.info("Génération du fichier : " + pathFile + ".");
 
+		// On fait la réduction des diagrammes d'activité
+		property.reduceActivityDiagram(activity);
+		
 		// On génère le contenu Alloy
 		String alloyTxt = this.getAlloyTxt(activity, property);
 		FileOutputStream out = null;
