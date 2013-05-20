@@ -1,0 +1,182 @@
+<%@ jet package="com.upmc.pstl2013.alloyGenerator.jet.impl" class="JetTemplate" 
+	imports="org.apache.log4j.Logger 
+			org.eclipse.emf.common.util.EList
+			org.eclipse.uml2.uml.*
+			com.upmc.pstl2013.alloyGenerator.jet.*
+			com.upmc.pstl2013.properties.*
+			com.upmc.pstl2013.properties.impl.InitialState" 
+	skeleton="alloyGenerator.skeleton" %>
+<% 
+	final Logger log = Logger.getLogger(JetTemplate.class);
+	if (!(argument instanceof IJetHelper)) {
+		final String error = "L'argument passé au template Jet n'est pas un IJetHelper.";
+		log.error(error);
+		throw new JetException(error);
+	}
+	IJetHelper jetHelper = (IJetHelper) argument;
+	
+	// on récupère la propriété
+	IProperties property = jetHelper.getProperty();
+	if (property == null) {
+		final String error = "La propriété est incorrecte.";
+		log.error(error);
+		throw new JetException(error);
+	}
+	
+	// GENERATION DYNAMIQUE DE L'ETAT INITIAL
+	StringBuffer stringInit = new StringBuffer();
+	
+	// on regarde si l'objet property possède un EtatInitial
+	InitialState etatInit = property.getEtatInitial();
+	
+	// si on n'a pas d'état initial, on fait par défaut
+	if (etatInit == null) {
+		stringInit.append("ActivityNode -> 0 +");
+		// on gère les cas sans noeud initial...
+		String allInitialName = property.getString("initialNode");
+		if (allInitialName.equals("")) {
+			final String error = "Le template Jet n'a pas trouvé de noeud initial.";
+			log.error(error);
+			throw new JetException(error);
+		} else {
+			String[] initialNodes = allInitialName.split("---");
+			for (String initialName : initialNodes) {
+				stringInit.append("+ ");
+				stringInit.append(initialName);
+				stringInit.append(" -> 1 ");
+			}
+		}
+		stringInit.append(", // tokens \n		ActivityEdge -> 0  // offers");
+	}
+	
+	// sinon on parse l'objet EtatInitial pour définir le process
+	else {
+		// on s'occupe d'abord des nodes
+		if (etatInit.hasNodeInit()) {
+			stringInit.append("ActivityNode -> 0 +");
+			for (String name : etatInit.keySetNode()) {
+				Integer number = etatInit.getNode(name);
+				if (number > 0) {
+					stringInit.append("+ ");
+					stringInit.append(name);
+					stringInit.append(" -> ");
+					stringInit.append(number);
+					stringInit.append(" ");
+				}
+			}
+			stringInit.append(", // tokens\n");
+		}
+		// si on n'a aucun noeud avec le init
+		else {
+			stringInit.append("ActivityNode -> 0, \n");
+		}
+		
+		// on s'occupe maintenant des edges
+		if (etatInit.hasEdgeInit()) {
+			stringInit.append("		ActivityEdge -> 0 +");
+			for (String name : etatInit.keySetEdge()) {
+				Integer number = etatInit.getEdge(name);
+				if (number > 0) {
+					stringInit.append("+ ");
+					stringInit.append(name);
+					stringInit.append(" -> ");
+					stringInit.append(number);
+					stringInit.append(" ");
+				}
+			}
+			stringInit.append("// offers");
+		}
+		// si on n'a aucun noeud avec le init
+		else {
+			stringInit.append("		ActivityEdge -> 0");
+		}
+	}
+%>
+
+module process
+
+open syntax
+open semantic
+
+fact initTokens {
+	Init[  
+		<%=stringInit.toString()%>
+	]
+}
+
+<% 
+	// GENERATION DES NOEUDS ET EDGES EN DYNAMIQUE
+	EList<ActivityNode> nodes = jetHelper.getNodes();
+	EList<ActivityEdge> edges = jetHelper.getEdges();
+	
+	stringBuffer.append("------Generated Nodes------" + NL);
+	for (ActivityNode node : nodes) {
+		stringBuffer.append("one sig " + node.getName() + " extends " + node.eClass().getName() + " {}{}" + NL);
+	}
+	
+	stringBuffer.append(NL + NL + "------Generated Edges------" + NL);
+	for (ActivityEdge edge : edges) {
+	
+		// la source
+		String source = null;
+		if (edge.getSource() != null && edge.getSource().getName() != null) {
+			source = edge.getSource().getName();
+		} else {
+			source = "none";
+		}
+		
+		// la destination
+		String target = null;
+		if (edge.getTarget() != null && edge.getTarget().getName() != null) {
+			target = edge.getTarget().getName();
+		} else {
+			target = "none";
+		}
+	
+		stringBuffer.append("one sig " + edge.getName() + " extends " + edge.eClass().getName() + " {}{" + NL);
+		stringBuffer.append("    source = " + source + NL);
+		stringBuffer.append("    target = " + target + NL);
+		stringBuffer.append("}" + NL);
+	}
+	
+	// GENERATION DE LA PROPRIETE FAIRNESS
+	Boolean isFairness = property.getBoolean("fairness");
+	if (isFairness) {%>
+	
+fact fairness {
+	all decision:DecisionNode | fairDecision[decision]
+}
+
+pred fairDecision[node:DecisionNode] {
+	all edge:node.outgoing | 
+		#{getNumberOfEdgeActivation[edge]} <= 2
+}
+
+fun getNumberOfEdgeActivation[edge:ActivityEdge] : State->State {
+	{ s1,s2 : State | s1.next = s2 and s1.getOffers[edge] < s2.getOffers[edge]  }
+}
+
+<%	} else {%>
+
+fact enoughState {
+	some s:State | s.running = Finished
+}
+
+<%	}
+
+	// GENERATION DE LA VERIFICATION DU PROCESS EN FONCTION DE LA PROPRIETE (Cf. subTemplates ou subTemplates/dynamics)
+	stringBuffer.append(property.getAlloyCode());
+%>
+
+/** *Visualization Variables */
+// http://alloy.mit.edu/community/node/548
+fun vNodeExecuting : State->ActivityNode {
+   {s:State, a:ActivityNode | s.getTokens[a] > 0}
+}
+fun vEdgeHaveOffers : State->ActivityEdge {
+   {s:State, e:ActivityEdge | s.getOffers[e] > 0}
+}
+
+fun pinInNode : State->Action->Pin->Int {
+	 {s:State, a:Action, p:a.output+a.input, i:s.getTokens[p]}
+}
