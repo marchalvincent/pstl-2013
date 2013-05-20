@@ -73,10 +73,10 @@ public class AlloyGenerator implements IAlloyGenerator {
 		log.info("Génération du fichier : " + pathFile + ".");
 
 		// On fait la réduction des diagrammes d'activité
-		property.reduceActivityDiagram(activity);
+		Activity activityOfProperty = property.reduceActivityDiagram(activity);
 		
 		// On génère le contenu Alloy
-		String alloyTxt = this.getAlloyTxt(activity, property);
+		String alloyTxt = this.getAlloyTxt(activityOfProperty, property);
 		FileOutputStream out = null;
 		try {
 			// on créé le fichier a générer

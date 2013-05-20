@@ -149,6 +149,7 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	
 	/**
 	 * Permet de faire la réduction d'un diagramme d'activités si la propriété possède une ou plusieurs réductions.
+	 * @return Activity le nouveau diagramme d'activité modifié
 	 */
-	void reduceActivityDiagram(Activity activity);
+	Activity reduceActivityDiagram(Activity activity);
 }
