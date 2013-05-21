@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_iZf90IcnEeKLW4_DoiNylA">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_iZf90YcnEeKLW4_DoiNylA" name="GenProcess" node="_iZf91ocnEeKLW4_DoiNylA _iZf914cnEeKLW4_DoiNylA _iZf92IcnEeKLW4_DoiNylA _iZf92YcnEeKLW4_DoiNylA _iZf92ocnEeKLW4_DoiNylA">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_iZf90ocnEeKLW4_DoiNylA" name="ControlFlow2" source="_iZf914cnEeKLW4_DoiNylA" target="_iZf92IcnEeKLW4_DoiNylA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_iZf904cnEeKLW4_DoiNylA" name="ControlFlow4" source="_iZf92YcnEeKLW4_DoiNylA" target="_iZf914cnEeKLW4_DoiNylA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_iZf91IcnEeKLW4_DoiNylA" name="ControlFlow5" source="_iZf91ocnEeKLW4_DoiNylA" target="_iZf92ocnEeKLW4_DoiNylA"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_iZf91YcnEeKLW4_DoiNylA" name="ControlFlow6" source="_iZf92ocnEeKLW4_DoiNylA" target="_iZf92YcnEeKLW4_DoiNylA"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_iZf91ocnEeKLW4_DoiNylA" name="InitialNode1" outgoing="_iZf91IcnEeKLW4_DoiNylA"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_iZf914cnEeKLW4_DoiNylA" name="OpaqueAction1" outgoing="_iZf90ocnEeKLW4_DoiNylA" incoming="_iZf904cnEeKLW4_DoiNylA"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_iZf92IcnEeKLW4_DoiNylA" name="ActivityFinalNode1" incoming="_iZf90ocnEeKLW4_DoiNylA"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_iZf92YcnEeKLW4_DoiNylA" name="OpaqueAction2" outgoing="_iZf904cnEeKLW4_DoiNylA" incoming="_iZf91YcnEeKLW4_DoiNylA"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_iZf92ocnEeKLW4_DoiNylA" name="OpaqueAction3" outgoing="_iZf91YcnEeKLW4_DoiNylA" incoming="_iZf91IcnEeKLW4_DoiNylA"/>
+  </packagedElement>
+</uml:Model>

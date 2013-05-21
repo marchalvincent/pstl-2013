@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_0bVtQCpOEeKVToz2K3w-3Q">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_0bVtQSpOEeKVToz2K3w-3Q" name="s00000061##s00002690" node="_0bVtRypOEeKVToz2K3w-3Q _0bVtSCpOEeKVToz2K3w-3Q _0bVtSSpOEeKVToz2K3w-3Q _0bVtSipOEeKVToz2K3w-3Q _0bVtSypOEeKVToz2K3w-3Q _0bVtTCpOEeKVToz2K3w-3Q">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0bVtQipOEeKVToz2K3w-3Q" name="s00001083" source="_0bVtSipOEeKVToz2K3w-3Q" target="_0bVtSypOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0bVtQypOEeKVToz2K3w-3Q" name="s00001087" source="_0bVtSypOEeKVToz2K3w-3Q" target="_0bVtSSpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0bVtRCpOEeKVToz2K3w-3Q" name="s00002692" source="_0bVtTCpOEeKVToz2K3w-3Q" target="_0bVtSipOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0bVtRSpOEeKVToz2K3w-3Q" name="s00002693" source="_0bVtRypOEeKVToz2K3w-3Q" target="_0bVtTCpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0bVtRipOEeKVToz2K3w-3Q" name="s00002694" source="_0bVtSCpOEeKVToz2K3w-3Q" target="_0bVtTCpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_0bVtRypOEeKVToz2K3w-3Q" name="s00000774" outgoing="_0bVtRSpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_0bVtSCpOEeKVToz2K3w-3Q" name="s00000775" outgoing="_0bVtRipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_0bVtSSpOEeKVToz2K3w-3Q" name="s00000779" incoming="_0bVtQypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_0bVtSipOEeKVToz2K3w-3Q" name="s00001061" outgoing="_0bVtQipOEeKVToz2K3w-3Q" incoming="_0bVtRCpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_0bVtSypOEeKVToz2K3w-3Q" name="s00001063" outgoing="_0bVtQypOEeKVToz2K3w-3Q" incoming="_0bVtQipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_0bVtTCpOEeKVToz2K3w-3Q" name="s00002691" outgoing="_0bVtRCpOEeKVToz2K3w-3Q" incoming="_0bVtRSpOEeKVToz2K3w-3Q _0bVtRipOEeKVToz2K3w-3Q"/>
+  </packagedElement>
+</uml:Model>

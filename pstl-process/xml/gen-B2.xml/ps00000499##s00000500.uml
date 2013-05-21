@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_1OBucCpOEeKVToz2K3w-3Q">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_1OBucSpOEeKVToz2K3w-3Q" name="s00000499##s00000500" node="_1OBudypOEeKVToz2K3w-3Q _1OBueCpOEeKVToz2K3w-3Q _1OBueSpOEeKVToz2K3w-3Q _1OBueipOEeKVToz2K3w-3Q _1OBueypOEeKVToz2K3w-3Q _1OBufCpOEeKVToz2K3w-3Q">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1OBucipOEeKVToz2K3w-3Q" name="s00001033" source="_1OBueSpOEeKVToz2K3w-3Q" target="_1OBueCpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1OBucypOEeKVToz2K3w-3Q" name="s00002434" source="_1OBueipOEeKVToz2K3w-3Q" target="_1OBueSpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1OBudCpOEeKVToz2K3w-3Q" name="s00002765" source="_1OBueypOEeKVToz2K3w-3Q" target="_1OBufCpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1OBudSpOEeKVToz2K3w-3Q" name="s00002436" source="_1OBufCpOEeKVToz2K3w-3Q" target="_1OBueipOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1OBudipOEeKVToz2K3w-3Q" name="s00003916" source="_1OBudypOEeKVToz2K3w-3Q" target="_1OBueypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_1OBudypOEeKVToz2K3w-3Q" name="s00000940" outgoing="_1OBudipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_1OBueCpOEeKVToz2K3w-3Q" name="s00000941" incoming="_1OBucipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:CallBehaviorAction" xmi:id="_1OBueSpOEeKVToz2K3w-3Q" name="s00000984" outgoing="_1OBucipOEeKVToz2K3w-3Q" incoming="_1OBucypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:CallBehaviorAction" xmi:id="_1OBueipOEeKVToz2K3w-3Q" name="s00002411" outgoing="_1OBucypOEeKVToz2K3w-3Q" incoming="_1OBudSpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_1OBueypOEeKVToz2K3w-3Q" name="s00002759" outgoing="_1OBudCpOEeKVToz2K3w-3Q" incoming="_1OBudipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_1OBufCpOEeKVToz2K3w-3Q" name="s00002427" outgoing="_1OBudSpOEeKVToz2K3w-3Q" incoming="_1OBudCpOEeKVToz2K3w-3Q"/>
+  </packagedElement>
+</uml:Model>

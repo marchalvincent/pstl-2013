@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_1233ICpOEeKVToz2K3w-3Q">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_1233ISpOEeKVToz2K3w-3Q" name="s00000473##s00003626" node="_1233KypOEeKVToz2K3w-3Q _1233LCpOEeKVToz2K3w-3Q _1233LSpOEeKVToz2K3w-3Q _1233LipOEeKVToz2K3w-3Q _1233LypOEeKVToz2K3w-3Q _1233MCpOEeKVToz2K3w-3Q _1233MSpOEeKVToz2K3w-3Q _1233MipOEeKVToz2K3w-3Q _1233MypOEeKVToz2K3w-3Q">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1233IipOEeKVToz2K3w-3Q" name="s00003630" source="_1233MSpOEeKVToz2K3w-3Q" target="_1233LSpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1233IypOEeKVToz2K3w-3Q" name="s00003631" source="_1233MCpOEeKVToz2K3w-3Q" target="_1233MipOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1233JCpOEeKVToz2K3w-3Q" name="s00001090" source="_1233MypOEeKVToz2K3w-3Q" target="_1233LipOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1233JSpOEeKVToz2K3w-3Q" name="s00003632" source="_1233LipOEeKVToz2K3w-3Q" target="_1233MCpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1233JipOEeKVToz2K3w-3Q" name="s00001531" source="_1233LipOEeKVToz2K3w-3Q" target="_1233MSpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1233JypOEeKVToz2K3w-3Q" name="s00001099" source="_1233LypOEeKVToz2K3w-3Q" target="_1233MypOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1233KCpOEeKVToz2K3w-3Q" name="s00003633" source="_1233MipOEeKVToz2K3w-3Q" target="_1233LypOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1233KSpOEeKVToz2K3w-3Q" name="s00002035" source="_1233KypOEeKVToz2K3w-3Q" target="_1233LypOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1233KipOEeKVToz2K3w-3Q" name="s00001140" source="_1233LCpOEeKVToz2K3w-3Q" target="_1233LypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_1233KypOEeKVToz2K3w-3Q" name="s00001056" outgoing="_1233KSpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_1233LCpOEeKVToz2K3w-3Q" name="s00001120" outgoing="_1233KipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_1233LSpOEeKVToz2K3w-3Q" name="s00001057" incoming="_1233IipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:DecisionNode" xmi:id="_1233LipOEeKVToz2K3w-3Q" name="s00001123" outgoing="_1233JSpOEeKVToz2K3w-3Q _1233JipOEeKVToz2K3w-3Q" incoming="_1233JCpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:MergeNode" xmi:id="_1233LypOEeKVToz2K3w-3Q" name="s00001061" outgoing="_1233JypOEeKVToz2K3w-3Q" incoming="_1233KCpOEeKVToz2K3w-3Q _1233KSpOEeKVToz2K3w-3Q _1233KipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:CallBehaviorAction" xmi:id="_1233MCpOEeKVToz2K3w-3Q" name="s00003625" outgoing="_1233IypOEeKVToz2K3w-3Q" incoming="_1233JSpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_1233MSpOEeKVToz2K3w-3Q" name="s00003627" outgoing="_1233IipOEeKVToz2K3w-3Q" incoming="_1233JipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_1233MipOEeKVToz2K3w-3Q" name="s00003628" outgoing="_1233KCpOEeKVToz2K3w-3Q" incoming="_1233IypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_1233MypOEeKVToz2K3w-3Q" name="s00003629" outgoing="_1233JCpOEeKVToz2K3w-3Q" incoming="_1233JypOEeKVToz2K3w-3Q"/>
+  </packagedElement>
+</uml:Model>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_z1AtECpOEeKVToz2K3w-3Q">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_z1AtESpOEeKVToz2K3w-3Q" name="s00000035##s00001429" node="_z1AtFypOEeKVToz2K3w-3Q _z1AtGCpOEeKVToz2K3w-3Q _z1AtGSpOEeKVToz2K3w-3Q _z1AtGipOEeKVToz2K3w-3Q _z1AtGypOEeKVToz2K3w-3Q _z1AtHCpOEeKVToz2K3w-3Q">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_z1AtEipOEeKVToz2K3w-3Q" name="s00000774" source="_z1AtFypOEeKVToz2K3w-3Q" target="_z1AtGypOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_z1AtEypOEeKVToz2K3w-3Q" name="s00000776" source="_z1AtGypOEeKVToz2K3w-3Q" target="_z1AtGSpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_z1AtFCpOEeKVToz2K3w-3Q" name="s00000759" source="_z1AtGSpOEeKVToz2K3w-3Q" target="_z1AtGipOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_z1AtFSpOEeKVToz2K3w-3Q" name="s00000773" source="_z1AtGipOEeKVToz2K3w-3Q" target="_z1AtHCpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_z1AtFipOEeKVToz2K3w-3Q" name="s00000751" source="_z1AtHCpOEeKVToz2K3w-3Q" target="_z1AtGCpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_z1AtFypOEeKVToz2K3w-3Q" name="s00000705" outgoing="_z1AtEipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_z1AtGCpOEeKVToz2K3w-3Q" name="s00000706" incoming="_z1AtFipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:CallBehaviorAction" xmi:id="_z1AtGSpOEeKVToz2K3w-3Q" name="s00001009" outgoing="_z1AtFCpOEeKVToz2K3w-3Q" incoming="_z1AtEypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_z1AtGipOEeKVToz2K3w-3Q" name="s00001431" outgoing="_z1AtFSpOEeKVToz2K3w-3Q" incoming="_z1AtFCpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:CallBehaviorAction" xmi:id="_z1AtGypOEeKVToz2K3w-3Q" name="s00001432" outgoing="_z1AtEypOEeKVToz2K3w-3Q" incoming="_z1AtEipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:CallBehaviorAction" xmi:id="_z1AtHCpOEeKVToz2K3w-3Q" name="s00001433" outgoing="_z1AtFipOEeKVToz2K3w-3Q" incoming="_z1AtFSpOEeKVToz2K3w-3Q"/>
+  </packagedElement>
+</uml:Model>
