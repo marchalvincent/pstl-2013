@@ -64,13 +64,18 @@ public class JetTemplate implements IJetTemplate {
 			throw new JetException(error);
 		} else {
 			String[] initialNodes = allInitialName.split("---");
+			boolean first = true;
 			for (String initialName : initialNodes) {
 				stringInit.append("+ ");
+				if (first) {
+					stringInit.append("( ");
+					first = false;
+				}
 				stringInit.append(initialName);
 				stringInit.append(" -> 1 ");
 			}
 		}
-		stringInit.append(", // tokens \n		ActivityEdge -> 0  // offers");
+		stringInit.append(") , // tokens \n		ActivityEdge -> 0  // offers");
 	}
 	
 	// sinon on parse l'objet EtatInitial pour définir le process
@@ -78,17 +83,22 @@ public class JetTemplate implements IJetTemplate {
 		// on s'occupe d'abord des nodes
 		if (etatInit.hasNodeInit()) {
 			stringInit.append("ActivityNode -> 0 +");
+			boolean first = true;
 			for (String name : etatInit.keySetNode()) {
 				Integer number = etatInit.getNode(name);
 				if (number > 0) {
 					stringInit.append("+ ");
+					if (first) {
+						stringInit.append("( ");
+						first = false;
+					}
 					stringInit.append(name);
 					stringInit.append(" -> ");
 					stringInit.append(number);
 					stringInit.append(" ");
 				}
 			}
-			stringInit.append(", // tokens\n");
+			stringInit.append(") , // tokens\n");
 		}
 		// si on n'a aucun noeud avec le init
 		else {
@@ -98,17 +108,22 @@ public class JetTemplate implements IJetTemplate {
 		// on s'occupe maintenant des edges
 		if (etatInit.hasEdgeInit()) {
 			stringInit.append("		ActivityEdge -> 0 +");
+			boolean first = true;
 			for (String name : etatInit.keySetEdge()) {
 				Integer number = etatInit.getEdge(name);
 				if (number > 0) {
 					stringInit.append("+ ");
+					if (first) {
+						stringInit.append("( ");
+						first = false;
+					}
 					stringInit.append(name);
 					stringInit.append(" -> ");
 					stringInit.append(number);
 					stringInit.append(" ");
 				}
 			}
-			stringInit.append("// offers");
+			stringInit.append(") // offers");
 		}
 		// si on n'a aucun noeud avec le init
 		else {
