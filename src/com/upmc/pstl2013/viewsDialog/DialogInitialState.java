@@ -107,7 +107,7 @@ public class DialogInitialState  extends ApplicationWindow {
 		String[] titlesVPEdges = { "Edges :", "Value" };
 		for (int i = 0; i < titlesVPEdges.length; i++) {
 			TableColumn column = new TableColumn(tableSetInitEdge, SWT.NONE);
-			column.setText(titlesVP[i]);
+			column.setText(titlesVPEdges[i]);
 		}
 		if (swtView.getActivitiesSelected().get(0).getEdges().size()>0) {
 			tableSetInitEdge.addSelectionListener(EventFactory.getInstance().newEventClickValueAttributes(tableSetInitEdge, editorStringEdge, false));		
