@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_0cj1QCpOEeKVToz2K3w-3Q">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_0cj1QSpOEeKVToz2K3w-3Q" name="s00000469##s00003502" node="_0cj1RypOEeKVToz2K3w-3Q _0cj1SCpOEeKVToz2K3w-3Q _0cj1SSpOEeKVToz2K3w-3Q _0cj1SipOEeKVToz2K3w-3Q _0cj1SypOEeKVToz2K3w-3Q _0cj1TCpOEeKVToz2K3w-3Q">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0cj1QipOEeKVToz2K3w-3Q" name="s00003490" source="_0cj1SypOEeKVToz2K3w-3Q" target="_0cj1SipOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0cj1QypOEeKVToz2K3w-3Q" name="s00003504" source="_0cj1TCpOEeKVToz2K3w-3Q" target="_0cj1SypOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0cj1RCpOEeKVToz2K3w-3Q" name="s00003505" source="_0cj1SipOEeKVToz2K3w-3Q" target="_0cj1SCpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0cj1RSpOEeKVToz2K3w-3Q" name="s00003506" source="_0cj1SipOEeKVToz2K3w-3Q" target="_0cj1SSpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_0cj1RipOEeKVToz2K3w-3Q" name="s00001202" source="_0cj1RypOEeKVToz2K3w-3Q" target="_0cj1TCpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_0cj1RypOEeKVToz2K3w-3Q" name="s00000774" outgoing="_0cj1RipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_0cj1SCpOEeKVToz2K3w-3Q" name="s00000779" incoming="_0cj1RCpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_0cj1SSpOEeKVToz2K3w-3Q" name="s00000780" incoming="_0cj1RSpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:CallBehaviorAction" xmi:id="_0cj1SipOEeKVToz2K3w-3Q" name="s00003477" outgoing="_0cj1RCpOEeKVToz2K3w-3Q _0cj1RSpOEeKVToz2K3w-3Q" incoming="_0cj1QipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_0cj1SypOEeKVToz2K3w-3Q" name="s00001618" outgoing="_0cj1QipOEeKVToz2K3w-3Q" incoming="_0cj1QypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_0cj1TCpOEeKVToz2K3w-3Q" name="s00003503" outgoing="_0cj1QypOEeKVToz2K3w-3Q" incoming="_0cj1RipOEeKVToz2K3w-3Q"/>
+  </packagedElement>
+</uml:Model>

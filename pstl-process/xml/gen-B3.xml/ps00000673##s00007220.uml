@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_18YpQCpOEeKVToz2K3w-3Q">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_18YpQSpOEeKVToz2K3w-3Q" name="s00000673##s00007220" node="_18YpRSpOEeKVToz2K3w-3Q _18YpRipOEeKVToz2K3w-3Q _18YpRypOEeKVToz2K3w-3Q _18YpSCpOEeKVToz2K3w-3Q">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_18YpQipOEeKVToz2K3w-3Q" name="s00007221" source="_18YpSCpOEeKVToz2K3w-3Q" target="_18YpRypOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_18YpQypOEeKVToz2K3w-3Q" name="s00001116" source="_18YpRypOEeKVToz2K3w-3Q" target="_18YpRipOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_18YpRCpOEeKVToz2K3w-3Q" name="s00007222" source="_18YpRSpOEeKVToz2K3w-3Q" target="_18YpSCpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_18YpRSpOEeKVToz2K3w-3Q" name="s00001056" outgoing="_18YpRCpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_18YpRipOEeKVToz2K3w-3Q" name="s00001057" incoming="_18YpQypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:CallBehaviorAction" xmi:id="_18YpRypOEeKVToz2K3w-3Q" name="s00001419" outgoing="_18YpQypOEeKVToz2K3w-3Q" incoming="_18YpQipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_18YpSCpOEeKVToz2K3w-3Q" name="s00004848" outgoing="_18YpQipOEeKVToz2K3w-3Q" incoming="_18YpRCpOEeKVToz2K3w-3Q"/>
+  </packagedElement>
+</uml:Model>

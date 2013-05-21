@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<uml:Model xmi:version="20110701" xmlns:xmi="http://www.omg.org/spec/XMI/20110701" xmlns:uml="http://www.eclipse.org/uml2/4.0.0/UML" xmi:id="_1M2pwCpOEeKVToz2K3w-3Q">
+  <packagedElement xmi:type="uml:Activity" xmi:id="_1M2pwSpOEeKVToz2K3w-3Q" name="s00000179##s00003309" node="_1M2pxypOEeKVToz2K3w-3Q _1M2pyCpOEeKVToz2K3w-3Q _1M2pySpOEeKVToz2K3w-3Q _1M2pyipOEeKVToz2K3w-3Q _1M2pyypOEeKVToz2K3w-3Q _1M2pzCpOEeKVToz2K3w-3Q">
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1M2pwipOEeKVToz2K3w-3Q" name="s00003310" source="_1M2pzCpOEeKVToz2K3w-3Q" target="_1M2pySpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1M2pwypOEeKVToz2K3w-3Q" name="s00003311" source="_1M2pzCpOEeKVToz2K3w-3Q" target="_1M2pyipOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1M2pxCpOEeKVToz2K3w-3Q" name="s00000974" source="_1M2pyypOEeKVToz2K3w-3Q" target="_1M2pzCpOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1M2pxSpOEeKVToz2K3w-3Q" name="s00003312" source="_1M2pxypOEeKVToz2K3w-3Q" target="_1M2pyypOEeKVToz2K3w-3Q"/>
+    <edge xmi:type="uml:ControlFlow" xmi:id="_1M2pxipOEeKVToz2K3w-3Q" name="s00003313" source="_1M2pyCpOEeKVToz2K3w-3Q" target="_1M2pyypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_1M2pxypOEeKVToz2K3w-3Q" name="s00000940" outgoing="_1M2pxSpOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:InitialNode" xmi:id="_1M2pyCpOEeKVToz2K3w-3Q" name="s00001116" outgoing="_1M2pxipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_1M2pySpOEeKVToz2K3w-3Q" name="s00000941" incoming="_1M2pwipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:ActivityFinalNode" xmi:id="_1M2pyipOEeKVToz2K3w-3Q" name="s00000942" incoming="_1M2pwypOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:MergeNode" xmi:id="_1M2pyypOEeKVToz2K3w-3Q" name="s00000945" outgoing="_1M2pxCpOEeKVToz2K3w-3Q" incoming="_1M2pxSpOEeKVToz2K3w-3Q _1M2pxipOEeKVToz2K3w-3Q"/>
+    <node xmi:type="uml:OpaqueAction" xmi:id="_1M2pzCpOEeKVToz2K3w-3Q" name="s00001551" outgoing="_1M2pwipOEeKVToz2K3w-3Q _1M2pwypOEeKVToz2K3w-3Q" incoming="_1M2pxCpOEeKVToz2K3w-3Q"/>
+  </packagedElement>
+</uml:Model>
