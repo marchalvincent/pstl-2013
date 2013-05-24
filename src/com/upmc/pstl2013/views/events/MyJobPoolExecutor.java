@@ -11,14 +11,14 @@ import org.apache.log4j.Logger;
 public class MyJobPoolExecutor {
 
 	private final int nbMaxWorker;
-	private Map<Integer, JobExecutor> jobsPrio;
+	private Map<Integer, List<JobExecutor>> jobsPrio;
 	private List<MyThreadWorker> workers;
 	private final Logger log = Logger.getLogger(MyJobPoolExecutor.class);
 
 	public MyJobPoolExecutor(int nbMaxWorker) {
 		super();
 		this.nbMaxWorker = nbMaxWorker;
-		jobsPrio = new HashMap<Integer, JobExecutor>();
+		jobsPrio = new HashMap<Integer, List<JobExecutor>>();
 		workers = new ArrayList<MyThreadWorker>();
 	}
 	
@@ -40,7 +40,13 @@ public class MyJobPoolExecutor {
 		}
 		
 		// puis le job
-		JobExecutor job = jobsPrio.remove(new Integer(priorite));
+		Integer prio = new Integer(priorite);
+		JobExecutor job = jobsPrio.get(prio).remove(0);
+		
+		// si la liste de cette priorité est vide, alors on supprime la liste
+		if (jobsPrio.get(prio).isEmpty())
+			jobsPrio.remove(prio);
+		
 		return job;
 	}
 
@@ -50,8 +56,13 @@ public class MyJobPoolExecutor {
 	 * @param priority un int qui représente la priorité du job. 0 est plus prioritaire que 1.
 	 */
 	public void addJob(JobExecutor job, int priority) {
+		Integer prio = new Integer(priority);
 		synchronized (this) {
-			jobsPrio.put(new Integer(priority), job);
+			// on vérifie s'il y a déjà une liste de créée pour cette priorité
+			if (jobsPrio.get(prio) == null)
+				jobsPrio.put(prio, new ArrayList<JobExecutor>());
+			// puis on ajoute le job dans la liste correspondant a cette priorité
+			jobsPrio.get(prio).add(job);
 		}
 	}
 
