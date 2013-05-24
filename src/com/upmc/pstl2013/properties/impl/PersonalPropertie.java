@@ -15,6 +15,9 @@ public class PersonalPropertie extends AbstractProperties {
 		super(Boolean.TRUE, 
 				ExecutionFactory.getInstance().newSimpleExecutionStrategy(), 
 				ParcoursFactory.getInstance().newVoidStrategy());
+		
+		// cette propriété n'a pas de dépendance car elle est exécutée toute seule.
+//		super.setDependance(null);
 	}
 
 	@Override

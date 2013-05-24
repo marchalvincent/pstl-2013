@@ -25,6 +25,8 @@ public class EnoughState extends AbstractProperties {
 		super.put("maxStep", "100");
 		super.setFairness(true);
 		
+		super.setDependance(Wf.class);
+		
 		// vous pouvez ajouter des réductions de diagramme d'activités ainsi...
 //		super.addReduction(ReductionFactory.getInstance().newReductionExample());
 	}

@@ -17,6 +17,8 @@ public class OptionToCompleteStrong extends AbstractProperties {
 		super(Boolean.TRUE, 
 				ExecutionFactory.getInstance().newSimpleExecutionStrategy(), 
 				ParcoursFactory.getInstance().newPathStrategy());
+		
+		super.setDependance(EnoughState.class);
 	}
 
 	@Override

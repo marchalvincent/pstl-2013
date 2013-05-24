@@ -17,6 +17,8 @@ public class OptionToCompleteWeak extends AbstractProperties {
 		super(Boolean.FALSE, 
 				ExecutionFactory.getInstance().newSimpleExecutionStrategy(), 
 				ParcoursFactory.getInstance().newPathStrategy());
+		
+		super.setDependance(EnoughState.class);
 	}
 
 	@Override

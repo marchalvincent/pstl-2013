@@ -152,4 +152,11 @@ public interface IProperties extends IStrategyExecution, IStrategyParcours, Clon
 	 * @return Activity le nouveau diagramme d'activité modifié
 	 */
 	Activity reduceActivityDiagram(Activity activity);
+	
+	/**
+	 * Renvoie un string correspondant au nom de la classe dont la propriété dépend.
+	 * Une propriété dépend d'une autre si elle ne peux pas s'exécuter avant la fin de cette deuxième.
+	 * @return
+	 */
+	String getDependance();
 }
