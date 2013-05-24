@@ -13,6 +13,8 @@ public class ProperCompletionStrong extends AbstractProperties {
 		super(Boolean.TRUE,
 				ExecutionFactory.getInstance().newSimpleExecutionStrategy(), 
 				ParcoursFactory.getInstance().newVoidStrategy());
+		
+		super.setDependance(EnoughState.class);
 	}
 
 	@Override

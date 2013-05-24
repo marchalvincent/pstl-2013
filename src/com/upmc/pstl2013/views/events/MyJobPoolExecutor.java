@@ -1,38 +1,46 @@
 package com.upmc.pstl2013.views.events;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Queue;
+import java.util.Map;
+import java.util.Set;
 import org.apache.log4j.Logger;
 
 
 public class MyJobPoolExecutor {
 
 	private final int nbMaxWorker;
-	private Queue<MyPriorityArrayList> jobs;
+	private Map<Integer, JobExecutor> jobsPrio;
 	private List<MyThreadWorker> workers;
 	private final Logger log = Logger.getLogger(MyJobPoolExecutor.class);
 
 	public MyJobPoolExecutor(int nbMaxWorker) {
 		super();
 		this.nbMaxWorker = nbMaxWorker;
-		jobs = new PriorityQueue<MyPriorityArrayList>();
+		jobsPrio = new HashMap<Integer, JobExecutor>();
 		workers = new ArrayList<MyThreadWorker>();
 	}
 	
 	public boolean hasJob() {
-		return (!jobs.isEmpty());
+		return (!jobsPrio.isEmpty());
 	}
 
 	public JobExecutor getJob() {
-		MyPriorityArrayList listePrioritaire = jobs.peek();
-		if (listePrioritaire == null)
+		
+		if (jobsPrio.isEmpty())
 			return null;
-		JobExecutor job = listePrioritaire.remove(0);
-		// si la liste prioritaire est maintenant vide, on la supprime de la queue
-		if (listePrioritaire.isEmpty())
-			jobs.poll();
+		
+		// on récupère la plus petite clé
+		Set<Integer> entiers = jobsPrio.keySet();
+		int priorite = Integer.MAX_VALUE;
+		for (Integer integer : entiers) {
+			if (integer < priorite)
+				priorite = integer;
+		}
+		
+		// puis le job
+		JobExecutor job = jobsPrio.remove(new Integer(priorite));
 		return job;
 	}
 
@@ -43,15 +51,7 @@ public class MyJobPoolExecutor {
 	 */
 	public void addJob(JobExecutor job, int priority) {
 		synchronized (this) {
-			for(MyPriorityArrayList priorListe : jobs) {
-				if(priority == priorListe.getPriority()) {
-					priorListe.add(job);
-					return;
-				}
-			}
-			MyPriorityArrayList myPriorityArrayList = new MyPriorityArrayList(priority);
-			myPriorityArrayList.add(job);
-			jobs.add(myPriorityArrayList);
+			jobsPrio.put(new Integer(priority), job);
 		}
 	}
 
@@ -62,7 +62,7 @@ public class MyJobPoolExecutor {
 
 		log.debug("Lancement du pool statique.");
 		// on définit le nombre minimum de Thread a lancer
-		int nbMaxThread = jobs.size();
+		int nbMaxThread = jobsPrio.size();
 		if (nbMaxWorker < nbMaxThread) {
 			nbMaxThread = nbMaxWorker;
 		}
@@ -82,7 +82,7 @@ public class MyJobPoolExecutor {
 	 */
 	@SuppressWarnings("deprecation")
 	public String killWorkers() {
-		jobs.clear();
+		jobsPrio.clear();
 		StringBuilder sb = new StringBuilder();
 		synchronized (workers) {
 			for (MyThreadWorker t : workers) {

@@ -3,6 +3,7 @@ package com.upmc.pstl2013.properties.dynamic;
 import com.upmc.pstl2013.alloyGenerator.jet.JetException;
 import com.upmc.pstl2013.properties.Family;
 import com.upmc.pstl2013.properties.impl.AbstractProperties;
+import com.upmc.pstl2013.properties.impl.EnoughState;
 import com.upmc.pstl2013.strategyExecution.ExecutionFactory;
 import com.upmc.pstl2013.strategyParcours.ParcoursFactory;
 
@@ -29,6 +30,9 @@ public class DynamicBusiness extends AbstractProperties {
 		this.nom = nom;
 		this.enumType = enumType;
 		dataParams = new String[enumType.getNbParams()];
+		
+		// les propriétés dynamiques dépendent d'EnoughState
+		super.setDependance(EnoughState.class);
 	}
 
 	@Override

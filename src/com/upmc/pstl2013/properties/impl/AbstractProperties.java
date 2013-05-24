@@ -29,6 +29,7 @@ public abstract class AbstractProperties implements IProperties {
 	private boolean isModifiable;
 	private InitialState etatInitial;
 	private List<IReduction> reductions;
+	private String dependance;
 	private static Logger log = Logger.getLogger(AbstractProperties.class);
 
 	/**
@@ -51,6 +52,7 @@ public abstract class AbstractProperties implements IProperties {
 		// certains attributs par défaut
 		this.putPrivate("fairness", false);
 		this.putPrivate("bitwidth", "3");
+		this.dependance = null;
 	}
 	
 	public void setFairness(boolean bool) {
@@ -228,5 +230,19 @@ public abstract class AbstractProperties implements IProperties {
 			reduction.reduce(activity);
 			}
 		return activity;
+	}
+	
+	/**
+	 * Setter sur la dépendance 
+	 * @param dependance
+	 */
+	protected void setDependance(Class<? extends IProperties> dependance) {
+		if (dependance != null)
+			this.dependance = dependance.getSimpleName();
+	}
+	
+	@Override
+	public String getDependance() {
+		return this.dependance;
 	}
 }

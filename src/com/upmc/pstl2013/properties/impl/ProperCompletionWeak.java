@@ -13,6 +13,8 @@ public class ProperCompletionWeak extends AbstractProperties {
 		super(Boolean.FALSE,
 				ExecutionFactory.getInstance().newSimpleExecutionStrategy(), 
 				ParcoursFactory.getInstance().newVoidStrategy());
+		
+		super.setDependance(EnoughState.class);
 	}
 
 	@Override

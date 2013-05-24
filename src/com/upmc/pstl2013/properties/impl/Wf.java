@@ -16,6 +16,9 @@ public class Wf extends AbstractProperties {
 		super.put("initial", Boolean.TRUE);
 		super.put("final", Boolean.TRUE);
 		super.put("merge", Boolean.TRUE);
+		
+		// cette propriété n'a aucune dépendance, c'est la première à etre exécutée.
+//		super.setDependance(null);
 	}
 
 	@Override
